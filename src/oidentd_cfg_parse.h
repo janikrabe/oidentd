@@ -1,4 +1,4 @@
-/* A Bison parser, made from ./oidentd_cfg_parse.y, by GNU bison 1.75.  */
+/* A Bison parser, made by GNU Bison 1.875.  */
 
 /* Skeleton parser for Yacc-like parsing with Bison,
    Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002 Free Software Foundation, Inc.
@@ -22,9 +22,6 @@
    Bison output file, you may use that output file without restriction.
    This special exception was added by the Free Software Foundation
    in version 1.24 of Bison.  */
-
-#ifndef BISON_Y_TAB_H
-# define BISON_Y_TAB_H
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -62,19 +59,20 @@
 
 
 
-#ifndef YYSTYPE
+#if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
 #line 60 "./oidentd_cfg_parse.y"
-typedef union {
+typedef union YYSTYPE {
 	int value;
 	char *string;
-} yystype;
-/* Line 1281 of /usr/share/bison/yacc.c.  */
-#line 73 "y.tab.h"
-# define YYSTYPE yystype
+} YYSTYPE;
+/* Line 1248 of yacc.c.  */
+#line 69 "y.tab.h"
+# define yystype YYSTYPE /* obsolescent; will be withdrawn */
+# define YYSTYPE_IS_DECLARED 1
+# define YYSTYPE_IS_TRIVIAL 1
 #endif
 
 extern YYSTYPE yylval;
 
 
-#endif /* not BISON_Y_TAB_H */
 

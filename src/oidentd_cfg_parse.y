@@ -279,13 +279,13 @@ force_reply:
 		cur_cap->action = ACTION_FORCE;
 		cur_cap->force_data = xrealloc(cur_cap->force_data,
 			++cur_cap->num_replies * sizeof(u_char *));
-		cur_cap->force_data[cur_cap->num_replies - 1] = xstrdup($3);
+		cur_cap->force_data[cur_cap->num_replies - 1] = $3;
 	}
 |
 	force_reply TOK_STRING {
 		cur_cap->force_data = xrealloc(cur_cap->force_data,
 			++cur_cap->num_replies * sizeof(u_char *));
-		cur_cap->force_data[cur_cap->num_replies - 1] = xstrdup($2);
+		cur_cap->force_data[cur_cap->num_replies - 1] = $2;
 	}
 ;
 
@@ -322,14 +322,14 @@ user_reply:
 		cur_cap->caps = CAP_REPLY;
 		cur_cap->force_data = xrealloc(cur_cap->force_data,
 			++cur_cap->num_replies * sizeof(u_char *));
-		cur_cap->force_data[cur_cap->num_replies - 1] = xstrdup($2);
+		cur_cap->force_data[cur_cap->num_replies - 1] = $2;
 	}
 |
 	user_reply TOK_STRING {
 		if (cur_cap->num_replies < MAX_RANDOM_REPLIES) {
 			cur_cap->force_data = xrealloc(cur_cap->force_data,
 				++cur_cap->num_replies * sizeof(u_char *));
-			cur_cap->force_data[cur_cap->num_replies - 1] = xstrdup($2);
+			cur_cap->force_data[cur_cap->num_replies - 1] = $2;
 		}
 	}
 ;
