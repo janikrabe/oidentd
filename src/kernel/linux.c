@@ -499,7 +499,7 @@ static int lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 
 		h = (struct nlmsghdr *) buf;
 
-		while (NLMSG_OK(h, ret)) {
+		while (NLMSG_OK(h, (size_t) ret)) {
 			struct tcpdiagmsg *r;
 
 			if (h->nlmsg_seq != 1) {

@@ -1,13 +1,4 @@
-There is no ipfw support for FreeBSD, and as far as I can tell, the kernel
-doesn't keep information necessary to implement it, so if you want IP
-masquerade support on FreeBSD use ipf instead of ipfw.  I'd love to be
-proven wrong, though.
-
-Add IPv6 support and IP masquerading support for Solaris.
-
-The documentation could always use improvement.
-
-I'd like oidentd to run on more platforms.  I don't have the access to port it
-to anything else, however.
-
-Patches for any of the above (and anything else) are welcome.
+I don't have the resources (or time or desire) to actively support oidentd
+anymore on platforms other than Linux and Darwin.  On platforms other than
+those two, bugs will be fixed and new features will be added only if someone
+else does the work and sends me a patch.

@@ -15,7 +15,6 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA
-**
 */
 
 #include <config.h>
@@ -40,9 +39,9 @@
 #include <oidentd_options.h>
 #include <oidentd_cfg_parse.h>
 
-extern int parser_mode;
-
 #define MAX_STRING_LEN 8192
+
+extern int parser_mode;
 
 static char string_buf[MAX_STRING_LEN];
 static size_t str_idx;
@@ -259,7 +258,7 @@ SPOOF_PRIVPORT		spoof_privport
 	string_buf[str_idx++] = result;
 }
 
-<state_string>\\[0-9]+ {
+<state_string>\\[0-9] {
 	if (parser_mode == PARSE_SYSTEM) {
 		o_log(NORMAL, "[line %u] Error: Bad escape sequence: \"%s\"\n",
 			current_line, yytext);
@@ -281,11 +280,8 @@ SPOOF_PRIVPORT		spoof_privport
 	string_buf[str_idx++] = get_esc_char(yytext[1]);
 }
 
-<state_string>[^\\\n\"]+ {
-	size_t len = yyleng;
-	char *p = yytext;
-
-	if (str_idx + len >= sizeof(string_buf) - 1) {
+<state_string>. {
+	if (str_idx >= sizeof(string_buf) - 1) {
 		if (parser_mode == PARSE_SYSTEM) {
 			o_log(NORMAL, "[line %u] String too long.  Max length is %d",
 				current_line, sizeof(string_buf), yytext);
@@ -294,17 +290,12 @@ SPOOF_PRIVPORT		spoof_privport
 		return (-1);
 	}
 
-	while (*p != '\0')
-		string_buf[str_idx++] = *p++;
+	string_buf[str_idx++] = yytext[0];
 }
 
 [^ \n\t\"]+ {
 	yylval.string = xstrdup(yytext);
 	return (TOK_USERNAME);
-}
-
-. {
-	return (-1);
 }
 
 %%
