@@ -13,34 +13,18 @@
 oidentd_masq.conf - oidentd IP masquerading/NAT configuration file.
 
 .SH DESCRIPTION
-If you are using IP masquerading or NAT, oidentd can optionally return a
-username for connections from other machines.  Support for
-this is specified by calling
-\fBoidentd\fP with the \-m (or \-\-masq) flag and by creating an
-\fB/etc/oidentd_masq.conf\fP file.
+If you are using IP masquerading or NAT, oidentd can optionally return a username for connections from other machines.  Support for this is specified by calling \fBoidentd\fP with the \-m (or \-\-masq) flag and by creating an \fB/etc/oidentd_masq.conf\fP file.
 .PP
-\fBoidentd\fP can also forward requests for an IP masqueraded connection to the
-machine from which connection originates by way of the -f option.  This
-will only work if the host to which the connection is forwarded is running
-oidentd with the -P (proxy) flag, or if the host's ident daemon will return a valid
-reply regardless of the input supplied by and the address of the host requesting
-the info (some ident daemons for windows do this, maybe others).
+\fBoidentd\fP can also forward requests for an IP masqueraded connection to the machine from which connection originates by way of the -f option.  This will only work if the host to which the connection is forwarded is running oidentd with the -P (proxy) flag, or if the host's ident daemon will return a valid reply regardless of the input supplied by and the address of the host requesting the info (some ident daemons for windows do this, maybe others).
 
 .SH FORMAT
 <IP Address|Hostname>[/<Mask>] <Ident Response> <System Type>
 .PP
-The first field contains the IP address or the hostname of a machine that IP
-masquerades through the machine on which \fBoidentd\fP
-runs.  The mask parameter can be either a network mask or a mask in CIDR
-notation.  A mask of 24 is equivalent to 255.255.255.0, a mask of 16 is
-equivalent to 255.255.0.0, etc.
+The first field contains the IP address or the hostname of a machine that IP masquerades through the machine on which \fBoidentd\fP runs.  The mask parameter can be either a network mask or a mask in CIDR notation.  A mask of 24 is equivalent to 255.255.255.0, a mask of 16 is equivalent to 255.255.0.0, etc.
 .PP
-The second field specifies the reply that \fBoidentd\fP
-will return for lookups to the host matching the IP address specified in the
-first parameter.
+The second field specifies the reply that \fBoidentd\fP will return for lookups to the host matching the IP address specified in the first parameter.
 .PP
-The third field specifies the operating system the machine matching the first
-parameter is running.
+The third field specifies the operating system the machine matching the first parameter is running.
 
 .SH EXAMPLES
 .sp 1n

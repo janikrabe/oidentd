@@ -1,16 +1,16 @@
-.\" Copyright (C)  2001-2003  Ryan McCabe <ryan@numb.org>.
+.\" Copyright (C) 2001-2003 Ryan McCabe <ryan@numb.org>.
 .\"
 .\" Permission is granted to copy, distribute and/or modify this document
 .\" under the terms of the GNU Free Documentation License, Version 1.1
 .\" or any later version published by the Free Software Foundation;
 .\" with the Invariant Sections being no invariant sections, with the
 .\" Front-Cover Texts being no front-cover texts, and with the Back-Cover
-.\" Texts being no back-cover texts.  A copy of the license is included with
+.\" Texts being no back-cover texts. A copy of the license is included with
 .\" this package in the file "COPYING.DOC."
 .TH oidentd 8 "11 Feb 2003" "version 2.0.5"
 
 .SH NAME
-oidentd, in.oidentd \- TCP/IP IDENT protocol server
+oidentd \- TCP/IP IDENT protocol server
 
 .SH SYNOPSIS
 .BI "oidentd [options]"
@@ -42,18 +42,15 @@ oidentd, in.oidentd \- TCP/IP IDENT protocol server
 .B [ \-u or \-\-user=<username|UID> ]
 
 .SH DESCRIPTION
-\fBoidentd\fP is a server that implements the TCP/IP standard IDENT user
-identification protocol as specified in the RFC 1413 document.
+\fBoidentd\fP is a server that implements the TCP/IP standard IDENT user identification protocol as specified in the RFC 1413 document.
 .PP
-\fBoidentd\fP operates by looking up specific TCP connections and returning the
-user name of the process owning the connection.
+\fBoidentd\fP operates by looking up specific TCP connections and returning the user name of the process owning the connection.
 
 .SH OPTIONS
 
 .TP
 .B "\-a or \-\-address=<address|hostname>"
-Listen for connections on the specified address.  The default is to listen
-for connections on all configured IP addresses.
+Listen for connections on the specified address. The default is to listen for connections on all configured IP addresses.
 
 .TP
 .B "\-c or \-\-charset=<charset>"
@@ -61,31 +58,19 @@ Use the specified alternate charset.
 
 .TP
 .B "\-C or \-\-config=<config file>"
-Use the specified file as the configuration file.  The default
-location of the configuration file is \fB/etc/oidentd.conf\fP.
+Use the specified file as the configuration file. The default location of the configuration file is \fB/etc/oidentd.conf\fP.
 
 .TP
 .B "\-d or \-\-debug"
-Enable debugging.  This causes debugging messages to be printed via syslog.
-This option can be useful when trying to track down the cause of failed
-lookups.
+Enable debugging. This causes debugging messages to be printed via syslog. This option can be useful when trying to track down the cause of failed lookups.
 
 .TP
 .B "\-e or \-\-error"
-Return "UNKNOWN-ERROR" for all errors, so as not to divulge any
-unnecessary information to remote clients.
+Return "UNKNOWN-ERROR" for all errors, so as not to divulge any unnecessary information to remote clients.
 
 .TP
 .B "\-f or \-\-forward=[<port>]"
-When IP masquerading support is enabled, forward requests for machines that
-masquerade through us to those machines on the specified port. If a port is not given, oidentd
-will use the default port for the ident service ("auth" or port 113). If the forwarded
-request fails, \fBoidentd\fP will fall back to reading the \fB/etc/oidentd_masq.conf\fP file.
-In order for forwarding to work, the machine to which the connection is forwarded must also
-be running oidentd, and oidentd must be run with the -P switch specifying the host that is
-forwarding the connections.  If the ident daemon on the host to which the connection is forwarded
-is capable of returning a fixed string for any lookup (for example, the ident server built in to
-the mIRC windows IRC client), it is not necessary to run oidentd on that host.
+When IP masquerading support is enabled, forward requests for machines that masquerade through us to those machines on the specified port. If a port is not given, oidentd will use the default port for the ident service ("auth" or port 113). If the forwarded request fails, \fBoidentd\fP will fall back to reading the \fB/etc/oidentd_masq.conf\fP file. In order for forwarding to work, the machine to which the connection is forwarded must also be running oidentd, and oidentd must be run with the -P switch specifying the host that is forwarding the connections. If the ident daemon on the host to which the connection is forwarded is capable of returning a fixed string for any lookup (for example, the ident server built in to the mIRC windows IRC client), it is not necessary to run oidentd on that host.
 
 .TP
 .B "\-g or \-\-group=<group|GID>"
@@ -103,13 +88,7 @@ for details on configuring support for masqueraded/NAT connections.
 
 .TP
 .B "\-o or \-\-other=[<string>]"
-The string specified will be returned as the OS string by
-default for all successful ident lookups.  If no argument is given,
-"OTHER" will be returned instead of the name of the operating system.
-Some requests may be interpreted as having failed by the client
-side (with ident in general, not just with
-\fBoidentd\fP), when some other string is returned instead of the actual
-name of the operating system.
+The string specified will be returned as the OS string by default for all successful ident lookups. If no argument is given, "OTHER" will be returned instead of the name of the operating system. Some requests may be interpreted as having failed by the client side (with ident in general, not just with \fBoidentd\fP), when some other string is returned instead of the actual name of the operating system.
 
 .TP
 .B "\-p or \-\-port=<port>"
@@ -117,10 +96,7 @@ Listen on the specified port.
 
 .TP
 .B "\-P or \-\-proxy=<host>"
-The specified host acts as a proxy, forwarding connections to us. This option
-must be enabled when connections on the machine on which oidentd is running are
-masqueraded through another host and the host through which the connections are
-masqueraded forwards requests to us.
+The specified host acts as a proxy, forwarding connections to us. This option must be enabled when connections on the machine on which oidentd is running are masqueraded through another host and the host through which the connections are masqueraded forwards requests to us.
 
 .TP
 .B "\-q or \-\-quiet"
@@ -128,8 +104,7 @@ Quiet mode; do not log any status messages to syslog.
 
 .TP
 .B "\-t or \-\-timeout=<seconds>"
-Sets the number of seconds to wait for input from a client before closing the
-connection.
+Sets the number of seconds to wait for input from a client before closing the connection.
 
 .TP
 .B "\-u or \-\-user=<user|UID>"
@@ -137,18 +112,11 @@ Run with specified username or UID.
 
 .TP
 .B "\-U or \-\-udb"
-Perform lookups in the UDB shared memory tables, both for connections
-originating on the local host and for masqueraded connections.  When a match is
-found, it will be used instead of the values supplied by the operating system,
-for either masqueraded entries (with the -m flag) or normal TCP connections.
-Entries in the table which don't match any local user will be returned verbatim.
-This allows oidentd to cooperate with other programs (e.g. RADIUS servers or 
-proxies) to give valid replies for dynamic connections.
+Perform lookups in the UDB shared memory tables, both for connections originating on the local host and for masqueraded connections. When a match is found, it will be used instead of the values supplied by the operating system, for either masqueraded entries (with the -m flag) or normal TCP connections. Entries in the table which don't match any local user will be returned verbatim. This allows oidentd to cooperate with other programs (e.g. RADIUS servers or proxies) to give valid replies for dynamic connections.
 
 .TP
 .B "\-r or \-\-reply=<string>"
-Upon a failed lookup, the specified string will be returned to the client as if the
-lookup had succeeded.
+Upon a failed lookup, the specified string will be returned to the client as if the lookup had succeeded.
 
 .TP
 .B "\-v or \-\-version"
@@ -161,11 +129,11 @@ Display options and exit.
 .SH FILES
 .TP
 .B /etc/oidentd.conf
-System-wide configuration file.
+The system-wide configuration file.
 
 .TP
 .B /etc/oidentd_masq.conf
-IP masquerading mappings.
+The NAT/IP masquerading mappings.
 
 .TP
 .B $HOME/.oidentd.conf
@@ -177,7 +145,7 @@ Ryan McCabe <ryan@numb.org>
 http://dev.ojnk.net
 
 .SH BUGS
-Solaris lacks IPv6 support and IP masquerading (NAT) support.
+Solaris lacks IPv6 support and NAT support.
 
 .SH "SEE ALSO"
 .BR oidentd.conf (5)
