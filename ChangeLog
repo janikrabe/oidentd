@@ -1,5 +1,8 @@
 Tue Feb 11 19:04:19 EST 2003    Ryan McCabe <ryan@numb.org>
 
+    * Added support for connection forwarding on recent versions of
+      OpenBSD.
+
     * Added a patch from Mieczyslaw Nalewaj  <nami@polbox.com> to add
       support for FreeBSD 5.
 

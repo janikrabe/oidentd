@@ -5,6 +5,7 @@ Changes in 2.0.5
 * IPv6 fixes.
 * FreeBSD 5 support.
 * Compile fixes.
+* Made connection forwarding work on recent versions of OpenBSD.
 
 Changes in 2.0.4
 * Support for lookups using the netlink socket diagnostics interface on Linux.
