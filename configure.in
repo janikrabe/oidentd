@@ -1,5 +1,5 @@
-AC_INIT(oidentd, 2.0.6, ryan@numb.org)
-AM_INIT_AUTOMAKE(oidentd, 2.0.6)
+AC_INIT(oidentd, 2.0.7, ryan@numb.org)
+AM_INIT_AUTOMAKE(oidentd, 2.0.7)
 
 AM_CONFIG_HEADER(config.h)
 
