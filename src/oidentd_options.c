@@ -391,7 +391,7 @@ static void print_usage(void) {
 "\nUsage: oidentd [options]\n"
 "-a or --address <address>    Bind to <address>\n"
 "-c or --charset <charset>    Specify an alternate charset\n"
-"-C or --config <config file> Use the specifed file instead of /etc/oidentd.conf\n"
+"-C or --config <config file> Use the specifed file instead of " CONFFILE "\n"
 "-d or --debug                Enable debugging\n"
 "-e or --error                Return \"UNKNOWN-ERROR\" for all errors\n"
 
