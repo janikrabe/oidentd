@@ -15,7 +15,7 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA
 **
-** $Id: oidentd.c,v 1.2 2003/01/09 19:44:57 odin Exp $
+** $Id: oidentd.c,v 1.3 2003/01/09 19:46:19 odin Exp $
 */
 
 #define _GNU_SOURCE
@@ -211,7 +211,7 @@ static int service_request(int sock) {
 	}
 
 #ifdef WANT_IPV6
-	laddr6 = laddr;		// save old sockaddr
+	laddr6 = laddr;
 	faddr6 = faddr;
 
 	if (laddr.ss_family == AF_INET6 && IN6_IS_ADDR_V4MAPPED(&SIN6(&laddr)->sin6_addr)) {

@@ -15,7 +15,7 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA
 **
-** $Id: oidentd.h,v 1.1 2002/12/03 06:05:05 odin Exp $
+** $Id: oidentd.h,v 1.2 2003/01/09 19:44:57 odin Exp $
 */
 
 #ifndef __OIDENTD_H_
@@ -154,11 +154,6 @@ struct sockaddr_storage {
 #ifdef HAVE___SS_FAMILY
 	#define ss_family __ss_family
 #endif
-
-int get_user(	in_port_t lport,
-				in_port_t fport,
-				struct sockaddr_storage *laddr,
-				struct sockaddr_storage *faddr);
 
 int get_user4(	in_port_t lport,
 				in_port_t fport,
