@@ -4,6 +4,9 @@ Sun Apr 27 16:01:51 EDT 2003    Ryan McCabe <ryan@numb.org>
       is included.
         - Problem reported by John Blazek <freebsd@logicalsolutns.com>
 
+    * Made random replies 12 characters long. I guess some programs don't
+      like it when they get a 512-byte long random reply.
+
 Wed Apr 23 19:59:42 EDT 2003    Ryan McCabe <ryan@numb.org>
 
     * Applied patches from henke@insync.net to

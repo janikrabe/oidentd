@@ -159,7 +159,7 @@ int get_ident(	const struct passwd *pwd,
 				break;
 
 			case CAP_RANDOM:
-				random_ident(reply, len);
+				random_ident(reply, MIN(12, len));
 				break;
 
 			case CAP_NUMERIC:
