@@ -53,7 +53,7 @@
 #include <sys/file.h>
 #include <sys/stream.h>
 
-#ifdef SOLARIS >= 7
+#if SOLARIS >= 7
 #	include <sys/dlpi.h>
 #	include <net/if_types.h>
 #endif
