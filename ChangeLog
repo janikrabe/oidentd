@@ -1,3 +1,9 @@
+Sun Apr 27 16:01:51 EDT 2003    Ryan McCabe <ryan@numb.org>
+
+    * Fixed a build problem on some versions of FreeBSD when NAT support
+      is included.
+        - Problem reported by John Blazek <freebsd@logicalsolutns.com>
+
 Wed Apr 23 19:59:42 EDT 2003    Ryan McCabe <ryan@numb.org>
 
     * Applied patches from henke@insync.net to

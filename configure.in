@@ -195,6 +195,15 @@ AC_CHECK_LIB(udb, main)
 
 use_kmem=no
 
+have_ipnat_h=""
+AC_CHECK_HEADER(netinet/ip_nat.h, have_ipnat_h="yes", have_ipnat_h="no")
+if test "$have_ipnat_h" = "no"; then
+	AC_CHECK_HEADER(/usr/src/sys/contrib/ipfilter/netinet/ip_nat.h, have_ipnat_h="yes", have_ipnat_h="no")
+	if test "$have_ipnat_h" = "yes"; then
+		CPPFLAGS="$CPPFLAGS -I/usr/src/sys/contrib/ipfilter"
+	fi
+fi
+
 if test "$masq_support" = "yes"; then
 	old_CPPFLAGS=$CPPFLAGS
 
