@@ -1,4 +1,4 @@
-oidentd v2.0.7 by Ryan McCabe <ryan@numb.org>
+oidentd v2.0.8 by Ryan McCabe <ryan@numb.org>
 
 oidentd is an ident (rfc1413 compliant) daemon that runs on Linux, Darwin,
 FreeBSD, OpenBSD, NetBSD and Solaris.  oidentd can handle IP masqueraded/NAT
