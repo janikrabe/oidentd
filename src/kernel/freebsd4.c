@@ -47,6 +47,8 @@
 #include <oidentd_util.h>
 #include <oidentd_inet_util.h>
 
+extern struct sockaddr_storage proxy;
+
 int get_user4(	in_port_t lport,
 				in_port_t fport,
 				struct sockaddr_storage *laddr,
@@ -69,7 +71,9 @@ int get_user4(	in_port_t lport,
 	sin4[1].sin_len = sizeof(struct sockaddr_in);
 	sin4[1].sin_family = AF_INET;
 	sin4[1].sin_port = fport;
-	sin4[1].sin_addr.s_addr = SIN4(faddr)->sin_addr.s_addr;
+
+	if (!opt_enabled(PROXY) || !sin_equal(faddr, &proxy))
+		sin4[1].sin_addr.s_addr = SIN4(faddr)->sin_addr.s_addr;
 
 	ret = sysctlbyname("net.inet.tcp.getcred",
 		&ucred, &len, sin4, sizeof(sin4));

@@ -37,6 +37,8 @@
 #include <oidentd_util.h>
 #include <oidentd_inet_util.h>
 
+extern struct sockaddr_storage proxy;
+
 /*
 ** Return the UID of the connection owner
 */
@@ -57,8 +59,10 @@ int get_user4(	in_port_t lport,
 	tir.faddr.sa_family = AF_INET;
 	tir.faddr.sa_len = sizeof(struct sockaddr);
 	fin = (struct sockaddr_in *) &tir.faddr;
-	memcpy(&fin->sin_addr, &SIN4(faddr)->sin_addr, sizeof(struct in_addr));
 	fin->sin_port = fport;
+
+	if (!opt_enabled(PROXY) || !sin_equal(faddr, &proxy))
+		memcpy(&fin->sin_addr, &SIN4(faddr)->sin_addr, sizeof(struct in_addr));
 
 	tir.laddr.sa_family = AF_INET;
 	tir.laddr.sa_len = sizeof(struct sockaddr);
