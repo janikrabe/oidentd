@@ -23,6 +23,10 @@
 #define NORMAL		LOG_INFO
 #define DEBUG		LOG_DEBUG
 
+#ifndef MIN
+#	define MIN(x,y) ((x) < (y) ? (x) : (y))
+#endif
+
 typedef struct list {
 	struct list *next;
 	void *data;
