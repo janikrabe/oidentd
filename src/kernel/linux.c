@@ -15,7 +15,7 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA
 **
-** $Id: linux.c,v 1.1 2002/12/03 06:05:25 odin Exp $
+** $Id: linux.c,v 1.2 2003/01/09 19:24:05 odin Exp $
 */
 
 #define _GNU_SOURCE
@@ -290,9 +290,12 @@ int masq(	int sock,
 		char os[24];
 		char proto[16];
 		in_port_t mport;
+		in_port_t nport;
 		in_port_t masq_lport;
 		in_port_t masq_fport;
 		char user[MAX_ULEN];
+		in_addr_t localn;
+		in_addr_t remoten;
 		in_addr_t localm;
 		in_addr_t remotem;
 		struct sockaddr_storage ss;
@@ -315,25 +318,36 @@ int masq(	int sock,
 			masq_fport = (in_port_t) masq_fport_temp;
 		} else {
 			int l1, l2, l3, l4, r1, r2, r3, r4;
+			int nl1, nl2, nl3, nl4, nr1, nr2, nr3, nr4;
+			u_int32_t nport_temp;
 			u_int32_t mport_temp;
 			u_int32_t masq_lport_temp;
 			u_int32_t masq_fport_temp;
 
 			ret = sscanf(buf,
-				"%15s %*d %*d ESTABLISHED src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d %*s %*s %*s dport=%d",
-					proto, &l1, &l2, &l3, &l4, &r1, &r2, &r3, &r4,
-					&masq_lport_temp, &masq_fport_temp, &mport_temp);
+				"%15s %*d %*d ESTABLISHED src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d" 
+				"src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d",
+				proto, &l1, &l2, &l3, &l4, &r1, &r2, &r3, &r4, &masq_lport_temp, &masq_fport_temp,
+				&nl1, &nl2, &nl3, &nl4, &nr1, &nr2, &nr3, &nr4, &nport_temp, &mport_temp);
 
-			if (ret != 12)
+			if (ret != 21)
 				continue;
 
-			mport = (in_port_t) mport_temp;
 			masq_lport = (in_port_t) masq_lport_temp;
 			masq_fport = (in_port_t) masq_fport_temp;
 
+			nport = (in_port_t) nport_temp;
+			mport = (in_port_t) mport_temp;
+
 			localm = l1 << 24 | l2 << 16 | l3 << 8 | l4;
 			remotem = r1 << 24 | r2 << 16 | r3 << 8 | r4;
+
+			localn = nl1 << 24 | nl2 << 16 | nl3 << 8 | nl4;
+			remoten = nr1 << 24 | nr2 << 16 | nr3 << 8 | nr4;
 		}
+
+		if (remotem != localn)
+			remotem = localn;       
 
 		if (strcasecmp(proto, "tcp"))
 			continue;

@@ -1,3 +1,7 @@
+Thu Jan  9 13:49:15 EST 2003    Ryan McCabe <odin@numb.org>
+
+    * Added dnat patch for Linux from Christian Kellner <gicmo@gmx.net>
+
 Sat Aug 24 09:20:43 EDT 2002    Ryan McCabe <odin@numb.org>
 
     * Fixed a compile error for older versions of libc on Linux.
