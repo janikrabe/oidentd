@@ -397,7 +397,7 @@ static void print_usage(void) {
 "-P or --proxy <host>         <host> acts as a proxy, forwarding connections to us\n"
 "-g or --group <group>        Run with specified group or GID\n"
 "-i or --foreground           Don't run as a daemon\n"
-"-I or --stdio                Service a single client connected to stdin/stdout then exit\n"
+"-I or --stdio                Service a single client connected to stdin/stdout then exit (use when oidentd is running from inetd/xinetd/etc).\n"
 "-l or --limit <number>       Limit the number of open connections to the specified number\n"
 "-o or --other [<os>]         Return <os> instead of the operating system.  Uses \"OTHER\" if no argument is given.\n"
 "-p or --port <port>          Listen for connections on specified port\n"

@@ -1,5 +1,6 @@
 Changes in 2.0.6
-* Build fixes for Darwin.
+* Bug fixes.
+* Build fixes for Darwin and FreeBSD.
 * Support for inetd/xinetd/daemontools.
 
 Changes in 2.0.5
