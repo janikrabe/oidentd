@@ -1,7 +1,7 @@
-/* A Bison parser, made by GNU Bison 1.875.  */
+/* A Bison parser, made by GNU Bison 1.875a.  */
 
 /* Skeleton parser for Yacc-like parsing with Bison,
-   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -64,8 +64,7 @@
      TOK_REPLY = 266,
      TOK_ALLOWDENY = 267,
      TOK_CAP = 268,
-     TOK_STRING = 269,
-     TOK_USERNAME = 270
+     TOK_STRING = 269
    };
 #endif
 #define TOK_USER 258
@@ -80,7 +79,6 @@
 #define TOK_ALLOWDENY 267
 #define TOK_CAP 268
 #define TOK_STRING 269
-#define TOK_USERNAME 270
 
 
 
@@ -166,7 +164,7 @@ typedef union YYSTYPE {
 	char *string;
 } YYSTYPE;
 /* Line 191 of yacc.c.  */
-#line 169 "y.tab.c"
+#line 168 "y.tab.c"
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
@@ -178,7 +176,7 @@ typedef union YYSTYPE {
 
 
 /* Line 214 of yacc.c.  */
-#line 181 "y.tab.c"
+#line 180 "y.tab.c"
 
 #if ! defined (yyoverflow) || YYERROR_VERBOSE
 
@@ -277,20 +275,20 @@ union yyalloc
 /* YYFINAL -- State number of the termination state. */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   85
+#define YYLAST   87
 
 /* YYNTOKENS -- Number of terminals. */
-#define YYNTOKENS  18
+#define YYNTOKENS  17
 /* YYNNTS -- Number of nonterminals. */
-#define YYNNTS  26
+#define YYNNTS  25
 /* YYNRULES -- Number of rules. */
-#define YYNRULES  47
+#define YYNRULES  45
 /* YYNRULES -- Number of states. */
-#define YYNSTATES  87
+#define YYNSTATES  85
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   270
+#define YYMAXUTOK   269
 
 #define YYTRANSLATE(YYX) 						\
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -310,7 +308,7 @@ static const unsigned char yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,    16,     2,    17,     2,     2,     2,     2,
+       2,     2,     2,    15,     2,    16,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -324,8 +322,7 @@ static const unsigned char yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15
+       5,     6,     7,     8,     9,    10,    11,    12,    13,    14
 };
 
 #if YYDEBUG
@@ -334,40 +331,39 @@ static const unsigned char yytranslate[] =
 static const unsigned char yyprhs[] =
 {
        0,     0,     3,     4,     7,     9,    10,    13,    15,    17,
-      18,    24,    26,    28,    29,    36,    38,    41,    42,    45,
-      50,    55,    60,    66,    68,    70,    73,    75,    77,    80,
-      83,    86,    89,    92,    94,    97,   101,   104,   107,   109,
-     112,   117,   122,   127,   133,   136,   139,   141
+      18,    24,    25,    32,    34,    37,    38,    41,    46,    51,
+      56,    62,    64,    66,    69,    71,    73,    76,    79,    82,
+      85,    88,    90,    93,    97,   100,   103,   105,   108,   113,
+     118,   123,   129,   132,   135,   137
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS. */
 static const yysigned_char yyrhs[] =
 {
-      19,     0,    -1,    -1,    19,    20,    -1,    22,    -1,    -1,
-      21,    41,    -1,    26,    -1,    23,    -1,    -1,     4,    24,
-      16,    28,    17,    -1,    15,    -1,    14,    -1,    -1,     3,
-      25,    27,    16,    28,    17,    -1,    29,    -1,    28,    29,
-      -1,    -1,    30,    31,    -1,     4,    16,    38,    17,    -1,
-      33,    16,    38,    17,    -1,    32,    16,    38,    17,    -1,
-      33,    32,    16,    38,    17,    -1,    36,    -1,    37,    -1,
-      36,    37,    -1,    34,    -1,    35,    -1,    34,    35,    -1,
-       7,    14,    -1,     8,    14,    -1,     6,    14,    -1,     9,
-      14,    -1,    40,    -1,    38,    40,    -1,    10,    11,    14,
-      -1,    39,    14,    -1,    10,    13,    -1,    39,    -1,    12,
-      13,    -1,     5,    16,    43,    17,    -1,    33,    16,    43,
-      17,    -1,    32,    16,    43,    17,    -1,    33,    32,    16,
-      43,    17,    -1,    11,    14,    -1,    42,    14,    -1,    13,
-      -1,    42,    -1
+      18,     0,    -1,    -1,    18,    19,    -1,    21,    -1,    -1,
+      20,    39,    -1,    24,    -1,    22,    -1,    -1,     4,    23,
+      15,    26,    16,    -1,    -1,     3,    14,    25,    15,    26,
+      16,    -1,    27,    -1,    26,    27,    -1,    -1,    28,    29,
+      -1,     4,    15,    36,    16,    -1,    31,    15,    36,    16,
+      -1,    30,    15,    36,    16,    -1,    31,    30,    15,    36,
+      16,    -1,    34,    -1,    35,    -1,    34,    35,    -1,    32,
+      -1,    33,    -1,    32,    33,    -1,     7,    14,    -1,     8,
+      14,    -1,     6,    14,    -1,     9,    14,    -1,    38,    -1,
+      36,    38,    -1,    10,    11,    14,    -1,    37,    14,    -1,
+      10,    13,    -1,    37,    -1,    12,    13,    -1,     5,    15,
+      41,    16,    -1,    31,    15,    41,    16,    -1,    30,    15,
+      41,    16,    -1,    31,    30,    15,    41,    16,    -1,    11,
+      14,    -1,    40,    14,    -1,    13,    -1,    40,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const unsigned short yyrline[] =
 {
-       0,    83,    83,    86,    90,    92,    92,   107,   109,   113,
-     113,   125,   127,   131,   131,   164,   166,   170,   170,   179,
-     184,   186,   188,   192,   194,   196,   200,   202,   204,   208,
-     227,   244,   263,   280,   282,   286,   294,   302,   307,   309,
-     320,   322,   324,   326,   330,   337,   347,   357
+       0,    80,    80,    83,    87,    89,    89,   104,   106,   110,
+     110,   122,   122,   155,   157,   161,   161,   170,   175,   177,
+     179,   183,   185,   187,   191,   193,   195,   199,   218,   235,
+     254,   271,   273,   277,   285,   293,   298,   300,   311,   313,
+     315,   317,   321,   328,   338,   348
 };
 #endif
 
@@ -378,13 +374,13 @@ static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "TOK_USER", "TOK_DEFAULT", "TOK_GLOBAL", 
   "TOK_FROM", "TOK_TO", "TOK_FPORT", "TOK_LPORT", "TOK_FORCE", 
-  "TOK_REPLY", "TOK_ALLOWDENY", "TOK_CAP", "TOK_STRING", "TOK_USERNAME", 
-  "'{'", "'}'", "$accept", "program", "parse_global", "@1", "user_rule", 
-  "default_statement", "@2", "user_spec", "user_statement", "@3", 
-  "target_rule", "target_statement", "@4", "range_rule", "src_rule", 
-  "dest_rule", "to_statement", "fport_statement", "from_statement", 
-  "lport_statement", "cap_rule", "force_reply", "cap_statement", 
-  "user_range_rule", "user_reply", "user_cap_rule", 0
+  "TOK_REPLY", "TOK_ALLOWDENY", "TOK_CAP", "TOK_STRING", "'{'", "'}'", 
+  "$accept", "program", "parse_global", "@1", "user_rule", 
+  "default_statement", "@2", "user_statement", "@3", "target_rule", 
+  "target_statement", "@4", "range_rule", "src_rule", "dest_rule", 
+  "to_statement", "fport_statement", "from_statement", "lport_statement", 
+  "cap_rule", "force_reply", "cap_statement", "user_range_rule", 
+  "user_reply", "user_cap_rule", 0
 };
 #endif
 
@@ -394,28 +390,28 @@ static const char *const yytname[] =
 static const unsigned short yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
-     265,   266,   267,   268,   269,   270,   123,   125
+     265,   266,   267,   268,   269,   123,   125
 };
 # endif
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const unsigned char yyr1[] =
 {
-       0,    18,    19,    19,    20,    21,    20,    22,    22,    24,
-      23,    25,    25,    27,    26,    28,    28,    30,    29,    31,
-      31,    31,    31,    32,    32,    32,    33,    33,    33,    34,
-      35,    36,    37,    38,    38,    39,    39,    40,    40,    40,
-      41,    41,    41,    41,    42,    42,    43,    43
+       0,    17,    18,    18,    19,    20,    19,    21,    21,    23,
+      22,    25,    24,    26,    26,    28,    27,    29,    29,    29,
+      29,    30,    30,    30,    31,    31,    31,    32,    33,    34,
+      35,    36,    36,    37,    37,    38,    38,    38,    39,    39,
+      39,    39,    40,    40,    41,    41
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const unsigned char yyr2[] =
 {
        0,     2,     0,     2,     1,     0,     2,     1,     1,     0,
-       5,     1,     1,     0,     6,     1,     2,     0,     2,     4,
-       4,     4,     5,     1,     1,     2,     1,     1,     2,     2,
-       2,     2,     2,     1,     2,     3,     2,     2,     1,     2,
-       4,     4,     4,     5,     2,     2,     1,     1
+       5,     0,     6,     1,     2,     0,     2,     4,     4,     4,
+       5,     1,     1,     2,     1,     1,     2,     2,     2,     2,
+       2,     1,     2,     3,     2,     2,     1,     2,     4,     4,
+       4,     5,     2,     2,     1,     1
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -424,46 +420,46 @@ static const unsigned char yyr2[] =
 static const unsigned char yydefact[] =
 {
        2,     5,     1,     0,     9,     3,     0,     4,     8,     7,
-      12,    11,    13,     0,     0,     0,     0,     0,     0,     0,
-       0,    26,    27,    23,    24,     6,     0,    17,     0,    31,
-      29,    30,    32,     0,     0,     0,    28,    25,    17,    17,
-      15,     0,     0,    46,    47,     0,     0,     0,     0,    17,
-      10,    16,     0,    18,     0,     0,    44,    45,    40,    42,
-      41,     0,    14,     0,     0,     0,     0,    43,     0,     0,
-       0,    38,    33,     0,     0,     0,     0,    37,    39,    19,
-      34,    36,    21,    20,     0,    35,    22
+      11,     0,     0,     0,     0,     0,     0,     0,     0,    24,
+      25,    21,    22,     6,     0,    15,     0,    29,    27,    28,
+      30,     0,     0,     0,    26,    23,    15,    15,    13,     0,
+       0,    44,    45,     0,     0,     0,     0,    15,    10,    14,
+       0,    16,     0,     0,    42,    43,    38,    40,    39,     0,
+      12,     0,     0,     0,     0,    41,     0,     0,     0,    36,
+      31,     0,     0,     0,     0,    35,    37,    17,    32,    34,
+      19,    18,     0,    33,    20
 };
 
 /* YYDEFGOTO[NTERM-NUM]. */
 static const yysigned_char yydefgoto[] =
 {
-      -1,     1,     5,     6,     7,     8,    13,    12,     9,    26,
-      39,    40,    41,    53,    19,    20,    21,    22,    23,    24,
-      70,    71,    72,    25,    44,    45
+      -1,     1,     5,     6,     7,     8,    11,     9,    24,    37,
+      38,    39,    51,    17,    18,    19,    20,    21,    22,    68,
+      69,    70,    23,    42,    43
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -68
+#define YYPACT_NINF -66
 static const yysigned_char yypact[] =
 {
-     -68,    49,   -68,    -1,   -68,   -68,    39,   -68,   -68,   -68,
-     -68,   -68,   -68,    11,    15,    23,    36,    37,    48,    20,
-       2,    51,   -68,    52,   -68,   -68,    50,   -68,    43,   -68,
-     -68,   -68,   -68,    43,    43,    53,   -68,   -68,   -68,    46,
-     -68,    34,    54,   -68,    56,    55,    57,    58,    43,    59,
-     -68,   -68,    61,   -68,    62,     3,   -68,   -68,   -68,   -68,
-     -68,    63,   -68,    45,    45,    45,    65,   -68,    47,    60,
-      12,    68,   -68,    13,    16,    45,    69,   -68,   -68,   -68,
-     -68,   -68,   -68,   -68,    22,   -68,   -68
+     -66,    49,   -66,    -5,   -66,   -66,    39,   -66,   -66,   -66,
+     -66,    -3,    11,    25,    36,    37,    48,    19,     4,    51,
+     -66,    18,   -66,   -66,    46,   -66,    43,   -66,   -66,   -66,
+     -66,    43,    43,    50,   -66,   -66,   -66,    52,   -66,    34,
+      53,   -66,    55,    54,    56,    57,    43,    58,   -66,   -66,
+      60,   -66,    61,     5,   -66,   -66,   -66,   -66,   -66,    62,
+     -66,    45,    45,    45,    64,   -66,    47,    67,    12,    63,
+     -66,    13,    20,    45,    68,   -66,   -66,   -66,   -66,   -66,
+     -66,   -66,    21,   -66,   -66
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yysigned_char yypgoto[] =
 {
-     -68,   -68,   -68,   -68,   -68,   -68,   -68,   -68,   -68,   -68,
-      26,   -29,   -68,   -68,   -20,    24,   -68,    64,   -68,    44,
-     -60,   -68,   -67,   -68,   -68,   -32
+     -66,   -66,   -66,   -66,   -66,   -66,   -66,   -66,   -66,    27,
+     -29,   -66,   -66,   -18,    32,   -66,    65,   -66,    66,   -58,
+     -66,   -65,   -66,   -66,   -30
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -473,43 +469,43 @@ static const yysigned_char yypgoto[] =
 #define YYTABLE_NINF -1
 static const unsigned char yytable[] =
 {
-      35,    46,    47,    80,    73,    74,    80,    80,    15,    15,
-      51,    18,    18,    10,    11,    84,    61,    80,    34,    65,
-      51,    54,    68,    68,    69,    69,    68,    27,    69,    79,
-      82,    28,    68,    83,    69,    66,    33,    29,    52,    86,
-      15,    16,    17,    18,    14,    15,    16,    17,    18,     2,
-      30,    31,     3,     4,    42,    68,    43,    69,    76,    17,
-      77,    18,    32,    50,    49,    55,    38,    37,    56,    48,
-      57,     0,    58,    78,    59,    60,    62,    63,    64,     0,
-      67,    75,    81,    85,     0,    36
+      33,    44,    45,    78,    71,    72,    78,    78,    49,    10,
+      13,    13,    25,    16,    16,    82,    59,    78,    49,    32,
+      63,    52,    66,    66,    67,    67,    26,    16,    77,    80,
+      66,    66,    67,    67,    31,    64,    81,    84,    50,    27,
+      13,    14,    15,    16,    12,    13,    14,    15,    16,     2,
+      28,    29,     3,     4,    40,    66,    41,    67,    74,    15,
+      75,    36,    30,    47,     0,    46,     0,    54,    48,    55,
+      56,    53,    57,    58,    60,    61,    62,    79,    65,    73,
+      76,     0,    83,     0,    34,     0,     0,    35
 };
 
 static const yysigned_char yycheck[] =
 {
-      20,    33,    34,    70,    64,    65,    73,    74,     6,     6,
-      39,     9,     9,    14,    15,    75,    48,    84,    16,    16,
-      49,    41,    10,    10,    12,    12,    10,    16,    12,    17,
-      17,    16,    10,    17,    12,    55,    16,    14,     4,    17,
+      18,    31,    32,    68,    62,    63,    71,    72,    37,    14,
+       6,     6,    15,     9,     9,    73,    46,    82,    47,    15,
+      15,    39,    10,    10,    12,    12,    15,     9,    16,    16,
+      10,    10,    12,    12,    15,    53,    16,    16,     4,    14,
        6,     7,     8,     9,     5,     6,     7,     8,     9,     0,
       14,    14,     3,     4,    11,    10,    13,    12,    11,     8,
-      13,     9,    14,    17,    38,    41,    16,    23,    14,    16,
-      14,    -1,    17,    13,    17,    17,    17,    16,    16,    -1,
-      17,    16,    14,    14,    -1,    21
+      13,    15,    14,    36,    -1,    15,    -1,    14,    16,    14,
+      16,    39,    16,    16,    16,    15,    15,    14,    16,    15,
+      13,    -1,    14,    -1,    19,    -1,    -1,    21
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const unsigned char yystos[] =
 {
-       0,    19,     0,     3,     4,    20,    21,    22,    23,    26,
-      14,    15,    25,    24,     5,     6,     7,     8,     9,    32,
-      33,    34,    35,    36,    37,    41,    27,    16,    16,    14,
-      14,    14,    14,    16,    16,    32,    35,    37,    16,    28,
-      29,    30,    11,    13,    42,    43,    43,    43,    16,    28,
-      17,    29,     4,    31,    32,    33,    14,    14,    17,    17,
-      17,    43,    17,    16,    16,    16,    32,    17,    10,    12,
-      38,    39,    40,    38,    38,    16,    11,    13,    13,    17,
-      40,    14,    17,    17,    38,    14,    17
+       0,    18,     0,     3,     4,    19,    20,    21,    22,    24,
+      14,    23,     5,     6,     7,     8,     9,    30,    31,    32,
+      33,    34,    35,    39,    25,    15,    15,    14,    14,    14,
+      14,    15,    15,    30,    33,    35,    15,    26,    27,    28,
+      11,    13,    40,    41,    41,    41,    15,    26,    16,    27,
+       4,    29,    30,    31,    14,    14,    16,    16,    16,    41,
+      16,    15,    15,    15,    30,    16,    10,    12,    36,    37,
+      38,    36,    36,    15,    11,    13,    13,    16,    38,    14,
+      16,    16,    36,    14,    16
 };
 
 #if ! defined (YYSIZE_T) && defined (__SIZE_TYPE__)
@@ -536,6 +532,7 @@ static const unsigned char yystos[] =
 #define YYACCEPT	goto yyacceptlab
 #define YYABORT		goto yyabortlab
 #define YYERROR		goto yyerrlab1
+
 
 /* Like YYERROR except do call yyerror.  This remains here temporarily
    to ease the transition to the new meaning of YYERROR, for GCC.
@@ -1119,7 +1116,7 @@ yyreduce:
   switch (yyn)
     {
         case 5:
-#line 92 "./oidentd_cfg_parse.y"
+#line 89 "./oidentd_cfg_parse.y"
     {
 		if (parser_mode != PARSE_USER) {
 			o_log(NORMAL, "%s",
@@ -1133,14 +1130,14 @@ yyreduce:
     break;
 
   case 6:
-#line 101 "./oidentd_cfg_parse.y"
+#line 98 "./oidentd_cfg_parse.y"
     {
 		list_prepend(&pref_list, cur_cap);
 	}
     break;
 
   case 9:
-#line 113 "./oidentd_cfg_parse.y"
+#line 110 "./oidentd_cfg_parse.y"
     {
 		if (parser_mode != PARSE_SYSTEM)
 			YYABORT;
@@ -1152,8 +1149,8 @@ yyreduce:
 	}
     break;
 
-  case 13:
-#line 131 "./oidentd_cfg_parse.y"
+  case 11:
+#line 122 "./oidentd_cfg_parse.y"
     {
 		if (parser_mode != PARSE_SYSTEM) {
 			free(yyvsp[0].string);
@@ -1183,38 +1180,38 @@ yyreduce:
 	}
     break;
 
-  case 14:
-#line 158 "./oidentd_cfg_parse.y"
+  case 12:
+#line 149 "./oidentd_cfg_parse.y"
     {
 		user_db_add(cur_user);
 	}
     break;
 
-  case 17:
-#line 170 "./oidentd_cfg_parse.y"
+  case 15:
+#line 161 "./oidentd_cfg_parse.y"
     {
 		cur_cap = xcalloc(1, sizeof(struct user_cap));
 		cur_cap->caps = default_caps;
 	}
     break;
 
-  case 18:
-#line 173 "./oidentd_cfg_parse.y"
+  case 16:
+#line 164 "./oidentd_cfg_parse.y"
     {
 		list_prepend(&cur_user->cap_list, cur_cap);
 	}
     break;
 
-  case 19:
-#line 179 "./oidentd_cfg_parse.y"
+  case 17:
+#line 170 "./oidentd_cfg_parse.y"
     {
 		if (cur_user == default_user)
 			default_caps = cur_cap->caps;
 	}
     break;
 
-  case 29:
-#line 208 "./oidentd_cfg_parse.y"
+  case 27:
+#line 199 "./oidentd_cfg_parse.y"
     {
 		cur_cap->dest = xmalloc(sizeof(struct sockaddr_storage));
 
@@ -1233,8 +1230,8 @@ yyreduce:
 	}
     break;
 
-  case 30:
-#line 227 "./oidentd_cfg_parse.y"
+  case 28:
+#line 218 "./oidentd_cfg_parse.y"
     {
 		cur_cap->fport = xmalloc(sizeof(struct port_range));
 
@@ -1251,8 +1248,8 @@ yyreduce:
 	}
     break;
 
-  case 31:
-#line 244 "./oidentd_cfg_parse.y"
+  case 29:
+#line 235 "./oidentd_cfg_parse.y"
     {
 		cur_cap->src = xmalloc(sizeof(struct sockaddr_storage));
 
@@ -1271,8 +1268,8 @@ yyreduce:
 	}
     break;
 
-  case 32:
-#line 263 "./oidentd_cfg_parse.y"
+  case 30:
+#line 254 "./oidentd_cfg_parse.y"
     {
 		cur_cap->lport = xmalloc(sizeof(struct port_range));
 
@@ -1289,8 +1286,8 @@ yyreduce:
 	}
     break;
 
-  case 35:
-#line 286 "./oidentd_cfg_parse.y"
+  case 33:
+#line 277 "./oidentd_cfg_parse.y"
     {
 		cur_cap->caps = CAP_REPLY;
 		cur_cap->action = ACTION_FORCE;
@@ -1300,8 +1297,8 @@ yyreduce:
 	}
     break;
 
-  case 36:
-#line 294 "./oidentd_cfg_parse.y"
+  case 34:
+#line 285 "./oidentd_cfg_parse.y"
     {
 		cur_cap->force_data = xrealloc(cur_cap->force_data,
 			++cur_cap->num_replies * sizeof(u_char *));
@@ -1309,16 +1306,16 @@ yyreduce:
 	}
     break;
 
-  case 37:
-#line 302 "./oidentd_cfg_parse.y"
+  case 35:
+#line 293 "./oidentd_cfg_parse.y"
     {
 		cur_cap->caps = yyvsp[0].value;
 		cur_cap->action = ACTION_FORCE;
 	}
     break;
 
-  case 39:
-#line 309 "./oidentd_cfg_parse.y"
+  case 37:
+#line 300 "./oidentd_cfg_parse.y"
     {
 		if (yyvsp[-1].value == ACTION_ALLOW)
 			cur_cap->caps |= yyvsp[0].value;
@@ -1329,8 +1326,8 @@ yyreduce:
 	}
     break;
 
-  case 44:
-#line 330 "./oidentd_cfg_parse.y"
+  case 42:
+#line 321 "./oidentd_cfg_parse.y"
     {
 		cur_cap->caps = CAP_REPLY;
 		cur_cap->force_data = xrealloc(cur_cap->force_data,
@@ -1339,8 +1336,8 @@ yyreduce:
 	}
     break;
 
-  case 45:
-#line 337 "./oidentd_cfg_parse.y"
+  case 43:
+#line 328 "./oidentd_cfg_parse.y"
     {
 		if (cur_cap->num_replies < MAX_RANDOM_REPLIES) {
 			cur_cap->force_data = xrealloc(cur_cap->force_data,
@@ -1350,8 +1347,8 @@ yyreduce:
 	}
     break;
 
-  case 46:
-#line 347 "./oidentd_cfg_parse.y"
+  case 44:
+#line 338 "./oidentd_cfg_parse.y"
     {
 		if (yyvsp[0].value == CAP_SPOOF || yyvsp[0].value == CAP_SPOOF_ALL || yyvsp[0].value == CAP_SPOOF_PRIVPORT)
 		{
@@ -1366,8 +1363,8 @@ yyreduce:
 
     }
 
-/* Line 991 of yacc.c.  */
-#line 1370 "y.tab.c"
+/* Line 999 of yacc.c.  */
+#line 1368 "y.tab.c"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -1481,28 +1478,13 @@ yyerrlab:
 
   /* Else will try to reuse lookahead token after shifting the error
      token.  */
-  goto yyerrlab2;
+  goto yyerrlab1;
 
 
 /*----------------------------------------------------.
 | yyerrlab1 -- error raised explicitly by an action.  |
 `----------------------------------------------------*/
 yyerrlab1:
-
-  /* Suppress GCC warning that yyerrlab1 is unused when no action
-     invokes YYERROR.  */
-#if defined (__GNUC_MINOR__) && 2093 <= (__GNUC__ * 1000 + __GNUC_MINOR__)
-  __attribute__ ((__unused__))
-#endif
-
-
-  goto yyerrlab2;
-
-
-/*---------------------------------------------------------------.
-| yyerrlab2 -- pop states until the error token can be shifted.  |
-`---------------------------------------------------------------*/
-yyerrlab2:
   yyerrstatus = 3;	/* Each real token shifted decrements this.  */
 
   for (;;)
@@ -1576,7 +1558,7 @@ yyreturn:
 }
 
 
-#line 360 "./oidentd_cfg_parse.y"
+#line 351 "./oidentd_cfg_parse.y"
 
 
 /*

@@ -39,12 +39,13 @@
 #include <oidentd_options.h>
 #include <oidentd_cfg_parse.h>
 
-#define MAX_STRING_LEN 8192
+#define STRING_CHUNK_LEN 256
 
 extern int parser_mode;
 
-static char string_buf[MAX_STRING_LEN];
+static char *string_buf;
 static size_t str_idx;
+static size_t max_slen;
 
 static char get_esc_char(char c);
 
@@ -175,8 +176,9 @@ SPOOF_PRIVPORT		spoof_privport
 }
 
 \" {
-	string_buf[0] = '\0';
+	string_buf = xmalloc(STRING_CHUNK_LEN);
 	str_idx = 0;
+	max_slen = STRING_CHUNK_LEN;
 
 	BEGIN(state_string);
 }
@@ -197,7 +199,8 @@ SPOOF_PRIVPORT		spoof_privport
 
 <state_string>\" {
 	string_buf[str_idx++] = '\0';
-	yylval.string = xstrdup(string_buf);
+	string_buf = xrealloc(string_buf, str_idx);
+	yylval.string = string_buf;
 
 	BEGIN(INITIAL);
 	return (TOK_STRING);
@@ -205,9 +208,11 @@ SPOOF_PRIVPORT		spoof_privport
 
 <state_string>\n {
 	if (parser_mode == PARSE_SYSTEM) {
-		o_log(NORMAL, "[line %u] Error: Unterminated string constant", current_line);
+		o_log(NORMAL, "[line %u] Error: Unterminated string constant",
+			current_line);
 	}
 
+	free(string_buf);
 	return (-1);
 }
 
@@ -226,16 +231,13 @@ SPOOF_PRIVPORT		spoof_privport
 				current_line, yytext);
 		}
 
+		free(string_buf);
 		return (-1);
 	}
 
-	if (str_idx >= sizeof(string_buf) - 1) {
-		if (parser_mode == PARSE_SYSTEM) {
-			o_log(NORMAL, "[line %u] String too long.  Max length is %d",
-				current_line, sizeof(string_buf), yytext);
-		}
-
-		return (-1);
+	if (str_idx >= max_slen - 1) {
+		max_slen += STRING_CHUNK_LEN;
+		string_buf = xrealloc(string_buf, max_slen);
 	}
 
 	string_buf[str_idx++] = result;
@@ -246,13 +248,9 @@ SPOOF_PRIVPORT		spoof_privport
 
 	result = strtoul(yytext + 2, NULL, 16);
 
-	if (str_idx >= sizeof(string_buf) - 1) {
-		if (parser_mode == PARSE_SYSTEM) {
-			o_log(NORMAL, "[line %u] String too long.  Max length is %d",
-				current_line, sizeof(string_buf), yytext);
-		}
-
-		return (-1);
+	if (str_idx >= max_slen - 2) {
+		max_slen += STRING_CHUNK_LEN;
+		string_buf = xrealloc(string_buf, max_slen);
 	}
 
 	string_buf[str_idx++] = result;
@@ -264,38 +262,39 @@ SPOOF_PRIVPORT		spoof_privport
 			current_line, yytext);
 	}
 
+	free(string_buf);
 	return (-1);
 }
 
 <state_string>\\. {
-	if (str_idx >= sizeof(string_buf) - 1) {
-		if (parser_mode == PARSE_SYSTEM) {
-			o_log(NORMAL, "[line %u] String too long.  Max length is %d",
-				current_line, sizeof(string_buf), yytext);
-		}
-
-		return (-1);
+	if (str_idx >= max_slen - 2) {
+		max_slen += STRING_CHUNK_LEN;
+		string_buf = xrealloc(string_buf, max_slen);
 	}
 
 	string_buf[str_idx++] = get_esc_char(yytext[1]);
 }
 
-<state_string>. {
-	if (str_idx >= sizeof(string_buf) - 1) {
-		if (parser_mode == PARSE_SYSTEM) {
-			o_log(NORMAL, "[line %u] String too long.  Max length is %d",
-				current_line, sizeof(string_buf), yytext);
-		}
+<state_string>[^\\\n\"]+ {
+	size_t len = yyleng;
+	char *p = yytext;
 
-		return (-1);
+	if (str_idx + len >= max_slen - 1) {
+		max_slen += len + 1;
+		string_buf = xrealloc(string_buf, max_slen);
 	}
 
-	string_buf[str_idx++] = yytext[0];
+	while (*p != '\0')
+		string_buf[str_idx++] = *p++;
 }
 
-[^ \n\t\"]+ {
+([^\n\t "/{}]([^\n\t {}]*))|(\/([^*\n\t {}]+)([^\n\t {}]*)) {
 	yylval.string = xstrdup(yytext);
-	return (TOK_USERNAME);
+	return (TOK_STRING);
+}
+
+. {
+	return (yytext[0]);
 }
 
 %%

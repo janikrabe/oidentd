@@ -74,9 +74,6 @@ u_int16_t default_caps;
 %token <value> TOK_ALLOWDENY
 %token <value> TOK_CAP
 %token <string> TOK_STRING
-%token <string> TOK_USERNAME
-
-%type <string> user_spec
 
 %%
 
@@ -121,14 +118,8 @@ default_statement:
 	} '{' target_rule '}'
 ;
 
-user_spec:
-	TOK_USERNAME
-|
-	TOK_STRING
-;
-
 user_statement:
-	TOK_USER user_spec {
+	TOK_USER TOK_STRING {
 		if (parser_mode != PARSE_SYSTEM) {
 			free($2);
 			YYABORT;
