@@ -119,6 +119,12 @@
 #	define debug(format, args...) do { } while (0)
 #endif
 
+#ifdef HAVE___ATTRIBUTE__
+	#define __format(x) __attribute__((format x ))
+#else
+	#define __format(x)
+#endif
+
 typedef enum {
 	false = 0,
 	true = 1

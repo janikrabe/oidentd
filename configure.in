@@ -33,9 +33,30 @@ fi
 enableval=""
 AC_ARG_ENABLE(debug, [  --enable-debug          Enable debugging])
 if test "$enableval" = "yes"; then
-	AC_DEFINE(ENABLE_DEBUGGING)
+	AC_DEFINE(ENABLE_DEBUGGING, 1, [Define to enable debugging])
 	CFLAGS="$CFLAGS -g3 -W -Wall -Wshadow -Wcast-align -Wwrite-strings -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Winline"
 fi
+
+AC_DEFUN(AC_C___ATTRIBUTE__, [
+AC_MSG_CHECKING(for __attribute__)
+AC_CACHE_VAL(ac_cv___attribute__, [
+AC_TRY_COMPILE([
+#include <stdlib.h>],
+[static void foo(char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
+static void
+foo(char *fmt, ...) {
+	exit(1);
+}],
+ac_cv___attribute__=yes,
+ac_cv___attribute__=no)])
+if test "$ac_cv___attribute__" = "yes"; then
+	AC_DEFINE(HAVE___ATTRIBUTE__, 1, [define if your compiler has __attribute__])
+fi
+AC_MSG_RESULT($ac_cv___attribute__)
+])
+
+AC_C___ATTRIBUTE__
+
 
 AC_CHECK_HEADERS(netinet/ip_compat.h netinet6/in6_pcb.h)
 
@@ -59,7 +80,7 @@ AC_TRY_COMPILE([#include <unistd.h>
 				#include <sys/types.h>
 				#include <sys/socket.h>],
 					[sizeof(socklen_t);],
-			[AC_DEFINE(HAVE_SOCKLEN_T)
+			[AC_DEFINE(HAVE_SOCKLEN_T, 1, [Define if you have socklen_t])
 			AC_MSG_RESULT(yes)],
 			[AC_MSG_RESULT(no)])
 
@@ -71,7 +92,7 @@ AC_TRY_COMPILE([#include <unistd.h>
 				#include <netinet/in_systm.h>
 				#include <netinet/in.h>],
 					[sizeof(in_addr_t);],
-			[AC_DEFINE(HAVE_IN_ADDR_T)
+			[AC_DEFINE(HAVE_IN_ADDR_T, 1, [Define if you have in_addr_t])
 			AC_MSG_RESULT(yes)],
 			[AC_MSG_RESULT(no)])
 
@@ -83,15 +104,29 @@ AC_TRY_COMPILE([#include <unistd.h>
 				#include <netinet/in_systm.h>
 				#include <netinet/in.h>],
 					[sizeof(in_port_t);],
-			[AC_DEFINE(HAVE_IN_PORT_T)
+			[AC_DEFINE(HAVE_IN_PORT_T, 1, [Define if you have in_port_t])
 			AC_MSG_RESULT(yes)],
 			[AC_MSG_RESULT(no)])
 
-AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO), ipv6_support=no)
-AC_CHECK_FUNC(freeaddrinfo, AC_DEFINE(HAVE_FREEADDRINFO), ipv6_support=no)
-AC_CHECK_FUNC(getnameinfo, AC_DEFINE(HAVE_GETNAMEINFO), ipv6_support=no)
-AC_CHECK_FUNC(gai_strerror, AC_DEFINE(HAVE_GAI_STRERROR), ipv6_support=no)
-AC_CHECK_FUNC(inet_ntop, AC_DEFINE(HAVE_INET_NTOP), ipv6_support=no)
+AC_CHECK_FUNC(getaddrinfo,
+	AC_DEFINE(HAVE_GETADDRINFO, 1, [Define if you have getaddrinfo]),
+	ipv6_support=no)
+
+AC_CHECK_FUNC(freeaddrinfo,
+	AC_DEFINE(HAVE_FREEADDRINFO, 1, [Define if you have freeaddrinfo]),
+	ipv6_support=no)
+
+AC_CHECK_FUNC(getnameinfo,
+	AC_DEFINE(HAVE_GETNAMEINFO, 1, [Define if you have getnameinfo]),
+	ipv6_support=no)
+
+AC_CHECK_FUNC(gai_strerror,
+	AC_DEFINE(HAVE_GAI_STRERROR, 1, [Define if you have gai_strerror]),
+	ipv6_support=no)
+
+AC_CHECK_FUNC(inet_ntop,
+	AC_DEFINE(HAVE_INET_NTOP, 1, [Define if you have inet_ntop]),
+	ipv6_support=no)
 
 AC_CHECK_FUNCS(vasprintf asprintf snprintf vsnprintf inet_aton getpagesize getopt_long)
 
@@ -107,7 +142,7 @@ AC_MSG_RESULT($have_struct_addrinfo)
 if test "$have_struct_addrinfo" = "no"; then
 	ipv6_support=no
 else
-	AC_DEFINE(HAVE_STRUCT_ADDRINFO)
+	AC_DEFINE(HAVE_STRUCT_ADDRINFO, 1, [Define if you have struct addrinfo])
 fi
 
 AC_MSG_CHECKING(for struct sockaddr_storage)
@@ -121,7 +156,7 @@ AC_MSG_RESULT($have_sockaddr_storage)
 if test "$have_sockaddr_storage" = "no"; then
 	ipv6_support=no
 else
-	AC_DEFINE(HAVE_STRUCT_SOCKADDR_STORAGE)
+	AC_DEFINE(HAVE_STRUCT_SOCKADDR_STORAGE, 1, [Define if you have struct sockaddr storage])
 
 	AC_MSG_CHECKING(for ss_family member in struct sockaddr_storage)
 	AC_TRY_COMPILE(	[	#include <sys/types.h>
@@ -145,7 +180,7 @@ else
 		if test "$have_ss_family" = "no"; then
 			ipv6_support=no
 		else
-			AC_DEFINE(HAVE___SS_FAMILY)
+			AC_DEFINE(HAVE___SS_FAMILY, 1, [Define if the sockaddr storage struct has the ss_family member])
 		fi
 	fi
 fi
@@ -294,7 +329,7 @@ case "$host_os" in
 	;;
 
 	*solaris2.4* )
-		AC_DEFINE(SOLARIS, 4)
+		AC_DEFINE(SOLARIS, 4, [Solaris version number])
 		use_kmem=yes
 		masq_support=no
 		ipv6_support=no
@@ -304,7 +339,7 @@ case "$host_os" in
 	;;
 
 	*solaris2.5* )
-		AC_DEFINE(SOLARIS, 5)
+		AC_DEFINE(SOLARIS, 5, [Solaris version number])
 		use_kmem=yes
 		masq_support=no
 		ipv6_support=no
@@ -314,7 +349,7 @@ case "$host_os" in
 	;;
 
 	*solaris2.6* )
-		AC_DEFINE(SOLARIS, 6)
+		AC_DEFINE(SOLARIS, 6, [Solaris version number])
 		use_kmem=yes
 		masq_support=no
 		ipv6_support=no
@@ -324,7 +359,7 @@ case "$host_os" in
 	;;
 
 	*solaris2.7* )
-		AC_DEFINE(SOLARIS, 7)
+		AC_DEFINE(SOLARIS, 7, [Solaris version number])
 		use_kmem=yes
 		masq_support=no
 		ipv6_support=no
@@ -334,7 +369,7 @@ case "$host_os" in
 	;;
 
 	*solaris2.8* )
-		AC_DEFINE(SOLARIS, 8)
+		AC_DEFINE(SOLARIS, 8, [Solaris version number])
 		use_kmem=yes
 		masq_support=no
 		ipv6_support=no
@@ -344,8 +379,8 @@ case "$host_os" in
 	;;
 
 	*solaris2.9* )
-		AC_DEFINE(SOLARIS, 8)
-		AC_DEFINE(HAVE_GETNAMEINFO)
+		AC_DEFINE(SOLARIS, 8, [Solaris version number])
+		AC_DEFINE(HAVE_GETNAMEINFO, 1, [Define if you have getnameinfo])
 		use_kmem=yes
 		masq_support=no
 		ipv6_support=no
@@ -360,18 +395,18 @@ case "$host_os" in
 esac
 
 if test "$use_kmem" = "yes"; then
-	AC_DEFINE(USE_KMEM)
+	AC_DEFINE(USE_KMEM, 1, [Define if using /dev/kmem])
 	LIBS="$LIBS -lkvm"
 fi
 
 if test "$masq_support" = "yes"; then
-	AC_DEFINE(MASQ_SUPPORT)
+	AC_DEFINE(MASQ_SUPPORT, 1, [Define to include NAT/IP masq support])
 else
 	AC_MSG_WARN(not including NAT/IP masquerade support.)
 fi
 
 if test "$ipv6_support" = "yes"; then
-	AC_DEFINE(WANT_IPV6)
+	AC_DEFINE(WANT_IPV6, 1, [Define to include IPv6 support])
 else
 	AC_MSG_WARN(not including IPv6 support.)
 fi

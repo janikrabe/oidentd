@@ -28,7 +28,7 @@ typedef struct list {
 	void *data;
 } list_t;
 
-int o_log(int priority, const char *fmt, ...);
+int o_log(int priority, const char *fmt, ...) __format((printf, 2, 3));
 int drop_privs(uid_t new_uid, gid_t new_gid);
 int go_background(void);
 

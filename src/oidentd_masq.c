@@ -179,7 +179,7 @@ int find_masq_entry(struct sockaddr_storage *host,
 			} else {
 				if (mask < 1 || mask > 31) {
 					debug("[%s:%d] Invalid mask: %s",
-						MASQ_MAP, line_num, p, temp);
+						MASQ_MAP, line_num, temp);
 
 					goto failure;
 				}
@@ -196,7 +196,7 @@ int find_masq_entry(struct sockaddr_storage *host,
 
 		p = strtok(NULL, " \t");
 		if (p == NULL) {
-			debug("[%s:%d] Missing user parameter", MASQ_MAP, line_num, p);
+			debug("[%s:%d] Missing user parameter", MASQ_MAP, line_num);
 			goto failure;
 		}
 
@@ -211,8 +211,7 @@ int find_masq_entry(struct sockaddr_storage *host,
 
 		p = strtok(NULL, " \t");
 		if (p == NULL) {
-			debug("[%s:%d] Missing OS parameter",
-				MASQ_MAP, line_num, p);
+			debug("[%s:%d] Missing OS parameter", MASQ_MAP, line_num);
 
 			goto failure;
 		}
