@@ -85,7 +85,7 @@ static void random_ident(char *buf, size_t len) {
 		"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 	for (i = 0 ; i < len - 1 ; i++)
-		buf[i] = valid[randval(sizeof(valid))];
+		buf[i] = valid[randval(sizeof(valid) - 1)];
 
 	buf[i] = '\0';
 }
@@ -203,7 +203,7 @@ int get_ident(	const struct passwd *pwd,
 
 			case CAP_RANDOM:
 				if (user_db_have_cap(user_cap, CAP_RANDOM) == true) {
-					random_ident(reply, len);
+					random_ident(reply, MIN(12, len));
 					goto out_success;
 				}
 
