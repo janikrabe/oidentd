@@ -1,12 +1,9 @@
 #!/bin/sh
 
-#
-# As of 12/28/2001, Debian can install both autoconf 2.13 and autoconf 2.50.
-# We want 2.50, if it's available.
-#
-
 AUTOCONF=autoconf
 AUTOHEADER=autoheader
+AUTOMAKE=automake
+ACLOCAL=aclocal
 
 if test `which autoconf2.50 2> /dev/null`
 then
@@ -18,6 +15,15 @@ then
 	AUTOHEADER=autoheader2.50
 fi
 
+if test `which automake-1.7 2> /dev/null`
+then
+	AUTOMAKE=automake-1.7
+fi
+
+if test `which aclocal-1.7 2> /dev/null`
+then
+	ACLOCAL=aclocal-1.7
+fi
 
 ($AUTOCONF --version) < /dev/null > /dev/null 2>&1 || {
 	echo
@@ -27,7 +33,7 @@ fi
 	exit -1
 }
 
-(aclocal --version) < /dev/null > /dev/null 2>&1 || {
+($ACLOCAL --version) < /dev/null > /dev/null 2>&1 || {
 	echo
 	echo "Error: Missing 'aclocal'.  The version of \`automake'"
 	echo "installed doesn't appear recent enough."
@@ -36,7 +42,7 @@ fi
 	exit -1
 }
 
-(aclocal && $AUTOHEADER && automake --gnu --add-missing --copy && $AUTOCONF) || {
+($ACLOCAL && $AUTOHEADER && $AUTOMAKE --gnu --add-missing --copy && $AUTOCONF) || {
 	echo
 	echo "Error: Automatic generation of the configuration scripts has failed."
 	echo "Please try to generate them manually.  If you believe this faulure"
@@ -46,4 +52,3 @@ fi
 }
 
 echo "The configuration scripts have been generated successfully."
-echo "Please run the ./configure script with any necessary options."
