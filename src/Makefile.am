@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.1 2002/12/03 06:04:43 odin Exp $
+# $Id: Makefile.am,v 1.2 2003/01/09 19:14:55 odin Exp $
 
 SUBDIRS = missing
 sbin_PROGRAMS = oidentd
@@ -7,9 +7,6 @@ LDADD =-Lmissing -lmissing
 
 DISTCLEANFILES = \
 	stamp_parse \
-	oidentd_cfg_scan.c \
-	oidentd_cfg_parse.h \
-	oidentd_cfg_parse.c \
 	os.c
 
 oidentd_SOURCES = \
