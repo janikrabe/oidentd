@@ -100,7 +100,6 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA
 **
-** $Id: oidentd_cfg_parse.c,v 1.2 2003/01/09 19:49:02 odin Exp $
 */
 
 #include <config.h>
@@ -156,13 +155,13 @@ u_int16_t default_caps;
 #endif
 
 #ifndef YYSTYPE
-#line 61 "./oidentd_cfg_parse.y"
+#line 60 "./oidentd_cfg_parse.y"
 typedef union {
 	int value;
 	char *string;
 } yystype;
 /* Line 193 of /usr/share/bison/yacc.c.  */
-#line 166 "y.tab.c"
+#line 165 "y.tab.c"
 # define YYSTYPE yystype
 # define YYSTYPE_IS_TRIVIAL 1
 #endif
@@ -183,7 +182,7 @@ typedef struct yyltype
 
 
 /* Line 213 of /usr/share/bison/yacc.c.  */
-#line 187 "y.tab.c"
+#line 186 "y.tab.c"
 
 #if ! defined (yyoverflow) || YYERROR_VERBOSE
 
@@ -365,11 +364,11 @@ static const yysigned_char yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const unsigned short yyrline[] =
 {
-       0,    81,    81,    83,    87,    90,    89,   104,   106,   111,
-     110,   123,   122,   155,   157,   162,   161,   170,   175,   177,
-     179,   183,   185,   187,   191,   193,   195,   199,   218,   235,
-     254,   271,   273,   277,   285,   293,   298,   300,   311,   313,
-     315,   317,   321,   328,   338,   348
+       0,    80,    80,    82,    86,    89,    88,   103,   105,   110,
+     109,   122,   121,   154,   156,   161,   160,   169,   174,   176,
+     178,   182,   184,   186,   190,   192,   194,   198,   217,   234,
+     253,   270,   272,   276,   284,   292,   297,   299,   310,   312,
+     314,   316,   320,   327,   337,   347
 };
 #endif
 
@@ -1062,7 +1061,7 @@ yyreduce:
   switch (yyn)
     {
         case 5:
-#line 90 "./oidentd_cfg_parse.y"
+#line 89 "./oidentd_cfg_parse.y"
     {
 		if (parser_mode != PARSE_USER) {
 			o_log(NORMAL, "%s",
@@ -1076,14 +1075,14 @@ yyreduce:
     break;
 
   case 6:
-#line 99 "./oidentd_cfg_parse.y"
+#line 98 "./oidentd_cfg_parse.y"
     {
 		list_prepend(&pref_list, cur_cap);
 	}
     break;
 
   case 9:
-#line 111 "./oidentd_cfg_parse.y"
+#line 110 "./oidentd_cfg_parse.y"
     {
 		if (parser_mode != PARSE_SYSTEM)
 			YYABORT;
@@ -1096,7 +1095,7 @@ yyreduce:
     break;
 
   case 11:
-#line 123 "./oidentd_cfg_parse.y"
+#line 122 "./oidentd_cfg_parse.y"
     {
 		if (parser_mode != PARSE_SYSTEM) {
 			free(yyvsp[0].string);
@@ -1127,14 +1126,14 @@ yyreduce:
     break;
 
   case 12:
-#line 150 "./oidentd_cfg_parse.y"
+#line 149 "./oidentd_cfg_parse.y"
     {
 		user_db_add(cur_user);
 	}
     break;
 
   case 15:
-#line 162 "./oidentd_cfg_parse.y"
+#line 161 "./oidentd_cfg_parse.y"
     {
 		cur_cap = xcalloc(1, sizeof(struct user_cap));
 		cur_cap->caps = default_caps;
@@ -1142,14 +1141,14 @@ yyreduce:
     break;
 
   case 16:
-#line 165 "./oidentd_cfg_parse.y"
+#line 164 "./oidentd_cfg_parse.y"
     {
 		list_prepend(&cur_user->cap_list, cur_cap);
 	}
     break;
 
   case 17:
-#line 171 "./oidentd_cfg_parse.y"
+#line 170 "./oidentd_cfg_parse.y"
     {
 		if (cur_user == default_user)
 			default_caps = cur_cap->caps;
@@ -1157,7 +1156,7 @@ yyreduce:
     break;
 
   case 27:
-#line 200 "./oidentd_cfg_parse.y"
+#line 199 "./oidentd_cfg_parse.y"
     {
 		cur_cap->dest = xmalloc(sizeof(struct sockaddr_storage));
 
@@ -1177,7 +1176,7 @@ yyreduce:
     break;
 
   case 28:
-#line 219 "./oidentd_cfg_parse.y"
+#line 218 "./oidentd_cfg_parse.y"
     {
 		cur_cap->fport = xmalloc(sizeof(struct port_range));
 
@@ -1195,7 +1194,7 @@ yyreduce:
     break;
 
   case 29:
-#line 236 "./oidentd_cfg_parse.y"
+#line 235 "./oidentd_cfg_parse.y"
     {
 		cur_cap->src = xmalloc(sizeof(struct sockaddr_storage));
 
@@ -1215,7 +1214,7 @@ yyreduce:
     break;
 
   case 30:
-#line 255 "./oidentd_cfg_parse.y"
+#line 254 "./oidentd_cfg_parse.y"
     {
 		cur_cap->lport = xmalloc(sizeof(struct port_range));
 
@@ -1233,7 +1232,7 @@ yyreduce:
     break;
 
   case 33:
-#line 278 "./oidentd_cfg_parse.y"
+#line 277 "./oidentd_cfg_parse.y"
     {
 		cur_cap->caps = CAP_REPLY;
 		cur_cap->action = ACTION_FORCE;
@@ -1244,7 +1243,7 @@ yyreduce:
     break;
 
   case 34:
-#line 286 "./oidentd_cfg_parse.y"
+#line 285 "./oidentd_cfg_parse.y"
     {
 		cur_cap->force_data = xrealloc(cur_cap->force_data,
 			++cur_cap->num_replies * sizeof(u_char *));
@@ -1253,7 +1252,7 @@ yyreduce:
     break;
 
   case 35:
-#line 294 "./oidentd_cfg_parse.y"
+#line 293 "./oidentd_cfg_parse.y"
     {
 		cur_cap->caps = yyvsp[0].value;
 		cur_cap->action = ACTION_FORCE;
@@ -1261,7 +1260,7 @@ yyreduce:
     break;
 
   case 37:
-#line 301 "./oidentd_cfg_parse.y"
+#line 300 "./oidentd_cfg_parse.y"
     {
 		if (yyvsp[-1].value == ACTION_ALLOW)
 			cur_cap->caps |= yyvsp[0].value;
@@ -1273,7 +1272,7 @@ yyreduce:
     break;
 
   case 42:
-#line 322 "./oidentd_cfg_parse.y"
+#line 321 "./oidentd_cfg_parse.y"
     {
 		cur_cap->caps = CAP_REPLY;
 		cur_cap->force_data = xrealloc(cur_cap->force_data,
@@ -1283,7 +1282,7 @@ yyreduce:
     break;
 
   case 43:
-#line 329 "./oidentd_cfg_parse.y"
+#line 328 "./oidentd_cfg_parse.y"
     {
 		if (cur_cap->num_replies < MAX_RANDOM_REPLIES) {
 			cur_cap->force_data = xrealloc(cur_cap->force_data,
@@ -1294,7 +1293,7 @@ yyreduce:
     break;
 
   case 44:
-#line 339 "./oidentd_cfg_parse.y"
+#line 338 "./oidentd_cfg_parse.y"
     {
 		if (yyvsp[0].value == CAP_SPOOF || yyvsp[0].value == CAP_SPOOF_ALL || yyvsp[0].value == CAP_SPOOF_PRIVPORT)
 		{
@@ -1310,7 +1309,7 @@ yyreduce:
     }
 
 /* Line 1016 of /usr/share/bison/yacc.c.  */
-#line 1314 "y.tab.c"
+#line 1313 "y.tab.c"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -1529,7 +1528,7 @@ yyreturn:
 }
 
 
-#line 352 "./oidentd_cfg_parse.y"
+#line 351 "./oidentd_cfg_parse.y"
 
 
 /*

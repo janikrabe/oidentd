@@ -1,0 +1,6 @@
+stamp_parse
+os.c
+oidentd
+Makefile.in
+Makefile
+.deps

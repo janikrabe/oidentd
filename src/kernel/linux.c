@@ -15,7 +15,7 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA
 **
-** $Id: linux.c,v 1.2 2003/01/09 19:24:05 odin Exp $
+** $Id: linux.c,v 1.3 2003/01/09 19:49:06 odin Exp $
 */
 
 #define _GNU_SOURCE
@@ -294,7 +294,6 @@ int masq(	int sock,
 		in_port_t masq_lport;
 		in_port_t masq_fport;
 		char user[MAX_ULEN];
-		in_addr_t localn;
 		in_addr_t remoten;
 		in_addr_t localm;
 		in_addr_t remotem;
@@ -321,6 +320,7 @@ int masq(	int sock,
 			int nl1, nl2, nl3, nl4, nr1, nr2, nr3, nr4;
 			u_int32_t nport_temp;
 			u_int32_t mport_temp;
+			in_addr_t localn;
 			u_int32_t masq_lport_temp;
 			u_int32_t masq_fport_temp;
 
@@ -344,10 +344,10 @@ int masq(	int sock,
 
 			localn = nl1 << 24 | nl2 << 16 | nl3 << 8 | nl4;
 			remoten = nr1 << 24 | nr2 << 16 | nr3 << 8 | nr4;
-		}
 
-		if (remotem != localn)
-			remotem = localn;       
+			if (remotem != localn)
+				remotem = localn;       
+		}
 
 		if (strcasecmp(proto, "tcp"))
 			continue;

@@ -16,7 +16,6 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA
 **
-** $Id: oidentd_cfg_scan.l,v 1.1 2002/12/03 06:04:33 odin Exp $
 */
 
 #include <config.h>

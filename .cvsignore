@@ -1,0 +1,16 @@
+stamp-h1
+mkinstalldirs
+missing
+install-sh
+depcomp
+configure
+config.sub
+config.status
+config.log
+config.h.in
+config.h
+config.guess
+autom4te.cache
+aclocal.m4
+Makefile.in
+Makefile

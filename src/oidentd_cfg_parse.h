@@ -63,7 +63,7 @@
 
 
 #ifndef YYSTYPE
-#line 61 "./oidentd_cfg_parse.y"
+#line 60 "./oidentd_cfg_parse.y"
 typedef union {
 	int value;
 	char *string;
