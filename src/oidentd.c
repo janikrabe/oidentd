@@ -15,7 +15,7 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA
 **
-** $Id: oidentd.c,v 1.1 2002/12/03 06:05:03 odin Exp $
+** $Id: oidentd.c,v 1.2 2003/01/09 19:44:57 odin Exp $
 */
 
 #define _GNU_SOURCE
@@ -192,13 +192,11 @@ static int service_request(int sock) {
 	int fport_temp;
 	in_port_t lport;
 	in_port_t fport;
-	bool conisipv4 = true;
 	char line[128];
 	char suser[MAX_ULEN];
 	char host_buf[MAX_HOSTLEN];
 	char ip_buf[MAX_IPLEN];
-	struct sockaddr_storage laddr;
-	struct sockaddr_storage faddr;
+	struct sockaddr_storage laddr, laddr6, faddr, faddr6;
 	struct passwd *pw, pwd;
 	static socklen_t socklen = sizeof(struct sockaddr_storage);
 
@@ -213,24 +211,22 @@ static int service_request(int sock) {
 	}
 
 #ifdef WANT_IPV6
-	if (laddr.ss_family == AF_INET6) {
-		if (!IN6_IS_ADDR_V4MAPPED(&SIN6(&laddr)->sin6_addr))
-			conisipv4 = false;
-		else {
-			struct in_addr in4;
+	laddr6 = laddr;		// save old sockaddr
+	faddr6 = faddr;
 
-			sin_extractv4(&SIN6(&laddr)->sin6_addr, &in4);
-			sin_setv4(in4.s_addr, &laddr);
+	if (laddr.ss_family == AF_INET6 && IN6_IS_ADDR_V4MAPPED(&SIN6(&laddr)->sin6_addr)) {
+		struct in_addr in4;
 
-			sin_extractv4(&SIN6(&faddr)->sin6_addr, &in4);
-			sin_setv4(in4.s_addr, &faddr);
-		}
+		sin_extractv4(&SIN6(&laddr)->sin6_addr, &in4);
+		sin_setv4(in4.s_addr, &laddr);
+
+		sin_extractv4(&SIN6(&faddr)->sin6_addr, &in4);
+		sin_setv4(in4.s_addr, &faddr);
 	}
 #endif
 
-	get_ip(&faddr, ip_buf, sizeof(ip_buf));
-
 	fport = htons(sin_port(&faddr));
+	get_ip(&faddr, ip_buf, sizeof(ip_buf));
 
 	if (get_hostname(&faddr, host_buf, sizeof(host_buf)) != 0) {
 		o_log(NORMAL, "Connection from %s:%d", ip_buf, fport);
@@ -272,15 +268,21 @@ static int service_request(int sock) {
 	}
 #endif
 
-	if (con_uid == -1)
-		con_uid = get_user(htons(lport), htons(fport), &laddr, &faddr);
+	if (con_uid == -1 && laddr.ss_family == AF_INET)
+		con_uid = get_user4(htons(lport), htons(fport), &laddr, &faddr);
 
-	if (con_uid == -1) {
-		if (opt_enabled(MASQ) && conisipv4 == true) {
+#ifdef WANT_IPV6
+	if (con_uid == -1 && laddr6.ss_family == AF_INET6)
+		con_uid = get_user6(htons(lport), htons(fport), &laddr6, &faddr6);
+#endif
+
+	if (opt_enabled(MASQ)) {
+		if (con_uid == -1 && laddr.ss_family == AF_INET)
 			if (masq(sock, htons(lport), htons(fport), &laddr, &faddr) == 0)
 				return (0);
-		}
+	}
 
+	if (con_uid == -1) {
 		if (failuser != NULL) {
 			sockprintf(sock, "%d , %d : USERID : %s : %s\r\n",
 				lport, fport, ret_os, failuser);
@@ -408,46 +410,3 @@ static void seed_prng(void) {
 	gettimeofday(&tv, NULL);
 	srandom(tv.tv_sec ^ (tv.tv_usec << 11));
 }
-
-#ifdef WANT_IPV6
-
-/*
-** Determine the owner of the connection.
-*/
-
-int get_user(	in_port_t lport,
-				in_port_t fport,
-				struct sockaddr_storage *laddr,
-				struct sockaddr_storage *faddr)
-{
-	if (laddr->ss_family != AF_INET6)
-		return (get_user4(lport, fport, laddr, faddr));
-
-	if (IN6_IS_ADDR_V4MAPPED(&SIN6(laddr)->sin6_addr)) {
-		struct sockaddr_storage laddr_new;
-		struct sockaddr_storage faddr_new;
-		struct in_addr in4;
-
-		sin_extractv4(&SIN6(laddr)->sin6_addr, &in4);
-		sin_setv4(in4.s_addr, &laddr_new);
-
-		sin_extractv4(&SIN6(faddr)->sin6_addr, &in4);
-		sin_setv4(in4.s_addr, &faddr_new);
-
-		return (get_user4(lport, fport, &laddr_new, &faddr_new));
-	}
-
-	return (get_user6(lport, fport, laddr, faddr));
-}
-
-#else
-
-int get_user(	in_port_t lport,
-				in_port_t fport,
-				struct sockaddr_storage *laddr,
-				struct sockaddr_storage *faddr)
-{
-	return (get_user4(lport, fport, laddr, faddr));
-}
-
-#endif
