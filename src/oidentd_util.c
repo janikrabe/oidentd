@@ -221,7 +221,7 @@ FILE *safe_open(const struct passwd *pw, const char *filename) {
 
 	if (st.st_uid != pw->pw_uid) {
 		o_log(LOG_CRIT,
-			"Refused to read \"%s\" during request for %s (owner is UID %d)",
+			"Refused to read \"%s\" during request for %s (owner is UID %u)",
 			path, pw->pw_name, st.st_uid);
 
 		fclose(fp);

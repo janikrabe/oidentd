@@ -1,3 +1,9 @@
+Fri Jul 11 10:11:38 EDT 2003    Ryan McCabe <ryan@numb.org>
+
+    * Really fix the bug with random ident replies.
+
+    * Build fixes (specifically, for Solaris).
+
 Sun Apr 27 16:01:51 EDT 2003    Ryan McCabe <ryan@numb.org>
 
     * Released as version 2.0.6.

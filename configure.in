@@ -86,9 +86,9 @@ AC_TRY_COMPILE([#include <unistd.h>
 				#include <sys/types.h>
 				#include <sys/socket.h>],
 					[sizeof(socklen_t);],
+			[AC_MSG_RESULT(yes)],
 			[AC_DEFINE(socklen_t, int, [Define if socklen_t is missing])
-			AC_MSG_RESULT(yes)],
-			[AC_MSG_RESULT(no)])
+			AC_MSG_RESULT(no)])
 
 AC_MSG_CHECKING(for in_addr_t)
 AC_TRY_COMPILE([#include <unistd.h>
@@ -98,9 +98,9 @@ AC_TRY_COMPILE([#include <unistd.h>
 				#include <netinet/in_systm.h>
 				#include <netinet/in.h>],
 					[sizeof(in_addr_t);],
+			[AC_MSG_RESULT(yes)],
 			[AC_DEFINE(in_addr_t, unsigned int, [Define if in_addr_t is missing])
-			AC_MSG_RESULT(yes)],
-			[AC_MSG_RESULT(no)])
+			AC_MSG_RESULT(no)])
 
 AC_MSG_CHECKING(for in_port_t)
 AC_TRY_COMPILE([#include <unistd.h>
@@ -110,9 +110,20 @@ AC_TRY_COMPILE([#include <unistd.h>
 				#include <netinet/in_systm.h>
 				#include <netinet/in.h>],
 					[sizeof(in_port_t);],
+			[AC_MSG_RESULT(yes)],
 			[AC_DEFINE(in_port_t, unsigned short, [Define if in_port_t is missing])
-			AC_MSG_RESULT(yes)],
-			[AC_MSG_RESULT(no)])
+			AC_MSG_RESULT(no)])
+
+
+AC_CHECK_FUNC(setsockopt,,
+	AC_CHECK_LIB(socket, setsockopt))
+
+AC_CHECK_FUNC(inet_ntop,
+	[AC_DEFINE(HAVE_INET_NTOP, 1, [Define if you have inet_ntop])],
+	[AC_CHECK_LIB(nsl, inet_ntop,
+		[	LIBS="-lnsl $LIBS"
+			AC_DEFINE(HAVE_INET_NTOP, 1, [Define if you have inet_ntop])],
+		ipv6_support=no)])
 
 AC_CHECK_FUNC(getaddrinfo,
 	AC_DEFINE(HAVE_GETADDRINFO, 1, [Define if you have getaddrinfo]),
@@ -130,9 +141,7 @@ AC_CHECK_FUNC(gai_strerror,
 	AC_DEFINE(HAVE_GAI_STRERROR, 1, [Define if you have gai_strerror]),
 	ipv6_support=no)
 
-AC_CHECK_FUNC(inet_ntop,
-	AC_DEFINE(HAVE_INET_NTOP, 1, [Define if you have inet_ntop]),
-	ipv6_support=no)
+CPPFLAGS=$OLDCPP
 
 AC_CHECK_FUNCS(vasprintf asprintf snprintf vsnprintf inet_aton getpagesize getopt_long)
 
@@ -350,7 +359,7 @@ case "$host_os" in
 		ipv6_support=no
 		os_src=solaris4.c
 
-		LIBS="$LIBS -lelf -lsocket -lnsl"
+		LIBS="$LIBS -lelf"
 	;;
 
 	*solaris2.5* )
@@ -360,7 +369,7 @@ case "$host_os" in
 		ipv6_support=no
 		os_src=solaris5.c
 
-		LIBS="$LIBS -lelf -lsocket -lnsl"
+		LIBS="$LIBS -lelf"
 	;;
 
 	*solaris2.6* )
@@ -370,7 +379,7 @@ case "$host_os" in
 		ipv6_support=no
 		os_src=solaris7.c
 
-		LIBS="$LIBS -lelf -lsocket -lnsl"
+		LIBS="$LIBS -lelf"
 	;;
 
 	*solaris2.7* )
@@ -380,7 +389,7 @@ case "$host_os" in
 		ipv6_support=no
 		os_src=solaris7.c
 
-		LIBS="$LIBS -lelf -lsocket -lnsl"
+		LIBS="$LIBS -lelf"
 	;;
 
 	*solaris2.8* )
@@ -390,17 +399,16 @@ case "$host_os" in
 		ipv6_support=no
 		os_src=solaris8.c
 
-		LIBS="$LIBS -lelf -lsocket -lnsl"
+		LIBS="$LIBS -lelf"
 	;;
 
 	*solaris2.9* )
 		AC_DEFINE(SOLARIS, 8, [Solaris version number])
-		AC_DEFINE(HAVE_GETNAMEINFO, 1, [Define if you have getnameinfo])
 		use_kmem=yes
 		masq_support=no
 		ipv6_support=no
 		os_src=solaris8.c
-		LIBS="$LIBS -lelf -lsocket -lnsl"
+		LIBS="$LIBS -lelf"
 	;; 
 
 	*)
