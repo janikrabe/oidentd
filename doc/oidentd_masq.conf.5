@@ -1,0 +1,76 @@
+.\" Copyright (C)  2001-2002  Ryan McCabe.
+.\"
+.\" Permission is granted to copy, distribute and/or modify this document
+.\" under the terms of the GNU Free Documentation License, Version 1.1
+.\" or any later version published by the Free Software Foundation;
+.\" with the Invariant Sections being no invariant sections, with the
+.\" Front-Cover Texts being no front-cover texts, and with the Back-Cover
+.\" Texts being no back-cover texts.  A copy of the license is included with
+.\" this package in the file "COPYING.DOC."
+.\"
+.\" $Id: oidentd_masq.conf.5,v 1.1 2002/12/03 06:04:30 odin Exp $
+.TH oidentd_masq.conf 5 "30 Dec 2001" "version 2.0.5"
+
+.SH NAME
+oidentd_masq.conf - oidentd IP masquerading/NAT configuration file.
+
+.SH DESCRIPTION
+If you are using IP masquerading or NAT, oidentd can optionally return a
+username for connections from other machines.  Support for
+this is specified by calling
+\fBoidentd\fP with the \-m (or \-\-masq) flag and by creating an
+\fB/etc/oidentd_masq.conf\fP file.
+.PP
+\fBoidentd\fP can also forward requests for an IP masqueraded connection to the
+machine from which connection originates by way of the -f option.  This
+will only work if the host to which the connection is forwarded is running
+oidentd with the -P (proxy) flag, or if the host's ident daemon will return a valid
+reply regardless of the input supplied by and the address of the host requesting
+the info (some ident daemons for windows do this, maybe others).
+
+.SH FORMAT
+<IP Address|Hostname>[/<Mask>] <Ident Response> <System Type>
+.PP
+The first field contains the IP address or the hostname of a machine that IP
+masquerades through the machine on which \fBoidentd\fP
+runs.  The mask parameter can be either a network mask or a mask in CIDR
+notation.  A mask of 24 is equivalent to 255.255.255.0, a mask of 16 is
+equivalent to 255.255.0.0, etc.
+.PP
+The second field specifies the reply that \fBoidentd\fP
+will return for lookups to the host matching the IP address specified in the
+first parameter.
+.PP
+The third field specifies the operating system the machine matching the first
+parameter is running.
+
+.SH EXAMPLES
+.sp 1n
+.PD 0
+.TP 16
+.B <Host>[/<Mask>]		<Ident Response>	<System Type>
+.TP
+192.168.1.1				someone			UNIX
+.TP
+192.168.1.2				noone			WINDOWS
+.TP
+192.168.1.1/32				user1			UNIX
+.TP
+192.168.1.0/24				user3			UNIX
+.TP
+192.168.0.0/16				user4			UNIX
+.TP
+somehost					user5			UNIX
+.TP
+192.168.1.0/255.255.255.0	user6			UNIX
+.PD
+.LP
+
+.SH AUTHOR
+Ryan McCabe <odin@numb.org>
+.br
+http://dev.ojnk.net
+
+.SH SEE ALSO
+.BR oidentd (8)
+.BR oidentd.conf (5)

@@ -1,0 +1,17 @@
+Kamil Andrusz <wizz@mniam.net>
+	OpenBSD >= 3.0 Packet Filter support.
+
+Daniel Brafford <pod@charter.net>
+    Initial IPv6 support, Initial IPv6 support on Linux.
+
+Bjarni R. Einarsson <bre at mmedia.is>
+    libudb support.
+      
+Slawomir Piotrowski <slawek@telsatgp.com.pl>
+    IP masq (NAT) support for OpenBSD.
+
+Guus Sliepen <sliepen@phys.uu.nl>
+    Initial netfilter (Linux >= 2.3 Support).
+
+Ryan McCabe <odin@numb.org>
+    Everything else.

@@ -1,0 +1,45 @@
+Issuing the commands "./configure", then "make", then "make install" will
+(respectively) configure, compile and install the oidentd daemon and its
+manual page.  By default, the daemon is installed in /usr/local/sbin/oidentd,
+and the uncompressed manual page is installed in /usr/local/man/man8.
+
+IPv6 and IP masquerade support are enabled by default on platforms that support
+them.  To disable IPv6 support, pass the --disable-ipv6 option to the configure
+script.  To disable IP masquerade support, pass the --disable-masq option to
+the configure script.
+
+If you're having problems with oidentd, additional debugging information is
+available when the --enable-debug option is passed to the configure script and
+oidentd is run with the --debug flag.
+
+oidentd version 2 runs only as a standalone daemon.  Therefore, any entries for
+ident in any inetd or xinetd (or any other "super server") configuration
+files must be disabled before running oidentd.  This is the case for
+performance reasons; when oidentd starts up, it parses the /etc/oidentd.conf
+configuration file.  If oidentd ran from inetd (or similar), for every
+incoming connection, it would have to parse the configuration file.  Running
+standalone lets oidentd parse the file once at startup and after that, only
+when it receives a SIGHUP.
+
+Users running inetd can locate such lines by running the command
+"egrep ^(auth|ident) /etc/inetd.conf".  Lines that show up must be
+commented out by inserting a '#' character at the start of the line.
+After the line is disabled the inetd program must be restarted by sending
+it the SIGHUP signal (signal 1).
+
+oidentd does not ordinarily require superuser privileges and should not
+run as root, if possible.  Do note, however, that oidentd must start up
+as root so that it can bind port 113 (if no --port argument is given)
+and so that it can open /dev/kmem on operating system that require that.
+Once oidentd does this, it can drop any extra privileges.
+oidentd does require running as root on FreeBSD 4.x, however, when IP
+masquerade support is disabled or when IPv6 support is enabled.
+
+oidentd also must be run as root on OpenBSD 3.0 and greater, as it uses
+a privileged ioctl to lookup connection owners and NAT information.
+
+For information regarding setting the user and group that oidentd will run as,
+please see the descriptions of the "--user" and "--group" command-line
+flags in the oidentd manual page.
+
+$Id: INSTALL,v 1.1 2002/12/03 06:04:13 odin Exp $

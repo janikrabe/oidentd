@@ -1,0 +1,374 @@
+dnl $Id: configure.in,v 1.1 2002/12/03 06:03:43 odin Exp $
+
+AC_INIT(oidentd, 2.0.5, odin@numb.org)
+AM_INIT_AUTOMAKE(oidentd, 2.0.5)
+
+AM_CONFIG_HEADER(config.h)
+
+AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_YACC
+AM_PROG_LEX
+AC_PATH_PROG(LEX, flex)
+AC_PROG_RANLIB
+AC_PROG_INSTALL
+
+AC_SUBST(FLEX_PATH)
+
+AC_CANONICAL_HOST
+
+CFLAGS="$CFLAGS -funsigned-char"
+
+masq_support=yes
+AC_ARG_ENABLE(masq, [  --disable-masq          Disable IP masquerading support])
+if test "$enableval" = "no"; then
+	masq_support=no
+fi
+
+enableval=""
+ipv6_support=yes
+AC_ARG_ENABLE(ipv6, [  --disable-ipv6          Disable IPv6 support])
+if test "$enableval" = "no"; then
+	ipv6_support=no
+fi
+
+enableval=""
+AC_ARG_ENABLE(debug, [  --enable-debug          Enable debugging])
+if test "$enableval" = "yes"; then
+	AC_DEFINE(ENABLE_DEBUGGING)
+	CFLAGS="$CFLAGS -g3 -W -Wall -Wshadow -Wcast-align -Wwrite-strings -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Winline"
+fi
+
+AC_CHECK_TYPE(u_int32_t, uint32_t)
+if test "$ac_cv_type_u_int32_t" = "no"; then
+	AC_CHECK_TYPE(uint32_t, unsigned int)
+fi
+
+AC_CHECK_TYPE(u_int16_t, uint16_t)
+if test "$ac_cv_type_u_int16_t" = "no"; then
+	AC_CHECK_TYPE(uint16_t, unsigned short)
+fi
+
+AC_CHECK_TYPE(u_int8_t, uint8_t)
+if test "$ac_cv_type_u_int8_t" = "no"; then
+	AC_CHECK_TYPE(uint8_t, unsigned char)
+fi
+
+AC_MSG_CHECKING(for socklen_t)
+AC_TRY_COMPILE([#include <unistd.h>
+				#include <sys/types.h>
+				#include <sys/socket.h>],
+					[sizeof(socklen_t);],
+			[AC_DEFINE(HAVE_SOCKLEN_T)
+			AC_MSG_RESULT(yes)],
+			[AC_MSG_RESULT(no)])
+
+AC_MSG_CHECKING(for in_addr_t)
+AC_TRY_COMPILE([#include <unistd.h>
+				#include <sys/types.h>
+				#include <sys/socket.h>
+				#include <netdb.h>
+				#include <netinet/in_systm.h>
+				#include <netinet/in.h>],
+					[sizeof(in_addr_t);],
+			[AC_DEFINE(HAVE_IN_ADDR_T)
+			AC_MSG_RESULT(yes)],
+			[AC_MSG_RESULT(no)])
+
+AC_MSG_CHECKING(for in_port_t)
+AC_TRY_COMPILE([#include <unistd.h>
+				#include <sys/types.h>
+				#include <sys/socket.h>
+				#include <netdb.h>
+				#include <netinet/in_systm.h>
+				#include <netinet/in.h>],
+					[sizeof(in_port_t);],
+			[AC_DEFINE(HAVE_IN_PORT_T)
+			AC_MSG_RESULT(yes)],
+			[AC_MSG_RESULT(no)])
+
+AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO), ipv6_support=no)
+AC_CHECK_FUNC(freeaddrinfo, AC_DEFINE(HAVE_FREEADDRINFO), ipv6_support=no)
+AC_CHECK_FUNC(getnameinfo, AC_DEFINE(HAVE_GETNAMEINFO), ipv6_support=no)
+AC_CHECK_FUNC(gai_strerror, AC_DEFINE(HAVE_GAI_STRERROR), ipv6_support=no)
+AC_CHECK_FUNC(inet_ntop, AC_DEFINE(HAVE_INET_NTOP), ipv6_support=no)
+
+AC_CHECK_FUNCS(vasprintf asprintf snprintf vsnprintf inet_aton getpagesize getopt_long)
+
+AC_MSG_CHECKING(for struct addrinfo)
+AC_TRY_COMPILE(	[	#include <sys/types.h>
+					#include <sys/socket.h>
+					#include <netdb.h>],
+				[ struct addrinfo s; s.ai_flags = AI_PASSIVE; ],
+				[ have_struct_addrinfo=yes ],
+				[ have_struct_addrinfo=no ])
+AC_MSG_RESULT($have_struct_addrinfo)
+
+if test "$have_struct_addrinfo" = "no"; then
+	ipv6_support=no
+else
+	AC_DEFINE(HAVE_STRUCT_ADDRINFO)
+fi
+
+AC_MSG_CHECKING(for struct sockaddr_storage)
+AC_TRY_COMPILE(	[	#include <sys/types.h>
+					#include <sys/socket.h>],
+				[ struct sockaddr_storage ss; ],
+				[ have_sockaddr_storage=yes ],
+				[ have_sockaddr_storage=no ])
+AC_MSG_RESULT($have_sockaddr_storage)
+
+if test "$have_sockaddr_storage" = "no"; then
+	ipv6_support=no
+else
+	AC_DEFINE(HAVE_STRUCT_SOCKADDR_STORAGE)
+
+	AC_MSG_CHECKING(for ss_family member in struct sockaddr_storage)
+	AC_TRY_COMPILE(	[	#include <sys/types.h>
+						#include <sys/socket.h>],
+					[ size_t test =
+						sizeof(((struct sockaddr_storage *)0)->ss_family);],
+					[ have_ss_family=yes ],
+					[ have_ss_family=no ])
+	AC_MSG_RESULT($have_ss_family)
+
+	if test "$have_ss_family" = "no"; then
+		AC_MSG_CHECKING(for __ss_family member in struct sockaddr_storage)
+		AC_TRY_COMPILE(	[	#include <sys/types.h>
+							#include <sys/socket.h>],
+						[ size_t test =
+							sizeof(((struct sockaddr_storage *)0)->__ss_family);],
+						[ have_ss_family=yes ],
+						[ have_ss_family=no ])
+		AC_MSG_RESULT($have_ss_family)
+
+		if test "$have_ss_family" = "no"; then
+			ipv6_support=no
+		else
+			AC_DEFINE(HAVE___SS_FAMILY)
+		fi
+	fi
+fi
+
+AC_CHECK_LIB(udb, main)
+
+use_kmem=no
+
+if test "$masq_support" = "yes"; then
+	old_CPPFLAGS=$CPPFLAGS
+
+	if test `uname -s` = "SunOS"; then
+		release=`uname -r | cut -d. -f2`
+		CPPFLAGS="$CPPFLAGS -DSOLARIS=$release"
+	fi
+
+	AC_MSG_CHECKING(if nat_t has nat_p member)
+	AC_CACHE_VAL(ac_cv_ipf_nat_p,
+		AC_TRY_COMPILE(
+			[
+				#include <sys/types.h>
+				#include <sys/socket.h>
+				#include <sys/socketvar.h>
+				#include <netinet/in.h>
+				#include <netinet/in_systm.h>
+				#include <net/if.h>
+				#include <net/route.h>
+				#include <netinet/ip.h>
+				#include <netinet/in_pcb.h>
+				#include <arpa/inet.h>
+				#include <netinet/tcp.h>
+
+				#if defined(__OpenBSD__)
+				#	include <netinet/ip_fil_compat.h>
+				#else
+				#	if defined(SOLARIS) && SOLARIS >= 8
+				#		include <netinet/ip6.h>
+				#	endif
+				#	include <netinet/ip_compat.h>
+				#endif
+
+				#include <netinet/ip_fil.h>
+				#include <netinet/ip_nat.h>
+			],
+			[int i = sizeof(((nat_t *)0)->nat_p);],
+			ac_cv_ipf_nat_p=yes,
+			ac_cv_ipf_nat_p=no))
+	AC_MSG_RESULT($ac_cv_ipf_nat_p)
+	CPPFLAGS=$old_CPPFLAGS
+fi
+
+case "$host_os" in
+
+	*linux* )
+		os_src=linux.c
+	;;
+
+	*netbsd* )
+		use_kmem=yes
+		os_src=netbsd.c
+		if test "$ac_cv_ipf_nat_p" = "no"; then
+			masq_support=no
+		fi
+	;;
+
+	*darwin* )
+		CFLAGS="-traditional-cpp $CFLAGS"
+		use_kmem=yes
+		os_src=darwin.c
+		if test "$ac_cv_ipf_nat_p" = "no"; then
+			masq_support=no
+		fi
+	;;
+
+	*openbsd* )
+		case "$host_os" in
+			*openbsd2* )
+				if test "$ac_cv_ipf_nat_p" = "no"; then
+					masq_support=no
+				fi
+			;;
+		esac
+
+		if test "$masq_support" = "no"; then
+			case "$host_os" in
+				*openbsd2.[[0123]]* )
+					use_kmem=yes
+					os_src=openbsd.c
+				;;
+
+				*openbsd2.[[45678]])
+					os_src=openbsd24.c
+				;;
+
+				*openbsd2.9*)
+					os_src=openbsd29.c
+				;;
+
+				*openbsd3*)
+					os_src=openbsd30.c
+				;;
+			esac
+		else
+			case "$host_os" in
+				*openbsd2* )
+					use_kmem=yes
+					os_src=openbsd.c
+				;;
+
+				*openbsd3* )
+					os_src=openbsd30.c
+				;;
+			esac
+		fi
+	;;
+
+	*freebsd* )
+		if test "$ac_cv_ipf_nat_p" = "no"; then
+			masq_support=no
+		fi
+
+		if test "$masq_support" = "no"; then
+			case "$host_os" in
+				*freebsd[[45]]* )
+					use_kmem=no
+					os_src=freebsd4.c
+				;;
+
+				*)
+					use_kmem=yes
+					os_src=freebsd.c
+				;;
+			esac
+		else
+			use_kmem=yes
+			os_src=freebsd.c
+		fi
+	;;
+
+	*solaris2.4* )
+		AC_DEFINE(SOLARIS, 4)
+		use_kmem=yes
+		masq_support=no
+		ipv6_support=no
+		os_src=solaris4.c
+
+		LIBS="$LIBS -lelf -lsocket -lnsl"
+	;;
+
+	*solaris2.5* )
+		AC_DEFINE(SOLARIS, 5)
+		use_kmem=yes
+		masq_support=no
+		ipv6_support=no
+		os_src=solaris5.c
+
+		LIBS="$LIBS -lelf -lsocket -lnsl"
+	;;
+
+	*solaris2.6* )
+		AC_DEFINE(SOLARIS, 6)
+		use_kmem=yes
+		masq_support=no
+		ipv6_support=no
+		os_src=solaris7.c
+
+		LIBS="$LIBS -lelf -lsocket -lnsl"
+	;;
+
+	*solaris2.7* )
+		AC_DEFINE(SOLARIS, 7)
+		use_kmem=yes
+		masq_support=no
+		ipv6_support=no
+		os_src=solaris7.c
+
+		LIBS="$LIBS -lelf -lsocket -lnsl"
+	;;
+
+	*solaris2.8* )
+		AC_DEFINE(SOLARIS, 8)
+		use_kmem=yes
+		masq_support=no
+		ipv6_support=no
+		os_src=solaris8.c
+
+		LIBS="$LIBS -lelf -lsocket -lnsl"
+	;;
+
+	*solaris2.9* )
+		AC_DEFINE(SOLARIS, 8)
+		AC_DEFINE(HAVE_GETNAMEINFO)
+		use_kmem=yes
+		masq_support=no
+		ipv6_support=no
+		os_src=solaris8.c
+		LIBS="$LIBS -lelf -lsocket -lnsl"
+	;; 
+
+	*)
+		echo $host_os is not yet supported.
+		exit 1
+	;;
+esac
+
+if test "$use_kmem" = "yes"; then
+	AC_DEFINE(USE_KMEM)
+	LIBS="$LIBS -lkvm"
+fi
+
+if test "$masq_support" = "yes"; then
+	AC_DEFINE(MASQ_SUPPORT)
+else
+	AC_MSG_WARN(not including IP masquerade support.)
+fi
+
+if test "$ipv6_support" = "yes"; then
+	AC_DEFINE(WANT_IPV6)
+else
+	AC_MSG_WARN(not including IPv6 support.)
+fi
+
+AC_SUBST(LIBS)
+AC_OUTPUT(Makefile src/Makefile src/missing/Makefile doc/Makefile)
+
+cp -f $srcdir/src/kernel/$os_src src/os.c
