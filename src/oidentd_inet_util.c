@@ -318,7 +318,7 @@ int get_port(const char *name, in_port_t *port) {
 }
 
 /*
-** Return a 32-bit, network byte ordered ipv4 or ipv6 address.
+** Return a network byte ordered ipv4 or ipv6 address.
 */
 
 int get_addr(const char *hostname, struct sockaddr_storage *addr) {
@@ -341,7 +341,7 @@ int get_addr(const char *hostname, struct sockaddr_storage *addr) {
 			goto out_fail;
 	}
 
-	if (len < res->ai_addrlen)
+	if (len < (size_t) res->ai_addrlen)
 		goto out_fail;
 
 	memcpy(addr, res->ai_addr, res->ai_addrlen);

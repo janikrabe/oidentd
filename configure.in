@@ -86,7 +86,7 @@ AC_TRY_COMPILE([#include <unistd.h>
 				#include <sys/types.h>
 				#include <sys/socket.h>],
 					[sizeof(socklen_t);],
-			[AC_DEFINE(HAVE_SOCKLEN_T, 1, [Define if you have socklen_t])
+			[AC_DEFINE(socklen_t, int, [Define if socklen_t is missing])
 			AC_MSG_RESULT(yes)],
 			[AC_MSG_RESULT(no)])
 
@@ -98,7 +98,7 @@ AC_TRY_COMPILE([#include <unistd.h>
 				#include <netinet/in_systm.h>
 				#include <netinet/in.h>],
 					[sizeof(in_addr_t);],
-			[AC_DEFINE(HAVE_IN_ADDR_T, 1, [Define if you have in_addr_t])
+			[AC_DEFINE(in_addr_t, unsigned int, [Define if in_addr_t is missing])
 			AC_MSG_RESULT(yes)],
 			[AC_MSG_RESULT(no)])
 
@@ -110,7 +110,7 @@ AC_TRY_COMPILE([#include <unistd.h>
 				#include <netinet/in_systm.h>
 				#include <netinet/in.h>],
 					[sizeof(in_port_t);],
-			[AC_DEFINE(HAVE_IN_PORT_T, 1, [Define if you have in_port_t])
+			[AC_DEFINE(in_port_t, unsigned short, [Define if in_port_t is missing])
 			AC_MSG_RESULT(yes)],
 			[AC_MSG_RESULT(no)])
 
