@@ -42,6 +42,7 @@
 #include <oidentd.h>
 #include <oidentd_util.h>
 #include <oidentd_inet_util.h>
+#include <oidentd_options.h>
 
 extern struct sockaddr_storage proxy;
 
