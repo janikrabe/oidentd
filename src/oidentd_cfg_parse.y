@@ -88,8 +88,8 @@ parse_global:
 |
 	{
 		if (parser_mode != PARSE_USER) {
-			o_log(NORMAL, "%s",
-				"This construct is valid only for user configuration files");
+			o_log(NORMAL,
+				"[line %d] This construct is valid only for user configuration files", current_line);
 			YYABORT;
 		}
 
