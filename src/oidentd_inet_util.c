@@ -429,13 +429,10 @@ void sin_setv6(struct in6_addr *sin6, struct sockaddr_storage *ss) {
 ** Returns the length of the sockaddr struct.
 */
 
-inline size_t sin_len(const struct sockaddr_storage *ss) {
+inline size_t sin_len(const struct sockaddr_storage *ss __notused) {
 #ifdef WANT_IPV6
 	if (ss->ss_family == AF_INET6)
 		return (sizeof(struct sockaddr_in6));
-#else
-	/* Shut the compiler up. */
-	(void) ss;
 #endif
 
 	return (sizeof(struct sockaddr_in));
@@ -446,13 +443,10 @@ inline size_t sin_len(const struct sockaddr_storage *ss) {
 ** structure.
 */
 
-inline size_t sin_addr_len(const struct sockaddr_storage *ss) {
+inline size_t sin_addr_len(const struct sockaddr_storage *ss __notused) {
 #ifdef WANT_IPV6
 	if (ss->ss_family == AF_INET6)
 		return (sizeof(struct in6_addr));
-#else
-	/* Shut the compiler up. */
-	(void) ss;
 #endif
 
 	return (sizeof(struct in_addr));

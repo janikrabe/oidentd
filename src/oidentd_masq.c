@@ -339,18 +339,12 @@ static void fwd_alarm(int sig) {
 ** Define a stub masq function.
 */
 
-int masq(	int sock,
-			in_port_t lport,
-			in_port_t fport,
-			struct sockaddr_storage *local,
-			struct sockaddr_storage *remote)
+int masq(	int sock __notused,
+			in_port_t lport __notused,
+			in_port_t fport __notused,
+			struct sockaddr_storage *local __notused,
+			struct sockaddr_storage *remote __notused)
 {
-	(void) sock;
-	(void) lport;
-	(void) fport;
-	(void) local;
-	(void) remote;
-
 	return (-1);
 }
 

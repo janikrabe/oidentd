@@ -121,8 +121,10 @@
 
 #ifdef HAVE___ATTRIBUTE__
 	#define __format(x) __attribute__((format x ))
+	#define __notused __attribute__((unused))
 #else
 	#define __format(x)
+	#define __notused
 #endif
 
 typedef enum {

@@ -354,11 +354,9 @@ static void free_pw(struct passwd *pw) {
 ** Handle SIGSEGV.
 */
 
-static void sig_segv(int unused) {
+static void sig_segv(int unused __notused) {
 	o_log(NORMAL, "Got SIGSEGV");
 	exit(-1);
-
-	(void) unused;
 }
 
 /*
@@ -376,26 +374,23 @@ static void sig_child(int sig) {
 ** Handle SIGALRM.
 */
 
-static void sig_alarm(int unused) {
+static void sig_alarm(int unused __notused) {
 	o_log(NORMAL, "Timeout for request -- Closing connection");
 
 	exit(0);
-	(void) unused;
 }
 
 /*
 ** Handle SIGHUP - This causes oidentd to reload its configuration file.
 */
 
-static void sig_hup(int unused) {
+static void sig_hup(int unused __notused) {
 	user_db_destroy();
 
 	if (read_config(CONFFILE) != 0) {
 		o_log(NORMAL, "Error parsing configuration file");
 		exit(-1);
 	}
-
-	(void) unused;
 }
 
 /*
