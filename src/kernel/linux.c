@@ -323,8 +323,7 @@ int masq(	int sock,
 			u_int32_t masq_fport_temp;
 
 			ret = sscanf(buf,
-				"%15s %*d %*d ESTABLISHED src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d" 
-				"src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d",
+				"%15s %*d %*d ESTABLISHED src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d",
 				proto, &l1, &l2, &l3, &l4, &r1, &r2, &r3, &r4, &masq_lport_temp, &masq_fport_temp,
 				&nl1, &nl2, &nl3, &nl4, &nr1, &nr2, &nr3, &nr4, &nport_temp, &mport_temp);
 
@@ -344,7 +343,7 @@ int masq(	int sock,
 			remoten = nr1 << 24 | nr2 << 16 | nr3 << 8 | nr4;
 
 			if (remotem != localn)
-				remotem = localn;       
+				remotem = localn;
 		}
 
 		if (strcasecmp(proto, "tcp"))
