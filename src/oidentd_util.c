@@ -32,6 +32,8 @@
 #include <grp.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/time.h>
+#include <time.h>
 #include <netdb.h>
 #include <stdarg.h>
 #include <sys/socket.h>
@@ -46,6 +48,36 @@
 #ifdef HAVE_LIBUDB
 #	include <udb.h>
 #endif
+
+/*
+** Seed PRNG from time-of-day clock. (FIXME: Should use entropy pool on
+** systems that have one. Should prefer lrand48()(3), then random()(3)
+** then rand()(3) in that order.)
+** Returns 0 on success, -1 on failure.
+*/
+
+int random_seed(void) {
+	struct timeval tv;
+
+	if (gettimeofday(&tv, NULL))
+		return (-1);
+
+	srand((u_int32_t) (tv.tv_sec ^ tv.tv_usec));
+	return (0);
+}
+
+/*
+** Return a pseudo-random integer between 0 and i-1 inclusive. The
+** obvious solution (rand()%i) isn't safe because on many systems,
+** the low-order bits of the return of rand()(3) are grossly non-random.
+** (FIXME: See comment preceding random_seed() regarding using better
+** PRNG functions on systems whose libraries provide them.)
+*/
+
+inline int randval(int i) {
+	/* Per _Numerical Recipes in C_: */
+	return ((double) i * rand() / (RAND_MAX+1.0));
+}
 
 /*
 ** Find the user specified by "temp_user"
@@ -142,8 +174,8 @@ int drop_privs(uid_t new_uid, gid_t new_gid) {
 
 /*
 ** Safely open "filename" which is located in the home directory
-** of the user specified by "pw."  This function is safe with respect
-** to stat/open races.  Only files owned by the user specified by "pw"
+** of the user specified by "pw." This function is safe with respect
+** to stat/open races. Only files owned by the user specified by "pw"
 ** will be opened.
 **
 ** Returns a pointer to the FILE struct returned by fopen on success,

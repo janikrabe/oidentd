@@ -53,6 +53,9 @@ void list_destroy(list_t *list, void (*free_data)(void *));
 int find_user(const char *temp_user, uid_t *uid);
 int find_group(const char *temp_group, gid_t *gid);
 
+int random_seed(void);
+inline int randval(int i);
+
 #ifndef HAVE_SNPRINTF
 	int snprintf(char *str, size_t n, char const *fmt, ...);
 #endif

@@ -85,7 +85,7 @@ static void random_ident(char *buf, size_t len) {
 		"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 	for (i = 0 ; i < len - 1 ; i++)
-		buf[i] = valid[rand() % (sizeof(valid) - 1)];
+		buf[i] = valid[randval(sizeof(valid))];
 
 	buf[i] = '\0';
 }
@@ -95,7 +95,7 @@ static void random_ident(char *buf, size_t len) {
 */
 
 static inline u_char *select_reply(const struct user_cap *user) {
-	return (user->force_data[rand() % user->num_replies]);
+	return (user->force_data[randval(user->num_replies)]);
 }
 
 /*
@@ -112,7 +112,7 @@ static inline void numeric_ident(uid_t con_uid, char *buf, size_t len) {
 */
 
 static inline void random_ident_numeric(char *buf, size_t len) {
-	snprintf(buf, len, "%s%u", UPREFIX, rand() % 100000);
+	snprintf(buf, len, "%s%u", UPREFIX, randval(100000));
 }
 
 /*

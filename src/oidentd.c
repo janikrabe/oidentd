@@ -87,6 +87,11 @@ int main(int argc, char **argv) {
 		exit(-1);
 	}
 
+	if (random_seed() != 0) {
+		o_log(NORMAL, "Error seeding random number generator");
+		exit(-1);
+	}
+
 	if (go_background() == -1) {
 		o_log(NORMAL, "Fatal: Error creating daemon process");
 		exit(-1);
