@@ -40,7 +40,8 @@
      TOK_REPLY = 266,
      TOK_ALLOWDENY = 267,
      TOK_CAP = 268,
-     TOK_STRING = 269
+     TOK_STRING = 269,
+     TOK_USERNAME = 270
    };
 #endif
 #define TOK_USER 258
@@ -55,6 +56,7 @@
 #define TOK_ALLOWDENY 267
 #define TOK_CAP 268
 #define TOK_STRING 269
+#define TOK_USERNAME 270
 
 
 
@@ -66,7 +68,7 @@ typedef union YYSTYPE {
 	char *string;
 } YYSTYPE;
 /* Line 1248 of yacc.c.  */
-#line 69 "y.tab.h"
+#line 71 "y.tab.h"
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1

@@ -13,6 +13,7 @@
 ** Modifications Copyright (C) 1998-2003 Ryan McCabe <ryan@numb.org>
 */
 
+#define _WANT_UCRED
 #include <config.h>
 
 #include <unistd.h>
@@ -262,7 +263,6 @@ int get_user4(	in_port_t lport,
 #else
 	struct inpcbhead tcb;
 #endif
-
 	kp = kvm_getprocs(kinfo->kd, KERN_PROC_ALL, 0, &nentries);
 	if (kp == NULL) {
 		debug("kvm_getprocs: %s", strerror(errno));
@@ -286,17 +286,15 @@ int get_user4(	in_port_t lport,
 	** Locate the file descriptor that has the socket in question
 	** open so that we can get the 'ucred' information
 	*/
-
 	for (i = 0 ; i < nentries ; i++) {
-		if (kp[i].kp_proc.p_fd != NULL) {
+
+		if ( kp[i].ki_fd != NULL) {
 			int j;
 			int ret;
 			struct filedesc pfd;
 			struct file **ofiles;
-
-			if (getbuf((u_long) kp[i].kp_proc.p_fd, &pfd, sizeof(pfd)) == -1)
+			if (getbuf((u_long) kp[i].ki_fd, &pfd, sizeof(pfd)) == -1)
 				return (-1);
-
 			ofiles = xmalloc(pfd.fd_nfiles * sizeof(struct file *));
 
 			ret = getbuf((u_long) pfd.fd_ofiles, ofiles,
@@ -325,22 +323,16 @@ int get_user4(	in_port_t lport,
 				if (ofile.f_type == DTYPE_SOCKET &&
 					(struct socket *) ofile.f_data == sockp)
 				{
-					struct pcred pc;
-
-					ret = getbuf((u_long) kp[i].kp_proc.p_cred,
-							&pc, sizeof(pc));
-					if (ret == -1) {
-						free(ofiles);
-						return (-1);
-					}
 
 					free(ofiles);
-					return (pc.p_ruid);
+
+					return (kp[i].ki_ruid);
 				}
 			}
 
 			free(ofiles);
 		}
+		
 	}
 
 	return (-1);

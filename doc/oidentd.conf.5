@@ -1,32 +1,25 @@
-.\" Copyright (C)  2001-2002  Ryan McCabe.
+.\" Copyright (C)	2001-2003	Ryan McCabe <ryan@numb.org>.
 .\"
 .\" Permission is granted to copy, distribute and/or modify this document
 .\" under the terms of the GNU Free Documentation License, Version 1.1
 .\" or any later version published by the Free Software Foundation;
 .\" with the Invariant Sections being no invariant sections, with the
 .\" Front-Cover Texts being no front-cover texts, and with the Back-Cover
-.\" Texts being no back-cover texts.  A copy of the license is included with
+.\" Texts being no back-cover texts. A copy of the license is included with
 .\" this package in the file "COPYING.DOC."
-.\"
-.\" $Id: oidentd.conf.5,v 1.1 2002/12/03 06:04:26 odin Exp $
-.TH oidentd.conf 5 "30 Dec 2001" "version 2.0.5"
+.TH oidentd.conf 5 "11 Feb 2003" "version 2.0.5"
 
 .SH NAME
 oidentd.conf - The oidentd configuration file.
 
 .SH DESCRIPTION
-The \fBoidentd\fP configuration file is used to define the amount of
-control users have over the responses \fBoidentd\fP returns upon
-successful lookups of connections owned by them.
+The \fBoidentd\fP configuration file is used to specify the amount of control users have over the responses \fBoidentd\fP returns upon successful lookups for connections owned by them.
 .PP
-The \fB$HOME/.oidentd.conf\fP file is used to specify, by the user,
-what ident response will be returned for specific connections.
+The \fB$HOME/.oidentd.conf\fP file allows a user to specify what ident response will be returned for specific connections.
 .SH /etc/oidentd.conf SYNTAX
 .TP
 .B USER DIRECTIVE
-The \fBoidentd\fP configuration file consists of 0 or more \fIuser\fP
-directives.  The \fIuser\fP directive is used to grant capabilities
-on a per-user basis.
+The \fBoidentd.conf\fP file consists of 0 or more \fIuser\fP directives. The \fIuser\fP directive is used to grant capabilities on a per-user basis.
 
 The \fIuser\fP directive has the following syntax:
 
@@ -42,21 +35,12 @@ OR
 }
 .fi
 
-The \fIdefault\fP directive matches all users for which rules are not defined.
-There should only be one \fIdefault\fP directive, and it should be the first
-statement in the file.  All entries for users defined after the default
-definition will inherit the capabilities of the default user.  Capabilities can
-then be allowed, denied or forced on a per-user basis by way of the \fIuser\fP
-statement followed by the username of the user to whom the properties that follow
-will apply.
+The \fIdefault\fP directive matches all users for whom rules are not defined. There should only be one \fIdefault\fP directive, and it should be the first statement in the file. All entries for users defined after the default definition will inherit the capabilities of the default user. Capabilities can then be allowed, denied, or forced on a per-user basis by way of the \fIuser\fP statement followed by the username of the user to whom the properties that follow will apply.
 .TP
 .B RANGE DIRECTIVE
-The body of a \fIuser\fP directive consists of 1 or more \fIrange\fP
-directives.
+The body of a \fIuser\fP directive consists of 1 or more \fIrange\fP directives.
 
-The \fIrange\fP directive is used to specify a host/port range for which a set
-of capabilities is binding.  A range directive consists of 1 or more
-statements of the following form:
+The \fIrange\fP directive is used to specify a host/port range for which a set of capabilities is binding. A range directive consists of 1 or more statements of the following form:
 
 .nf
 default {
@@ -65,64 +49,43 @@ default {
 
 OR
 
-\fIto\fP <host> \fIlport\fP <lport> \fIfrom\fP <host> \fIfport\fP <fport>  {
+\fIto\fP <host> \fIlport\fP <lport> \fIfrom\fP <host> \fIfport\fP <fport> {
 	<capability directive>
 }
 .fi
 
-The \fIdefault\fP directive matches all host/port pairs for which rules are not
-defined. There should only be one \fIdefault\fP directive, and it should be the
-first statement in the block.
+The \fIdefault\fP directive matches all host/port pairs for which rules are not defined. There should only be one \fIdefault\fP directive, and it should be the first statement in the block.
 
-Anywhere from 1 to 4 or the \fIto\fP, \fIlport\fP, \fIfrom\fP and \fIfport\fP
-parameters may be specified.
+Anywhere from 1 to all 4 of the \fIto\fP, \fIlport\fP, \fIfrom\fP, and \fIfport\fP parameters may be specified.
 
-The \fIto\fP parameter is used to specify the address to which a connection is
-made.
+The \fIto\fP parameter is used to specify the address to which a connection is made.
 
-The \fIfrom\fP parameter is used to specify the address from which a connection
-originates.  It may be useful to specify this address when a system has more
-than 1 IP address.
+The \fIfrom\fP parameter is used to specify the address from which a connection originates. It may be useful to specify this address when a system has more than 1 IP address.
 
-The \fIto\fP and \fIfrom\fP parameters take either an IP address
-or a hostname argument.
+The \fIto\fP and \fIfrom\fP parameters take either an IP address or a hostname argument.
 
-The \fIlport\fP parameter is used to specify the local port from which a
-connection originates.
+The \fIlport\fP parameter is used to specify the local port from which a connection originates.
 
-The \fIfport\fP parameter is used to specify the destination port of
-a connection.
+The \fIfport\fP parameter is used to specify the destination port of a connection.
 
-The \fIlport\fP and \fIfport\fP parameters take either a port or a port range.
-Ports can be specified numerically (e.g. 113) or by giving a service name
-(e.g. "auth").  Ranges of ports take the form <starting port>:<ending port>.
-The ending port is optional.  If the ending port is omitted, the range is
-interpreted as representing any port greater than or equal to the starting port.
+The \fIlport\fP and \fIfport\fP parameters take either a port or a port range. Ports can be specified numerically (e.g. 113) or by giving a service name (e.g. "auth"). Ranges of ports take the form <starting port>:<ending port>. The ending port is optional. If the ending port is omitted, the range is taken to be any port greater than or equal to the starting port.
 
-The omission of any of the \fIto\fP, \fIlport\fP, \fIfrom\fP and \fIfport\fP 
-parameters acts like a wildcard for that parameter.  For example, the statement
-"from localhost" matches all connections from localhost on any port to any
-host on any port.
+The omission of any of the \fIto\fP, \fIlport\fP, \fIfrom\fP and \fIfport\fP parameters acts like a wildcard for that parameter. For example, the statement "from localhost" matches all connections from localhost on any port to any host on any port.
 .TP
 .B CAPABILITY DIRECTIVE
-The body of a \fIrange\fP directive consists of one or more capability
-directives.
+The body of a \fIrange\fP directive consists of one or more capability directives.
 
-Capabilities are used to assign or deny privileges to specific users.  Valid
-capabilities inside user directives are \fIallow\fP, \fIdeny\fP and\fIforce\fP.
+Capabilities are used to assign or deny privileges to specific users. Valid capabilities inside user directives are \fIallow\fP, \fIdeny\fP, and\fIforce\fP.
 
 The capability directive consists of one or more statements of the form:
 
 \fIallow\fP OR \fIdeny\fP OR \fIforce\fP <capability>.
 
-The capability argument must be one of the capabilities described in the
-\fBcapability\fP section below.
+The capability argument must be one of the capabilities described in the \fBcapability\fP section below.
 
-The force action takes a third argument when the capability is \fIreply\fP.
-For example, \fIforce reply "randomuser"\fP.
+The force action takes a third argument when the capability is \fIreply\fP. For example, \fIforce reply "randomuser"\fP.
 .SH $HOME/.oidentd.conf SYNTAX
-A user's .oidentd.conf configuration file may contain 0 or more of the
-following statements:
+A user's .oidentd.conf configuration file may contain 0 or more of the following statements:
 
 .nf
 \fIglobal\fP {
@@ -136,24 +99,15 @@ OR
 }
 .fi
 
-The \fIglobal\fP directive acts as a wildcard, matching all connections, so
-if used at all, the global directive should be the first entry in the
-file and should be used only once.  Use is permitted anywhere in the file
-and infinitely many times, however it doesn't make much sense to use it in this
-manner.
+The \fIglobal\fP directive acts as a wildcard, matching all connections, so if used at all, the global directive should be the first entry in the file and should be used only once. Use is permitted anywhere in the file and infinitely many times, however it doesn't make much sense to use it in this manner.
 
-The range directive has the same syntax and semantics as the range directive
-in the \fB/etc/oidentd.conf\fP file.  See above for a description.
+The range directive has the same syntax and semantics as the range directive in the \fB/etc/oidentd.conf\fP file. See above for a description.
 
-Valid capabilities are \fIreply\fP, \fIrandom\fP, \fInumeric\fP,
-\fIrandom_numeric\fP and \fIhide\fP.  Descriptions can be found below.
+Valid capabilities are \fIreply\fP, \fIrandom\fP, \fInumeric\fP, \fIrandom_numeric\fP, and \fIhide\fP. Descriptions can be found below.
 .SH CAPABILITIES
 .TP
 .B spoof
-Allow spoofed ident responses -- allow the user to specify a string of her
-choosing as the ident reply.  The only restriction on the spoofed response is
-that it must not be the username of another user.  When a user spoofs her
-ident reply, the login name of the user is recorded along with the forged reply.
+Allow spoofed ident responses; allow the user to specify a string of her choosing as the ident reply. The only restriction on the spoofed response is that it must not be the username of another user. When a user spoofs her ident reply, the login name of the user is recorded along with the forged reply.
 .br
 This capability does not apply to the \fIforce\fP action.
 .TP
@@ -168,18 +122,13 @@ Allow ident replies to be spoofed on privileged ports (ports lower than 1024).
 This capability does not apply to the \fIforce\fP action.
 .TP
 \fBreply\fP <string> [<string1> ... <stringN>]
-Reply to successful ident lookups with the ident response specified in <string>.
-If more than one string parameter is given, one of the strings will be selected
-randomly.
+Reply to successful ident lookups with the ident response specified in <string>. If more than one string parameter is given, one of the strings will be selected randomly.
 
-In a user's \fB$HOME/.oidentd.conf\fP file, up to 20 strings may be specified
-for a \fBreply\fP statement.
+In a user's \fB$HOME/.oidentd.conf\fP file, up to 20 strings may be specified for a \fBreply\fP statement.
 
-In the \fB/etc/oidentd.conf\fP file, there is no limitation on the number
-of strings that may be specified.
+In the \fB/etc/oidentd.conf\fP file, there is no limitation on the number of strings that may be specified.
 
-The strings may be an ordinary string or a quoted string (e.g. string vs.
-"string").  Quoted strings may contain the following escape characters:
+The strings must be quoted strings (e.g. "string"). Strings may contain the following escape characters:
 
 .RS
 .PD 0
@@ -227,15 +176,13 @@ The character with the ASCII code \fINNN\fP in the hexadecimal base system.
 Hide the user; report a "HIDDEN-USER" error when an ident lookup succeeds.
 .TP
 .B random
-Reply to successful ident lookups with a randomly generated ident response of
-consisting of alphanumeric characters.
+Reply to successful ident lookups with a randomly generated ident response of consisting of alphanumeric characters.
 .TP
 .B numeric
 Reply to successful ident lookups with the UID of the user that was looked up.
 .TP
 .B random_numeric
-Reply to successful with a randomly generated ident response of the form userN,
-where N is a random number between 0 and 100000.
+Reply to successful with a randomly generated ident response of the form userN, where N is a random number between 0 and 100000.
 .SH EXAMPLE /etc/oidentd.conf FILE
 .nf
 default {
@@ -250,10 +197,7 @@ default {
 }
 .fi
 
-Grant all users the ability to generate random numeric ident replies, the
-ability to generate numeric ident replies and the ability to hide their
-identities on all ident queries.  Explicitly deny the ability to spoof
-ident responses.
+Grant all users the ability to generate random numeric ident replies, the ability to generate numeric ident replies and the ability to hide their identities on all ident queries. Explicitly deny the ability to spoof ident responses.
 
 .nf
 user root {
@@ -266,7 +210,7 @@ user root {
 Reply with "UNKNOWN" for all successful ident queries for root.
 
 .nf
-user odin {
+user ryan {
 	default {
 		allow spoof
 		allow spoof_all
@@ -280,11 +224,7 @@ user odin {
 }
 .fi
 
-Grant the user "odin" the capability to spoof ident replies, including the
-ability to use other usernames as ident replies, generate random replies and
-hide his ident for all connections, and grant the user "odin" the capability to
-spoof ident replies to privileged ports (< 1024) on connections originating from
-the host 127.0.0.1.
+Grant the user "ryan" the capability to spoof ident replies, including the ability to use other usernames as ident replies, generate random replies and hide his ident for all connections, and grant the user "ryan" the capability to spoof ident replies to privileged ports (< 1024) on connections originating from the host 127.0.0.1.
 .SH EXAMPLE $HOME/.oidentd.conf FILE
 .nf
 global {
@@ -303,7 +243,7 @@ to irc.example.org {
 Reply with "example" to ident lookups for connections to irc.example.org.
 
 .SH AUTHOR
-Ryan McCabe <odin@numb.org>
+Ryan McCabe <ryan@numb.org>
 .br
 http://dev.ojnk.net
 

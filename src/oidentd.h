@@ -1,6 +1,6 @@
 /*
 ** oidentd.h - oidentd ident (rfc1413) implementation.
-** Copyright (C) 1998-2002 Ryan McCabe <odin@numb.org>
+** Copyright (C) 1998-2003 Ryan McCabe <ryan@numb.org>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -14,8 +14,6 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA
-**
-** $Id: oidentd.h,v 1.2 2003/01/09 19:44:57 odin Exp $
 */
 
 #ifndef __OIDENTD_H_

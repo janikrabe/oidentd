@@ -11,7 +11,7 @@
 ** This code was taken from OpenSSH.  It is distributed
 ** under a two-term BSD license.
 **
-** Modifications are Copyright (C) 2001-2002 Ryan McCabe <odin@numb.org>
+** Modifications are Copyright (C) 2001-2003 Ryan McCabe <ryan@numb.org>
 */
 
 #define _GNU_SOURCE

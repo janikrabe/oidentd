@@ -7,11 +7,9 @@
 ** NAT code taken from the OpenBSD NAT code by
 ** Slawomir Piotrowski <slawek@telsatgp.com.pl>
 **
-** Modifications Copyright (C) 1998-2002 Ryan McCabe <odin@numb.org>
+** Modifications Copyright (C) 1998-2003 Ryan McCabe <ryan@numb.org>
 **
-** All IPv6 code Copyright 2002 Ryan McCabe <odin@numb.org>
-**
-** $Id: darwin.c,v 1.1 2002/12/03 06:05:21 odin Exp $
+** All IPv6 code Copyright 2002-2003 Ryan McCabe <ryan@numb.org>
 */
 
 #include <config.h>

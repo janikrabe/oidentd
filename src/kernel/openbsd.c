@@ -7,14 +7,10 @@
 **		This program is in the public domain and may be used freely
 **		by anyone who wants to.
 **
-** This file has been modified for oidentd by Ryan McCabe <odin@numb.org>
-**
 ** OpenBSD IP masquerading support Copyright (C) 2000
 ** Slawomir Piotrowski <slawek@telsatgp.com.pl>
 **
-** Modifications Copyright (C) 1998-2002 Ryan McCabe <odin@numb.org>
-**
-** $Id: openbsd.c,v 1.1 2002/12/03 06:05:29 odin Exp $
+** Modifications Copyright (C) 1998-2003 Ryan McCabe <ryan@numb.org>
 */
 
 #include <config.h>

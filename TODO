@@ -11,5 +11,3 @@ I'd like oidentd to run on more platforms.  I don't have the access to port it
 to anything else, however.
 
 Patches for any of the above (and anything else) are welcome.
-
-$Id: TODO,v 1.1 2002/12/03 06:02:34 odin Exp $

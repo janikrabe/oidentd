@@ -1,7 +1,7 @@
 %{
 /*
 ** oidentd_cfg_scan.l - oidentd configuration scanner.
-** Copyright (C) 2001-2002 Ryan McCabe <odin@numb.org>
+** Copyright (C) 2001-2003 Ryan McCabe <ryan@numb.org>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -40,13 +40,12 @@
 #include <oidentd_options.h>
 #include <oidentd_cfg_parse.h>
 
-#define STRING_CHUNK_LEN 256
-
 extern int parser_mode;
 
-static char *string_buf;
+#define MAX_STRING_LEN 8192
+
+static char string_buf[MAX_STRING_LEN];
 static size_t str_idx;
-static size_t max_slen;
 
 static char get_esc_char(char c);
 
@@ -177,9 +176,8 @@ SPOOF_PRIVPORT		spoof_privport
 }
 
 \" {
-	string_buf = xmalloc(STRING_CHUNK_LEN);
+	string_buf[0] = '\0';
 	str_idx = 0;
-	max_slen = STRING_CHUNK_LEN;
 
 	BEGIN(state_string);
 }
@@ -200,8 +198,7 @@ SPOOF_PRIVPORT		spoof_privport
 
 <state_string>\" {
 	string_buf[str_idx++] = '\0';
-	string_buf = xrealloc(string_buf, str_idx);
-	yylval.string = string_buf;
+	yylval.string = xstrdup(string_buf);
 
 	BEGIN(INITIAL);
 	return (TOK_STRING);
@@ -209,10 +206,9 @@ SPOOF_PRIVPORT		spoof_privport
 
 <state_string>\n {
 	if (parser_mode == PARSE_SYSTEM) {
-		debug("[line %u] Error: Unterminated string constant", current_line);
+		o_log(NORMAL, "[line %u] Error: Unterminated string constant", current_line);
 	}
 
-	free(string_buf);
 	return (-1);
 }
 
@@ -221,36 +217,43 @@ SPOOF_PRIVPORT		spoof_privport
 }
 
 <state_string>\\[0-7]{1,3} {
-	u_long result;
+	u_int32_t result;
 
 	result = strtoul(yytext + 1, NULL, 8);
 
 	if (result > 0xff) {
 		if (parser_mode == PARSE_SYSTEM) {
-			debug("[line %u] Bad escape sequence: \"%s\"\n",
+			o_log(NORMAL, "[line %u] Bad escape sequence: \"%s\"\n",
 				current_line, yytext);
 		}
 
-		free(string_buf);
 		return (-1);
 	}
 
-	if (str_idx >= max_slen - 1) {
-		max_slen += STRING_CHUNK_LEN;
-		string_buf = xrealloc(string_buf, max_slen);
+	if (str_idx >= sizeof(string_buf) - 1) {
+		if (parser_mode == PARSE_SYSTEM) {
+			o_log(NORMAL, "[line %u] String too long.  Max length is %d",
+				current_line, sizeof(string_buf), yytext);
+		}
+
+		return (-1);
 	}
 
 	string_buf[str_idx++] = result;
 }
 
 <state_string>\\[xX][0-9A-Fa-f]{1,2} {
-	u_long result;
+	u_int32_t result;
 
 	result = strtoul(yytext + 2, NULL, 16);
 
-	if (str_idx >= max_slen - 2) {
-		max_slen += STRING_CHUNK_LEN;
-		string_buf = xrealloc(string_buf, max_slen);
+	if (str_idx >= sizeof(string_buf) - 1) {
+		if (parser_mode == PARSE_SYSTEM) {
+			o_log(NORMAL, "[line %u] String too long.  Max length is %d",
+				current_line, sizeof(string_buf), yytext);
+		}
+
+		return (-1);
 	}
 
 	string_buf[str_idx++] = result;
@@ -258,18 +261,21 @@ SPOOF_PRIVPORT		spoof_privport
 
 <state_string>\\[0-9]+ {
 	if (parser_mode == PARSE_SYSTEM) {
-		debug("[line %u] Error: Bad escape sequence: \"%s\"\n",
+		o_log(NORMAL, "[line %u] Error: Bad escape sequence: \"%s\"\n",
 			current_line, yytext);
 	}
 
-	free(string_buf);
 	return (-1);
 }
 
 <state_string>\\. {
-	if (str_idx >= max_slen - 2) {
-		max_slen += STRING_CHUNK_LEN;
-		string_buf = xrealloc(string_buf, max_slen);
+	if (str_idx >= sizeof(string_buf) - 1) {
+		if (parser_mode == PARSE_SYSTEM) {
+			o_log(NORMAL, "[line %u] String too long.  Max length is %d",
+				current_line, sizeof(string_buf), yytext);
+		}
+
+		return (-1);
 	}
 
 	string_buf[str_idx++] = get_esc_char(yytext[1]);
@@ -279,22 +285,26 @@ SPOOF_PRIVPORT		spoof_privport
 	size_t len = yyleng;
 	char *p = yytext;
 
-	if (str_idx + len >= max_slen - 1) {
-		max_slen += len + 1;
-		string_buf = xrealloc(string_buf, max_slen);
+	if (str_idx + len >= sizeof(string_buf) - 1) {
+		if (parser_mode == PARSE_SYSTEM) {
+			o_log(NORMAL, "[line %u] String too long.  Max length is %d",
+				current_line, sizeof(string_buf), yytext);
+		}
+
+		return (-1);
 	}
 
 	while (*p != '\0')
 		string_buf[str_idx++] = *p++;
 }
 
-([^\n\t "/{}]([^\n\t {}]*))|(\/([^*\n\t {}]+)([^\n\t {}]*)) {
-	yylval.string = strdup(yytext);
-	return (TOK_STRING);
+[^ \n\t\"]+ {
+	yylval.string = xstrdup(yytext);
+	return (TOK_USERNAME);
 }
 
 . {
-	return (yytext[0]);
+	return (-1);
 }
 
 %%

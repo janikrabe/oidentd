@@ -1,6 +1,6 @@
 /*
 ** oidentd_options.c - oidentd command-line handler.
-** Copyright (C) 2001-2002 Ryan McCabe <odin@numb.org>
+** Copyright (C) 2001-2003 Ryan McCabe <ryan@numb.org>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -14,8 +14,6 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA
-**
-** $Id: oidentd_options.c,v 1.1 2002/12/03 06:04:43 odin Exp $
 */
 
 #define _GNU_SOURCE
@@ -401,6 +399,6 @@ static void print_usage(void) {
 }
 
 static void print_version(void) {
-	printf(	"oidentd " VERSION "\nRyan McCabe <odin@numb.org>\n"
+	printf(	"oidentd " VERSION " by Ryan McCabe <ryan@numb.org>\n"
 			"http://dev.ojnk.net\n");
 }

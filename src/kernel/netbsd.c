@@ -7,16 +7,12 @@
 **		This program is in the public domain and may be used freely
 **		by anyone who wants to.
 **
-** This file has been modified for oidentd by Ryan McCabe <odin@numb.org>
-**
 ** NAT code taken from the OpenBSD NAT code by
 ** Slawomir Piotrowski <slawek@telsatgp.com.pl>
 **
-** Modifications Copyright (C) 1998-2002 Ryan McCabe <odin@numb.org>
+** Modifications Copyright (C) 1998-2003 Ryan McCabe <ryan@numb.org>
 **
-** All IPv6 code Copyright 2002 Ryan McCabe <odin@numb.org>
-**
-** $Id: netbsd.c,v 1.1 2002/12/03 06:05:34 odin Exp $
+** All IPv6 code Copyright 2002-2003 Ryan McCabe <ryan@numb.org>
 */
 
 #include <config.h>

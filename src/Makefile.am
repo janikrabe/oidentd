@@ -1,5 +1,3 @@
-# $Id: Makefile.am,v 1.2 2003/01/09 19:14:55 odin Exp $
-
 SUBDIRS = missing
 sbin_PROGRAMS = oidentd
 

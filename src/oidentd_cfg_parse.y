@@ -1,7 +1,7 @@
 %{
 /*
 ** oidentd_cfg_parse.y - oidentd configuration parser.
-** Copyright (C) 2001-2002 Ryan McCabe <odin@numb.org>
+** Copyright (C) 2001-2003 Ryan McCabe <ryan@numb.org>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -74,6 +74,9 @@ u_int16_t default_caps;
 %token <value> TOK_ALLOWDENY
 %token <value> TOK_CAP
 %token <string> TOK_STRING
+%token <string> TOK_USERNAME
+
+%type <string> user_spec
 
 %%
 
@@ -118,8 +121,14 @@ default_statement:
 	} '{' target_rule '}'
 ;
 
+user_spec:
+	TOK_USERNAME
+|
+	TOK_STRING
+;
+
 user_statement:
-	TOK_USER TOK_STRING {
+	TOK_USER user_spec {
 		if (parser_mode != PARSE_SYSTEM) {
 			free($2);
 			YYABORT;

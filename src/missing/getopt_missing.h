@@ -1,6 +1,4 @@
 /*
-** $Id: getopt_missing.h,v 1.1 2002/12/03 06:05:13 odin Exp $
-**
 ** getopt_missing.h - Declarations for getopt.
 **
 ** Copyright (C) 1989-1994, 1996-1999, 2001 Free Software Foundation, Inc.
@@ -21,7 +19,7 @@
 ** Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 ** 02111-1307 USA.
 **
-** Cleanup for oidentd Copyright (C) 2001-2002 Ryan McCabe <odin@numb.org>
+** Cleanup for oidentd Copyright (C) 2001-2003 Ryan McCabe <ryan@numb.org>
 */
 
 #ifndef _GETOPT_MISSING_H

@@ -1,6 +1,4 @@
-dnl $Id: configure.in,v 1.1 2002/12/03 06:03:43 odin Exp $
-
-AC_INIT(oidentd, 2.0.5, odin@numb.org)
+AC_INIT(oidentd, 2.0.5, ryan@numb.org)
 AM_INIT_AUTOMAKE(oidentd, 2.0.5)
 
 AM_CONFIG_HEADER(config.h)
@@ -280,8 +278,16 @@ case "$host_os" in
 				;;
 			esac
 		else
-			use_kmem=yes
-			os_src=freebsd.c
+			case "$host_os" in
+				*freebsd5* )
+					use_kmem=yes
+					os_src=freebsd5.c
+				;;
+				*)
+					use_kmem=yes
+					os_src=freebsd.c
+				;;
+			esac
 		fi
 	;;
 

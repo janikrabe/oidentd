@@ -1,8 +1,6 @@
 #!/bin/sh
 
 #
-# $Id: autogen.sh,v 1.1 2002/12/03 06:03:56 odin Exp $
-#
 # As of 12/28/2001, Debian can install both autoconf 2.13 and autoconf 2.50.
 # We want 2.50, if it's available.
 #
@@ -42,7 +40,7 @@ fi
 	echo
 	echo "Error: Automatic generation of the configuration scripts has failed."
 	echo "Please try to generate them manually.  If you believe this faulure"
-	echo "is the result of a bug in oidentd, please email odin@numb.org with"
+	echo "is the result of a bug in oidentd, please email ryan@numb.org with"
 	echo "any relevant details."
 	exit -1
 }

@@ -1,6 +1,6 @@
 /*
 ** openbsd30.c - Low level kernel access functions for OpenBSD 3.0 and greater
-** Copyright (C) 2001-2002 Ryan McCabe <odin@numb.org>
+** Copyright (C) 2001-2003 Ryan McCabe <ryan@numb.org>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -16,8 +16,6 @@
 ** Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA
 **
 ** PF support by Kamil Andrusz <wizz@mniam.net>
-**
-** $Id: openbsd30.c,v 1.1 2002/12/03 06:05:32 odin Exp $
 */
 
 #include <config.h>

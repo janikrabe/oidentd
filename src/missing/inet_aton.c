@@ -1,6 +1,4 @@
 /*
- * $Id: inet_aton.c,v 1.1 2002/12/03 06:05:13 odin Exp $
- *
  * ++Copyright++ 1983, 1990, 1993
  * -
  * Copyright (c) 1983, 1990, 1993

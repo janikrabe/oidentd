@@ -5,7 +5,7 @@
 ** and macros from linux/netlink.h and linux/tcp_diag.h, and converts them 
 ** to be usable from userland code.
 **
-** Cleanup and conversion Copyright (C) 2002 Ryan McCabe <odin@numb.org>
+** Cleanup and conversion Copyright (C) 2002-2003 Ryan McCabe <ryan@numb.org>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,

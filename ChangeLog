@@ -1,26 +1,34 @@
-Thu Jan  9 13:49:15 EST 2003    Ryan McCabe <odin@numb.org>
+Tue Feb 11 19:04:19 EST 2003    Ryan McCabe <ryan@numb.org>
+
+    * Added a patch from Mieczyslaw Nalewaj  <nami@polbox.com> to add
+      support for FreeBSD 5.
+
+    * Added a patch from Elliott Mitchell <ehem@m5p.com> to prevent
+      memory leaks in parts of the configuration parser.
+
+Thu Jan  9 13:49:15 EST 2003    Ryan McCabe <ryan@numb.org>
 
     * Added DNAT patch for Linux from Christian Kellner <gicmo@gmx.net>
 
     * Added a ptch from Krzysztof Ol?dzki <ole@ans.pl> that fixes
       lookups of IPv6 connections.
 
-Sat Aug 24 09:20:43 EDT 2002    Ryan McCabe <odin@numb.org>
+Sat Aug 24 09:20:43 EDT 2002    Ryan McCabe <ryan@numb.org>
 
     * Fixed a compile error for older versions of libc on Linux.
         - Thanks to Motohiko Takemura <takemura@pharmaco.crl.hyo-med.ac.jp>
 
-Thu Aug 22 11:44:20 EDT 2002    Ryan McCabe <odin@numb.org>
+Thu Aug 22 11:44:20 EDT 2002    Ryan McCabe <ryan@numb.org>
 
     * Cleaned up the connection forwarding code, made connection
       forwarding actually work on BSD.
         - Thanks to Ewen McNeill <ewen@naos.co.nz>
 
-Wed Aug 20 13:21:34 EDT 2002    Ryan McCabe <odin@numb.org>
+Wed Aug 20 13:21:34 EDT 2002    Ryan McCabe <ryan@numb.org>
 
     * Released as version 2.0.4.
 
-Wed Aug  7 23:05:56 EDT 2002    Ryan McCabe <odin@numb.org>
+Wed Aug  7 23:05:56 EDT 2002    Ryan McCabe <ryan@numb.org>
 
     * Added support for Solaris 9.
         - Thanks to Douglas Palmer <palmer@nyed.uscourts.gov>
@@ -28,28 +36,28 @@ Wed Aug  7 23:05:56 EDT 2002    Ryan McCabe <odin@numb.org>
     * Use the netlink socket diagnostics interface to look up
       connection owners on Linux, if available.
 
-Wed Jan 30 15:22:39 EST 2002    Ryan McCabe <odin@numb.org>
+Wed Jan 30 15:22:39 EST 2002    Ryan McCabe <ryan@numb.org>
 
     * Added support for Darwin.
 
-Tue Jan 22 16:07:39 EST 2002    Ryan McCabe <odin@numb.org>
+Tue Jan 22 16:07:39 EST 2002    Ryan McCabe <ryan@numb.org>
 
     * Kill the "Address family not supported by protocol" warning
       when running with --debug.
 
-Wed Jan 16 00:25:02 EST 2002    Ryan McCabe <odin@numb.org>
+Wed Jan 16 00:25:02 EST 2002    Ryan McCabe <ryan@numb.org>
 
     * Really fixed forwarding and proxy support on FreeBSD.
 
     * Fixes for NAT on OpenBSD >= 3.0.
 
-Tue Jan  1 10:17:30 EST 2002    Ryan McCabe <odin@numb.org>
+Tue Jan  1 10:17:30 EST 2002    Ryan McCabe <ryan@numb.org>
 
     * Added support for NetBSD.
 
     * Fixed a bug in the OpenBSD connection forwarding code.
 
-Sat Dec 29 16:23:52 EST 2001    Ryan McCabe <odin@numb.org>
+Sat Dec 29 16:23:52 EST 2001    Ryan McCabe <ryan@numb.org>
 
     * Released as version 2.0.3.
 
@@ -59,64 +67,64 @@ Sat Dec 29 16:23:52 EST 2001    Ryan McCabe <odin@numb.org>
     * Moved all the OS-specific user lookup functions into the src/kernel
       directory.
 
-Fri Dec 28 12:27:51 EST 2001    Ryan McCabe <odin@numb.org>
+Fri Dec 28 12:27:51 EST 2001    Ryan McCabe <ryan@numb.org>
 
     * Released as version 2.0.2.
 
     * Fixed a bug in the forwarding code.
 
-Fri Dec 28 02:03:21 EST 2001    Ryan McCabe <odin@numb.org>
+Fri Dec 28 02:03:21 EST 2001    Ryan McCabe <ryan@numb.org>
 
     * Applied a patch from Kamil Andrusz <wizz@mniam.net> adding
       support for OpenBSD >= 3.0 packet filter.
 
-Sun Nov 11 23:24:07 EST 2001    Ryan McCabe <odin@numb.org>
+Sun Nov 11 23:24:07 EST 2001    Ryan McCabe <ryan@numb.org>
 
     * Cleaned up the parsing of $HOME/.oidentd.conf files.
 
-Sat Nov  3 13:33:53 EST 2001    Ryan McCabe <odin@numb.org>
+Sat Nov  3 13:33:53 EST 2001    Ryan McCabe <ryan@numb.org>
 
     * Allow multiple strings after a reply statement, from which
       one of them will be selected randomly.
 
-Mon Oct 29 15:19:30 EST 2001    Ryan McCabe <odin@numb.org>
+Mon Oct 29 15:19:30 EST 2001    Ryan McCabe <ryan@numb.org>
 
     * Added a --limit command-line option.
 
-Wed Oct  3 14:01:46 EDT 2001    Ryan McCabe <odin@numb.org>
+Wed Oct  3 14:01:46 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Released as version 2.0.1.
 
     * Fixed a crash that occurred when oidentd reloaded its
       configuration file.
 
-Tue Oct  2 22:03:32 EDT 2001    Ryan McCabe <odin@numb.org>
+Tue Oct  2 22:03:32 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Only lookup the "_nat_instances" symbol on BSD if the --masq
       option is given.
         - Without this patch, oidentd fails on FreeBSD (at least) if
           NAT support is not compiled into the kernel.
 
-Tue Oct  2 19:48:16 EDT 2001    Ryan McCabe <odin@numb.org>
+Tue Oct  2 19:48:16 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Blank lines and lines beginning with # (comments) are ignored
       in /etc/oidentd_masq.conf.
 
-Sun Sep 30 12:37:47 EDT 2001    Ryan McCabe <odin@numb.org>
+Sun Sep 30 12:37:47 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Re-enable NAT support for OpenBSD 2.9 and greater.
         - Eric LeBlanc <inouk@toutatis.igt.net> noted that
           the kernel access method used for earlier OpenBSD
           versions still works for version 2.9.
 
-Sat Sep 29 15:41:47 EDT 2001    Ryan McCabe <odin@numb.org>
+Sat Sep 29 15:41:47 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Released as version 2.0.0.
 
     * Fixed a bug that caused freebsd.c to be built instead of
       freebsd4.c when IP masq/NAT is diabled on FreeBSD.
 
-Fri Sep 28 21:00:28 EDT 2001    Ryan McCabe <odin@numb.org>
+Fri Sep 28 21:00:28 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Removed the debugging code from the FreeBSD NAT handler.
         - Thanks to Steven Nikkel <steven_nikkel@bigfoot.com> for
@@ -125,53 +133,53 @@ Fri Sep 28 21:00:28 EDT 2001    Ryan McCabe <odin@numb.org>
     * Made debugging messages a compile time option.
         - They're only included if configure is passed --enable-debug
 
-Thu Sep 27 12:18:15 EDT 2001    Ryan McCabe <odin@numb.org>
+Thu Sep 27 12:18:15 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Applied patch from Motohiko Takemura <takemura@pharmaco.crl.hyo-med.ac.jp>
       that fixed a bug in the command-line argument handler.
 
-Mon Sep 24 22:05:00 EDT 2001    Ryan McCabe <odin@numb.org>
+Mon Sep 24 22:05:00 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Allow oidentd to bind more than one interface returned
       by getaddrinfo().
 
-Wed Sep 19 17:01:05 EDT 2001    Ryan McCabe <odin@numb.org>
+Wed Sep 19 17:01:05 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Fixed a potential problem with the default port binding mechanism.
 
-Wed Sep 19 14:32:45 EDT 2001    Ryan McCabe <odin@numb.org>
+Wed Sep 19 14:32:45 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Added a new command-line flag, --config, that is used to specify
       the location of the configuration file.  The default is
       /etc/oidentd.conf.
 
-Tue Sep 18 21:23:13 EDT 2001    Ryan McCabe <odin@numb.org>
+Tue Sep 18 21:23:13 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Make sure the trailing new line is trimmed from the operating
       system parameter in the /etc/oidentd_masq.conf file.
         - Thanks to Eric LeBlanc <inouk@toutatis.igt.net> for noticing this.
 
-Tue Sep 18 17:19:15 EDT 2001    Ryan McCabe <odin@numb.org>
+Tue Sep 18 17:19:15 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Fixes for IP masquerading and connection forwarding on OpenBSD
       and FreeBSD.
 
-Tue Sep 18 12:40:57 EDT 2001    Ryan McCabe <odin@numb.org>
+Tue Sep 18 12:40:57 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Applied a patch that fixes the bug that caused IP masquerading to fail.
         - Fix reported by
           Motohiko Takemura <takemura@pharmaco.crl.hyo-med.ac.jp>
           and Eric LeBlanc <inouk@toutatis.igt.net>
 
-Tue Sep 18 09:35:29 EDT 2001    Ryan McCabe <odin@numb.org>
+Tue Sep 18 09:35:29 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Applied UDB fixes from Martin Waitz <tali@stud.uni-erlangen.de>
 
-Mon Sep 17 15:29:32 EDT 2001    Ryan McCabe <odin@numb.org>
+Mon Sep 17 15:29:32 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Added IP masquerade support for FreeBSD.
 
-Mon Sep 17 14:19:49 EDT 2001    Ryan McCabe <odin@numb.org>
+Mon Sep 17 14:19:49 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Fixed bugs that caused openbsd.c not to compile.
 
@@ -179,16 +187,16 @@ Mon Sep 17 14:19:49 EDT 2001    Ryan McCabe <odin@numb.org>
         - Thanks to Stephen Marley <stephen@openkast.com> for access to
           a machine running OpenBSD 2.9.
 
-Fri Sep 14 17:31:07 EDT 2001    Ryan McCabe <odin@numb.org>
+Fri Sep 14 17:31:07 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Released as version 1.9.9.1
 
-Fri Sep 14 11:43:21 EDT 2001    Ryan McCabe <odin@numb.org>
+Fri Sep 14 11:43:21 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Merged the --other and --os command-line flags.  See the manual
       page for details.
 
-Tue Sep 11 22:50:47 EDT 2001    Ryan McCabe <odin@numb.org>
+Tue Sep 11 22:50:47 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Merged fixes from Motohiko Takemura <takemura@pharmaco.crl.hyo-med.ac.jp>
         - Includes fixes for:
@@ -198,13 +206,13 @@ Tue Sep 11 22:50:47 EDT 2001    Ryan McCabe <odin@numb.org>
             * Typo that caused the the UDB and forward options to
               use the same bit mask.
 
-Tue Sep  4 10:17:38 EDT 2001    Ryan McCabe <odin@numb.org>
+Tue Sep  4 10:17:38 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Fix a crash when no configuration file is used.
         - If you saw crashes with oidentd 1.9.9, this will
           fix it.
 
-Tue Sep  4 09:50:33 EDT 2001    Ryan McCabe <odin@numb.org>
+Tue Sep  4 09:50:33 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * IPv4/IPv6 interoperability cleanups.
 
@@ -212,48 +220,48 @@ Tue Sep  4 09:50:33 EDT 2001    Ryan McCabe <odin@numb.org>
         - Thanks to Arkadiusz Miskiewicz <misiek@pld.ORG.PL> for
           input and the bug report concerning the configure flags.
 
-Fri Aug 31 11:43:39 EDT 2001    Ryan McCabe <odin@numb.org>
+Fri Aug 31 11:43:39 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * It's $HOME/.oidentd.conf.  Fix everywhere...
 
-Fri Aug 31 10:26:38 EDT 2001    Ryan McCabe <odin@numb.org>
+Fri Aug 31 10:26:38 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Fixed Solaris 8 support.
         - Thanks to Carlton Clark <rstark@manatrip.ath.cx> for
           access to his Solaris 8 box.
 
-Wed Aug 29 14:09:59 EDT 2001    Ryan McCabe <odin@numb.org>
+Wed Aug 29 14:09:59 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Solaris 7 support.
 
     * Cleaned up the Solaris 2.[456] support.
 
-Tue Aug 28 16:25:30 EDT 2001    Ryan McCabe <odin@numb.org>
+Tue Aug 28 16:25:30 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Solaris 8 support.
 
     * Small cleanups.
 
-Tue Aug 28 10:00:10 EDT 2001    Ryan McCabe <odin@numb.org>
+Tue Aug 28 10:00:10 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Compile fix for systems that have __ss_family instead of ss_family.
 
-Mon Aug 27 16:28:39 EDT 2001    Ryan McCabe <odin@numb.org>
+Mon Aug 27 16:28:39 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Fix the port binding mechanism.
 
-Mon Aug 27 09:46:06 EDT 2001    Ryan McCabe <odin@numb.org>
+Mon Aug 27 09:46:06 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * autoconf tweaks.
 
     * Fixed to work with automake 1.5.
 
-Sat Aug 25 10:09:44 EDT 2001    Ryan McCabe <odin@numb.org>
+Sat Aug 25 10:09:44 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Fixed compile bugs that showed up when you passed configure a
       --srcdir argument.
         - Reported by Frederic L. W. Meunier <0@pervalidus.net>
 
-Fri Aug 24 10:06:05 EDT 2001    Ryan McCabe <odin@numb.org>
+Fri Aug 24 10:06:05 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Released version 1.9.9

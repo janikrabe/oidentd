@@ -1,5 +1,10 @@
 Changes in 2.0.5
 * Bugfixes for connection forwarding on BSD.
+* DNAT support on linux.
+* Configuration Parser/scanner cleanups.
+* IPv6 fixes.
+* FreeBSD 5 support.
+* Compile fixes.
 
 Changes in 2.0.4
 * Support for lookups using the netlink socket diagnostics interface on Linux.
