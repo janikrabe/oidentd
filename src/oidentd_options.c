@@ -44,10 +44,10 @@
 #endif
 
 #ifdef MASQ_SUPPORT
-#	define OPTSTRING "a:c:C:def::g:hl:mo::p:P:qr:t:u:Uv"
+#	define OPTSTRING "a:c:C:def::g:hiIl:mo::p:P:qr:St:u:Uv"
 	extern in_port_t fwdport;
 #else
-#	define OPTSTRING "a:c:C:deg:hl:o::p:P:qr:t:u:Uv"
+#	define OPTSTRING "a:c:C:deg:hiIl:o::p:P:qr:St:u:Uv"
 #endif
 
 extern struct sockaddr_storage proxy;
@@ -73,11 +73,14 @@ static const struct option longopts[] = {
 	{"error",				no_argument,		0, 'e'},
 	{"group",				required_argument,	0, 'g'},
 	{"help",				no_argument,		0, 'h'},
+	{"foreground",				no_argument,		0, 'i'},
+	{"stdio",				no_argument,		0, 'I'},
 	{"limit",				required_argument,	0, 'l'},
 	{"other",				optional_argument,	0, 'o'},
 	{"port",				required_argument,	0, 'p'},
 	{"quiet",				no_argument,		0, 'q'},
 	{"reply",				required_argument,	0, 'r'},
+	{"nosyslog",				no_argument,		0, 'S'},
 	{"timeout",				required_argument,	0, 't'},
 	{"user",				required_argument,	0, 'u'},
 #ifdef HAVE_LIBUDB
@@ -226,6 +229,16 @@ int get_options(int argc, char *const argv[]) {
 				}
 				break;
 
+			/* pre-connected, as when run from inetd */
+			case 'I':
+				enable_opt(STDIO | FOREGROUND);
+				break;
+
+			/* do not become a daemon */
+			case 'i':
+				enable_opt(FOREGROUND);
+				break;
+
 			case 'l':
 			{
 				u_int32_t temp_limit;
@@ -276,6 +289,10 @@ int get_options(int argc, char *const argv[]) {
 				if (failuser != NULL)
 					free(failuser);
 				failuser = xstrdup(optarg);
+				break;
+
+			case 'S':
+				enable_opt(NOSYSLOG);
 				break;
 
 			case 't':
@@ -337,7 +354,7 @@ int get_options(int argc, char *const argv[]) {
 	if (!opt_enabled(CHANGE_UID)) {
 		if (find_user("nobody", &uid) == -1) {
 			o_log(NORMAL,
-				"user \"nobody\" does not exist.  Using %u as default UID",
+				"user \"nobody\" does not exist. Using %u as default UID",
 				DEFAULT_UID);
 
 			uid = DEFAULT_UID;
@@ -379,10 +396,13 @@ static void print_usage(void) {
 
 "-P or --proxy <host>         <host> acts as a proxy, forwarding connections to us\n"
 "-g or --group <group>        Run with specified group or GID\n"
+"-i or --foreground           Don't run as a daemon\n"
+"-I or --stdio                Service a single client connected to stdin/stdout then exit\n"
 "-l or --limit <number>       Limit the number of open connections to the specified number\n"
 "-o or --other [<os>]         Return <os> instead of the operating system.  Uses \"OTHER\" if no argument is given.\n"
 "-p or --port <port>          Listen for connections on specified port\n"
 "-q or --quiet                Suppress normal logging\n"
+"-S or --nosyslog             Write messages to stderr not syslog\n"
 "-t or --timeout <seconds>    Wait for <seconds> before closing connection\n"
 "-u or --user <user>          Run as specified user or UID\n"
 

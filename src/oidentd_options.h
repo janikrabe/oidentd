@@ -30,6 +30,9 @@
 #define USEUDB				(1 << 0x07)
 #define DEBUG_MSGS			(1 << 0x08)
 #define QUIET				(1 << 0x09)
+#define FOREGROUND			(1 << 0x0a)
+#define NOSYSLOG			(1 << 0x0b)
+#define STDIO				(1 << 0x0c)
 
 bool opt_enabled(u_int32_t option);
 void disable_opt(u_int32_t option);

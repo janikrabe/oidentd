@@ -416,7 +416,7 @@ int o_log(int priority, const char *fmt, ...) {
 	ret = vasprintf((char **) &buf, fmt, ap);
 	va_end(ap);
 
-	if (isatty(fileno(stderr)))
+	if (opt_enabled(NOSYSLOG) || isatty(fileno(stderr)))
 		fprintf(stderr, "%s\n", buf);
 	else
 		syslog(priority, "%s", buf);

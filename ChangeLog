@@ -1,3 +1,11 @@
+Wed Apr 23 19:59:42 EDT 2003    Ryan McCabe <ryan@numb.org>
+
+    * Applied patches from henke@insync.net to
+        - Improve PRNG seeding and random number selection.
+
+        - Add support for running in the foreground, logging only to stderr,
+          and for inetd support and daemontools support.
+
 Thu Feb 13 23:28:14 EST 2003    Ryan McCabe <ryan@numb.org>
 
     * Make it build again on recent versions of Darwin.

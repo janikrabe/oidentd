@@ -15,7 +15,7 @@ oidentd \- TCP/IP IDENT protocol server
 .SH SYNOPSIS
 .BI "oidentd [options]"
 .sp
-.B [ \-dehmoqv ]
+.B [ \-dehiImoqSv ]
 .br
 .B [ \-a <host> ]
 .br
@@ -77,6 +77,24 @@ When IP masquerading support is enabled, forward requests for machines that masq
 Run with specified GID or group.
 
 .TP
+.B "\-i or \-\-foreground"
+Run interactively, not as a daemon. This is useful when debugging, or
+when running from a service manager such as daemontools.
+
+.TP
+.B "\-I or \-\-stdio"
+Service only a single client request then exit. The client is expected to
+be already connected via stdin and stdout. This mode is useful when running
+from listener utilities such as
+.BR inetd (8),
+.BR xinetd (8)
+or 
+.BR tcpserver (8).
+This option implies
+.B \-i
+(run in foreground) also. 
+
+.TP
 .B "\-l or \-\-limit=<number>"
 Allow, at most, the specified number of open connections at once.
 
@@ -101,6 +119,12 @@ The specified host acts as a proxy, forwarding connections to us. This option mu
 .TP
 .B "\-q or \-\-quiet"
 Quiet mode; do not log any status messages to syslog.
+
+.TP
+.B "\-S or \-\-nosyslog"
+Log any status messages to stderr, not syslog. This is useful for debugging
+or integration with external loggers such as 
+.BR multilog (8).
 
 .TP
 .B "\-t or \-\-timeout=<seconds>"

@@ -58,7 +58,7 @@ static void free_pw(struct passwd *pwd);
 
 static void seed_prng(void);
 
-static int service_request(int sock);
+static int service_request(int insock, int outsock);
 
 u_int32_t timeout = DEFAULT_TIMEOUT;
 u_int32_t connection_limit;
@@ -75,7 +75,7 @@ in_port_t listen_port;
 struct sockaddr_storage *addr;
 
 int main(int argc, char **argv) {
-	int *listen_fds;
+	int *listen_fds = NULL;
 
 	if (get_options(argc, argv) != 0)
 		exit(-1);
@@ -92,15 +92,17 @@ int main(int argc, char **argv) {
 		exit(-1);
 	}
 
-	if (go_background() == -1) {
+	if (!opt_enabled(FOREGROUND) && go_background() == -1) {
 		o_log(NORMAL, "Fatal: Error creating daemon process");
 		exit(-1);
 	}
 
-	listen_fds = setup_listen(addr, htons(listen_port));
-	if (listen_fds == NULL || listen_fds[0] == -1) {
-		o_log(NORMAL, "Fatal: Unable to setup listening socket");
-		exit(-1);
+	if (!opt_enabled(STDIO)) {
+		listen_fds = setup_listen(addr, htons(listen_port));
+		if (listen_fds == NULL || listen_fds[0] == -1) {
+			o_log(NORMAL, "Fatal: Unable to setup listening socket");
+			exit(-1);
+		}
 	}
 
 	if (k_open() != 0) {
@@ -126,6 +128,11 @@ int main(int argc, char **argv) {
 	signal(SIGCHLD, sig_child);
 	signal(SIGHUP, sig_hup);
 	signal(SIGSEGV, sig_segv);
+
+	if (opt_enabled(STDIO)) {
+		service_request(fileno(stdin), fileno(stdout));
+		exit(0);
+	}
 
 	for (;;) {
 		fd_set rfds;
@@ -169,7 +176,7 @@ int main(int argc, char **argv) {
 						free(listen_fds);
 						alarm(timeout);
 						seed_prng();
-						service_request(connectfd);
+						service_request(connectfd, connectfd);
 
 						exit(0);
 					}
@@ -187,7 +194,7 @@ int main(int argc, char **argv) {
 ** Handle the client's request: read the client data and send the identd reply.
 */
 
-static int service_request(int sock) {
+static int service_request(int insock, int outsock) {
 	int len;
 	int ret;
 	int con_uid;
@@ -203,12 +210,12 @@ static int service_request(int sock) {
 	struct passwd *pw, pwd;
 	static socklen_t socklen = sizeof(struct sockaddr_storage);
 
-	if (getpeername(sock, (struct sockaddr *) &faddr, &socklen) != 0) {
+	if (getpeername(insock, (struct sockaddr *) &faddr, &socklen) != 0) {
 		debug("getpeername: %s", strerror(errno));
 		return (-1);
 	}
 
-	if (getsockname(sock, (struct sockaddr *) &laddr, &socklen) != 0) {
+	if (getsockname(insock, (struct sockaddr *) &laddr, &socklen) != 0) {
 		debug("getsockname: %s", strerror(errno));
 		return (-1);
 	}
@@ -237,7 +244,7 @@ static int service_request(int sock) {
 	} else
 		o_log(NORMAL, "Connection from %s (%s):%d", host_buf, ip_buf, fport);
 
-	len = sock_read(sock, line, sizeof(line));
+	len = sock_read(insock, line, sizeof(line));
 	if (len <= 0)
 		return (-1);
 
@@ -248,7 +255,7 @@ static int service_request(int sock) {
 	}
 
 	if (!VALID_PORT(lport_temp) || !VALID_PORT(fport_temp)) {
-		sockprintf(sock, "%d , %d : ERROR : %s\r\n",
+		sockprintf(outsock, "%d , %d : ERROR : %s\r\n",
 				lport_temp, fport_temp, ERROR("INVALID-PORT"));
 
 		debug("[%s] %d , %d : ERROR : INVALID-PORT",
@@ -265,7 +272,7 @@ static int service_request(int sock) {
 
 #ifdef HAVE_LIBUDB
 	if (opt_enabled(USEUDB)) {
-		con_uid = get_udb_user(lport, fport, &laddr, &faddr, sock);
+		con_uid = get_udb_user(lport, fport, &laddr, &faddr, insock);
 		if (con_uid == -2)
 			return (0);
 	}
@@ -281,19 +288,19 @@ static int service_request(int sock) {
 
 	if (opt_enabled(MASQ)) {
 		if (con_uid == -1 && laddr.ss_family == AF_INET)
-			if (masq(sock, htons(lport), htons(fport), &laddr, &faddr) == 0)
+			if (masq(insock, htons(lport), htons(fport), &laddr, &faddr) == 0)
 				return (0);
 	}
 
 	if (con_uid == -1) {
 		if (failuser != NULL) {
-			sockprintf(sock, "%d , %d : USERID : %s : %s\r\n",
+			sockprintf(outsock, "%d , %d : USERID : %s : %s\r\n",
 				lport, fport, ret_os, failuser);
 
 			o_log(NORMAL, "[%s] Failed lookup: %d , %d : (returned %s)",
 				host_buf, lport, fport, failuser);
 		} else {
-			sockprintf(sock, "%d , %d : ERROR : %s\r\n",
+			sockprintf(outsock, "%d , %d : ERROR : %s\r\n",
 				lport, fport, ERROR("NO-USER"));
 
 			o_log(NORMAL, "[%s] %d , %d : ERROR : NO-USER",
@@ -305,7 +312,7 @@ static int service_request(int sock) {
 
 	pw = getpwuid(con_uid);
 	if (pw == NULL) {
-		sockprintf(sock, "%d , %d : ERROR : %s\r\n",
+		sockprintf(outsock, "%d , %d : ERROR : %s\r\n",
 			lport, fport, ERROR("NO-USER"));
 
 		debug("getpwuid(%d): %s", con_uid, strerror(errno));
@@ -315,7 +322,7 @@ static int service_request(int sock) {
 
 	ret = get_ident(&pwd, lport, fport, &laddr, &faddr, suser, sizeof(suser));
 	if (ret == -1) {
-		sockprintf(sock, "%d , %d : ERROR : %s\r\n",
+		sockprintf(outsock, "%d , %d : ERROR : %s\r\n",
 			lport, fport, ERROR("HIDDEN-USER"));
 
 		o_log(NORMAL, "[%s] %d , %d : HIDDEN-USER (%s)",
@@ -324,7 +331,7 @@ static int service_request(int sock) {
 		goto out;
 	}
 
-	sockprintf(sock, "%d , %d : USERID : %s : %s\r\n",
+	sockprintf(outsock, "%d , %d : USERID : %s : %s\r\n",
 		lport, fport, ret_os, suser);
 
 	o_log(NORMAL, "[%s] Successful lookup: %d , %d : %s (%s)",
