@@ -1,5 +1,5 @@
-AC_INIT(oidentd, 2.0.5, ryan@numb.org)
-AM_INIT_AUTOMAKE(oidentd, 2.0.5)
+AC_INIT(oidentd, 2.0.6, ryan@numb.org)
+AM_INIT_AUTOMAKE(oidentd, 2.0.6)
 
 AM_CONFIG_HEADER(config.h)
 
@@ -36,6 +36,8 @@ if test "$enableval" = "yes"; then
 	AC_DEFINE(ENABLE_DEBUGGING)
 	CFLAGS="$CFLAGS -g3 -W -Wall -Wshadow -Wcast-align -Wwrite-strings -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Winline"
 fi
+
+AC_CHECK_HEADERS(netinet/ip_compat.h netinet6/in6_pcb.h)
 
 AC_CHECK_TYPE(u_int32_t, uint32_t)
 if test "$ac_cv_type_u_int32_t" = "no"; then

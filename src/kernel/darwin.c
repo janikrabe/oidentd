@@ -37,7 +37,9 @@
 #include <netinet/in_pcb.h>
 #include <arpa/inet.h>
 #include <netinet/tcp.h>
-#include <netinet/ip_compat.h>
+#ifdef HAVE_NETINET_IP_COMPAT_H
+#	include <netinet/ip_compat.h>
+#endif
 
 #define KERNEL
 #include <sys/file.h>
@@ -48,7 +50,9 @@
 #	include <netinet/tcp_timer.h>
 #	include <netinet/tcp_var.h>
 #	include <netinet/ip6.h>
-#	include <netinet6/in6_pcb.h>
+#	ifdef HAVE_NETINET6_IN6_PCB_H
+#		include <netinet6/in6_pcb.h>
+#	endif
 #endif
 
 #ifdef MASQ_SUPPORT

@@ -1,3 +1,11 @@
+Thu Feb 13 23:28:14 EST 2003    Ryan McCabe <ryan@numb.org>
+
+    * Make it build again on recent versions of Darwin.
+
+Tue Feb 12 01:30:45 EST 2003    Ryan McCabe <ryan@numb.org>
+
+    * Released as version 2.0.5.
+
 Tue Feb 11 19:04:19 EST 2003    Ryan McCabe <ryan@numb.org>
 
     * Added support for connection forwarding on recent versions of
