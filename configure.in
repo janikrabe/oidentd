@@ -365,7 +365,7 @@ fi
 if test "$masq_support" = "yes"; then
 	AC_DEFINE(MASQ_SUPPORT)
 else
-	AC_MSG_WARN(not including IP masquerade support.)
+	AC_MSG_WARN(not including NAT/IP masquerade support.)
 fi
 
 if test "$ipv6_support" = "yes"; then
