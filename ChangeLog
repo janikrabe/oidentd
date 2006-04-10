@@ -6,6 +6,8 @@ Tue Apr 10 20:57:00 BST 2006    Simon Arlott <oidentd@fire.lp0.eu>
 
     * Add an option that does forwarding only if the masquerading file lookup fails.
 
+    * Support Layer 3 Independent Connection tracking on Linux.
+
 Mon May 22 00:20:15 EDT 2006    Ryan McCabe <ryan@numb.org>
 
     * Released as version 2.0.8.

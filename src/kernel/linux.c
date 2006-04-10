@@ -47,7 +47,8 @@
 #define CFILE		"/proc/net/tcp"
 #define CFILE6		"/proc/net/tcp6"
 #define MASQFILE	"/proc/net/ip_masquerade"
-#define CONNTRACK	"/proc/net/ip_conntrack"
+#define IPCONNTRACK	"/proc/net/ip_conntrack"
+#define NFCONNTRACK	"/proc/net/nf_conntrack"
 
 static int netlink_sock;
 extern struct sockaddr_storage proxy;
@@ -58,8 +59,14 @@ static int lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 							in_port_t dst_port);
 
 #ifdef MASQ_SUPPORT
+enum {
+	CT_UNKNOWN,
+	CT_MASQFILE,
+	CT_IPCONNTRACK,
+	CT_NFCONNTRACK
+};
 FILE *masq_fp;
-bool netfilter;
+int conntrack = CT_UNKNOWN;
 #endif
 
 /*
@@ -76,18 +83,29 @@ bool core_init(void) {
 			return false;
 		}
 
-		masq_fp = fopen(CONNTRACK, "r");
+		masq_fp = fopen(NFCONNTRACK, "r");
 		if (masq_fp == NULL) {
 			if (errno != ENOENT) {
-				debug("fopen: %s: %s", CONNTRACK, strerror(errno));
+				debug("fopen: %s: %s", NFCONNTRACK, strerror(errno));
 				return false;
 			}
-			masq_fp = fopen("/dev/null", "r");
-		}
 
-		netfilter = true;
+			masq_fp = fopen(IPCONNTRACK, "r");
+			if (masq_fp == NULL) {
+				if (errno != ENOENT) {
+					debug("fopen: %s: %s", IPCONNTRACK, strerror(errno));
+					return false;
+				}
+
+				masq_fp = fopen("/dev/null", "r");
+			} else {
+				conntrack = CT_IPCONNTRACK;
+			}
+		} else {
+			conntrack = CT_NFCONNTRACK;
+		}
 	} else {
-		netfilter = false;
+		conntrack = CT_MASQFILE;
 	}
 #endif
 
@@ -302,19 +320,20 @@ int masq(	int sock,
 	fport = ntohs(fport);
 
 	/* masq support failed to initialize */
-	if (masq_fp == NULL)
+	if (masq_fp == NULL || conntrack == CT_UNKNOWN)
 		return (-1);
 
 	/* rewind fp to read new contents */
 	rewind(masq_fp);
 
-	if (!netfilter) {
+	if (conntrack == CT_MASQFILE) {
 		/* Eat the header line. */
 		fgets(buf, sizeof(buf), masq_fp);
 	}
 
 	while (fgets(buf, sizeof(buf), masq_fp)) {
 		char os[24];
+		char family[16];
 		char proto[16];
 		in_port_t mport;
 		in_port_t nport;
@@ -328,7 +347,7 @@ int masq(	int sock,
 		struct sockaddr_storage ss;
 		int ret;
 
-		if (!netfilter) {
+		if (conntrack == CT_MASQFILE) {
 			u_int32_t mport_temp;
 			u_int32_t nport_temp;
 			u_int32_t masq_lport_temp;
@@ -345,7 +364,7 @@ int masq(	int sock,
 			nport = (in_port_t) nport_temp;
 			masq_lport = (in_port_t) masq_lport_temp;
 			masq_fport = (in_port_t) masq_fport_temp;
-		} else {
+		} else if (conntrack == CT_IPCONNTRACK) {
 			int l1, l2, l3, l4, r1, r2, r3, r4;
 			int nl1, nl2, nl3, nl4, nr1, nr2, nr3, nr4;
 			u_int32_t nport_temp;
@@ -370,6 +389,38 @@ int masq(	int sock,
 			}
 
 			if (ret != 21)
+				continue;
+
+			masq_lport = (in_port_t) masq_lport_temp;
+			masq_fport = (in_port_t) masq_fport_temp;
+
+			nport = (in_port_t) nport_temp;
+			mport = (in_port_t) mport_temp;
+
+			localm = l1 << 24 | l2 << 16 | l3 << 8 | l4;
+			remotem = r1 << 24 | r2 << 16 | r3 << 8 | r4;
+
+			localn = nl1 << 24 | nl2 << 16 | nl3 << 8 | nl4;
+			remoten = nr1 << 24 | nr2 << 16 | nr3 << 8 | nr4;
+		} else if (conntrack == CT_NFCONNTRACK) {
+			int l1, l2, l3, l4, r1, r2, r3, r4;
+			int nl1, nl2, nl3, nl4, nr1, nr2, nr3, nr4;
+			u_int32_t nport_temp;
+			u_int32_t mport_temp;
+			u_int32_t masq_lport_temp;
+			u_int32_t masq_fport_temp;
+
+			ret = sscanf(buf,
+				"%15s %*d %15s %*d %*d ESTABLISHED src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d packets=%*d bytes=%*d src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d",
+				family, proto, &l1, &l2, &l3, &l4, &r1, &r2, &r3, &r4,
+				&masq_lport_temp, &masq_fport_temp,
+				&nl1, &nl2, &nl3, &nl4, &nr1, &nr2, &nr3, &nr4,
+				&nport_temp, &mport_temp);
+
+			if (ret != 22)
+				continue;
+
+			if (strcasecmp(family, "ipv4")) /* ? */
 				continue;
 
 			masq_lport = (in_port_t) masq_lport_temp;
