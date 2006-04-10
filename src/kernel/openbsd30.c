@@ -125,6 +125,7 @@ int masq(	int sock,
 	char user[MAX_ULEN];
 	struct sockaddr_storage ss;
 	in_port_t masq_lport;
+	in_port_t masq_fport;
 
 	if (faddr->ss_family != AF_INET || laddr->ss_family != AF_INET)
 		return (-1);
@@ -157,11 +158,12 @@ int masq(	int sock,
 	fport = ntohs(fport);
 	lport = ntohs(lport);
 	masq_lport = ntohs(natlook.rsport);
+	masq_fport = ntohs(natlook.rdport);
 
 	sin_setv4(natlook.rsaddr.v4.s_addr, &ss);
 
 	if (opt_enabled(FORWARD)) {
-		ret = fwd_request(sock, lport, masq_lport, fport, &ss);
+		ret = fwd_request(sock, lport, masq_lport, fport, masq_fport, &ss);
 		if (ret == 0)
 			return (0);
 		else {

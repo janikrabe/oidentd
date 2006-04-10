@@ -290,6 +290,7 @@ int masq(	int sock,
 	for (; np != NULL ; np = nat.nat_next) {
 		int ret;
 		in_port_t masq_lport;
+		in_port_t masq_fport;
 
 		if (getbuf((u_long) np, &nat, sizeof(nat)) == -1)
 			break;
@@ -320,11 +321,12 @@ int masq(	int sock,
 		lport = ntohs(lport);
 		fport = ntohs(fport);
 		masq_lport = ntohs(nat.nat_inport);
+		masq_fport = ntohs(nat.nat_outport);
 
 		sin_setv4(nat.nat_inip.s_addr, &ss);
 
 		if (opt_enabled(FORWARD)) {
-			ret = fwd_request(sock, lport, masq_lport, fport, &ss);
+			ret = fwd_request(sock, lport, masq_lport, fport, masq_fport, &ss);
 			if (ret == 0)
 				return (0);
 			else {

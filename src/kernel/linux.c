@@ -324,22 +324,25 @@ int masq(	int sock,
 		in_addr_t remoten;
 		in_addr_t localm;
 		in_addr_t remotem;
+		in_addr_t localn;
 		struct sockaddr_storage ss;
 		int ret;
 
 		if (!netfilter) {
 			u_int32_t mport_temp;
+			u_int32_t nport_temp;
 			u_int32_t masq_lport_temp;
 			u_int32_t masq_fport_temp;
 
-			ret = sscanf(buf, "%15s %X:%X %X:%X %X %*X %*d %*d %*u",
+			ret = sscanf(buf, "%15s %X:%X %X:%X %X %X %*d %*d %*u",
 					proto, &localm, &masq_lport_temp,
-					&remotem, &masq_fport_temp, &mport_temp);
+					&remotem, &masq_fport_temp, &mport_temp, &nport_temp);
 
-			if (ret != 6)
+			if (ret != 7)
 				continue;
 
 			mport = (in_port_t) mport_temp;
+			nport = (in_port_t) nport_temp;
 			masq_lport = (in_port_t) masq_lport_temp;
 			masq_fport = (in_port_t) masq_fport_temp;
 		} else {
@@ -347,7 +350,6 @@ int masq(	int sock,
 			int nl1, nl2, nl3, nl4, nr1, nr2, nr3, nr4;
 			u_int32_t nport_temp;
 			u_int32_t mport_temp;
-			in_addr_t localn;
 			u_int32_t masq_lport_temp;
 			u_int32_t masq_fport_temp;
 
@@ -381,9 +383,6 @@ int masq(	int sock,
 
 			localn = nl1 << 24 | nl2 << 16 | nl3 << 8 | nl4;
 			remoten = nr1 << 24 | nr2 << 16 | nr3 << 8 | nr4;
-
-			if (remotem != localn)
-				remotem = localn;
 		}
 
 		if (strcasecmp(proto, "tcp"))
@@ -392,17 +391,17 @@ int masq(	int sock,
 		if (mport != lport)
 			continue;
 
-		if (masq_fport != fport)
+		if (nport != fport)
 			continue;
 
-		if (remotem != ntohl(SIN4(faddr)->sin_addr.s_addr)) {
+		if (localn != ntohl(SIN4(faddr)->sin_addr.s_addr)) {
 			if (!opt_enabled(PROXY))
 				continue;
 
 			if (SIN4(faddr)->sin_addr.s_addr != SIN4(&proxy)->sin_addr.s_addr)
 				continue;
 
-			if (remotem == SIN4(&proxy)->sin_addr.s_addr)
+			if (localn == SIN4(&proxy)->sin_addr.s_addr)
 				continue;
 		}
 
@@ -411,7 +410,7 @@ int masq(	int sock,
 		if (opt_enabled(FORWARD)) {
 			char ipbuf[MAX_IPLEN];
 
-			if (fwd_request(sock, lport, masq_lport, fport, &ss) == 0)
+			if (fwd_request(sock, lport, masq_lport, fport, masq_fport, &ss) == 0)
 				goto out_success;
 
 			get_ip(&ss, ipbuf, sizeof(ipbuf));

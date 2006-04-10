@@ -31,6 +31,7 @@ int fwd_request(int sock,
 				in_port_t real_lport,
 				in_port_t masq_lport,
 				in_port_t real_fport,
+				in_port_t masq_fport,
 				struct sockaddr_storage *mrelay);
 
 #endif
