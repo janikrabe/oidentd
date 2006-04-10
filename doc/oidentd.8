@@ -105,6 +105,10 @@ Enable support for ident queries for masqueraded/NAT connections. See
 for details on configuring support for masqueraded/NAT connections.
 
 .TP
+.B "\-M or \-\-forward-last"
+Check IP masquerading file before forwarding.
+
+.TP
 .B "\-o or \-\-other=[<string>]"
 The string specified will be returned as the OS string by default for all successful ident lookups. If no argument is given, "OTHER" will be returned instead of the name of the operating system. Some requests may be interpreted as having failed by the client side (with ident in general, not just with \fBoidentd\fP), when some other string is returned instead of the actual name of the operating system.
 

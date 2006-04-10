@@ -262,7 +262,8 @@ int masq(	int sock,
 		return (-1);
 
 	for (; np != NULL ; np = nat.nat_next) {
-		int ret;
+		int retf;
+		int retm;
 		in_port_t masq_lport;
 		in_port_t masq_fport;
 
@@ -299,11 +300,14 @@ int masq(	int sock,
 
 		sin_setv4(nat.nat_inip.s_addr, &ss);
 
-		if (opt_enabled(FORWARD)) {
-			ret = fwd_request(sock, lport, masq_lport, fport, masq_fport, &ss);
-			if (ret == 0)
-				return (0);
-			else {
+		retm = find_masq_entry(&ss, user, sizeof(user), os, sizeof(os));
+		
+		if (opt_enabled(FORWARD) && (retm != 0 || !opt_enabled(MASQ_OVERRIDE))) {
+			retf = fwd_request(sock, lport, masq_lport, fport, masq_fport, &ss);
+			if (retf == 0) {
+				if (retm != 0)
+					return (0);
+			} else {
 				char ipbuf[MAX_IPLEN];
 
 				get_ip(&ss, ipbuf, sizeof(ipbuf));
@@ -311,9 +315,8 @@ int masq(	int sock,
 					ipbuf, nat.nat_inport, fport);
 			}
 		}
-
-		ret = find_masq_entry(&ss, user, sizeof(user), os, sizeof(os));
-		if (ret == 0) {
+		
+		if (retm == 0) {
 			char ipbuf[MAX_IPLEN];
 
 			sockprintf(sock, "%d , %d : USERID : %s : %s\r\n",

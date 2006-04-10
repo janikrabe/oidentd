@@ -407,7 +407,9 @@ int masq(	int sock,
 
 		sin_setv4(htonl(localm), &ss);
 
-		if (opt_enabled(FORWARD)) {
+		ret = find_masq_entry(&ss, user, sizeof(user), os, sizeof(os));
+
+		if (opt_enabled(FORWARD) && (ret != 0 || !opt_enabled(MASQ_OVERRIDE))) {
 			char ipbuf[MAX_IPLEN];
 
 			if (fwd_request(sock, lport, masq_lport, fport, masq_fport, &ss) == 0)
@@ -418,7 +420,6 @@ int masq(	int sock,
 			debug("Forward to %s (%d %d) failed", ipbuf, masq_lport, fport);
 		}
 
-		ret = find_masq_entry(&ss, user, sizeof(user), os, sizeof(os));
 		if (ret == 0) {
 			char ipbuf[MAX_IPLEN];
 

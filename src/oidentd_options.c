@@ -40,7 +40,7 @@
 #include <oidentd_options.h>
 
 #ifdef MASQ_SUPPORT
-#	define OPTSTRING "a:c:C:def::g:hiIl:mo::p:P:qr:St:u:Uv"
+#	define OPTSTRING "a:c:C:def::g:hiIl:mMo::p:P:qr:St:u:Uv"
 	extern in_port_t fwdport;
 #else
 #	define OPTSTRING "a:c:C:deg:hiIl:o::p:P:qr:St:u:Uv"
@@ -85,7 +85,8 @@ static const struct option longopts[] = {
 	{"version",				no_argument,		0, 'v'},
 #ifdef MASQ_SUPPORT
 	{"forward",				optional_argument,	0, 'f'},
-	{"masquerade",			no_argument,		0, 'm'},
+	{"masquerade",				no_argument,		0, 'm'},
+	{"forward-last",			no_argument,		0, 'M'},
 #endif
 	{"proxy",				required_argument,	0, 'P'},
 	{NULL, 0, NULL, 0}
@@ -203,6 +204,11 @@ int get_options(int argc, char *const argv[]) {
 
 			case 'm':
 				enable_opt(MASQ);
+				break;
+
+			case 'M':
+				enable_opt(MASQ);
+				enable_opt(MASQ_OVERRIDE);
 				break;
 
 #endif
@@ -388,6 +394,7 @@ static void print_usage(void) {
 #ifdef MASQ_SUPPORT
 "-f or --forward [<port>]     Forward requests for masqueraded hosts to the host on port <port>\n"
 "-m or --masquerade           Enable support for IP masquerading\n"
+"-M or --forward-last         Check IP masquerading file before forwarding\n"
 #endif
 
 "-P or --proxy <host>         <host> acts as a proxy, forwarding connections to us\n"
