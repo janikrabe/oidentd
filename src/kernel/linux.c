@@ -52,6 +52,7 @@
 
 static int netlink_sock;
 extern struct sockaddr_storage proxy;
+extern char *ret_os;
 
 static int lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 							struct sockaddr_storage *dst_addr,
@@ -306,9 +307,6 @@ int masq(	int sock,
 {
 	char buf[2048];
 
-	/* laddr is unneeded on Linux */
-	(void) laddr;
-
 	/*
 	** There's no masq support for IPv6 yet.
 	*/
@@ -444,6 +442,53 @@ int masq(	int sock,
 
 		if (nport != fport)
 			continue;
+
+		/* Local NAT, don't forward or do masquerade entry lookup. */
+		if (localm == remoten) {
+			int con_uid = -1;
+			struct passwd *pw;
+			char suser[MAX_ULEN];
+			char ipbuf[MAX_IPLEN];
+
+			sin_setv4(htonl(remotem), &ss);
+			get_ip(faddr, ipbuf, sizeof(ipbuf));
+	
+			if (con_uid == -1 && faddr->ss_family == AF_INET)
+				con_uid = get_user4(htons(masq_lport), htons(masq_fport), laddr, &ss);
+
+			/* Add call to get_user6 when IPv6 NAT is supported. */
+
+			if (con_uid == -1)
+				return (-1);
+
+			pw = getpwuid(con_uid);
+			if (pw == NULL) {
+				sockprintf(sock, "%d,%d:ERROR:%s\r\n",
+					lport, fport, ERROR("NO-USER"));
+
+				debug("getpwuid(%d): %s", con_uid, strerror(errno));
+				return (0);
+			}
+
+			ret = get_ident(pw, masq_lport, masq_fport, laddr, &ss, suser, sizeof(suser));
+			if (ret == -1) {
+				sockprintf(sock, "%d,%d:ERROR:%s\r\n",
+					lport, fport, ERROR("HIDDEN-USER"));
+
+				o_log(NORMAL, "[%s] %d (%d) , %d (%d) : HIDDEN-USER (%s)",
+					ipbuf, lport, masq_lport, fport, masq_fport, pw->pw_name);
+
+				goto out_success;
+    		}
+
+			sockprintf(sock, "%d,%d:USERID:%s:%s\r\n",
+				lport, fport, ret_os, suser);
+
+			o_log(NORMAL, "[%s] Successful lookup: %d (%d) , %d (%d) : %s (%s)",
+				ipbuf, lport, masq_lport, fport, masq_fport, pw->pw_name, suser);
+		
+			goto out_success;
+		}
 
 		if (localn != ntohl(SIN4(faddr)->sin_addr.s_addr)) {
 			if (!opt_enabled(PROXY))
