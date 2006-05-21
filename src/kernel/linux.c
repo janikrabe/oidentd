@@ -1,6 +1,6 @@
 /*
 ** linux.c - Linux user lookup facility.
-** Copyright (C) 1998-2003 Ryan McCabe <ryan@numb.org>
+** Copyright (C) 1998-2006 Ryan McCabe <ryan@numb.org>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -55,6 +55,44 @@ static int lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 							struct sockaddr_storage *dst_addr,
 							in_port_t src_port,
 							in_port_t dst_port);
+
+#ifdef MASQ_SUPPORT
+FILE *masq_fp;
+bool netfilter;
+#endif
+
+/*
+** System dependend initialisation. Call only once!
+** On failure, return false.
+** Open connection tracking file before dropping permissions.
+*/
+bool core_init(void) {
+#ifdef MASQ_SUPPORT
+	masq_fp = fopen(MASQFILE, "r");
+	if (masq_fp == NULL) {
+		if (errno != ENOENT) {
+			debug("fopen: %s: %s", MASQFILE, strerror(errno));
+			return false;
+		}
+
+		masq_fp = fopen(CONNTRACK, "r");
+		if (masq_fp == NULL) {
+			if (errno != ENOENT) {
+				debug("fopen: %s: %s", CONNTRACK, strerror(errno));
+				return false;
+			}
+			masq_fp = fopen("/dev/null", "r");
+		}
+
+		netfilter = true;
+	} else {
+		netfilter = false;
+	}
+#endif
+
+	return true;
+}
+
 
 #ifdef WANT_IPV6
 
@@ -247,9 +285,7 @@ int masq(	int sock,
 			struct sockaddr_storage *laddr,
 			struct sockaddr_storage *faddr)
 {
-	FILE *fp;
 	char buf[2048];
-	bool netfilter;
 
 	/* laddr is unneeded on Linux */
 	(void) laddr;
@@ -264,27 +300,19 @@ int masq(	int sock,
 	lport = ntohs(lport);
 	fport = ntohs(fport);
 
-	fp = fopen(MASQFILE, "r");
-	if (fp == NULL) {
-		if (errno != ENOENT)
-			debug("fopen: %s: %s", MASQFILE, strerror(errno));
+	/* masq support failed to initialize */
+	if (masq_fp == NULL)
+		return (-1);
 
-		fp = fopen(CONNTRACK, "r");
-		if (fp == NULL) {
-			if (errno != ENOENT)
-				debug("fopen: %s: %s", CONNTRACK, strerror(errno));
-			return (-1);
-		}
+	/* rewind fp to read new contents */
+	rewind(masq_fp);
 
-		netfilter = true;
-	} else {
-		netfilter = false;
-
+	if (!netfilter) {
 		/* Eat the header line. */
-		fgets(buf, sizeof(buf), fp);
+		fgets(buf, sizeof(buf), masq_fp);
 	}
 
-	while (fgets(buf, sizeof(buf), fp)) {
+	while (fgets(buf, sizeof(buf), masq_fp)) {
 		char os[24];
 		char proto[16];
 		in_port_t mport;
@@ -298,7 +326,7 @@ int masq(	int sock,
 		struct sockaddr_storage ss;
 		int ret;
 
-		if (netfilter == false) {
+		if (!netfilter) {
 			u_int32_t mport_temp;
 			u_int32_t masq_lport_temp;
 			u_int32_t masq_fport_temp;
@@ -324,8 +352,19 @@ int masq(	int sock,
 
 			ret = sscanf(buf,
 				"%15s %*d %*d ESTABLISHED src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d",
-				proto, &l1, &l2, &l3, &l4, &r1, &r2, &r3, &r4, &masq_lport_temp, &masq_fport_temp,
-				&nl1, &nl2, &nl3, &nl4, &nr1, &nr2, &nr3, &nr4, &nport_temp, &mport_temp);
+				proto, &l1, &l2, &l3, &l4, &r1, &r2, &r3, &r4,
+				&masq_lport_temp, &masq_fport_temp,
+				&nl1, &nl2, &nl3, &nl4, &nr1, &nr2, &nr3, &nr4,
+				&nport_temp, &mport_temp);
+
+			if (ret != 21) {
+				ret = sscanf(buf,
+					"%15s %*d %*d ESTABLISHED src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d packets=%*d bytes=%*d src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d",
+				proto, &l1, &l2, &l3, &l4, &r1, &r2, &r3, &r4,
+				&masq_lport_temp, &masq_fport_temp,
+				&nl1, &nl2, &nl3, &nl4, &nr1, &nr2, &nr3, &nr4,
+				&nport_temp, &mport_temp);
+			}
 
 			if (ret != 21)
 				continue;
@@ -396,11 +435,9 @@ int masq(	int sock,
 		}
 	}
 
-	fclose(fp);
 	return (-1);
 
 out_success:
-	fclose(fp);
 	return (0);
 }
 

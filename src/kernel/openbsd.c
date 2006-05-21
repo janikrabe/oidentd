@@ -10,7 +10,7 @@
 ** OpenBSD IP masquerading support Copyright (C) 2000
 ** Slawomir Piotrowski <slawek@telsatgp.com.pl>
 **
-** Modifications Copyright (C) 1998-2003 Ryan McCabe <ryan@numb.org>
+** Modifications Copyright (C) 1998-2006 Ryan McCabe <ryan@numb.org>
 */
 
 #include <config.h>
@@ -178,6 +178,15 @@ static struct socket *getlist4(	struct inpcbtable *tcbtablep,
 	}
 
 	return (NULL);
+}
+
+/*
+** System dependend initialisation. Call only once!
+** On failure, return false.
+*/
+
+bool core_init(void) {
+	return (true);
 }
 
 /*

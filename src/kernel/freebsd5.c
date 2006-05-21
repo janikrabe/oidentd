@@ -10,7 +10,7 @@
 ** The IP masquerading functionality has been taken from openbsd.c and
 ** is distributed under the same copyright.
 **
-** Modifications Copyright (C) 1998-2003 Ryan McCabe <ryan@numb.org>
+** Modifications Copyright (C) 1998-2006 Ryan McCabe <ryan@numb.org>
 */
 
 #define _WANT_UCRED
@@ -244,6 +244,15 @@ static struct socket *getlist4(	void *arg,
 }
 
 #endif
+
+/*
+** System dependend initialisation. Call only once!
+** On failure, return false.
+*/
+
+bool core_init(void) {
+	return (true);
+}
 
 /*
 ** Return the UID of the connection owner

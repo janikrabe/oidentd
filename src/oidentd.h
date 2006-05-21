@@ -1,6 +1,6 @@
 /*
 ** oidentd.h - oidentd ident (rfc1413) implementation.
-** Copyright (C) 1998-2003 Ryan McCabe <ryan@numb.org>
+** Copyright (C) 1998-2006 Ryan McCabe <ryan@numb.org>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -148,6 +148,8 @@ struct sockaddr_storage {
 #ifdef HAVE___SS_FAMILY
 	#define ss_family __ss_family
 #endif
+
+bool core_init(void);
 
 int get_user4(	in_port_t lport,
 				in_port_t fport,

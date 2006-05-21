@@ -1,6 +1,6 @@
 /*
 ** oidentd.c - oidentd ident (rfc1413) implementation.
-** Copyright (C) 1998-2003 Ryan McCabe <ryan@numb.org>
+** Copyright (C) 1998-2006 Ryan McCabe <ryan@numb.org>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -84,6 +84,11 @@ int main(int argc, char **argv) {
 
 	if (read_config(config_file) != 0) {
 		o_log(NORMAL, "Error reading configuration file");
+		exit(-1);
+	}
+
+	if (!core_init()) {
+		o_log(NORMAL, "Error initializing core");
 		exit(-1);
 	}
 

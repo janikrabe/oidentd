@@ -7,7 +7,7 @@
 **		This program is in the public domain and may be used freely
 **		by anyone who wants to.
 **
-** Modifications Copyright (C) 1998-2003 Ryan McCabe <ryan@numb.org>
+** Modifications Copyright (C) 1998-2006 Ryan McCabe <ryan@numb.org>
 */
 
 #include <config.h>
@@ -39,6 +39,15 @@
 #include <oidentd_options.h>
 
 extern struct sockaddr_storage proxy;
+
+/*
+** System dependend initialisation. Call only once!
+** On failure, return false.
+*/
+
+bool core_init(void) {
+	return (true);
+}
 
 /*
 ** Return the UID of the connection owner

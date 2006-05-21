@@ -1,6 +1,6 @@
 /*
 ** freebsd4.c - Ident lookup routines for >= FreeBSD 4
-** Copyright (C) 2000-2003 Ryan McCabe <ryan@numb.org>
+** Copyright (C) 2000-2006 Ryan McCabe <ryan@numb.org>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -47,6 +47,15 @@
 #include <oidentd_util.h>
 #include <oidentd_inet_util.h>
 #include <oidentd_options.h>
+
+/*
+** System dependend initialisation. Call only once!
+** On failure, return false.
+*/
+
+bool core_init(void) {
+	return (true);
+}
 
 extern struct sockaddr_storage proxy;
 

@@ -1,5 +1,8 @@
+Christof Douma <christof@douma.eu.org>
+    netfilter premissions fix
+
 Kamil Andrusz <wizz@mniam.net>
-	OpenBSD >= 3.0 Packet Filter support.
+    OpenBSD >= 3.0 Packet Filter support.
 
 Daniel Brafford <pod@charter.net>
     Initial IPv6 support, Initial IPv6 support on Linux.
