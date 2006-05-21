@@ -229,7 +229,9 @@ static int service_request(int insock, int outsock) {
 	laddr6 = laddr;
 	faddr6 = faddr;
 
-	if (laddr.ss_family == AF_INET6 && IN6_IS_ADDR_V4MAPPED(&SIN6(&laddr)->sin6_addr)) {
+	if (laddr.ss_family == AF_INET6 &&
+		IN6_IS_ADDR_V4MAPPED(&SIN6(&laddr)->sin6_addr))
+	{
 		struct in_addr in4;
 
 		sin_extractv4(&SIN6(&laddr)->sin6_addr, &in4);
