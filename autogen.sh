@@ -5,26 +5,6 @@ AUTOHEADER=autoheader
 AUTOMAKE=automake
 ACLOCAL=aclocal
 
-if test `which autoconf2.50 2> /dev/null`
-then
-	AUTOCONF=autoconf2.50
-fi
-
-if test `which autoheader2.50 2> /dev/null`
-then
-	AUTOHEADER=autoheader2.50
-fi
-
-if test `which automake-1.7 2> /dev/null`
-then
-	AUTOMAKE=automake-1.7
-fi
-
-if test `which aclocal-1.7 2> /dev/null`
-then
-	ACLOCAL=aclocal-1.7
-fi
-
 ($AUTOCONF --version) < /dev/null > /dev/null 2>&1 || {
 	echo
 	echo "Error: You must have 'autoconf' installed to compile this program."
@@ -35,7 +15,7 @@ fi
 
 ($ACLOCAL --version) < /dev/null > /dev/null 2>&1 || {
 	echo
-	echo "Error: Missing 'aclocal'.  The version of \`automake'"
+	echo "Error: Missing 'aclocal'. The version of \`automake'"
 	echo "installed doesn't appear recent enough."
 	echo "Download the appropriate package for your distribution,"
 	echo "or get the source tarball at ftp://ftp.gnu.org/pub/gnu/automake"
@@ -45,7 +25,7 @@ fi
 ($ACLOCAL && $AUTOHEADER && $AUTOMAKE --gnu --add-missing --copy && $AUTOCONF) || {
 	echo
 	echo "Error: Automatic generation of the configuration scripts has failed."
-	echo "Please try to generate them manually.  If you believe this faulure"
+	echo "Please try to generate them manually. If you believe this faulure"
 	echo "is the result of a bug in oidentd, please email ryan@numb.org with"
 	echo "any relevant details."
 	exit -1
