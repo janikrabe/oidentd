@@ -255,7 +255,7 @@ static int service_request(int insock, int outsock) {
 	}
 
 	if (!VALID_PORT(lport_temp) || !VALID_PORT(fport_temp)) {
-		sockprintf(outsock, "%d , %d : ERROR : %s\r\n",
+		sockprintf(outsock, "%d,%d:ERROR:%s\r\n",
 				lport_temp, fport_temp, ERROR("INVALID-PORT"));
 
 		debug("[%s] %d , %d : ERROR : INVALID-PORT",
@@ -294,13 +294,13 @@ static int service_request(int insock, int outsock) {
 
 	if (con_uid == -1) {
 		if (failuser != NULL) {
-			sockprintf(outsock, "%d , %d : USERID : %s : %s\r\n",
+			sockprintf(outsock, "%d,%d:USERID:%s:%s\r\n",
 				lport, fport, ret_os, failuser);
 
 			o_log(NORMAL, "[%s] Failed lookup: %d , %d : (returned %s)",
 				host_buf, lport, fport, failuser);
 		} else {
-			sockprintf(outsock, "%d , %d : ERROR : %s\r\n",
+			sockprintf(outsock, "%d,%d:ERROR:%s\r\n",
 				lport, fport, ERROR("NO-USER"));
 
 			o_log(NORMAL, "[%s] %d , %d : ERROR : NO-USER",
@@ -312,7 +312,7 @@ static int service_request(int insock, int outsock) {
 
 	pw = getpwuid(con_uid);
 	if (pw == NULL) {
-		sockprintf(outsock, "%d , %d : ERROR : %s\r\n",
+		sockprintf(outsock, "%d,%d:ERROR:%s\r\n",
 			lport, fport, ERROR("NO-USER"));
 
 		debug("getpwuid(%d): %s", con_uid, strerror(errno));
@@ -322,7 +322,7 @@ static int service_request(int insock, int outsock) {
 
 	ret = get_ident(&pwd, lport, fport, &laddr, &faddr, suser, sizeof(suser));
 	if (ret == -1) {
-		sockprintf(outsock, "%d , %d : ERROR : %s\r\n",
+		sockprintf(outsock, "%d,%d:ERROR:%s\r\n",
 			lport, fport, ERROR("HIDDEN-USER"));
 
 		o_log(NORMAL, "[%s] %d , %d : HIDDEN-USER (%s)",
@@ -331,7 +331,7 @@ static int service_request(int insock, int outsock) {
 		goto out;
 	}
 
-	sockprintf(outsock, "%d , %d : USERID : %s : %s\r\n",
+	sockprintf(outsock, "%d,%d:USERID:%s:%s\r\n",
 		lport, fport, ret_os, suser);
 
 	o_log(NORMAL, "[%s] Successful lookup: %d , %d : %s (%s)",
