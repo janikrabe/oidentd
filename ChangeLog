@@ -2,7 +2,10 @@ Mon May 22 00:20:15 EDT 2006    Ryan McCabe <ryan@numb.org>
 
     * Pulled in patches for Linux from Debian.
 
-    * Pulled in Darwin patches from fink.
+    * Pulled in Darwin patches from fink and
+      http://sbutler.typepad.com/oidentd-2.0.7-darwin-fix.patch.
+
+    * Pulled in NetBSD patches from pkgsrc/net/oidentd/patches/patch-ac.
 
     * Pulled in patches for FreeBSD from FreeBSD ports
       (ports/security/oidentd/files/patch-unprivileged_ipv6).

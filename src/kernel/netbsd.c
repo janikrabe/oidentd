@@ -29,6 +29,7 @@
 #include <errno.h>
 #include <string.h>
 #include <sys/types.h>
+#include <sys/param.h>
 #include <sys/socket.h>
 #include <sys/socketvar.h>
 #include <netinet/in.h>
@@ -40,6 +41,16 @@
 #include <arpa/inet.h>
 #include <netinet/tcp.h>
 #include <netinet/ip_compat.h>
+
+#if __NetBSD_Version__ >= 399000300	/* 3.99.3 */
+#define	SO_UIDINFO	/* "struct socket" contains so_uidinfo" */
+
+#include <sys/proc.h>
+#include <sys/resource.h>
+#define	_KERNEL	42
+#include <sys/resourcevar.h>
+#undef _KERNEL
+#endif
 
 #ifdef WANT_IPV6
 #	include <sys/sysctl.h>
@@ -100,7 +111,11 @@ int k_open(void) {
 	kinfo->nl[N_TCB].n_name = "_tcbtable";
 
 #ifdef WANT_IPV6
+#if __NetBSD_Version__ >= 106250000	/* 1.6Y */
+	kinfo->nl[N_TCB6].n_name = "_tcbtable";
+#else
 	kinfo->nl[N_TCB6].n_name = "_tcb6";
+#endif
 #else
 	kinfo->nl[N_TCB6].n_name = "_oidentd_nonexistent";
 #endif
@@ -163,7 +178,7 @@ static struct socket *getlist4(	struct inpcbtable *tcbtablep,
 	if (tcbtablep == NULL)
 		return (NULL);
 
-	kpcbp = tcbtablep->inpt_queue.cqh_first;
+	kpcbp = (struct inpcb *) tcbtablep->inpt_queue.cqh_first;
 	while (kpcbp != (struct inpcb *) ktcbtablep) {
 		if (getbuf((u_long) kpcbp, &pcb, sizeof(struct inpcb)) == -1)
 			break;
@@ -186,7 +201,7 @@ static struct socket *getlist4(	struct inpcbtable *tcbtablep,
 			return (pcb.inp_socket);
 		}
 
-		kpcbp = pcb.inp_queue.cqe_next;
+		kpcbp = (struct inpcb *) pcb.inp_queue.cqe_next;
 	}
 
 	return (NULL);
@@ -213,6 +228,9 @@ int get_user4(	in_port_t lport,
 	struct socket *sockp, sock;
 	struct inpcbtable tcbtable;
 	int ret;
+#ifdef SO_UIDINFO
+	struct uidinfo uidinfo;
+#endif
 
 	ret = getbuf(kinfo->nl[N_TCB].n_value, &tcbtable, sizeof(tcbtable));
 	if (ret == -1)
@@ -228,7 +246,17 @@ int get_user4(	in_port_t lport,
 	if (getbuf((u_long) sockp, &sock, sizeof(sock)) == -1)
 		return (-1);
 
+#ifdef SO_UIDINFO
+	if (sock.so_uidinfo == NULL)
+		return (-1);
+
+	if (getbuf((u_long) sock.so_uidinfo, &uidinfo, sizeof(uidinfo)) == -1)
+		return (-1);
+
+	return (uidinfo.ui_uid);
+#else
 	return (sock.so_uid);
+#endif
 }
 
 #ifdef MASQ_SUPPORT
@@ -337,12 +365,38 @@ int masq(	int sock,
 ** Returns NULL if no match.
 */
 
+#if __NetBSD_Version__ >= 106250000
+static struct socket *getlist6(	struct inpcbtable *tcbtablep,
+								struct inpcbtable *ktcbtablep,
+#else
 static struct socket *getlist6(	struct in6pcb *tcb6,
+#endif
 								in_port_t lport,
 								in_port_t fport,
 								const struct in6_addr *laddr,
 								const struct in6_addr *faddr)
 {
+#if __NetBSD_Version__ >= 106250000
+	struct in6pcb *kpcbp, pcb;
+
+	if (tcbtablep == NULL)
+		return (NULL);
+
+	kpcbp = (struct in6pcb *) tcbtablep->inpt_queue.cqh_first;
+	while (kpcbp != (struct in6pcb *) ktcbtablep) {
+		if (getbuf((u_long) kpcbp, &pcb, sizeof(struct in6pcb)) == -1)
+			break;
+		if (pcb.in6p_fport == fport &&
+			pcb.in6p_lport == lport &&
+			IN6_ARE_ADDR_EQUAL(&pcb.in6p_laddr, laddr) &&
+			IN6_ARE_ADDR_EQUAL(&pcb.in6p_faddr, faddr))
+		{
+			return (pcb.in6p_socket);
+		}
+
+		kpcbp = (struct in6pcb *) pcb.in6p_queue.cqe_next;
+	}
+#else
 	struct in6pcb *tcb6_cur, tcb6_temp;
 
 	if (tcb6 == NULL)
@@ -365,7 +419,7 @@ static struct socket *getlist6(	struct in6pcb *tcb6,
 		if (getbuf((u_long) tcb6_cur, &tcb6_temp, sizeof(tcb6_temp)) == -1)
 			break;
 	} while ((u_long) tcb6_cur != kinfo->nl[N_TCB6].n_value);
-
+#endif
 	return (NULL);
 }
 
@@ -378,6 +432,22 @@ int get_user6(	in_port_t lport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
 {
+#if __NetBSD_Version__ >= 106250000	/* 1.6Y */
+	struct socket *sockp, sock;
+	struct inpcbtable tcbtable;
+	int ret;
+#ifdef SO_UIDINFO
+	struct uidinfo uidinfo;
+#endif
+
+	ret = getbuf(kinfo->nl[N_TCB6].n_value, &tcbtable, sizeof(tcbtable));
+	if (ret == -1)
+		return (-1);
+
+	sockp = getlist6(&tcbtable,
+				(struct inpcbtable *) kinfo->nl[N_TCB6].n_value,
+				lport, fport, &SIN6(laddr)->sin6_addr, &SIN6(faddr)->sin6_addr);
+#else
 	struct socket *sockp, sock;
 	struct in6pcb tcb6;
 	int ret;
@@ -388,6 +458,7 @@ int get_user6(	in_port_t lport,
 
 	sockp = getlist6(&tcb6, lport, fport,
 				&SIN6(laddr)->sin6_addr, &SIN6(faddr)->sin6_addr);
+#endif
 
 	if (sockp == NULL)
 		return (-1);
@@ -395,7 +466,17 @@ int get_user6(	in_port_t lport,
 	if (getbuf((u_long) sockp, &sock, sizeof(sock)) == -1)
 		return (-1);
 
+#ifdef SO_UIDINFO
+	if (sock.so_uidinfo == NULL)
+		return (-1);
+
+	if (getbuf((u_long) sock.so_uidinfo, &uidinfo, sizeof(uidinfo)) == -1)
+		return (-1);
+
+	return (uidinfo.ui_uid);
+#else
 	return (sock.so_uid);
+#endif
 }
 
 #endif
