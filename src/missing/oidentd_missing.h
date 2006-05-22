@@ -23,18 +23,30 @@ const char *inet_ntop(int af, const void *src, char *dst, size_t len);
 #endif
 
 #ifndef EAI_NODATA
-#	define EAI_NODATA	1
-#	define EAI_MEMORY	2
+#	define EAI_NODATA		1
+#endif
+
+#ifndef EAI_MEMORY
+#	define EAI_MEMORY		2
 #endif
 
 #ifndef AI_PASSIVE
 #	define AI_PASSIVE		1
+#endif
+
+#ifndef AI_CANONNAME
 #	define AI_CANONNAME		2
 #endif
 
 #ifndef NI_NUMERICHOST
 #	define NI_NUMERICHOST	2
+#endif
+
+#ifndef NI_NAMEREQD
 #	define NI_NAMEREQD		4
+#endif
+
+#ifndef NI_NUMERICSERV
 #	define NI_NUMERICSERV	8
 #endif
 
