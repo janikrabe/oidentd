@@ -55,7 +55,7 @@ in_port_t fwdport;
 
 extern char *ret_os;
 
-static void fwd_alarm(int sig);
+static void fwd_alarm(int sig) __noreturn;
 static bool blank_line(const char *buf);
 
 /*
