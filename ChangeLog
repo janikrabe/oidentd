@@ -1,3 +1,9 @@
+Mon May 22 00:20:15 EDT 2006    Ryan McCabe <ryan@numb.org>
+    * Pulled in patches for Linux from Debian.
+
+    * Pulled in patches for FreeBSD from FreeBSD ports
+      (ports/security/oidentd/files/patch-unprivileged_ipv6).
+
 Thu Jan 26 16:32:18 CET 2006    Christof Douma <christof@douma.eu.org>
 
     * Open masquerading options before dropping permissions on linux.

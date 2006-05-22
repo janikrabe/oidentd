@@ -161,11 +161,11 @@ static int getbuf(u_long addr, void *buf, size_t len) {
 
 #ifdef _HAVE_OLD_INPCB
 
-static struct socket *getlist4(	void *arg,
+static struct socket *getlist(	void *arg,
 								in_port_t lport,
 								in_port_t fport,
-								const struct in_addr *laddr,
-								const struct in_addr *faddr)
+								const struct sockaddr *laddr,
+								const struct sockaddr *faddr)
 {
 	struct inpcb *pcbp = arg;
 	struct inpcb *head;
@@ -177,8 +177,8 @@ static struct socket *getlist4(	void *arg,
 
 	do {
 		if (opt_enabled(PROXY)) {
-			if (faddr->s_addr == SIN4(&proxy)->sin_addr.s_addr &&
-				laddr->s_addr != SIN4(&proxy)->sin_addr.s_addr &&
+			if (SIN4(faddr)->sin_addr.s_addr == SIN4(&proxy)->sin_addr.s_addr &&
+				SIN4(laddr)->sin_addr.s_addr != SIN4(&proxy)->sin_addr.s_addr &&
 				pcbp->inp_fport == fport &&
 				pcbp->inp_lport == lport)
 			{
@@ -186,8 +186,8 @@ static struct socket *getlist4(	void *arg,
 			}
 		}
 
-		if (pcbp->inp_faddr.s_addr == faddr->s_addr &&
-			pcbp->inp_laddr.s_addr == laddr->s_addr &&
+		if (pcbp->inp_faddr.s_addr == SIN4(faddr)->sin_addr.s_addr &&
+			pcbp->inp_laddr.s_addr == SIN4(laddr)->sin_addr.s_addr &&
 			pcbp->inp_fport == fport &&
 			pcbp->inp_lport == lport)
 		{
@@ -201,16 +201,31 @@ static struct socket *getlist4(	void *arg,
 
 #else
 
-static struct socket *getlist4(	void *arg,
+static struct socket *getlist(	void *arg,
 								in_port_t lport,
 								in_port_t fport,
-								const struct in_addr *laddr,
-								const struct in_addr *faddr)
+								const struct sockaddr *local,
+								const struct sockaddr *remote)
 {
 	struct inpcb *head, pcbp;
 	struct inpcbhead *pcbhead = arg;
+	char *faddr, *laddr, *pfaddr, *pladdr;
+	int alen;
 
-	(void) laddr;
+	if (remote->sa_family != local->sa_family)
+		return (NULL);
+	switch (remote->sa_family) {
+	case AF_INET:
+		faddr = (char *)&SIN4(remote)->sin_addr;
+		laddr = (char *)&SIN4(local)->sin_addr;
+		break;
+	case AF_INET6:
+		faddr = (char *)&SIN6(remote)->sin6_addr;
+		laddr = (char *)&SIN6(local)->sin6_addr;
+		break;
+	default:
+		return (NULL);
+	}
 
 	head = pcbhead->lh_first;
 	if (head == NULL)
@@ -220,9 +235,9 @@ static struct socket *getlist4(	void *arg,
 		if (getbuf((u_long) head, &pcbp, sizeof(struct inpcb)) == -1)
 			break;
 
-		if (opt_enabled(PROXY)) {
-			if (faddr->s_addr == SIN4(&proxy)->sin_addr.s_addr &&
-				laddr->s_addr != SIN4(&proxy)->sin_addr.s_addr &&
+		if (opt_enabled(PROXY) && remote->sa_family == AF_INET) {
+			if (SIN4(remote)->sin_addr.s_addr == SIN4(&proxy)->sin_addr.s_addr &&
+				SIN4(local)->sin_addr.s_addr != SIN4(&proxy)->sin_addr.s_addr &&
 				pcbp.inp_fport == fport &&
 				pcbp.inp_lport == lport)
 			{
@@ -230,8 +245,22 @@ static struct socket *getlist4(	void *arg,
 			}
 		}
 
-		if (pcbp.inp_faddr.s_addr == faddr->s_addr &&
-			pcbp.inp_laddr.s_addr == laddr->s_addr &&
+		if (remote->sa_family == AF_INET)
+		{
+			pfaddr = (char *)&pcbp.inp_faddr;
+			pladdr = (char *)&pcbp.inp_laddr;
+			alen = sizeof(struct in_addr);
+		}
+		else if (remote->sa_family == AF_INET6)
+		{
+			pfaddr = (char *)&pcbp.in6p_faddr;
+			pladdr = (char *)&pcbp.in6p_laddr;
+			alen = sizeof(struct in6_addr);
+		}
+		else
+			continue;
+		if (memcmp(pfaddr, faddr, alen) == 0 &&
+			memcmp(pladdr, laddr, alen) == 0 &&
 			pcbp.inp_fport == fport &&
 			pcbp.inp_lport == lport)
 		{
@@ -259,7 +288,7 @@ bool core_init(void) {
 ** Return the UID of the connection owner
 */
 
-int get_user4(	in_port_t lport,
+static int get_user(	in_port_t lport,
 				in_port_t fport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
@@ -286,8 +315,9 @@ int get_user4(	in_port_t lport,
 	tcb.inp_prev = (struct inpcb *) kinfo->nl[N_TCB].n_value;
 #endif
 
-	sockp = getlist4(&tcb, lport, fport,
-				&SIN4(laddr)->sin_addr, &SIN4(faddr)->sin_addr);
+	sockp = getlist(&tcb, lport, fport,
+				(struct sockaddr *)laddr,
+				(struct sockaddr *)faddr);
 
 	if (sockp == NULL)
 		return (-1);
@@ -346,6 +376,14 @@ int get_user4(	in_port_t lport,
 	}
 
 	return (-1);
+}
+
+int get_user4(	in_port_t lport,
+				in_port_t fport,
+				struct sockaddr_storage *laddr,
+				struct sockaddr_storage *faddr)
+{
+	return (get_user(lport, fport, laddr, faddr));
 }
 
 #ifdef MASQ_SUPPORT
@@ -458,36 +496,7 @@ int get_user6(	in_port_t lport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
 {
-	struct ucred ucred;
-	struct sockaddr_in6 sin6[2];
-	int len;
-	int ret;
-
-	len = sizeof(struct ucred);
-
-	memset(sin6, 0, sizeof(sin6));
-
-	sin6[0].sin6_len = sizeof(struct sockaddr_in6);
-	sin6[0].sin6_family = AF_INET6;
-	sin6[0].sin6_port = lport;
-	memcpy(&sin6[0].sin6_addr, &SIN6(laddr)->sin6_addr,
-		sizeof(sin6[0].sin6_addr));
-
-	sin6[1].sin6_len = sizeof(struct sockaddr_in6);
-	sin6[1].sin6_family = AF_INET6;
-	sin6[1].sin6_port = fport;
-	memcpy(&sin6[1].sin6_addr, &SIN6(faddr)->sin6_addr,
-		sizeof(sin6[1].sin6_addr));
-
-	ret = sysctlbyname("net.inet6.tcp6.getcred",
-			&ucred, &len, sin6, sizeof(sin6));
-
-	if (ret == -1) {
-		debug("sysctlbyname: %s", strerror(errno));
-		return (-1);
-	}
-
-	return (ucred.cr_uid);
+	return (get_user(lport, fport, laddr, faddr));
 }
 
 #endif
