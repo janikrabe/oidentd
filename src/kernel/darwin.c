@@ -46,9 +46,7 @@
 #undef KERNEL
 
 #ifdef WANT_IPV6
-#	include <netinet/ip_var.h>
 #	include <netinet/tcp_timer.h>
-#	include <netinet/tcp_var.h>
 #	include <netinet/ip6.h>
 #	ifdef HAVE_NETINET6_IN6_PCB_H
 #		include <netinet6/in6_pcb.h>
@@ -68,22 +66,19 @@
 #include <oidentd_masq.h>
 #include <oidentd_options.h>
 
-#define N_FILEH		0
-#define N_NFILE		1
-#define N_TCB		2
-#define N_TCB6		3
+#define N_TCB		0
+#define N_TCB6		1
 
 #ifdef MASQ_SUPPORT
-#	define N_NATLIST	4
-#	define N_TOTAL		5
+#	define N_NATLIST	2
+#	define N_TOTAL		3
 #else
-#	define N_TOTAL		4
+#	define N_TOTAL		2
 #endif
 
 extern struct sockaddr_storage proxy;
 
 static int getbuf(u_long addr, void *buf, size_t len);
-static struct file *get_file(void);
 
 static struct socket *getlist4(	struct inpcbhead *pcbhead,
 								in_port_t lport,
@@ -105,8 +100,6 @@ int k_open(void) {
 		return (-1);
 	}
 
-	kinfo->nl[N_FILEH].n_name = "_filehead";
-	kinfo->nl[N_NFILE].n_name = "_nfiles";
 	kinfo->nl[N_TCB].n_name = "_tcb";
 
 #ifdef WANT_IPV6
@@ -201,26 +194,6 @@ static struct socket *getlist4(	struct inpcbhead *pcbhead,
 	return (NULL);
 }
 
-static struct file *get_file(void) {
-	int ret;
-	size_t len;
-	struct file *temp_file;
-	int mib[2] = { CTL_KERN, KERN_FILE };
-
-	ret = sysctl(mib, sizeof(mib) / sizeof(mib[0]), NULL, &len, NULL, 0);
-
-	if (ret == -1)
-		return (NULL);
-
-	temp_file = xmalloc(len);
-
-	ret = sysctl(mib, sizeof(mib) / sizeof(mib[0]), temp_file, &len, NULL, 0);
-
-	temp_file = (struct file *) ((char *) temp_file + sizeof(struct filelist));
-
-	return (temp_file);
-}
-
 /*
 ** System dependant initialization. Call only once!
 ** On failure, return false.
@@ -239,28 +212,12 @@ int get_user4(	in_port_t lport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
 {
-	struct socket *sockp;
+	struct socket *sockp, sock;
 	struct inpcbhead tcb;
 	int ret;
-	int i;
-	int nfile;
-	u_long addr;
-	struct file *files;
-
-	ret = getbuf(kinfo->nl[N_NFILE].n_value, &nfile, sizeof(nfile));
-	if (ret == -1)
-		return (-1);
-
-	ret = getbuf(kinfo->nl[N_FILEH].n_value, &addr, sizeof(addr));
-	if (ret == -1)
-		return (-1);
 
 	ret = getbuf(kinfo->nl[N_TCB].n_value, &tcb, sizeof(tcb));
 	if (ret == -1)
-		return (-1);
-
-	files = get_file();
-	if (files == NULL)
 		return (-1);
 
 	sockp = getlist4(&tcb, lport, fport,
@@ -269,26 +226,11 @@ int get_user4(	in_port_t lport,
 	if (sockp == NULL)
 		return (-1);
 
-	for (i = 0 ; i < nfile ; i++) {
-		struct ucred ucred;
+	ret = getbuf((u_long) sockp, &sock, sizeof(sock));
+	if (ret == -1)
+		return (-1);
 
-		if (files[i].f_count == 0)
-			continue;
-
-		if (files[i].f_type != DTYPE_SOCKET)
-			continue;
-
-		if ((struct socket *) files[i].f_data != sockp)
-			continue;
-
-		ret = getbuf((u_long) files[i].f_cred, &ucred, sizeof(ucred));
-		if (ret == -1)
-			continue;
-
-		return (ucred.cr_uid);
-	}
-
-	return (-1);
+	return (sock.so_uid);
 }
 
 #ifdef MASQ_SUPPORT
@@ -436,28 +378,12 @@ int get_user6(	in_port_t lport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
 {
-	struct socket *sockp;
+	struct socket *sockp, sock;
 	struct inpcbhead pcb6;
 	int ret;
-	int i;
-	int nfile;
-	u_long addr;
-	struct file *files;
-
-	ret = getbuf(kinfo->nl[N_NFILE].n_value, &nfile, sizeof(nfile));
-	if (ret == -1)
-		return (-1);
-
-	ret = getbuf(kinfo->nl[N_FILEH].n_value, &addr, sizeof(addr));
-	if (ret == -1)
-		return (-1);
 
 	ret = getbuf(kinfo->nl[N_TCB6].n_value, &pcb6, sizeof(pcb6));
 	if (ret == -1)
-		return (-1);
-
-	files = get_file();
-	if (files == NULL)
 		return (-1);
 
 	sockp = getlist6(&pcb6, lport, fport,
@@ -466,26 +392,11 @@ int get_user6(	in_port_t lport,
 	if (sockp == NULL)
 		return (-1);
 
-	for (i = 0 ; i < nfile ; i++) {
-		struct ucred ucred;
+	ret = getbuf((u_long) sockp, &sock, sizeof(sock));
+	if (ret == -1)
+		return (-1);
 
-		if (files[i].f_count == 0)
-			continue;
-
-		if (files[i].f_type != DTYPE_SOCKET)
-			continue;
-
-		if ((struct socket *) files[i].f_data != sockp)
-			continue;
-
-		ret = getbuf((u_long) files[i].f_cred, &ucred, sizeof(ucred));
-		if (ret == -1)
-			continue;
-
-		return (ucred.cr_uid);
-	}
-
-	return (-1);
+	return (sock.so_uid);
 }
 
 #endif

@@ -1,5 +1,8 @@
 Mon May 22 00:20:15 EDT 2006    Ryan McCabe <ryan@numb.org>
+
     * Pulled in patches for Linux from Debian.
+
+    * Pulled in Darwin patches from fink.
 
     * Pulled in patches for FreeBSD from FreeBSD ports
       (ports/security/oidentd/files/patch-unprivileged_ipv6).
