@@ -1,7 +1,7 @@
 SUBDIRS = missing
 sbin_PROGRAMS = oidentd
 
-oidentd_LDADD =-Lmissing -lmissing
+oidentd_LDADD =-Lmissing -lmissing $(ADD_LIB)
 
 AM_CFLAGS = -funsigned-char
 AM_CPPFLAGS = "-Imissing"
