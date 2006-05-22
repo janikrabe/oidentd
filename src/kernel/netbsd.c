@@ -58,6 +58,7 @@
 #include <oidentd.h>
 #include <oidentd_util.h>
 #include <oidentd_inet_util.h>
+#include <oidentd_missing.h>
 #include <oidentd_masq.h>
 #include <oidentd_options.h>
 
@@ -192,7 +193,7 @@ static struct socket *getlist4(	struct inpcbtable *tcbtablep,
 }
 
 /*
-** System dependend initialisation. Call only once!
+** System dependant initialization. Call only once!
 ** On failure, return false.
 */
 

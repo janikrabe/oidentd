@@ -4,3 +4,4 @@ oidentd
 Makefile.in
 Makefile
 .deps
+*.o

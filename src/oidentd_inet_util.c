@@ -38,9 +38,9 @@
 
 #include <oidentd.h>
 #include <oidentd_util.h>
+#include <oidentd_missing.h>
 #include <oidentd_inet_util.h>
 #include <oidentd_options.h>
-#include <missing/ipv6_missing.h>
 
 static int setup_bind(const struct addrinfo *ai, in_port_t listen_port);
 
@@ -241,8 +241,6 @@ ssize_t sock_write(int sock, void *buf, size_t len) {
 ** printf-like function that writes to sockets.
 */
 
-#ifdef HAVE_VASPRINTF
-
 int sockprintf(int fd, const char *fmt, ...) {
 	va_list ap;
 	char *buf;
@@ -257,21 +255,6 @@ int sockprintf(int fd, const char *fmt, ...) {
 
 	return (ret);
 }
-
-#else
-
-int sockprintf(int fd, const char *fmt, ...) {
-	va_list ap;
-	char buf[4096];
-
-	va_start(ap, fmt);
-	vsnprintf(buf, sizeof(buf), fmt, ap);
-	va_end(ap);
-
-	return (sock_write(fd, buf, strlen(buf)));
-}
-
-#endif
 
 /*
 ** Return the canonical hostname of the given address.
@@ -513,29 +496,3 @@ inline void sin_extractv4(void *in6, struct in_addr *in4) {
 
 	memcpy(in4, ((char *) in6) + 12, sizeof(struct in_addr));
 }
-
-#ifndef HAVE_INET_NTOP
-
-/*
-** This is an IPv4 only inet_ntop(3) replacement function.
-*/
-
-const char *inet_ntop(int af, const void *src, char *dst, size_t len) {
-	const char *tmp = src;
-
-	if (af != AF_INET) {
-		errno = EAFNOSUPPORT;
-		return (NULL);
-	}
-
-	if (len < INET_ADDRSTRLEN) {
-		errno = ENOSPC;
-		return (NULL);
-	}
-
-	snprintf(dst, len, "%u.%u.%u.%u", tmp[0], tmp[1], tmp[2], tmp[3]);
-
-	return (dst);
-}
-
-#endif

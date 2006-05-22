@@ -111,20 +111,27 @@
 #define ERROR(x)		(opt_enabled(HIDE_ERRORS) ? "UNKNOWN-ERROR" : (x))
 
 #if ENABLE_DEBUGGING
-#	define debug(format, args...) \
-	do { \
-		o_log(DEBUG, "[%s:%u] DEBUG: " format, __FILE__, __LINE__, args); \
-	} while (0)
+#	define debug(format, args...) do { o_log(DEBUG, "[%s:%u:%s] DEBUG: " format "\n", __FILE__, __LINE__, __FUNCTION__, ##args); } while (0)
 #else
 #	define debug(format, args...) do { } while (0)
 #endif
 
-#ifdef HAVE___ATTRIBUTE__
-	#define __format(x) __attribute__((format x ))
+#ifdef HAVE___ATTRIBUTE__UNUSED
 	#define __notused __attribute__((unused))
 #else
-	#define __format(x)
 	#define __notused
+#endif
+
+#ifdef HAVE___ATTRIBUTE__NORETURN
+	#define __noreturn __attribute__((noreturn))
+#else
+	#define __noreturn
+#endif
+
+#ifdef HAVE___ATTRIBUTE__FORMAT
+	#define __format(x) __attribute__((format x ))
+#else
+	#define __format(x)
 #endif
 
 typedef enum {

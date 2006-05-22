@@ -11,7 +11,7 @@
 **
 ** The GNU C Library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 ** Lesser General Public License for more details.
 **
 ** You should have received a copy of the GNU Lesser General Public
@@ -19,7 +19,7 @@
 ** Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 ** 02111-1307 USA.
 **
-** Cleanup for oidentd Copyright (C) 2001-2003 Ryan McCabe <ryan@numb.org>
+** Cleanup Copyright (C) 2001-2006 Ryan McCabe <ryan@numb.org>
 */
 
 #ifndef _GETOPT_MISSING_H
@@ -39,7 +39,7 @@ struct option {
 	int val;
 };
 
-/* Names for the values of the `has_arg' field of `struct option'.  */
+/* Names for the values of the `has_arg' field of `struct option'. */
 
 #define no_argument			0
 #define required_argument	1
@@ -67,4 +67,6 @@ int _getopt_internal(	int ___argc,
 						int __long_only);
 #	endif
 
+#else
+#	warning "included multiple times"
 #endif

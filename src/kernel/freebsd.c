@@ -66,6 +66,7 @@
 #include <oidentd.h>
 #include <oidentd_util.h>
 #include <oidentd_inet_util.h>
+#include <oidentd_missing.h>
 #include <oidentd_options.h>
 #include <oidentd_masq.h>
 
@@ -245,7 +246,7 @@ static struct socket *getlist4(	void *arg,
 #endif
 
 /*
-** System dependend initialisation. Call only once!
+** System dependant initialization. Call only once!
 ** On failure, return false.
 */
 

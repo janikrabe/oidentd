@@ -53,6 +53,7 @@
 #include <oidentd.h>
 #include <oidentd_util.h>
 #include <oidentd_inet_util.h>
+#include <oidentd_missing.h>
 
 #define N_FANOUT		0
 #define N_PRACTIVE		1
@@ -162,7 +163,7 @@ static int getbuf(kvm_t *kd, off_t addr, void *dst, size_t len) {
 }
 
 /*
-** System dependend initialisation. Call only once!
+** System dependant initialization. Call only once!
 ** On failure, return false.
 */
 

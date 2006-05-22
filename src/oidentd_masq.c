@@ -39,6 +39,7 @@
 
 #include <oidentd.h>
 #include <oidentd_util.h>
+#include <oidentd_missing.h>
 #include <oidentd_inet_util.h>
 #include <oidentd_masq.h>
 #include <oidentd_options.h>

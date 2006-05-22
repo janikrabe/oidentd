@@ -35,6 +35,7 @@
 #include <oidentd.h>
 #include <oidentd_util.h>
 #include <oidentd_inet_util.h>
+#include <oidentd_missing.h>
 #include <oidentd_masq.h>
 #include <oidentd_options.h>
 #include <oidentd_netlink.h>
@@ -62,7 +63,7 @@ bool netfilter;
 #endif
 
 /*
-** System dependend initialisation. Call only once!
+** System dependant initialization. Call only once!
 ** On failure, return false.
 ** Open connection tracking file before dropping permissions.
 */

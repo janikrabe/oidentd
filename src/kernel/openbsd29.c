@@ -42,12 +42,13 @@
 #include <oidentd.h>
 #include <oidentd_util.h>
 #include <oidentd_inet_util.h>
+#include <oidentd_missing.h>
 #include <oidentd_options.h>
 
 extern struct sockaddr_storage proxy;
 
 /*
-** System dependend initialisation. Call only once!
+** System dependant initialization. Call only once!
 ** On failure, return false.
 */
 

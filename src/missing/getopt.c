@@ -10,7 +10,7 @@
 **
 ** The GNU C Library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 ** Lesser General Public License for more details.
 **
 ** You should have received a copy of the GNU Lesser General Public
@@ -18,7 +18,7 @@
 ** Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 ** 02111-1307 USA.
 **
-** Code cleanup for oidentd Copyright (C) 2001-2003 Ryan McCabe <ryan@numb.org>
+** Code cleanup Copyright (C) 2001-2006 Ryan McCabe <ryan@numb.org>
 */
 
 #include <config.h>
@@ -332,7 +332,7 @@ int _getopt_internal(	int argc,
 				if (posixly_correct) {
 					fprintf(stderr, "%s: illegal option -- %c\n", argv[0], c);
 				} else {
-					fprintf (stderr, "%s: invalid option -- %c\n", argv[0], c);
+					fprintf(stderr, "%s: invalid option -- %c\n", argv[0], c);
 				}
 			}
 

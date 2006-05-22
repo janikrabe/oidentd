@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <pwd.h>
 #include <syslog.h>
+#include <getopt.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -33,15 +34,10 @@
 
 #include <oidentd.h>
 #include <oidentd_util.h>
+#include <oidentd_missing.h>
 #include <oidentd_inet_util.h>
 #include <oidentd_user_db.h>
 #include <oidentd_options.h>
-
-#ifndef HAVE_GETOPT_LONG
-#	include <missing/getopt_missing.h>
-#else
-#	include <getopt.h>
-#endif
 
 #ifdef MASQ_SUPPORT
 #	define OPTSTRING "a:c:C:def::g:hiIl:mo::p:P:qr:St:u:Uv"
@@ -419,6 +415,7 @@ static void print_usage(void) {
 }
 
 static void print_version(void) {
-	printf(	"oidentd " VERSION " by Ryan McCabe <ryan@numb.org>\n"
-			"http://dev.ojnk.net\n");
+	printf("%s\n", PACKAGE_STRING);
+	printf("Written by %s <%s>\n", PACKAGE_AUTHOR, PACKAGE_BUGREPORT);
+	printf("%s\n", PACKAGE_WEBSITE);
 }

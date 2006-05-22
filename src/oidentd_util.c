@@ -43,6 +43,7 @@
 #include <oidentd.h>
 #include <oidentd_util.h>
 #include <oidentd_inet_util.h>
+#include <oidentd_missing.h>
 #include <oidentd_options.h>
 
 #ifdef HAVE_LIBUDB
@@ -399,8 +400,6 @@ void list_destroy(list_t *list, void (*free_data)(void *)) {
 ** Logging mechanism for oidentd.
 */
 
-#ifdef HAVE_VASPRINTF
-
 int o_log(int priority, const char *fmt, ...) {
 	va_list ap;
 	ssize_t ret;
@@ -424,33 +423,6 @@ int o_log(int priority, const char *fmt, ...) {
 	free(buf);
 	return (ret);
 }
-
-#else
-
-int o_log(int priority, const char *fmt, ...) {
-	va_list ap;
-	ssize_t ret;
-	char buf[4096];
-
-	if (opt_enabled(QUIET) && priority != LOG_CRIT)
-		return (0);
-
-	if (priority == DEBUG && !opt_enabled(DEBUG_MSGS))
-		return (0);
-
-	va_start(ap, fmt);
-	ret = vsnprintf(buf, sizeof(buf), fmt, ap);
-	va_end(ap);
-
-	if (isatty(fileno(stderr)))
-		fprintf(stderr, "%s\n", buf);
-	else
-		syslog(priority, "%s", buf);
-
-	return (ret);
-}
-
-#endif
 
 #ifdef HAVE_LIBUDB
 /*

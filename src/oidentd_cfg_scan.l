@@ -1,7 +1,7 @@
 %{
 /*
 ** oidentd_cfg_scan.l - oidentd configuration scanner.
-** Copyright (C) 2001-2003 Ryan McCabe <ryan@numb.org>
+** Copyright (C) 2001-2006 Ryan McCabe <ryan@numb.org>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -35,6 +35,7 @@
 
 #include <oidentd.h>
 #include <oidentd_util.h>
+#include <oidentd_missing.h>
 #include <oidentd_user_db.h>
 #include <oidentd_options.h>
 #include <oidentd_cfg_parse.h>

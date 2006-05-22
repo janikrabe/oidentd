@@ -61,6 +61,7 @@
 #include <oidentd.h>
 #include <oidentd_util.h>
 #include <oidentd_inet_util.h>
+#include <oidentd_missing.h>
 
 #define FANOUT_OFFSET(n)	(kip->nl[N_FANOUT].n_value + (n) * sizeof(ipc_t *))
 
@@ -157,7 +158,7 @@ static int getbuf(kvm_t *kd, off_t addr, void *dst, size_t len) {
 }
 
 /*
-** System dependend initialisation. Call only once!
+** System dependant initialization. Call only once!
 ** On failure, return false.
 */
 

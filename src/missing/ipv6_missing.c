@@ -8,13 +8,16 @@
 ** is implemented for ssh use only. For exapmle, this routine assumes
 ** that ai_family is AF_INET. Don't use it for another purpose.
 **
-** This code was taken from OpenSSH.  It is distributed
+** This code was taken from OpenSSH. It is distributed
 ** under a two-term BSD license.
 **
-** Modifications are Copyright (C) 2001-2003 Ryan McCabe <ryan@numb.org>
+** Modifications are Copyright (C) 2001-2006 Ryan McCabe <ryan@numb.org>
 */
 
-#define _GNU_SOURCE
+#ifndef _GNU_SOURCE
+#	define _GNU_SOURCE
+#endif
+
 #include <config.h>
 
 #include <unistd.h>
@@ -34,23 +37,18 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#include <oidentd.h>
-#include <oidentd_util.h>
-#include <oidentd_inet_util.h>
-#include <oidentd_options.h>
-
-#include <ipv6_missing.h>
+#include <oidentd_missing.h>
 
 #ifndef HAVE_GAI_STRERROR
 
 char *gai_strerror(int ecode) {
 	switch (ecode) {
 		case EAI_NODATA:
-			return ("no address associated with hostname.");
+			return ("no address associated with hostname");
 		case EAI_MEMORY:
-			return ("memory allocation failure.");
+			return ("memory allocation failure");
 		default:
-			return ("unknown error.");
+			return ("unknown error");
 	}
 }
 
