@@ -479,7 +479,7 @@ static int lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 
 	memset(&req.r, 0, sizeof(req.r));
 
-	req.r.tcpdiag_states = ~0;
+	req.r.tcpdiag_states = ~0U;
 	req.r.tcpdiag_family = dst_addr->ss_family;
 	memcpy(&req.r.id.tcpdiag_dst, sin_addr(dst_addr), addr_len);
 	memcpy(&req.r.id.tcpdiag_src, sin_addr(src_addr), addr_len);
@@ -513,6 +513,7 @@ static int lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 
 	while (1) {
 		ssize_t ret;
+		size_t uret;
 		struct nlmsghdr *h;
 
 		msghdr.msg_name = &nladdr;
@@ -536,11 +537,12 @@ static int lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 
 		h = (struct nlmsghdr *) buf;
 
-		while (NLMSG_OK(h, (size_t) ret)) {
+		uret = (size_t) ret;
+		while (NLMSG_OK(h, uret)) {
 			struct tcpdiagmsg *r;
 
 			if (h->nlmsg_seq != 1) {
-				h = NLMSG_NEXT(h, ret);
+				h = NLMSG_NEXT(h, uret);
 				continue;
 			}
 
@@ -563,7 +565,7 @@ static int lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 			return (-1);
 		}
 
-		if (msghdr.msg_flags & MSG_TRUNC || ret != 0)
+		if ((msghdr.msg_flags & MSG_TRUNC) || uret != 0)
 			return (-1);
 	}
 
