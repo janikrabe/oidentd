@@ -49,9 +49,9 @@
 #	include <udb.h>
 #endif
 
-static void sig_segv(int unused);
+static void sig_segv(int unused __notused) __noreturn;
 static void sig_child(int sig);
-static void sig_alarm(int unused);
+static void sig_alarm(int unused __notused) __noreturn;
 static void sig_hup(int unused);
 
 static void copy_pw(const struct passwd *pw, struct passwd *pwd);
@@ -375,7 +375,7 @@ static void free_pw(struct passwd *pw) {
 */
 
 static void sig_segv(int unused __notused) {
-	o_log(NORMAL, "Got SIGSEGV");
+	o_log(NORMAL, "Caught SIGSEGV");
 	exit(-1);
 }
 
@@ -396,7 +396,6 @@ static void sig_child(int sig) {
 
 static void sig_alarm(int unused __notused) {
 	o_log(NORMAL, "Timeout for request -- Closing connection");
-
 	exit(0);
 }
 
