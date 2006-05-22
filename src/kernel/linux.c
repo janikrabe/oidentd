@@ -512,7 +512,7 @@ static int lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 	iov[0].iov_len = sizeof(buf);
 
 	while (1) {
-		int ret;
+		ssize_t ret;
 		struct nlmsghdr *h;
 
 		msghdr.msg_name = &nladdr;
