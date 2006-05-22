@@ -1,5 +1,9 @@
 Mon May 22 00:20:15 EDT 2006    Ryan McCabe <ryan@numb.org>
 
+    * Released as version 2.0.8.
+
+    * Removed spaces between commas and colons from responses.
+
     * Pulled in patches for Linux from Debian.
 
     * Pulled in Darwin patches from fink and
