@@ -413,6 +413,20 @@ case "$host_os" in
 		fi
 	;;
 
+	*dragonfly* )
+		if test "$ac_cv_ipf_nat_p" = "no"; then
+			masq_support=no
+		fi
+
+		if test "$masq_support" = "no"; then
+			use_kmem=no
+			os_src=freebsd4.c
+		else
+			use_kmem=yes
+			os_src=freebsd.c
+		fi
+	;;
+
 	*solaris2.4* )
 		AC_DEFINE(SOLARIS, 4, [Solaris version number])
 		use_kmem=yes
