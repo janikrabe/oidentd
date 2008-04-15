@@ -52,8 +52,9 @@ the user name of the process owning the connection.
 
 .TP
 .B "\-a or \-\-address=<address|hostname>"
-Listen for connections on the specified address. The default is to listen for
-connections on all configured IP addresses.
+Listen for connections on the specified address. If this option is specified
+multiple times, \fBoidentd\fP will listen on all specified IP addresses. The
+default is to listen for connections on all configured IP addresses.
 
 .TP
 .B "\-c or \-\-charset=<charset>"

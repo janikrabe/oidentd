@@ -53,7 +53,7 @@ extern char *config_file;
 extern u_int32_t timeout;
 extern u_int32_t connection_limit;
 extern in_port_t listen_port;
-extern struct sockaddr_storage *addr;
+extern struct sockaddr_storage **addr;
 extern uid_t uid;
 extern gid_t gid;
 
@@ -127,6 +127,7 @@ int get_options(int argc, char *const argv[]) {
 	int opt;
 	char *temp_os;
 	char *charset = NULL;
+	int naddrs = 0;
 
 #ifdef MASQ_SUPPORT
 	if (get_port(DEFAULT_FPORT, &fwdport) == -1) {
@@ -152,13 +153,16 @@ int get_options(int argc, char *const argv[]) {
 				struct sockaddr_storage *temp_ss =
 					xmalloc(sizeof(struct sockaddr_storage));
 
+				if (naddrs % 16 == 0)
+					addr = xrealloc(addr, sizeof(struct sockaddr_storage *) * (naddrs + 16));
+
 				if (get_addr(optarg, temp_ss) == -1) {
 					o_log(LOG_CRIT, "Fatal: Unknown host: \"%s\"", optarg);
 					free(temp_ss);
 					return (-1);
 				}
 
-				addr = temp_ss;
+				addr[naddrs++] = temp_ss;
 				break;
 			}
 
@@ -337,6 +341,9 @@ int get_options(int argc, char *const argv[]) {
 				return (-1);
 		}
 	}
+
+	if (addr != NULL)
+		addr[naddrs] = NULL;
 
 	if (charset != NULL) {
 		size_t len = strlen(temp_os) + strlen(charset) + 4;

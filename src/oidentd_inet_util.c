@@ -96,42 +96,45 @@ static int setup_bind(const struct addrinfo *ai, in_port_t listen_port) {
 ** Setup the listening socket(s).
 */
 
-int *setup_listen(struct sockaddr_storage *listen_addr, in_port_t listen_port) {
+int *setup_listen(struct sockaddr_storage **listen_addr, in_port_t listen_port) {
 	int ret;
-	int *bound_fds;
+	int *bound_fds = NULL;
 	u_char listen_port_str[64];
 	struct addrinfo hints, *res, *cur;
+	int naddr = 0;
 
 	if (listen_addr != NULL) {
-		cur = xcalloc(1, sizeof(struct addrinfo));
+		do {
+			cur = xcalloc(1, sizeof(struct addrinfo));
 
-		cur->ai_family = listen_addr->ss_family;
+			cur->ai_family = listen_addr[naddr]->ss_family;
 
-		switch (cur->ai_family) {
+			switch (cur->ai_family) {
 #ifdef WANT_IPV6
-			case AF_INET6:
-				cur->ai_addrlen = sizeof(struct sockaddr_in6);
-				break;
+				case AF_INET6:
+					cur->ai_addrlen = sizeof(struct sockaddr_in6);
+					break;
 #endif
-			case AF_INET:
-				cur->ai_addrlen = sizeof(struct sockaddr_in);
-				break;
-		}
+				case AF_INET:
+					cur->ai_addrlen = sizeof(struct sockaddr_in);
+					break;
+			}
 
-		cur->ai_addr = xmalloc(cur->ai_addrlen);
-		memcpy(cur->ai_addr, listen_addr, cur->ai_addrlen);
+			cur->ai_addr = xmalloc(cur->ai_addrlen);
+			memcpy(cur->ai_addr, listen_addr[naddr], cur->ai_addrlen);
 
-		ret = setup_bind(cur, listen_port);
-		free(cur->ai_addr);
-		free(cur);
-		free(listen_addr);
+			ret = setup_bind(cur, listen_port);
+			free(cur->ai_addr);
+			free(cur);
+			free(listen_addr[naddr]);
 
-		if (ret == -1)
-			return (NULL);
+			if (ret == -1)
+				return (NULL);
 
-		bound_fds = xmalloc(2 * sizeof(int));
-		bound_fds[0] = ret;
-		bound_fds[1] = -1;
+			bound_fds = xrealloc(bound_fds, (naddr + 2) * sizeof(int));
+			bound_fds[naddr] = ret;
+			bound_fds[++naddr] = -1;
+		} while (listen_addr[naddr] != NULL);
 
 		return (bound_fds);
 	}

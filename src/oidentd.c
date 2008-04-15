@@ -73,7 +73,7 @@ char *failuser;
 char *config_file;
 
 in_port_t listen_port;
-struct sockaddr_storage *addr;
+struct sockaddr_storage **addr;
 
 int main(int argc, char **argv) {
 	int *listen_fds = NULL;

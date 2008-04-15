@@ -22,7 +22,7 @@
 #define SIN4(x) ((struct sockaddr_in *) (x))
 #define SIN6(x) ((struct sockaddr_in6 *) (x))
 
-int *setup_listen(struct sockaddr_storage *listen_addr, in_port_t listen_port);
+int *setup_listen(struct sockaddr_storage **listen_addr, in_port_t listen_port);
 
 int get_port(const char *name, in_port_t *port);
 int get_addr(const char *const hostname, struct sockaddr_storage *g_addr);
