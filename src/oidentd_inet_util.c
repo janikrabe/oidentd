@@ -60,6 +60,11 @@ static int setup_bind(const struct addrinfo *ai, in_port_t listen_port) {
 #ifdef WANT_IPV6
 		case AF_INET6:
 			SIN6(ai->ai_addr)->sin6_port = listen_port;
+			if (setsockopt(listenfd, IPPROTO_IPV6, IPV6_V6ONLY, &one,
+						sizeof(one)) != 0) {
+				debug("setsockopt IPV6_V6ONLY: %s", strerror(errno));
+				return (-1);
+			}
 			break;
 #endif
 
