@@ -415,7 +415,17 @@ int masq(	int sock,
 				&nl1, &nl2, &nl3, &nl4, &nr1, &nr2, &nr3, &nr4,
 				&nport_temp, &mport_temp);
 
-			if (ret != 22)
+			/* Added to handle /proc/sys/net/netfilter/nf_conntrack_acct = 0 */
+			if (ret != 22) {
+				ret = sscanf(buf,
+					"%15s %*d %15s %*d %*d ESTABLISHED src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d",
+					family, proto, &l1, &l2, &l3, &l4, &r1, &r2, &r3, &r4,
+					&masq_lport_temp, &masq_fport_temp,
+					&nl1, &nl2, &nl3, &nl4, &nr1, &nr2, &nr3, &nr4,
+					&nport_temp, &mport_temp);
+				}
+
+ 			if (ret != 22)
 				continue;
 
 			if (strcasecmp(family, "ipv4")) /* ? */

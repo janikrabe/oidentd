@@ -1,3 +1,7 @@
+Thu Aug 18 22:42:50 BST 2011	Chris Taylor <chris@equate.dyndns.org>
+
+    * Add handling for nf_conntrack_acct being off (Thanks to Jonas Gorski)
+
 Tue Apr 10 22:14:00 BST 2006    Simon Arlott <oidentd@fire.lp0.eu>
 
     * Fix bug handling NAT with a different destination port on Linux.
