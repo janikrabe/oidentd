@@ -78,6 +78,11 @@ int conntrack = CT_UNKNOWN;
 */
 bool core_init(void) {
 #ifdef MASQ_SUPPORT
+	if (!opt_enabled(MASQ)) {
+		masq_fp = NULL;
+		return true;
+	}
+
 	masq_fp = fopen(MASQFILE, "r");
 	if (masq_fp == NULL) {
 		if (errno != ENOENT) {
