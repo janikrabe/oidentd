@@ -86,7 +86,6 @@ AC_ARG_ENABLE(debug,
 [  --enable-debug          enable debugging support])
 if test "$enableval" = "yes"; then
 	AC_DEFINE(ENABLE_DEBUGGING, 1, [Define to enable debugging])
-	DEBUG_CFLAGS="-O0 -fvar-tracking -g3 -ggdb"
 fi
 
 enableval=""

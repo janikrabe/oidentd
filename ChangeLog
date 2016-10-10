@@ -1,3 +1,7 @@
+2018-03-02  Magnus Holmgren  <holmgren@debian.org>
+
+	* Don't let --enable-debug mess with build flags.
+
 2018-02-24  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Rename --forward-last to --masquerade-first.
