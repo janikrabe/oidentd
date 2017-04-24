@@ -19,6 +19,8 @@
 #ifndef __OIDENTD_UTIL_H
 #define __OIDENTD_UTIL_H
 
+#include <stdlib.h> /* inline randval() */
+
 #define FACILITY	LOG_DAEMON
 #define NORMAL		LOG_INFO
 #define DEBUG		LOG_DEBUG
