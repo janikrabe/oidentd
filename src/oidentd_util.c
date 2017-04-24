@@ -68,19 +68,6 @@ int random_seed(void) {
 }
 
 /*
-** Return a pseudo-random integer between 0 and i-1 inclusive. The
-** obvious solution (rand()%i) isn't safe because on many systems,
-** the low-order bits of the return of rand()(3) are grossly non-random.
-** (FIXME: See comment preceding random_seed() regarding using better
-** PRNG functions on systems whose libraries provide them.)
-*/
-
-inline int randval(int i) {
-	/* Per _Numerical Recipes in C_: */
-	return ((double) i * rand() / (RAND_MAX+1.0));
-}
-
-/*
 ** Find the user specified by "temp_user"
 ** Returns 0 on success, -1 on failure.
 */
