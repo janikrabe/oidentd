@@ -19,7 +19,7 @@
 ** Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 ** 02111-1307 USA.
 **
-** Cleanup Copyright (C) 2001-2006 Ryan McCabe <ryan@numb.org>
+** Cleanup Copyright (C) 2001-2018 Ryan McCabe <ryan@numb.org>
 */
 
 #ifndef _GETOPT_MISSING_H

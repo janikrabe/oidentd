@@ -1,4 +1,4 @@
-oidentd v2.0.9 by Ryan McCabe <ryan@numb.org>
+oidentd v2.1.0 by Ryan McCabe <ryan@numb.org>
 Maintained by Janik Rabe <info@janikrabe.com>
 
 oidentd is an ident (rfc1413 compliant) daemon that runs on Linux, Darwin,

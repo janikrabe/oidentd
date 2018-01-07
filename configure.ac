@@ -1,9 +1,9 @@
 dnl Copyright (C) 2006 Ryan McCabe <ryan@numb.org> (GPL v2)
 
-AC_INIT(oidentd, 2.0.9, ryan@numb.org)
-AM_INIT_AUTOMAKE(oidentd, 2.0.9)
+AC_INIT(oidentd, 2.1.0, info@janikrabe.com)
+AM_INIT_AUTOMAKE(oidentd, 2.1.0)
 
-AC_DEFINE(PACKAGE_WEBSITE, ["http://dev.ojnk.net"], [website])
+AC_DEFINE(PACKAGE_WEBSITE, ["https://github.com/janikrabe/oidentd"], [website])
 AC_DEFINE(PACKAGE_AUTHOR, ["Ryan McCabe"], [author])
 
 AM_CONFIG_HEADER(config.h)

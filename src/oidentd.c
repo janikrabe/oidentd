@@ -1,6 +1,6 @@
 /*
 ** oidentd.c - oidentd ident (rfc1413) implementation.
-** Copyright (C) 1998-2006 Ryan McCabe <ryan@numb.org>
+** Copyright (C) 1998-2018 Ryan McCabe <ryan@numb.org>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,

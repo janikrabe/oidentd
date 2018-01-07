@@ -471,7 +471,7 @@ char *yytext;
 #line 2 "oidentd_cfg_scan.l"
 /*
 ** oidentd_cfg_scan.l - oidentd configuration scanner.
-** Copyright (C) 2001-2006 Ryan McCabe <ryan@numb.org>
+** Copyright (C) 2001-2018 Ryan McCabe <ryan@numb.org>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,

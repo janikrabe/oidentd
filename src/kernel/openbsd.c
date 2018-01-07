@@ -10,7 +10,7 @@
 ** OpenBSD IP masquerading support Copyright (C) 2000
 ** Slawomir Piotrowski <slawek@telsatgp.com.pl>
 **
-** Modifications Copyright (C) 1998-2006 Ryan McCabe <ryan@numb.org>
+** Modifications Copyright (C) 1998-2018 Ryan McCabe <ryan@numb.org>
 */
 
 #include <config.h>

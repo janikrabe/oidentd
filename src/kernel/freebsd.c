@@ -10,7 +10,7 @@
 ** The IP masquerading functionality has been taken from openbsd.c and
 ** is distributed under the same copyright.
 **
-** Modifications Copyright (C) 1998-2006 Ryan McCabe <ryan@numb.org>
+** Modifications Copyright (C) 1998-2018 Ryan McCabe <ryan@numb.org>
 */
 
 #include <config.h>
