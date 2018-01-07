@@ -1,4 +1,5 @@
 oidentd v2.0.9 by Ryan McCabe <ryan@numb.org>
+Maintained by Janik Rabe <info@janikrabe.com>
 
 oidentd is an ident (rfc1413 compliant) daemon that runs on Linux, Darwin,
 FreeBSD, OpenBSD, NetBSD and Solaris.  oidentd can handle IP masqueraded/NAT
@@ -9,13 +10,11 @@ specified according to host and port pairs.
 
 For details on how to install oidentd see the INSTALL file.
 
-See the TODO file for things that need to be done.
-
 For a complete list of features, consult the manual page or run
 oidentd --help.
 
 The most recent version of oidentd will always be available at
-http://dev.ojnk.net
+https://github.com/janikrabe/oidentd.
 
 Please mail any suggestions, questions, comments, bug reports, et cetera to
-me at ryan@numb.org
+me at info@janikrabe.com.

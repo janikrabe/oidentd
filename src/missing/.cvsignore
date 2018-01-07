@@ -1,5 +1,0 @@
-Makefile.in
-Makefile
-.deps
-*.o
-libmissing.a
