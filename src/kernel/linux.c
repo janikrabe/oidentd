@@ -425,7 +425,7 @@ int masq(	int sock,
 					&nport_temp, &mport_temp);
 				}
 
- 			if (ret != 22)
+			if (ret != 22)
 				continue;
 
 			if (strcasecmp(family, "ipv4")) /* ? */
