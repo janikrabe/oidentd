@@ -301,7 +301,7 @@ int masq(	int sock,
 		sin_setv4(nat.nat_inip.s_addr, &ss);
 
 		retm = find_masq_entry(&ss, user, sizeof(user), os, sizeof(os));
-		
+
 		if (opt_enabled(FORWARD) && (retm != 0 || !opt_enabled(MASQ_OVERRIDE))) {
 			retf = fwd_request(sock, lport, masq_lport, fport, masq_fport, &ss);
 			if (retf == 0) {
@@ -315,7 +315,7 @@ int masq(	int sock,
 					ipbuf, nat.nat_inport, fport);
 			}
 		}
-		
+
 		if (retm == 0) {
 			char ipbuf[MAX_IPLEN];
 
