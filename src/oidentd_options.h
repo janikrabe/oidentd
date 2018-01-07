@@ -33,6 +33,7 @@
 #define FOREGROUND			(1 << 0x0a)
 #define NOSYSLOG			(1 << 0x0b)
 #define STDIO				(1 << 0x0c)
+#define MASQ_OVERRIDE		(1 << 0x0d)
 
 bool opt_enabled(u_int32_t option);
 void disable_opt(u_int32_t option);

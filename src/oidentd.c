@@ -226,6 +226,8 @@ static int service_request(int insock, int outsock) {
 		return (-1);
 	}
 
+	fport = htons(sin_port(&faddr));
+
 #ifdef WANT_IPV6
 	laddr6 = laddr;
 	faddr6 = faddr;
@@ -243,7 +245,6 @@ static int service_request(int insock, int outsock) {
 	}
 #endif
 
-	fport = htons(sin_port(&faddr));
 	get_ip(&faddr, ip_buf, sizeof(ip_buf));
 
 	if (get_hostname(&faddr, host_buf, sizeof(host_buf)) != 0) {

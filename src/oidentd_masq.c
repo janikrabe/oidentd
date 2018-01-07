@@ -244,6 +244,7 @@ int fwd_request(	int sock,
 					in_port_t real_lport,
 					in_port_t masq_lport,
 					in_port_t real_fport,
+					in_port_t masq_fport,
 					struct sockaddr_storage *mrelay)
 {
 	char ipbuf[MAX_IPLEN];
@@ -280,7 +281,7 @@ int fwd_request(	int sock,
 		goto out_fail;
 	}
 
-	if (sockprintf(fsock, "%d , %d\r\n", masq_lport, real_fport) < 1) {
+	if (sockprintf(fsock, "%d , %d\r\n", masq_lport, masq_fport) < 1) {
 		debug("write: %s", strerror(errno));
 		goto out_fail;
 	}
@@ -313,8 +314,8 @@ int fwd_request(	int sock,
 		real_lport, real_fport, ret_os, user);
 
 	o_log(NORMAL,
-		"[%s] Successful lookup (by forward): %d (%d) , %d : %s",
-		ipbuf, real_lport, masq_lport, real_fport, user);
+		"[%s] Successful lookup (by forward): %d (%d) , %d (%d) : %s",
+		ipbuf, real_lport, masq_lport, real_fport, masq_fport, user);
 
 	return (0);
 
