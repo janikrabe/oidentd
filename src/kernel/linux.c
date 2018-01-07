@@ -452,7 +452,7 @@ int masq(	int sock,
 
 			sin_setv4(htonl(remotem), &ss);
 			get_ip(faddr, ipbuf, sizeof(ipbuf));
-	
+
 			if (con_uid == -1 && faddr->ss_family == AF_INET)
 				con_uid = get_user4(htons(masq_lport), htons(masq_fport), laddr, &ss);
 
@@ -479,14 +479,14 @@ int masq(	int sock,
 					ipbuf, lport, masq_lport, fport, masq_fport, pw->pw_name);
 
 				goto out_success;
-    		}
+			}
 
 			sockprintf(sock, "%d,%d:USERID:%s:%s\r\n",
 				lport, fport, ret_os, suser);
 
 			o_log(NORMAL, "[%s] Successful lookup: %d (%d) , %d (%d) : %s (%s)",
 				ipbuf, lport, masq_lport, fport, masq_fport, pw->pw_name, suser);
-		
+
 			goto out_success;
 		}
 
