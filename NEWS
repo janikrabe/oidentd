@@ -1,3 +1,8 @@
+Changes in 2.1.0
+* Fixed memory corruption on FreeBSD
+* Changed maintainer to Janik Rabe <info@janikrabe.com>
+* Migrated project from CVS to git
+
 Changes in 2.0.9
 
 Changes in 2.0.8

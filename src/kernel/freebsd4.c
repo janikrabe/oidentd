@@ -67,7 +67,7 @@ int get_user4(	in_port_t lport,
 {
 	struct ucred ucred;
 	struct sockaddr_in sin4[2];
-	int len;
+	size_t len;
 	int ret;
 
 	len = sizeof(struct ucred);
@@ -106,7 +106,7 @@ int get_user6(	in_port_t lport,
 {
 	struct ucred ucred;
 	struct sockaddr_in6 sin6[2];
-	int len;
+	size_t len;
 	int ret;
 
 	len = sizeof(struct ucred);

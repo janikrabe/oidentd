@@ -10,6 +10,10 @@ Daniel Brafford <pod@charter.net>
 Guus Sliepen <sliepen@phys.uu.nl>
 	Initial netfilter (Linux >= 2.3 Support).
 
+Janik Rabe <info@janikrabe.com>
+	Maintainer
+	Bugfixes
+
 Kamil Andrusz <wizz@mniam.net>
 	OpenBSD >= 3.0 Packet Filter support.
 
