@@ -4,6 +4,7 @@ AC_INIT(oidentd, 2.1.0, info@janikrabe.com)
 AM_INIT_AUTOMAKE(oidentd, 2.1.0)
 
 AC_DEFINE(PACKAGE_WEBSITE, ["https://github.com/janikrabe/oidentd"], [website])
+AC_DEFINE(PACKAGE_MAINTAINER, ["Janik Rabe"], [maintainer])
 AC_DEFINE(PACKAGE_AUTHOR, ["Ryan McCabe"], [author])
 
 AM_CONFIG_HEADER(config.h)

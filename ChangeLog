@@ -4,7 +4,7 @@ Sun Jan  7 10:05:00 IST 2018    Janik Rabe <info@janikrabe.com>
 
     * Fix memory corruption on FreeBSD.
 
-Sun Apr 23 22:52:25 EDT 2017    Kufat <kufat@kufat.net>
+Sun Apr 24 02:52:25 UTC 2017    Kufat <kufat@kufat.net>
 
     * Fix gcc linker error due to inline function being defined in source file
 

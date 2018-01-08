@@ -41,9 +41,11 @@ m4/ltversion.m4
 m4/lt~obsolete.m4
 autom4te.cache
 
-# Prerequisites and object files
+# Archives, prerequisites and object files
+*.a
 *.d
 *.o
 
-# Compiled executable
-src/hermod
+# Generated source files and executables
+src/oidentd
+src/os.c
