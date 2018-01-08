@@ -1,7 +1,7 @@
 dnl Copyright (C) 2006 Ryan McCabe <ryan@numb.org> (GPL v2)
 
 AC_INIT(oidentd, 2.1.0, info@janikrabe.com)
-AM_INIT_AUTOMAKE(oidentd, 2.1.0)
+AM_INIT_AUTOMAKE
 
 AC_DEFINE(PACKAGE_WEBSITE, ["https://github.com/janikrabe/oidentd"], [website])
 AC_DEFINE(PACKAGE_MAINTAINER, ["Janik Rabe"], [maintainer])
