@@ -273,7 +273,7 @@ void *xmalloc(size_t size) {
 	void *ret = malloc(size);
 
 	if (ret == NULL) {
-		debug("Fatal: malloc: %s", strerror(errno));
+		o_log(LOG_CRIT, "Fatal: malloc: %s", strerror(errno));
 		exit(-1);
 	}
 
@@ -288,7 +288,7 @@ void *xcalloc(size_t nmemb, size_t size) {
 	void *ret = calloc(nmemb, size);
 
 	if (ret == NULL) {
-		debug("Fatal: calloc: %s", strerror(errno));
+		o_log(LOG_CRIT, "Fatal: calloc: %s", strerror(errno));
 		exit(-1);
 	}
 
@@ -303,7 +303,7 @@ void *xrealloc(void *ptr, size_t len) {
 	void *ret = realloc(ptr, len);
 
 	if (ret == NULL) {
-		debug("Fatal: realloc: %s", strerror(errno));
+		o_log(LOG_CRIT, "Fatal: realloc: %s", strerror(errno));
 		exit(-1);
 	}
 
@@ -342,7 +342,7 @@ char *xstrdup(const char *string) {
 	ret = strdup(string);
 
 	if (ret == NULL) {
-		debug("Fatal: strdup: %s", strerror(errno));
+		o_log(LOG_CRIT, "Fatal: strdup: %s", strerror(errno));
 		exit(-1);
 	}
 

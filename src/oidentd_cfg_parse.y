@@ -89,7 +89,7 @@ parse_global:
 |
 	{
 		if (parser_mode != PARSE_USER) {
-			o_log(NORMAL,
+			o_log(LOG_CRIT,
 				"[line %d] This construct is valid only for user configuration files", current_line);
 			YYABORT;
 		}
@@ -130,14 +130,14 @@ user_statement:
 		cur_user->cap_list = NULL;
 
 		if (find_user($2, &cur_user->user) == -1) {
-			o_log(NORMAL, "[line %u] Invalid user: \"%s\"", current_line, $2);
+			o_log(LOG_CRIT, "[line %u] Invalid user: \"%s\"", current_line, $2);
 			free($2);
 			free_cap_entries(cur_cap);
 			YYABORT;
 		}
 
 		if (user_db_lookup(cur_user->user) != NULL) {
-			o_log(NORMAL,
+			o_log(LOG_CRIT,
 				"[line %u] User \"%s\" already has a capability entry",
 				current_line, $2);
 			free($2);
@@ -202,7 +202,7 @@ to_statement:
 
 		if (get_addr($2, cur_cap->dest) == -1) {
 			if (parser_mode == PARSE_SYSTEM) {
-				o_log(NORMAL, "[line %u]: Bad address: \"%s\"",
+				o_log(LOG_CRIT, "[line %u] Bad address: \"%s\"",
 					current_line, $2);
 			}
 
@@ -221,7 +221,7 @@ fport_statement:
 
 		if (extract_port_range($2, cur_cap->fport) == -1) {
 			if (parser_mode == PARSE_SYSTEM)
-				o_log(NORMAL, "[line %u] Bad port: \"%s\"", current_line, $2);
+				o_log(LOG_CRIT, "[line %u] Bad port: \"%s\"", current_line, $2);
 
 			free($2);
 			free_cap_entries(cur_cap);
@@ -238,7 +238,7 @@ from_statement:
 
 		if (get_addr($2, cur_cap->src) == -1) {
 			if (parser_mode == PARSE_SYSTEM) {
-				o_log(NORMAL, "[line %u]: Bad address: \"%s\"",
+				o_log(LOG_CRIT, "[line %u] Bad address: \"%s\"",
 					current_line, $2);
 			}
 
@@ -257,7 +257,7 @@ lport_statement:
 
 		if (extract_port_range($2, cur_cap->lport) == -1) {
 			if (parser_mode == PARSE_SYSTEM)
-				o_log(NORMAL, "[line %u] Bad port: \"%s\"", current_line, $2);
+				o_log(LOG_CRIT, "[line %u] Bad port: \"%s\"", current_line, $2);
 
 			free($2);
 			free_cap_entries(cur_cap);
@@ -377,7 +377,7 @@ int read_config(const char *path) {
 			}
 		}
 
-		o_log(NORMAL, "Error opening config file: %s: %s",
+		o_log(LOG_CRIT, "Error opening config file: %s: %s",
 			path, strerror(errno));
 		return (-1);
 	}
@@ -453,7 +453,7 @@ static void yyerror(const char *err) {
 	if (parser_mode == PARSE_USER)
 		free_cap_entries(cur_cap);
 	else
-		o_log(NORMAL, "[line %u] %s", current_line, err);
+		o_log(LOG_CRIT, "[line %u] %s", current_line, err);
 }
 
 /*

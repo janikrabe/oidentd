@@ -130,7 +130,7 @@ int get_options(int argc, char *const argv[]) {
 
 #ifdef MASQ_SUPPORT
 	if (get_port(DEFAULT_FPORT, &fwdport) == -1) {
-		o_log(NORMAL, "Fatal: Bad port: \"%s\"", DEFAULT_FPORT);
+		o_log(LOG_CRIT, "Fatal: Bad port: \"%s\"", DEFAULT_FPORT);
 		return (-1);
 	}
 	fwdport = htons(fwdport);
@@ -142,7 +142,7 @@ int get_options(int argc, char *const argv[]) {
 	temp_os = xstrdup("UNIX");
 
 	if (get_port(DEFAULT_PORT, &listen_port) == -1) {
-		o_log(NORMAL, "Fatal: Bad port: \"%s\"", DEFAULT_PORT);
+		o_log(LOG_CRIT, "Fatal: Bad port: \"%s\"", DEFAULT_PORT);
 		return (-1);
 	}
 
@@ -153,7 +153,7 @@ int get_options(int argc, char *const argv[]) {
 					xmalloc(sizeof(struct sockaddr_storage));
 
 				if (get_addr(optarg, temp_ss) == -1) {
-					o_log(NORMAL, "Fatal: Unknown host: \"%s\"", optarg);
+					o_log(LOG_CRIT, "Fatal: Unknown host: \"%s\"", optarg);
 					free(temp_ss);
 					return (-1);
 				}
@@ -193,7 +193,7 @@ int get_options(int argc, char *const argv[]) {
 					p = optarg;
 
 				if (get_port(p, &fwdport) == -1) {
-					o_log(NORMAL, "Fatal: Bad port: \"%s\"", p);
+					o_log(LOG_CRIT, "Fatal: Bad port: \"%s\"", p);
 					return (-1);
 				}
 				fwdport = htons(fwdport);
@@ -215,7 +215,7 @@ int get_options(int argc, char *const argv[]) {
 			case 'P':
 			{
 				if (get_addr(optarg, &proxy) == -1) {
-					o_log(NORMAL, "Fatal: Unknown host: \"%s\"", optarg);
+					o_log(LOG_CRIT, "Fatal: Unknown host: \"%s\"", optarg);
 					return (-1);
 				}
 
@@ -226,7 +226,7 @@ int get_options(int argc, char *const argv[]) {
 			case 'g':
 				enable_opt(CHANGE_GID);
 				if (find_group(optarg, &gid) == -1) {
-					o_log(NORMAL, "Fatal: Unknown group: \"%s\"", optarg);
+					o_log(LOG_CRIT, "Fatal: Unknown group: \"%s\"", optarg);
 					return (-1);
 				}
 				break;
@@ -248,7 +248,7 @@ int get_options(int argc, char *const argv[]) {
 
 				temp_limit = strtoul(optarg, &end, 10);
 				if (*end != '\0') {
-					o_log(NORMAL, "Fatal: Not a valid number: \"%s\"", optarg);
+					o_log(LOG_CRIT, "Fatal: Not a valid number: \"%s\"", optarg);
 					return (-1);
 				}
 
@@ -278,7 +278,7 @@ int get_options(int argc, char *const argv[]) {
 
 			case 'p':
 				if (get_port(optarg, &listen_port) == -1) {
-					o_log(NORMAL, "Fatal: Bad port: \"%s\"", optarg);
+					o_log(LOG_CRIT, "Fatal: Bad port: \"%s\"", optarg);
 					return (-1);
 				}
 				break;
@@ -303,7 +303,7 @@ int get_options(int argc, char *const argv[]) {
 
 				timeout = strtoul(optarg, &end, 10);
 				if (*end != '\0') {
-					o_log(NORMAL, "Fatal: Bad timeout value: \"%s\"", optarg);
+					o_log(LOG_CRIT, "Fatal: Bad timeout value: \"%s\"", optarg);
 					return (-1);
 				}
 				break;
@@ -312,7 +312,7 @@ int get_options(int argc, char *const argv[]) {
 			case 'u':
 				enable_opt(CHANGE_UID);
 				if (find_user(optarg, &uid) == -1) {
-					o_log(NORMAL, "Fatal: Unknown user: \"%s\"", optarg);
+					o_log(LOG_CRIT, "Fatal: Unknown user: \"%s\"", optarg);
 					return (-1);
 				}
 				break;
@@ -345,7 +345,7 @@ int get_options(int argc, char *const argv[]) {
 		ret_os = temp_os;
 
 	if (opt_enabled(DEBUG_MSGS) && opt_enabled(QUIET)) {
-		o_log(NORMAL, "Fatal: The debug and quiet flags are incompatible");
+		o_log(LOG_CRIT, "Fatal: The debug and quiet flags are incompatible");
 		return (-1);
 	}
 
@@ -356,7 +356,7 @@ int get_options(int argc, char *const argv[]) {
 	if (!opt_enabled(CHANGE_UID)) {
 		if (find_user("nobody", &uid) == -1) {
 			o_log(NORMAL,
-				"user \"nobody\" does not exist. Using %u as default UID",
+				"User \"nobody\" does not exist; using %u as default UID",
 				DEFAULT_UID);
 
 			uid = DEFAULT_UID;
@@ -371,7 +371,7 @@ int get_options(int argc, char *const argv[]) {
 		if (find_group("nobody", &gid) == -1) {
 			if (find_group("nogroup", &gid) == -1) {
 				o_log(NORMAL,
-					"Groups \"nobody\" and \"nogroup\" do not exist. Using %u as default GID",
+					"Groups \"nobody\" and \"nogroup\" do not exist; using %u as default GID",
 					DEFAULT_GID);
 
 				gid = DEFAULT_GID;

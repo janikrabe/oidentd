@@ -81,21 +81,21 @@ bool core_init(void) {
 	masq_fp = fopen(MASQFILE, "r");
 	if (masq_fp == NULL) {
 		if (errno != ENOENT) {
-			debug("fopen: %s: %s", MASQFILE, strerror(errno));
+			o_log(LOG_CRIT, "fopen: %s: %s", MASQFILE, strerror(errno));
 			return false;
 		}
 
 		masq_fp = fopen(NFCONNTRACK, "r");
 		if (masq_fp == NULL) {
 			if (errno != ENOENT) {
-				debug("fopen: %s: %s", NFCONNTRACK, strerror(errno));
+				o_log(LOG_CRIT, "fopen: %s: %s", NFCONNTRACK, strerror(errno));
 				return false;
 			}
 
 			masq_fp = fopen(IPCONNTRACK, "r");
 			if (masq_fp == NULL) {
 				if (errno != ENOENT) {
-					debug("fopen: %s: %s", IPCONNTRACK, strerror(errno));
+					o_log(LOG_CRIT, "fopen: %s: %s", IPCONNTRACK, strerror(errno));
 					return false;
 				}
 

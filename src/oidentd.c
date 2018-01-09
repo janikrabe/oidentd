@@ -84,47 +84,47 @@ int main(int argc, char **argv) {
 	openlog("oidentd", LOG_PID | LOG_CONS | LOG_NDELAY, FACILITY);
 
 	if (read_config(config_file) != 0) {
-		o_log(NORMAL, "Error reading configuration file");
+		o_log(LOG_CRIT, "Fatal: Error reading configuration file");
 		exit(-1);
 	}
 
 	if (!core_init()) {
-		o_log(NORMAL, "Error initializing core");
+		o_log(LOG_CRIT, "Fatal: Error initializing core");
 		exit(-1);
 	}
 
 	if (random_seed() != 0) {
-		o_log(NORMAL, "Error seeding random number generator");
+		o_log(LOG_CRIT, "Fatal: Error seeding random number generator");
 		exit(-1);
 	}
 
 	if (!opt_enabled(FOREGROUND) && go_background() == -1) {
-		o_log(NORMAL, "Fatal: Error creating daemon process");
+		o_log(LOG_CRIT, "Fatal: Error creating daemon process");
 		exit(-1);
 	}
 
 	if (!opt_enabled(STDIO)) {
 		listen_fds = setup_listen(addr, htons(listen_port));
 		if (listen_fds == NULL || listen_fds[0] == -1) {
-			o_log(NORMAL, "Fatal: Unable to setup listening socket");
+			o_log(LOG_CRIT, "Fatal: Unable to set up listening socket");
 			exit(-1);
 		}
 	}
 
 	if (k_open() != 0) {
-		o_log(NORMAL, "Fatal: Can't open kmem device: %s", strerror(errno));
+		o_log(LOG_CRIT, "Fatal: Unable to open kmem device: %s", strerror(errno));
 		exit(-1);
 	}
 
 	if (drop_privs(uid, gid) == -1) {
-		o_log(NORMAL, "Fatal: Couldn't drop privileges");
+		o_log(LOG_CRIT, "Fatal: Failed to drop privileges");
 		exit(-1);
 	}
 
 #ifdef HAVE_LIBUDB
 	if (opt_enabled(USEUDB)) {
 		if (udb_init(UDB_ENV_BASE_KEY) == 0) {
-			o_log(NORMAL, "Fatal: Can't open UDB shared memory tables");
+			o_log(LOG_CRIT, "Fatal: Can't open UDB shared memory tables");
 			exit(-1);
 		}
 	}
@@ -376,7 +376,7 @@ static void free_pw(struct passwd *pw) {
 */
 
 static void sig_segv(int unused __notused) {
-	o_log(NORMAL, "Caught SIGSEGV");
+	o_log(LOG_CRIT, "Caught SIGSEGV; please report this to " PACKAGE_BUGREPORT);
 	exit(-1);
 }
 
@@ -408,7 +408,7 @@ static void sig_hup(int unused __notused) {
 	user_db_destroy();
 
 	if (read_config(CONFFILE) != 0) {
-		o_log(NORMAL, "Error parsing configuration file");
+		o_log(LOG_CRIT, "Error parsing configuration file");
 		exit(-1);
 	}
 }
