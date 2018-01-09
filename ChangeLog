@@ -1,3 +1,13 @@
+Tue Jan  9 10:00:00 IST 2018    Janik Rabe <info@janikrabe.com>
+
+    * Update documentation and manual pages
+
+    * Change priorities of log messages.
+
+    * Add missing user_db header to linux.c.
+
+    * Various changes to the build system.
+
 Sun Jan  7 10:05:00 IST 2018    Janik Rabe <info@janikrabe.com>
 
     * Released as version 2.1.0.

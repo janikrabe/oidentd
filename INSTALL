@@ -30,13 +30,13 @@ it the SIGHUP signal (signal 1).
 oidentd does not ordinarily require superuser privileges and should not
 run as root, if possible.  Do note, however, that oidentd must start up
 as root so that it can bind port 113 (if no --port argument is given)
-and so that it can open /dev/kmem on operating system that require that.
+and so that it can open /dev/kmem on operating systems that require that.
 Once oidentd does this, it can drop any extra privileges.
 oidentd does require running as root on FreeBSD 4.x, however, when IP
 masquerade support is disabled or when IPv6 support is enabled.
 
 oidentd also must be run as root on OpenBSD 3.0 and greater, as it uses
-a privileged ioctl to lookup connection owners and NAT information.
+a privileged ioctl to look up connection owners and NAT information.
 
 For information regarding setting the user and group that oidentd will run as,
 please see the descriptions of the "--user" and "--group" command-line
