@@ -176,6 +176,10 @@ int get_options(int argc, char *const argv[]) {
 
 			case 'd':
 				enable_opt(DEBUG_MSGS);
+#ifndef ENABLE_DEBUGGING
+				o_log(LOG_CRIT, "Fatal: oidentd was compiled without --enable-debug");
+				return (-1);
+#endif
 				break;
 
 			case 'e':
