@@ -51,8 +51,7 @@ static int setup_bind(const struct addrinfo *ai, in_port_t listen_port) {
 
 	listenfd = socket(ai->ai_family, SOCK_STREAM, 0);
 	if (listenfd == -1) {
-		if (errno != EAFNOSUPPORT)
-			debug("socket: %s", strerror(errno));
+		debug("socket: %s", strerror(errno));
 		return (-1);
 	}
 
