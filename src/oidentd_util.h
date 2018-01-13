@@ -69,7 +69,7 @@ int random_seed(void);
 ** PRNG functions on systems whose libraries provide them.)
 */
 
-inline int randval(int i) {
+static inline int randval(int i) {
 	/* Per _Numerical Recipes in C_: */
 	return ((double) i * rand() / (RAND_MAX+1.0));
 }
