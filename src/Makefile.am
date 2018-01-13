@@ -3,7 +3,7 @@ sbin_PROGRAMS = oidentd
 
 oidentd_LDADD =-Lmissing -lmissing $(ADD_LIB)
 
-AM_CFLAGS = -funsigned-char
+AM_CFLAGS = -funsigned-char -Wall
 AM_CPPFLAGS = "-Imissing"
 AM_CFLAGS += $(DEBUG_CFLAGS) $(WARN_CFLAGS)
 
