@@ -10,7 +10,7 @@ ACLOCAL=aclocal
 	echo "Error: You must have 'autoconf' installed to compile this program."
 	echo "Download the appropriate package for your distribution,"
 	echo "or get the source tarball at ftp://ftp.gnu.org/pub/gnu/autoconf"
-	exit -1
+	exit 1
 }
 
 ($ACLOCAL --version) < /dev/null > /dev/null 2>&1 || {
@@ -19,7 +19,7 @@ ACLOCAL=aclocal
 	echo "installed doesn't appear recent enough."
 	echo "Download the appropriate package for your distribution,"
 	echo "or get the source tarball at ftp://ftp.gnu.org/pub/gnu/automake"
-	exit -1
+	exit 1
 }
 
 ($ACLOCAL && $AUTOHEADER && $AUTOMAKE --gnu --add-missing --copy && $AUTOCONF) || {
@@ -28,7 +28,7 @@ ACLOCAL=aclocal
 	echo "Please try to generate them manually. If you believe this faulure"
 	echo "is the result of a bug in oidentd, please email info@janikrabe.com"
 	echo "with any relevant details."
-	exit -1
+	exit 1
 }
 
 echo "The configuration scripts have been generated successfully."
