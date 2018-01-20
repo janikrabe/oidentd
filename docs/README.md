@@ -1,6 +1,7 @@
 ---
 title: oidentd
 description: Configurable ident daemon
+permalink: /
 ---
 
 oidentd is an RFC 1413 compliant ident daemon that runs on Linux, Darwin,
