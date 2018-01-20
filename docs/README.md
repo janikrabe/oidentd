@@ -1,5 +1,5 @@
 oidentd is an RFC 1413 compliant ident daemon that runs on Linux, Darwin,
-FreeBSD, OpenBSD, NetBSD, DragonflyBSD and Solaris.
+FreeBSD, OpenBSD, NetBSD, DragonFly BSD, and Solaris.
 
 oidentd is used primarily by universities, providers of shell accounts, and
 public IRC bouncers to fight abuse by allowing servers to identify the owners

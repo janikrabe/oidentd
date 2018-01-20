@@ -2,11 +2,12 @@ oidentd v2.1.0 by Janik Rabe <info@janikrabe.com>
 Originally written by Ryan McCabe <ryan@numb.org>
 
 oidentd is an RFC 1413 compliant ident daemon that runs on Linux, Darwin,
-FreeBSD, OpenBSD, NetBSD, DragonflyBSD and Solaris. oidentd can handle IP
+FreeBSD, OpenBSD, NetBSD, DragonFly BSD, and Solaris. oidentd can handle IP
 masqueraded/NAT connections on Linux, Darwin, FreeBSD (ipf only), OpenBSD,
-NetBSD and DragonflyBSD. oidentd has a flexible mechanism for specifying ident
-responses. Users can be granted permission to specify their own responses, and
-different responses can be sent depending on host and port pairs.
+NetBSD, and DragonFly BSD. oidentd has a flexible mechanism for specifying
+ident responses. Users can be granted permission to specify their own
+responses, and different responses can be sent depending on host and port
+pairs.
 
 For details on how to install oidentd see the INSTALL file.
 
