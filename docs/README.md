@@ -1,3 +1,8 @@
+---
+title: oidentd
+description: Configurable ident daemon
+---
+
 oidentd is an RFC 1413 compliant ident daemon that runs on Linux, Darwin,
 FreeBSD, OpenBSD, NetBSD, DragonFly BSD, and Solaris.
 
