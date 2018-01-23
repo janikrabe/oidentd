@@ -14,7 +14,7 @@ For details on how to install oidentd see the INSTALL file.
 For a complete list of features, consult the manual page or run oidentd --help.
 
 The most recent version of oidentd will always be available at
-https://github.com/janikrabe/oidentd.
+ftp://ftp.janikrabe.com/pub/oidentd/releases/latest.
 
 Please mail any suggestions, questions, comments, bug reports, et cetera to
 me at info@janikrabe.com or open an issue at the link above.

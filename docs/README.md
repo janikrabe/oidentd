@@ -24,6 +24,11 @@ of incoming connections.
 For a complete list of features, please consult the manual pages
 or run `oidentd --help`.
 
+## Download
+
+The most recent version of oidentd will always be available at
+ftp://ftp.janikrabe.com/pub/oidentd/releases/latest.
+
 ## Contributing
 
 If you're interested in contributing to oidentd, please open an issue or a
