@@ -36,5 +36,7 @@ pull request on [GitHub](https://github.com/janikrabe/oidentd). You can also
 email patches, suggestions, questions, comments, bug reports, et cetera to
 [Janik Rabe](https://janikrabe.com) (<info@janikrabe.com>).
 
+## IRC
+
 You can find us on IRC at
 irc://chat.freenode.net/[#oidentd](irc://chat.freenode.net/#oidentd).
