@@ -73,7 +73,21 @@ AC_SUBST(WARN_CFLAGS)
 AC_SUBST(DEBUG_CFLAGS)
 AC_SUBST(FLEX_PATH)
 
-AC_CHECK_HEADERS(netinet/ip_compat.h netinet6/in6_pcb.h)
+AC_CHECK_HEADERS(sys/types.h sys/socket.h net/if.h netinet/in.h)
+AC_CHECK_HEADERS(netinet/ip_compat.h netinet6/in6_pcb.h, [], [], [
+	#ifdef HAVE_SYS_TYPES_H
+		#include <sys/types.h>
+	#endif
+	#ifdef HAVE_SYS_SOCKET_H
+		#include <sys/socket.h>
+	#endif
+	#ifdef HAVE_NET_IF_H
+		#include <net/if.h>
+	#endif
+	#ifdef HAVE_NETINET_IN_H
+		#include <netinet/in.h>
+	#endif
+])
 AC_CHECK_HEADERS(fcntl.h sys/time.h unistd.h)
 
 AC_CHECK_TYPE(u_int32_t, uint32_t)
@@ -266,9 +280,48 @@ fi
 
 
 have_ipnat_h=""
-AC_CHECK_HEADER(netinet/ip_nat.h, have_ipnat_h="yes", have_ipnat_h="no")
+AC_CHECK_HEADER(netinet/ip_compat.h netinet/ip_fil.h netinet/ip_nat.h)
+AC_CHECK_HEADER(netinet/ip_nat.h, have_ipnat_h="yes", have_ipnat_h="no", [
+	#ifdef HAVE_SYS_TYPES_H
+		#include <sys/types.h>
+	#endif
+	#ifdef HAVE_SYS_SOCKET_H
+		#include <sys/socket.h>
+	#endif
+	#ifdef HAVE_NET_IF_H
+		#include <net/if.h>
+	#endif
+	#ifdef HAVE_NETINET_IN_H
+		#include <netinet/in.h>
+	#endif
+	#ifdef HAVE_NETINET_IP_COMPAT_H
+		#include <netinet/ip_compat.h>
+	#endif
+	#ifdef HAVE_NETINET_IP_FIL_H
+		#include <netinet/ip_fil.h>
+	#endif
+])
 if test "$have_ipnat_h" = "no"; then
-	AC_CHECK_HEADER(/usr/src/sys/contrib/ipfilter/netinet/ip_nat.h, have_ipnat_h="yes", have_ipnat_h="no")
+	AC_CHECK_HEADER(/usr/src/sys/contrib/ipfilter/netinet/ip_nat.h, have_ipnat_h="yes", have_ipnat_h="no", [
+		#ifdef HAVE_SYS_TYPES_H
+			#include <sys/types.h>
+		#endif
+		#ifdef HAVE_SYS_SOCKET_H
+			#include <sys/socket.h>
+		#endif
+		#ifdef HAVE_NET_IF_H
+			#include <net/if.h>
+		#endif
+		#ifdef HAVE_NETINET_IN_H
+			#include <netinet/in.h>
+		#endif
+		#ifdef HAVE_NETINET_IP_COMPAT_H
+			#include <netinet/ip_compat.h>
+		#endif
+		#ifdef HAVE_NETINET_IP_FIL_H
+			#include <netinet/ip_fil.h>
+		#endif
+	])
 	if test "$have_ipnat_h" = "yes"; then
 		CPPFLAGS="$CPPFLAGS -I/usr/src/sys/contrib/ipfilter"
 	fi
