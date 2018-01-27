@@ -1,12 +1,20 @@
-Tue Jan  9 10:00:00 IST 2018    Janik Rabe <info@janikrabe.com>
+Tue Jan 27 19:00:00 IST 2018    Janik Rabe <info@janikrabe.com>
 
-    * Update documentation and manual pages
+    * Fix build and missing prerequisite headers on FreeBSD.
+
+    * Update documentation and manual pages.
 
     * Change priorities of log messages.
+
+    * Always show error message when socket initialization fails.
 
     * Add missing user_db header to linux.c.
 
     * Various changes to the build system.
+
+    * Warn when --debug is used but not supported.
+
+    * Remove negative exit codes and use constants where possible.
 
 Sun Jan  7 10:05:00 IST 2018    Janik Rabe <info@janikrabe.com>
 
@@ -18,23 +26,25 @@ Sun Apr 24 02:52:25 UTC 2017    Kufat <kufat@kufat.net>
 
     * Fix gcc linker error due to inline function being defined in source file
 
+Fri Mar 11 10:38:10 CET 2016    Petr Písař <ppisar@redhat.com>
+
+    * Only open conntracking table when IP masquerading is enabled.
+
 Thu Aug 18 22:42:50 BST 2011    Chris Taylor <chris@equate.dyndns.org>
 
     * Add handling for nf_conntrack_acct being off (Thanks to Jonas Gorski)
 
-Tue Apr 10 22:14:00 BST 2006    Simon Arlott <oidentd@fire.lp0.eu>
+Mon Mar  1 20:26:11 CET 2010    Fabian Knittel <fabian.knittel@avona.com>
 
-    * Fix bug handling NAT with a different destination port on Linux.
+    * Bind to IPv6 socket as well.
 
-    * Fix forwarding when the destination port is different.
+Tue Apr 15 14:38:35 UTC 2008    Jan Rękorajski <baggins@pld-linux.org>
 
-    * Add an option that does forwarding only if the masquerading file lookup fails.
+    * Allow oidentd to listen on multiple specified IPs.
 
-    * Support Layer 3 Independent Connection tracking on Linux.
+Thu Jun  1 22:17:32 UTC 2006    Joerg Sonnenberger <joerg@bec.de>
 
-    * Handle local NAT on Linux (instead of fowarding to self).
-
-    * Copy fport before converting v4-mapped v6 addresses.
+    * Add basic support for DragonFly BSD.
 
 Mon May 22 00:20:15 EDT 2006    Ryan McCabe <ryan@numb.org>
 
@@ -52,9 +62,27 @@ Mon May 22 00:20:15 EDT 2006    Ryan McCabe <ryan@numb.org>
     * Pulled in patches for FreeBSD from FreeBSD ports
       (ports/security/oidentd/files/patch-unprivileged_ipv6).
 
+Tue Apr 10 22:14:00 BST 2006    Simon Arlott <oidentd@fire.lp0.eu>
+
+    * Fix bug handling NAT with a different destination port on Linux.
+
+    * Fix forwarding when the destination port is different.
+
+    * Add an option that does forwarding only if the masquerading file lookup fails.
+
+    * Support Layer 3 Independent Connection tracking on Linux.
+
+    * Handle local NAT on Linux (instead of fowarding to self).
+
+    * Copy fport before converting v4-mapped v6 addresses.
+
 Thu Jan 26 16:32:18 CET 2006    Christof Douma <christof@douma.eu.org>
 
     * Open masquerading options before dropping permissions on linux.
+
+Sat Jan  3 23:21:45 UTC 2004    Matthias Scheler <tron@NetBSD.org>
+
+    * Replace hardcoded CONFFILE path in usage instructions.
 
 Fri Jul 11 10:11:38 EDT 2003    Ryan McCabe <ryan@numb.org>
 
