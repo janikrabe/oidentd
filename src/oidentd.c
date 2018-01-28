@@ -89,7 +89,11 @@ int main(int argc, char **argv) {
 	}
 
 	if (!core_init()) {
-		o_log(LOG_CRIT, "Fatal: Error initializing core");
+		if (opt_enabled(DEBUG_MSGS)) {
+			o_log(LOG_CRIT, "Fatal: Error initializing core");
+		} else {
+			o_log(LOG_CRIT, "Fatal: Error initializing core (try --debug)");
+		}
 		exit(EXIT_FAILURE);
 	}
 
