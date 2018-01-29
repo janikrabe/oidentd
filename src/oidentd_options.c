@@ -396,10 +396,16 @@ int get_options(int argc, char *const argv[]) {
 static void print_usage(void) {
 	const char usage[] =
 "\nUsage: oidentd [options]\n"
-"-a or --address <address>    Bind to <address>\n"
+"-a or --address <address>    Bind to <address> (can be specified multiple times)\n"
 "-c or --charset <charset>    Specify an alternate charset\n"
 "-C or --config <config file> Use the specifed file instead of " CONFFILE "\n"
+
+#ifdef ENABLE_DEBUGGING
 "-d or --debug                Enable debugging\n"
+#else
+"-d or --debug                Enable debugging (not available in this build)\n"
+#endif
+
 "-e or --error                Return \"UNKNOWN-ERROR\" for all errors\n"
 
 #ifdef MASQ_SUPPORT
@@ -408,16 +414,16 @@ static void print_usage(void) {
 "-M or --forward-last         Check IP masquerading file before forwarding\n"
 #endif
 
-"-P or --proxy <host>         <host> acts as a proxy, forwarding connections to us\n"
+"-P or --proxy <host>         Let <host> act as a proxy, forwarding connections to us\n"
 "-g or --group <group>        Run with specified group or GID\n"
 "-i or --foreground           Don't run as a daemon\n"
-"-I or --stdio                Service a single client connected to stdin/stdout then exit (use when oidentd is running from inetd/xinetd/etc).\n"
+"-I or --stdio                Service a single client connected to stdin/stdout, then exit (use when running from inetd/xinetd/etc.)\n"
 "-l or --limit <number>       Limit the number of open connections to the specified number\n"
 "-o or --other [<os>]         Return <os> instead of the operating system.  Uses \"OTHER\" if no argument is given.\n"
 "-p or --port <port>          Listen for connections on specified port\n"
 "-q or --quiet                Suppress normal logging\n"
-"-S or --nosyslog             Write messages to stderr not syslog\n"
-"-t or --timeout <seconds>    Wait for <seconds> before closing connection\n"
+"-S or --nosyslog             Write messages to stderr instead of syslog\n"
+"-t or --timeout <seconds>    Wait at most <seconds> before closing connections\n"
 "-u or --user <user>          Run as specified user or UID\n"
 
 #ifdef HAVE_LIBUDB
@@ -426,7 +432,7 @@ static void print_usage(void) {
 
 "-v or --version              Display version information and exit\n"
 "-r or --reply <string>       If a query fails, pretend it succeeded, returning <string>\n"
-"-h or --help                 This help message\n";
+"-h or --help                 Display this help and exit\n";
 
 	print_version();
 	printf("%s", usage);
