@@ -73,7 +73,16 @@ AC_SUBST(WARN_CFLAGS)
 AC_SUBST(DEBUG_CFLAGS)
 AC_SUBST(FLEX_PATH)
 
-AC_CHECK_HEADERS(sys/types.h sys/socket.h net/if.h netinet/in.h)
+AC_CHECK_HEADERS(sys/types.h sys/socket.h netinet/in.h)
+AC_CHECK_HEADERS(net/if.h, [], [], [
+	#ifdef HAVE_SYS_SOCKET_H
+		#include <sys/socket.h>
+	#endif
+	#ifdef HAVE_NETINET_IN_H
+		#include <netinet/in.h>
+	#endif
+
+])
 AC_CHECK_HEADERS(netinet/ip_compat.h netinet6/in6_pcb.h, [], [], [
 	#ifdef HAVE_SYS_TYPES_H
 		#include <sys/types.h>
@@ -81,11 +90,11 @@ AC_CHECK_HEADERS(netinet/ip_compat.h netinet6/in6_pcb.h, [], [], [
 	#ifdef HAVE_SYS_SOCKET_H
 		#include <sys/socket.h>
 	#endif
-	#ifdef HAVE_NET_IF_H
-		#include <net/if.h>
-	#endif
 	#ifdef HAVE_NETINET_IN_H
 		#include <netinet/in.h>
+	#endif
+	#ifdef HAVE_NET_IF_H
+		#include <net/if.h>
 	#endif
 ])
 AC_CHECK_HEADERS(fcntl.h sys/time.h unistd.h)
