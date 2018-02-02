@@ -404,7 +404,12 @@ case "$host_os" in
 
 	*openbsd* )
 		case "$host_os" in
-			*openbsd2* )
+			*openbsd1.* )
+				echo "$host_os is not supported." 1>&2
+				exit 1
+			;;
+
+			*openbsd2.* )
 				if test "$ac_cv_ipf_nat_p" = "no"; then
 					masq_support=no
 				fi
@@ -426,7 +431,7 @@ case "$host_os" in
 					os_src=openbsd29.c
 				;;
 
-				*openbsd3*)
+				*)
 					os_src=openbsd30.c
 				;;
 			esac
@@ -437,7 +442,7 @@ case "$host_os" in
 					os_src=openbsd.c
 				;;
 
-				*openbsd3* )
+				* )
 					os_src=openbsd30.c
 				;;
 			esac
@@ -533,7 +538,7 @@ case "$host_os" in
 	;; 
 
 	*)
-		echo $host_os is not yet supported.
+		echo "$host_os is not yet supported." 1>&2
 		exit 1
 	;;
 esac
