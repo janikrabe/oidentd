@@ -385,7 +385,7 @@ case "$host_os" in
 		os_src=linux.c
 	;;
 
-	*netbsd* )
+	*netbsd[[1234]].* )
 		use_kmem=yes
 		os_src=netbsd.c
 		if test "$ac_cv_ipf_nat_p" = "no"; then
@@ -423,15 +423,15 @@ case "$host_os" in
 					os_src=openbsd.c
 				;;
 
-				*openbsd2.[[45678]])
+				*openbsd2.[[45678]] )
 					os_src=openbsd24.c
 				;;
 
-				*openbsd2.9*)
+				*openbsd2.9* )
 					os_src=openbsd29.c
 				;;
 
-				*)
+				* )
 					os_src=openbsd30.c
 				;;
 			esac
@@ -477,67 +477,56 @@ case "$host_os" in
 		fi
 	;;
 
-	*solaris2.4* )
-		AC_DEFINE(SOLARIS, 4, [Solaris version number])
-		use_kmem=yes
-		masq_support=no
-		ipv6_support=no
-		os_src=solaris4.c
-
-		ADD_LIB="$ADD_LIB -lelf"
-	;;
-
-	*solaris2.5* )
-		AC_DEFINE(SOLARIS, 5, [Solaris version number])
-		use_kmem=yes
-		masq_support=no
-		ipv6_support=no
-		os_src=solaris5.c
-
-		ADD_LIB="$ADD_LIB -lelf"
-	;;
-
-	*solaris2.6* )
-		AC_DEFINE(SOLARIS, 6, [Solaris version number])
-		use_kmem=yes
-		masq_support=no
-		ipv6_support=no
-		os_src=solaris7.c
-
-		ADD_LIB="$ADD_LIB -lelf"
-	;;
-
-	*solaris2.7* )
-		AC_DEFINE(SOLARIS, 7, [Solaris version number])
-		use_kmem=yes
-		masq_support=no
-		ipv6_support=no
-		os_src=solaris7.c
-
-		ADD_LIB="$ADD_LIB -lelf"
-	;;
-
-	*solaris2.8* )
-		AC_DEFINE(SOLARIS, 8, [Solaris version number])
-		use_kmem=yes
-		masq_support=no
-		ipv6_support=no
-		os_src=solaris8.c
-
-		ADD_LIB="$ADD_LIB -lelf"
-	;;
-
 	*solaris* )
-		AC_DEFINE(SOLARIS, 8, [Solaris version number])
+		ADD_LIB="$ADD_LIB -lelf"
 		use_kmem=yes
 		masq_support=no
 		ipv6_support=no
-		os_src=solaris8.c
 
-		ADD_LIB="$ADD_LIB -lelf"
-	;; 
+		case "$host_os" in
+			*solaris2.[[0123]]* )
+				echo "$host_os is not supported." 1>&2
+				exit 1
+			;;
 
-	*)
+			*solaris2.4* )
+				AC_DEFINE(SOLARIS, 4, [Solaris version number])
+				os_src=solaris4.c
+			;;
+
+			*solaris2.5* )
+				AC_DEFINE(SOLARIS, 5, [Solaris version number])
+				os_src=solaris5.c
+			;;
+
+			*solaris2.6* )
+				AC_DEFINE(SOLARIS, 6, [Solaris version number])
+				os_src=solaris7.c
+			;;
+
+			*solaris2.7* )
+				AC_DEFINE(SOLARIS, 7, [Solaris version number])
+				os_src=solaris7.c
+			;;
+
+			*solaris[[234]]* )
+				AC_DEFINE(SOLARIS, 8, [Solaris version number])
+				os_src=solaris8.c
+			;;
+
+			*solaris5.0* )
+				AC_DEFINE(SOLARIS, 8, [Solaris version number])
+				os_src=solaris8.c
+			;;
+
+			* )
+				echo "$host_os is not supported." 1>&2
+				exit 1
+			;;
+		esac
+	;;
+
+	* )
 		echo "$host_os is not yet supported." 1>&2
 		exit 1
 	;;
