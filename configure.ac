@@ -385,7 +385,7 @@ case "$host_os" in
 		os_src=linux.c
 	;;
 
-	*netbsd[[1234]].* )
+	*netbsd[[1-4]].* )
 		use_kmem=yes
 		os_src=netbsd.c
 		if test "$ac_cv_ipf_nat_p" = "no"; then
@@ -405,7 +405,7 @@ case "$host_os" in
 	*openbsd* )
 		case "$host_os" in
 			*openbsd1.* )
-				echo "$host_os is not supported." 1>&2
+				echo "$host_os is not supported; oidentd requires OpenBSD 2.0 or newer." 1>&2
 				exit 1
 			;;
 
@@ -418,12 +418,12 @@ case "$host_os" in
 
 		if test "$masq_support" = "no"; then
 			case "$host_os" in
-				*openbsd2.[[0123]]* )
+				*openbsd2.[[0-3]]* )
 					use_kmem=yes
 					os_src=openbsd.c
 				;;
 
-				*openbsd2.[[45678]] )
+				*openbsd2.[[4-8]] )
 					os_src=openbsd24.c
 				;;
 
@@ -437,7 +437,7 @@ case "$host_os" in
 			esac
 		else
 			case "$host_os" in
-				*openbsd2* )
+				*openbsd2.* )
 					use_kmem=yes
 					os_src=openbsd.c
 				;;
@@ -484,8 +484,8 @@ case "$host_os" in
 		ipv6_support=no
 
 		case "$host_os" in
-			*solaris2.[[0123]]* )
-				echo "$host_os is not supported." 1>&2
+			*solaris2.[[0-3]]* )
+				echo "$host_os is not supported; oidentd requires Solaris 2.4 or newer." 1>&2
 				exit 1
 			;;
 
@@ -509,7 +509,7 @@ case "$host_os" in
 				os_src=solaris7.c
 			;;
 
-			*solaris[[234]]* )
+			*solaris[[2-4]].* )
 				AC_DEFINE(SOLARIS, 8, [Solaris version number])
 				os_src=solaris8.c
 			;;
@@ -520,7 +520,7 @@ case "$host_os" in
 			;;
 
 			* )
-				echo "$host_os is not supported." 1>&2
+				echo "$host_os is not supported; oidentd requires Solaris 5.0 or older." 1>&2
 				exit 1
 			;;
 		esac
