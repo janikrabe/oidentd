@@ -455,11 +455,29 @@ case "$host_os" in
 		fi
 
 		if test "$masq_support" = "no"; then
-			use_kmem=no
-			os_src=freebsd4.c
+			case "$host_os" in
+				*freebsd[[1-3]].* )
+					use_kmem=yes
+					os_src=freebsd.c
+				;;
+
+				* )
+					use_kmem=no
+					os_src=freebsd4.c
+				;;
+			esac
 		else
-			use_kmem=yes
-			os_src=freebsd5.c
+			case "$host_os" in
+				*freebsd[[1-4]].* )
+					use_kmem=yes
+					os_src=freebsd.c
+				;;
+
+				* )
+					use_kmem=yes
+					os_src=freebsd5.c
+				;;
+			esac
 		fi
 	;;
 
