@@ -134,10 +134,14 @@
 	#define __format(x)
 #endif
 
+#ifdef HAVE_STDBOOL_H
+#	include <stdbool.h>
+#else
 typedef enum {
 	false = 0,
 	true = 1
 } bool;
+#endif
 
 int k_open(void);
 

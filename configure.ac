@@ -73,6 +73,9 @@ AC_SUBST(WARN_CFLAGS)
 AC_SUBST(DEBUG_CFLAGS)
 AC_SUBST(FLEX_PATH)
 
+# Don't rely on __STDC_VERSION__ as kernels may use C99 booleans
+AC_CHECK_HEADERS(stdbool.h)
+
 AC_CHECK_HEADERS(sys/types.h sys/socket.h netinet/in.h)
 AC_CHECK_HEADERS(net/if.h, [], [], [
 	#ifdef HAVE_SYS_SOCKET_H
@@ -385,12 +388,22 @@ case "$host_os" in
 		os_src=linux.c
 	;;
 
-	*netbsd[[1-4]].* )
-		use_kmem=yes
-		os_src=netbsd.c
-		if test "$ac_cv_ipf_nat_p" = "no"; then
-			masq_support=no
-		fi
+	*netbsd* )
+		case "$host_os" in
+			*netbsd[[1-4]].* )
+				use_kmem=yes
+				os_src=netbsd.c
+				if test "$ac_cv_ipf_nat_p" = "no"; then
+					masq_support=no
+				fi
+			;;
+
+			* )
+				use_kmem=no
+				os_src=netbsd5.c
+				masq_support=no
+			;;
+		esac
 	;;
 
 	*darwin* )
