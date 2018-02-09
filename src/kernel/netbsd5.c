@@ -84,8 +84,8 @@ int get_user4(	in_port_t lport,
 
 	memcpy(&ss[0], faddr, sizeof(ss[0]));
 	memcpy(&ss[1], laddr, sizeof(ss[1]));
-	((struct sockaddr_in *) &ss[0])->sin_port = fport;
-	((struct sockaddr_in *) &ss[1])->sin_port = lport;
+	SIN4(&ss[0])->sin_port = fport;
+	SIN4(&ss[1])->sin_port = lport;
 	uidlen = sizeof(uid);
 	sslen = sizeof(ss);
 	error = sysctl(mib, sizeof(mib) / sizeof(int), &uid, &uidlen, ss, sslen);
@@ -115,8 +115,8 @@ int get_user6(	in_port_t lport,
 
 	memcpy(&ss[0], faddr, sizeof(ss[0]));
 	memcpy(&ss[1], laddr, sizeof(ss[1]));
-	((struct sockaddr_in6 *) &ss[0])->sin6_port = fport;
-	((struct sockaddr_in6 *) &ss[1])->sin6_port = lport;
+	SIN6(&ss[0])->sin6_port = fport;
+	SIN6(&ss[1])->sin6_port = lport;
 	uidlen = sizeof(int);
 	sslen = sizeof(ss);
 	error = sysctl(mib, sizeof(mib) / sizeof(int), &uid, &uidlen, ss, sslen);
