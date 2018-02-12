@@ -71,7 +71,7 @@ int random_seed(void);
 
 static inline int randval(int i) {
 	/* Per _Numerical Recipes in C_: */
-	return ((double) i * rand() / (RAND_MAX+1.0));
+	return (int) ((double) i * rand() / (RAND_MAX+1.0));
 }
 
 #ifndef HAVE_SNPRINTF
