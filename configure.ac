@@ -40,7 +40,7 @@ if test "$enableval" = "no"; then
 	masq_support=no
 fi
 
-masq_support=yes
+enableval=""
 AC_ARG_ENABLE(nat, [  --disable-nat           Disable NAT/IP masquerading support])
 if test "$enableval" = "no"; then
 	masq_support=no
