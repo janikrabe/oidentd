@@ -128,6 +128,10 @@ int masq(	int sock,
 	in_port_t masq_lport;
 	in_port_t masq_fport;
 
+	/*
+	** Only IPv4 is supported right now..
+	*/
+
 	if (faddr->ss_family != AF_INET || laddr->ss_family != AF_INET)
 		return (-1);
 
