@@ -429,7 +429,8 @@ int masq(	int sock,
 					&masq_lport_temp, &masq_fport_temp,
 					&nl1, &nl2, &nl3, &nl4, &nr1, &nr2, &nr3, &nr4,
 					&nport_temp, &mport_temp);
-				}
+			}
+
 
 			if (ret != 22)
 				continue;
