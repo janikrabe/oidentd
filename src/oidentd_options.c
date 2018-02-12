@@ -336,6 +336,8 @@ int get_options(int argc, char *const argv[]) {
 				return (-1);
 
 			case 'h':
+				print_usage();
+				exit(EXIT_SUCCESS);
 			default:
 				print_usage();
 				return (-1);
