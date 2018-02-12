@@ -314,7 +314,7 @@ static bool user_db_can_reply(	const struct user_cap *user_cap,
 	pw = getpwnam(reply);
 	if (pw != NULL) {
 		/*
-		** A user can always reply with her own username.
+		** A user can always reply with their own username.
 		*/
 
 		if (pw->pw_uid == con_uid)

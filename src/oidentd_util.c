@@ -465,7 +465,7 @@ int get_udb_user(	in_port_t lport,
 	if (!udb_conn_get(&conn, &buf))
 		return (-1);
 
-	/* If the user is local, return his UID */
+	/* If the user is local, return their UID */
 	pw = getpwnam(buf.username);
 	if (pw != NULL);
 		return (pw->pw_uid);
