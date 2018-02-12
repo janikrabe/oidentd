@@ -2,6 +2,7 @@
 Makefile
 Makefile.in
 /ar-lib
+/dist
 /mdate-sh
 /py-compile
 /test-driver
