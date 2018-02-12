@@ -9,15 +9,15 @@
 | [FreeBSD 5+][freebsd5]         | Yes  | Yes  | ipf only | No       | NAT only   |                          |
 | [Linux][linux]                 | Yes  | Yes  | Yes      | No       | No         |                          |
 | [NetBSD 1-4][netbsd]           | Yes  | Yes  | ipf only | No       | Yes        |                          |
-| [NetBSD 5+][netbsd5]           | Yes  | Yes  | No       | No       | No         | Ignores `--forward-last` |
+| [NetBSD 5+][netbsd5]           | Yes  | Yes  | No       | No       | No         |                          |
 | [OpenBSD 2.0 - 2.3][openbsd]   | Yes  | Yes  | ipf only | No       | Yes        |                          |
 | [OpenBSD 2.4 - 2.8][openbsd24] | Yes  | Yes  | ipf only | No       | NAT only   | Ignores `--forward-last` |
 | [OpenBSD 2.9][openbsd29]       | Yes  | Yes  | ipf only | No       | NAT only   | Ignores `--forward-last` |
 | [OpenBSD 3+][openbsd30]        | Yes  | Yes  | Yes      | No       | No         |                          |
-| [Solaris 2.4][solaris4]        | Yes  | No   | No       | No       | Yes        | Ignores `--forward-last` |
-| [Solaris 2.5][solaris5]        | Yes  | No   | No       | No       | Yes        | Ignores `--forward-last` |
-| [Solaris 2.6 - 2.7][solaris7]  | Yes  | No   | No       | No       | Yes        | Ignores `--forward-last` |
-| [Solaris 2.8][solaris8]        | Yes  | No   | No       | No       | Yes        | Ignores `--forward-last` |
+| [Solaris 2.4][solaris4]        | Yes  | No   | No       | No       | Yes        |                          |
+| [Solaris 2.5][solaris5]        | Yes  | No   | No       | No       | Yes        |                          |
+| [Solaris 2.6 - 2.7][solaris7]  | Yes  | No   | No       | No       | Yes        |                          |
+| [Solaris 2.8][solaris8]        | Yes  | No   | No       | No       | Yes        |                          |
 
 Links do not necessarily indicate which source file is being used.
 See `configure.ac` for which file is compiled on any given system.
