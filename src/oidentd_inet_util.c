@@ -99,7 +99,7 @@ static int setup_bind(const struct addrinfo *ai, in_port_t listen_port) {
 int *setup_listen(struct sockaddr_storage **listen_addr, in_port_t listen_port) {
 	int ret;
 	int *bound_fds = NULL;
-	u_char listen_port_str[64];
+	char listen_port_str[64];
 	struct addrinfo hints, *res, *cur;
 	int naddr = 0;
 
