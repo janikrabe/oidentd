@@ -10,6 +10,7 @@ find . \( -name .deps -or -name Makefile -or -name Makefile.in -or -name \*.o -o
 	missing		\
 	install-sh	\
 	depcomp		\
+	dist		\
 	configure	\
 	config.sub	\
 	config.status	\
