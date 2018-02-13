@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 find . \( -name .deps -or -name Makefile -or -name Makefile.in -or -name \*.o -or -name \*.a \) -exec /bin/rm -rf {} \; 2>/dev/null
 
