@@ -1,10 +1,10 @@
 SUBDIRS = missing
 sbin_PROGRAMS = oidentd
 
-oidentd_LDADD =-Lmissing -lmissing $(ADD_LIB)
+oidentd_LDADD = -Lmissing -lmissing $(ADD_LIB)
 
 AM_CFLAGS = $(DEBUG_CFLAGS) $(WARN_CFLAGS)
-AM_CPPFLAGS = "-Imissing"
+AM_CPPFLAGS = "-I$(srcdir)/missing"
 
 EXTRA_DIST = kernel
 
