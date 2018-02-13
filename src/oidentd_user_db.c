@@ -108,7 +108,7 @@ static inline void numeric_ident(uid_t con_uid, char *buf, size_t len) {
 }
 
 /*
-** Generate an ident response of the form UPREFIXxxxxx,
+** Generates an ident response of the form UPREFIXxxxxx,
 ** where xxxxx is a pseudo-random number between 1 and 99999
 */
 
@@ -117,11 +117,11 @@ static inline void random_ident_numeric(char *buf, size_t len) {
 }
 
 /*
-** Returns true if a user has a capabilitiy, false if it doesn't.
+** Returns true if the user has a capability, false if they don't.
 */
 
 static inline bool user_db_have_cap(const struct user_cap *user_cap,
-									u_int16_t cap_flag)
+					u_int16_t cap_flag)
 {
 	return ((user_cap->caps & cap_flag) != 0);
 }

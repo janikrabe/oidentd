@@ -20,8 +20,8 @@
 #define __OIDENTD_H_
 
 /*
-** File containing the identd replies to be used for hosts that masq through
-** us.
+** File containing the ident replies to be used for hosts that
+** masquerade through us.
 */
 
 #define MASQ_MAP		"/etc/oidentd_masq.conf"
@@ -46,14 +46,14 @@
 #define USER_CONF		".oidentd.conf"
 
 /*
-** Maximum length of identd replies.
+** Maximum length of ident replies.
 */
 
 #define MAX_ULEN		512
 
 /*
-** Max random replies -- the number of strings that may
-** follow "reply" statements.
+** Maximum number of random replies -- the number of strings that
+** may follow "reply" statements.
 */
 
 #define MAX_RANDOM_REPLIES	20

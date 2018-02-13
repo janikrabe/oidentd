@@ -201,7 +201,7 @@ int main(int argc, char **argv) {
 }
 
 /*
-** Handle the client's request: read the client data and send the identd reply.
+** Handle the client's request: read the client data and send the ident reply.
 */
 
 static int service_request(int insock, int outsock) {

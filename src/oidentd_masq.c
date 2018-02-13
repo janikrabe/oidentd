@@ -292,7 +292,7 @@ int fwd_request(	int sock,
 	}
 
 	/*
-	** We don't want to timeout once we're finished processing the request.
+	** Don't time out once we've finished processing the request.
 	*/
 
 	alarm(0);
