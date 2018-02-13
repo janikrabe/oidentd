@@ -276,8 +276,9 @@ static struct socket *getlist(	void *arg,
 #endif
 
 /*
-** System dependant initialization. Call only once!
-** On failure, return false.
+** System-dependent initialization; called only once.
+** Called before privileges are dropped.
+** Returns false on failure.
 */
 
 bool core_init(void) {
@@ -288,7 +289,7 @@ bool core_init(void) {
 ** Return the UID of the connection owner
 */
 
-static int get_user(	in_port_t lport,
+static uid_t get_user(	in_port_t lport,
 				in_port_t fport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
@@ -305,11 +306,11 @@ static int get_user(	in_port_t lport,
 	kp = kvm_getprocs(kinfo->kd, KERN_PROC_ALL, 0, &nentries);
 	if (kp == NULL) {
 		debug("kvm_getprocs: %s", strerror(errno));
-		return (-1);
+		return MISSING_UID;
 	}
 
 	if (getbuf(kinfo->nl[N_TCB].n_value, &tcb, sizeof(tcb)) == -1)
-		return (-1);
+		return MISSING_UID;
 
 #ifdef _HAVE_OLD_INPCB
 	tcb.inp_prev = (struct inpcb *) kinfo->nl[N_TCB].n_value;
@@ -320,7 +321,7 @@ static int get_user(	in_port_t lport,
 				(struct sockaddr *)faddr);
 
 	if (sockp == NULL)
-		return (-1);
+		return MISSING_UID;
 
 	/*
 	** Locate the file descriptor that has the socket in question
@@ -334,7 +335,7 @@ static int get_user(	in_port_t lport,
 			struct filedesc pfd;
 			struct file **ofiles;
 			if (getbuf((u_long) kp[i].ki_fd, &pfd, sizeof(pfd)) == -1)
-				return (-1);
+				return MISSING_UID;
 			ofiles = xmalloc(pfd.fd_nfiles * sizeof(struct file *));
 
 			ret = getbuf((u_long) pfd.fd_ofiles, ofiles,
@@ -342,7 +343,7 @@ static int get_user(	in_port_t lport,
 
 			if (ret == -1) {
 				free(ofiles);
-				return (-1);
+				return MISSING_UID;
 			}
 
 			for (j = 0 ; j < pfd.fd_nfiles ; j++) {
@@ -354,7 +355,7 @@ static int get_user(	in_port_t lport,
 				ret = getbuf((u_long) ofiles[j], &ofile, sizeof(struct file));
 				if (ret == -1) {
 					free(ofiles);
-					return (-1);
+					return MISSING_UID;
 				}
 
 				if (ofile.f_count == 0)
@@ -372,13 +373,18 @@ static int get_user(	in_port_t lport,
 
 			free(ofiles);
 		}
-		
+
 	}
 
-	return (-1);
+	return MISSING_UID;
 }
 
-int get_user4(	in_port_t lport,
+/*
+** Returns the UID of the owner of an IPv4 connection,
+** or MISSING_UID on failure.
+*/
+
+uid_t get_user4(	in_port_t lport,
 				in_port_t fport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
@@ -496,7 +502,12 @@ int masq(	int sock,
 
 #ifdef WANT_IPV6
 
-int get_user6(	in_port_t lport,
+/*
+** Returns the UID of the owner of an IPv6 connection,
+** or MISSING_UID on failure.
+*/
+
+uid_t get_user6(	in_port_t lport,
 				in_port_t fport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)

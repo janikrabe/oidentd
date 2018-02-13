@@ -195,8 +195,9 @@ static struct socket *getlist4(	struct inpcbhead *pcbhead,
 }
 
 /*
-** System dependant initialization. Call only once!
-** On failure, return false.
+** System-dependent initialization; called only once.
+** Called before privileges are dropped.
+** Returns false on failure.
 */
 
 bool core_init(void) {
@@ -204,10 +205,11 @@ bool core_init(void) {
 }
 
 /*
-** Return the UID of the connection owner
+** Returns the UID of the owner of an IPv4 connection,
+** or MISSING_UID on failure.
 */
 
-int get_user4(	in_port_t lport,
+uid_t get_user4(	in_port_t lport,
 				in_port_t fport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
@@ -218,17 +220,17 @@ int get_user4(	in_port_t lport,
 
 	ret = getbuf(kinfo->nl[N_TCB].n_value, &tcb, sizeof(tcb));
 	if (ret == -1)
-		return (-1);
+		return MISSING_UID;
 
 	sockp = getlist4(&tcb, lport, fport,
 				&SIN4(laddr)->sin_addr, &SIN4(faddr)->sin_addr);
 
 	if (sockp == NULL)
-		return (-1);
+		return MISSING_UID;
 
 	ret = getbuf((u_long) sockp, &sock, sizeof(sock));
 	if (ret == -1)
-		return (-1);
+		return MISSING_UID;
 
 	return (sock.so_uid);
 }
@@ -375,10 +377,11 @@ static struct socket *getlist6(	struct inpcbhead *pcbhead,
 }
 
 /*
-** Check ident requests for NAT connection
+** Returns the UID of the owner of an IPv6 connection,
+** or MISSING_UID on failure.
 */
 
-int get_user6(	in_port_t lport,
+uid_t get_user6(	in_port_t lport,
 				in_port_t fport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
@@ -389,17 +392,17 @@ int get_user6(	in_port_t lport,
 
 	ret = getbuf(kinfo->nl[N_TCB6].n_value, &pcb6, sizeof(pcb6));
 	if (ret == -1)
-		return (-1);
+		return MISSING_UID;
 
 	sockp = getlist6(&pcb6, lport, fport,
 				&SIN6(laddr)->sin6_addr, &SIN6(faddr)->sin6_addr);
 
 	if (sockp == NULL)
-		return (-1);
+		return MISSING_UID;
 
 	ret = getbuf((u_long) sockp, &sock, sizeof(sock));
 	if (ret == -1)
-		return (-1);
+		return MISSING_UID;
 
 	return (sock.so_uid);
 }

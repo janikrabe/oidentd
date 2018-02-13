@@ -413,22 +413,12 @@ int o_log(int priority, const char *fmt, ...) {
 
 #ifdef HAVE_LIBUDB
 /*
-** This function will look up the connection in the UDB shared memory tables.
-**
-** Return values:
-**
-**	If an entry is found which matches a local username, the function will
-**	return the matching UID for further processing.
-**
-**	Otherwise, if a non-local match is found, the reply will be sent directly
-**	to the client and -2 returned.
-**
-**	If no match is found, -1 is returned.
+** Look up a connection in the UDB shared memory tables.
 **
 ** This only supports IPv4 right now.
 */
 
-int get_udb_user(	in_port_t lport,
+struct udb_lookup_res get_udb_user(	in_port_t lport,
 					in_port_t fport,
 					const struct sockaddr_storage *laddr,
 					const struct sockaddr_storage *faddr,
@@ -436,13 +426,14 @@ int get_udb_user(	in_port_t lport,
 {
 	struct udb_connection conn;
 	struct udb_conn_user buf;
+	struct udb_lookup_res res = {0, (uid_t) -1};
 	struct passwd *pw;
 	char faddr_buf[MAX_IPLEN];
 	char laddr_buf[MAX_IPLEN];
 	extern char *ret_os;
 
 	if (laddr->ss_family != AF_INET || faddr->ss_family != AF_INET)
-		return (-1);
+		return res;
 
 	memset(&conn, 0, sizeof(conn));
 
@@ -463,12 +454,15 @@ int get_udb_user(	in_port_t lport,
 		faddr_buf, ntohs(conn.to.sin_port));
 
 	if (!udb_conn_get(&conn, &buf))
-		return (-1);
+		return res;
 
 	/* If the user is local, return their UID */
 	pw = getpwnam(buf.username);
-	if (pw != NULL);
-		return (pw->pw_uid);
+	if (pw != NULL) {
+		res.status = 1;
+		res.uid = pw->pw_uid;
+		return res;
+	}
 
 	/* User not local, reply with string from UDB table. */
 	sockprintf(sock, "%d , %d : USERID : %s : %s\r\n",
@@ -477,7 +471,8 @@ int get_udb_user(	in_port_t lport,
 	o_log(NORMAL, "[%s] UDB lookup: %d , %d : (returned %s)",
 		faddr_buf, lport, fport, buf.username);
 
-	return (-2);
+	res.status = 2;
+	return res;
 }
 
 #endif

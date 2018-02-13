@@ -197,8 +197,9 @@ static int getbuf(kvm_t *kd, off_t addr, void *dst, size_t len) {
 }
 
 /*
-** System dependant initialization. Call only once!
-** On failure, return false.
+** System-dependent initialization; called only once.
+** Called before privileges are dropped.
+** Returns false on failure.
 */
 
 bool core_init(void) {
@@ -206,10 +207,11 @@ bool core_init(void) {
 }
 
 /*
-** Return the UID of the connection owner
+** Returns the UID of the owner of an IPv4 connection,
+** or MISSING_UID on failure.
 */
 
-int get_user4(	in_port_t lport,
+uid_t get_user4(	in_port_t lport,
 				in_port_t fport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
@@ -232,7 +234,7 @@ int get_user4(	in_port_t lport,
 #ifdef WANT_IPV6
 		iphash = ((char *) &SIN6(faddr)->sin6_addr) + 12;
 #else
-		return (-1);
+		return MISSING_UID;
 #endif
 
 	/*
@@ -254,14 +256,14 @@ int get_user4(	in_port_t lport,
 	offset %= kinfo->hash_size;
 
 	if (getbuf(kinfo->kd, FANOUT_OFFSET(offset), &tcpb, sizeof(tcpb)) == -1)
-		return (-1);
+		return MISSING_UID;
 
 	if (tcpb == NULL)
-		return (-1);
+		return MISSING_UID;
 
 	while (tcpb != NULL) {
 		if (getbuf(kinfo->kd, (off_t) tcpb, &tb, sizeof(tb)) == -1)
-			return (-1);
+			return MISSING_UID;
 
 		if (lport == tb.tcpb_lport && fport == tb.tcpb_fport) {
 			if (faddr->ss_family == AF_INET) {
@@ -288,28 +290,28 @@ int get_user4(	in_port_t lport,
 	}
 
 	if (tcpb == NULL)
-		return (-1);
+		return MISSING_UID;
 
 	ret = getbuf(kinfo->kd, (off_t) tb.tcpb_tcp + offsetof(tcp_t, tcp_rq),
 			&q, sizeof(q));
 
 	if (ret == -1)
-		return (-1);
+		return MISSING_UID;
 
 	ret = getbuf(kinfo->kd, (off_t) q + offsetof(queue_t, q_stream),
 			&std, sizeof(std));
 
 	if (ret == -1)
-		return (-1);
+		return MISSING_UID;
 
 	/*
-	** at this point std holds the pointer to the stream we're
+	** At this point std holds the pointer to the stream we're
 	** interested in. Now we're going to find the file pointer
 	** that refers to the vnode that refers to this stream stream
 	*/
 
 	if (kvm_setproc(kinfo->kd) != 0)
-		return (-1);
+		return MISSING_UID;
 
 	/*
 	** In Solaris 8, the file lists changed dramatically.
@@ -330,7 +332,7 @@ int get_user4(	in_port_t lport,
 			vnode_t vp;
 
 			if (getbuf(kinfo->kd, addr, &files[0], size) == -1)
-				return (-1);
+				return MISSING_UID;
 
 			for (i = 0 ; i < nread ; i++) {
 				if (files[i].uf_ofile == 0 || files[i].uf_ofile == last)
@@ -339,7 +341,7 @@ int get_user4(	in_port_t lport,
 				last = files[i].uf_ofile;
 
 				if (getbuf(kinfo->kd, (off_t) last, &tf, sizeof(tf)) == -1)
-					return (-1);
+					return MISSING_UID;
 
 				if (tf.f_vnode == NULL)
 					continue;
@@ -350,14 +352,14 @@ int get_user4(	in_port_t lport,
 						sizeof(vp.v_stream));
 
 				if (ret == -1)
-					return (-1);
+					return MISSING_UID;
 
 				if (vp.v_stream == std) {
 					cred_t cr;
 
 					ret = getbuf(kinfo->kd, (off_t) tf.f_cred, &cr, sizeof(cr));
 					if (ret == -1)
-						return (-1);
+						return MISSING_UID;
 
 					return (cr.cr_ruid);
 				}
@@ -368,5 +370,5 @@ int get_user4(	in_port_t lport,
 		}
 	}
 
-	return (-1);
+	return MISSING_UID;
 }

@@ -50,8 +50,9 @@
 #include <oidentd_options.h>
 
 /*
-** System dependant initialization. Call only once!
-** On failure, return false.
+** System-dependent initialization; called only once.
+** Called before privileges are dropped.
+** Returns false on failure.
 */
 
 bool core_init(void) {
@@ -60,7 +61,12 @@ bool core_init(void) {
 
 extern struct sockaddr_storage proxy;
 
-int get_user4(	in_port_t lport,
+/*
+** Returns the UID of the owner of an IPv4 connection,
+** or MISSING_UID on failure.
+*/
+
+uid_t get_user4(	in_port_t lport,
 				in_port_t fport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
@@ -91,7 +97,7 @@ int get_user4(	in_port_t lport,
 
 	if (ret == -1) {
 		debug("sysctlbyname: %s", strerror(errno));
-		return (-1);
+		return MISSING_UID;
 	}
 
 	return (ucred.cr_uid);
@@ -99,7 +105,12 @@ int get_user4(	in_port_t lport,
 
 #ifdef WANT_IPV6
 
-int get_user6(	in_port_t lport,
+/*
+** Returns the UID of the owner of an IPv6 connection,
+** or MISSING_UID on failure.
+*/
+
+uid_t get_user6(	in_port_t lport,
 				in_port_t fport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
@@ -130,7 +141,7 @@ int get_user6(	in_port_t lport,
 
 	if (ret == -1) {
 		debug("sysctlbyname: %s", strerror(errno));
-		return (-1);
+		return MISSING_UID;
 	}
 
 	return (ucred.cr_uid);

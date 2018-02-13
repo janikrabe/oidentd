@@ -107,6 +107,11 @@
 #define PORT_MAX		0xffff
 #define PORT_MIN		1
 
+/*
+** POSIX reserves this UID value for this purpose.
+*/
+#define MISSING_UID		((uid_t) -1)
+
 #define VALID_PORT(p)	(((p) >= PORT_MIN && (((p) & PORT_MAX) == (p))))
 #define ERROR(x)		(opt_enabled(HIDE_ERRORS) ? "UNKNOWN-ERROR" : (x))
 
@@ -160,14 +165,30 @@ struct sockaddr_storage {
 	#define ss_family __ss_family
 #endif
 
+/*
+** System-dependent initialization; called only once.
+** Called before privileges are dropped.
+** Returns false on failure.
+*/
+
 bool core_init(void);
 
-int get_user4(	in_port_t lport,
+/*
+** Returns the UID of the owner of an IPv4 connection,
+** or MISSING_UID on failure.
+*/
+
+uid_t get_user4(	in_port_t lport,
 				in_port_t fport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr);
 
-int get_user6(	in_port_t lport,
+/*
+** Returns the UID of the owner of an IPv6 connection,
+** or MISSING_UID on failure.
+*/
+
+uid_t get_user6(	in_port_t lport,
 				in_port_t fport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr);

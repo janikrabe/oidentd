@@ -207,7 +207,7 @@ int main(int argc, char **argv) {
 static int service_request(int insock, int outsock) {
 	int len;
 	int ret;
-	int con_uid;
+	uid_t con_uid;
 	int lport_temp;
 	int fport_temp;
 	in_port_t lport;
@@ -281,31 +281,33 @@ static int service_request(int insock, int outsock) {
 	fport = (in_port_t) fport_temp;
 
 	/* User ID is unknown. */
-	con_uid = -1;
+	con_uid = MISSING_UID;
 
 #ifdef HAVE_LIBUDB
 	if (opt_enabled(USEUDB)) {
-		con_uid = get_udb_user(lport, fport, &laddr, &faddr, insock);
-		if (con_uid == -2)
+		struct udb_lookup_res udb_res = get_udb_user(
+				lport, fport, &laddr, &faddr, insock);
+		if (udb_res.status == 2)
 			return (0);
+		con_uid = udb_res.uid;
 	}
 #endif
 
-	if (con_uid == -1 && laddr.ss_family == AF_INET)
+	if (con_uid == MISSING_UID && laddr.ss_family == AF_INET)
 		con_uid = get_user4(htons(lport), htons(fport), &laddr, &faddr);
 
 #ifdef WANT_IPV6
-	if (con_uid == -1 && laddr6.ss_family == AF_INET6)
+	if (con_uid == MISSING_UID && laddr6.ss_family == AF_INET6)
 		con_uid = get_user6(htons(lport), htons(fport), &laddr6, &faddr6);
 #endif
 
 	if (opt_enabled(MASQ)) {
-		if (con_uid == -1 && laddr.ss_family == AF_INET)
+		if (con_uid == MISSING_UID && laddr.ss_family == AF_INET)
 			if (masq(insock, htons(lport), htons(fport), &laddr, &faddr) == 0)
 				return (0);
 	}
 
-	if (con_uid == -1) {
+	if (con_uid == MISSING_UID) {
 		if (failuser != NULL) {
 			sockprintf(outsock, "%d,%d:USERID:%s:%s\r\n",
 				lport, fport, ret_os, failuser);

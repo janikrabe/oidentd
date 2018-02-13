@@ -182,8 +182,9 @@ static struct socket *getlist4(	struct inpcbtable *tcbtablep,
 }
 
 /*
-** System dependant initialization. Call only once!
-** On failure, return false.
+** System-dependent initialization; called only once.
+** Called before privileges are dropped.
+** Returns false on failure.
 */
 
 bool core_init(void) {
@@ -191,10 +192,11 @@ bool core_init(void) {
 }
 
 /*
-** Return the UID of the connection owner
+** Returns the UID of the owner of an IPv4 connection,
+** or MISSING_UID on failure.
 */
 
-int get_user4(	in_port_t lport,
+uid_t get_user4(	in_port_t lport,
 				in_port_t fport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
@@ -205,20 +207,20 @@ int get_user4(	in_port_t lport,
 
 	ret = getbuf(kinfo->nl[N_TCB].n_value, &tcbtable, sizeof(tcbtable));
 	if (ret == -1)
-		return (-1);
+		return MISSING_UID;
 
 	sockp = getlist4(&tcbtable,
 				(struct inpcbtable *) kinfo->nl[N_TCB].n_value,
 				lport, fport, &SIN4(laddr)->sin_addr, &SIN4(faddr)->sin_addr);
 
 	if (sockp == NULL)
-		return (-1);
+		return MISSING_UID;
 
 	if (getbuf((u_long) sockp, &sock, sizeof(sock)) == -1)
-		return (-1);
+		return MISSING_UID;
 
 	if (!(sock.so_state & SS_CONNECTOUT))
-		return (-1);
+		return MISSING_UID;
 
 	return (sock.so_ruid);
 }
@@ -329,7 +331,12 @@ int masq(	int sock,
 
 #ifdef WANT_IPV6
 
-int get_user6(	in_port_t lport,
+/*
+** Returns the UID of the owner of an IPv6 connection,
+** or MISSING_UID on failure.
+*/
+
+uid_t get_user6(	in_port_t lport,
 				in_port_t fport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
@@ -348,7 +355,7 @@ int get_user6(	in_port_t lport,
 	fin->sin6_len = sizeof(struct sockaddr_in6);
 
 	if (faddr->ss_len > sizeof(tir.faddr))
-		return (-1);
+		return MISSING_UID;
 
 	memcpy(&fin->sin6_addr, &SIN6(faddr)->sin6_addr, sizeof(tir.faddr));
 	fin->sin6_port = fport;
@@ -358,7 +365,7 @@ int get_user6(	in_port_t lport,
 	lin->sin6_len = sizeof(struct sockaddr_in6);
 
 	if (laddr->ss_len > sizeof(tir.laddr))
-		return (-1);
+		return MISSING_UID;
 
 	memcpy(&lin->sin6_addr, &SIN6(laddr)->sin6_addr, sizeof(tir.laddr));
 	lin->sin6_port = lport;
@@ -372,7 +379,7 @@ int get_user6(	in_port_t lport,
 	if (error == -1)
 		debug("sysctl: %s", strerror(errno));
 
-	return (-1);
+	return MISSING_UID;
 }
 
 #endif

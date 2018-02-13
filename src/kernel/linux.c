@@ -72,10 +72,11 @@ int conntrack = CT_UNKNOWN;
 #endif
 
 /*
-** System dependant initialization. Call only once!
-** On failure, return false.
-** Open connection tracking file before dropping permissions.
+** System-dependent initialization; called only once.
+** Called before privileges are dropped.
+** Returns false on failure.
 */
+
 bool core_init(void) {
 #ifdef MASQ_SUPPORT
 	if (!opt_enabled(MASQ)) {
@@ -123,11 +124,11 @@ bool core_init(void) {
 #ifdef WANT_IPV6
 
 /*
-** Determine the owner of an IPv6 connection.
-** Returns 0 on success, -1 on failure.
+** Returns the UID of the owner of an IPv6 connection,
+** or MISSING_UID on failure.
 */
 
-int get_user6(	in_port_t lport,
+uid_t get_user6(	in_port_t lport,
 				in_port_t fport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
@@ -136,9 +137,9 @@ int get_user6(	in_port_t lport,
 	char buf[1024];
 
 	if (netlink_sock != -1) {
-		int uid = lookup_tcp_diag(laddr, faddr, lport, fport);
+		uid_t uid = lookup_tcp_diag(laddr, faddr, lport, fport);
 
-		if (uid != -1)
+		if (uid != MISSING_UID)
 			return (uid);
 	}
 
@@ -148,7 +149,7 @@ int get_user6(	in_port_t lport,
 	fp = fopen(CFILE6, "r");
 	if (fp == NULL) {
 		debug("fopen: %s: %s", CFILE6, strerror(errno));
-		return (-1);
+		return MISSING_UID;
 	}
 
 	/* Eat the header line. */
@@ -161,12 +162,12 @@ int get_user6(	in_port_t lport,
 		u_int32_t portf_temp;
 		in_port_t portl;
 		in_port_t portf;
-		int uid;
+		uid_t uid;
 		int ret;
 		u_long inode;
 
 		ret = sscanf(buf,
-			"%*d: %8x%8x%8x%8x:%x %8x%8x%8x%8x:%x %*x %*X:%*X %*x:%*X %*x %d %*d %lu",
+			"%*d: %8x%8x%8x%8x:%x %8x%8x%8x%8x:%x %*x %*X:%*X %*x:%*X %*x %u %*d %lu",
 			&local6.s6_addr32[0], &local6.s6_addr32[1], &local6.s6_addr32[2],
 			&local6.s6_addr32[3], &portl_temp,
 			&remote6.s6_addr32[0], &remote6.s6_addr32[1], &remote6.s6_addr32[2],
@@ -187,29 +188,29 @@ int get_user6(	in_port_t lport,
 			fclose(fp);
 
 			if (inode == 0 && uid == 0)
-				return (-1);
+				return MISSING_UID;
 
 			return (uid);
 		}
 	}
 
 	fclose(fp);
-	return (-1);
+	return MISSING_UID;
 }
 
 #endif
 
 /*
-** Determine the owner of an IPv4 connection.
-** Returns 0 on success, -1 on failure.
+** Returns the UID of the owner of an IPv4 connection,
+** or MISSING_UID on failure.
 */
 
-int get_user4(	in_port_t lport,
+uid_t get_user4(	in_port_t lport,
 				in_port_t fport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
 {
-	int uid;
+	uid_t uid;
 	FILE *fp;
 	char buf[1024];
 	u_int32_t inode;
@@ -219,7 +220,7 @@ int get_user4(	in_port_t lport,
 	if (netlink_sock != -1) {
 		uid = lookup_tcp_diag(laddr, faddr, lport, fport);
 
-		if (uid != -1)
+		if (uid != MISSING_UID)
 			return (uid);
 	}
 
@@ -232,7 +233,7 @@ int get_user4(	in_port_t lport,
 	fp = fopen(CFILE, "r");
 	if (fp == NULL) {
 		debug("fopen: %s: %s", CFILE, strerror(errno));
-		return (-1);
+		return MISSING_UID;
 	}
 
 	/* Eat the header line. */
@@ -252,7 +253,7 @@ int get_user4(	in_port_t lport,
 		in_addr_t remote;
 
 		ret = sscanf(buf,
-			"%*d: %x:%x %x:%x %*x %*x:%*x %*x:%*x %*x %d %*d %u",
+			"%*d: %x:%x %x:%x %*x %*x:%*x %*x:%*x %*x %u %*d %u",
 			&local, &portl_temp, &remote, &portf_temp, &uid, &inode);
 
 		if (ret != 6)
@@ -281,7 +282,7 @@ int get_user4(	in_port_t lport,
 	}
 
 	fclose(fp);
-	return (-1);
+	return MISSING_UID;
 
 out_success:
 	fclose(fp);
@@ -293,7 +294,7 @@ out_success:
 	*/
 
 	if (inode == 0 && uid == 0)
-		return (-1);
+		return MISSING_UID;
 
 	return (uid);
 }
@@ -462,7 +463,7 @@ int masq(	int sock,
 
 		/* Local NAT, don't forward or do masquerade entry lookup. */
 		if (localm == remoten) {
-			int con_uid = -1;
+			uid_t con_uid = MISSING_UID;
 			struct passwd *pw;
 			char suser[MAX_ULEN];
 			char ipbuf[MAX_IPLEN];
@@ -470,12 +471,12 @@ int masq(	int sock,
 			sin_setv4(htonl(remotem), &ss);
 			get_ip(faddr, ipbuf, sizeof(ipbuf));
 
-			if (con_uid == -1 && faddr->ss_family == AF_INET)
+			if (con_uid == MISSING_UID && faddr->ss_family == AF_INET)
 				con_uid = get_user4(htons(masq_lport), htons(masq_fport), laddr, &ss);
 
 			/* Add call to get_user6 when IPv6 NAT is supported. */
 
-			if (con_uid == -1)
+			if (con_uid == MISSING_UID)
 				return (-1);
 
 			pw = getpwuid(con_uid);
@@ -483,7 +484,7 @@ int masq(	int sock,
 				sockprintf(sock, "%d,%d:ERROR:%s\r\n",
 					lport, fport, ERROR("NO-USER"));
 
-				debug("getpwuid(%d): %s", con_uid, strerror(errno));
+				debug("getpwuid(%u): %s", con_uid, strerror(errno));
 				return (0);
 			}
 
@@ -563,10 +564,10 @@ out_success:
 ** and distributed with the iproute2 package.
 **
 ** I've made some cleanups, and I've converted the routine to support
-** both ipv4 and ipv6 queries.
+** both IPv4 and IPv6 queries.
 */
 
-static int lookup_tcp_diag(	struct sockaddr_storage *src_addr,
+static uid_t lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 							struct sockaddr_storage *dst_addr,
 							in_port_t src_port,
 							in_port_t dst_port)
@@ -618,7 +619,7 @@ static int lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 			netlink_sock = -1;
 		}
 
-		return (-1);
+		return MISSING_UID;
 	}
 
 	iov[0].iov_base = buf;
@@ -642,11 +643,11 @@ static int lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 			if (errno == EINTR || errno == EAGAIN)
 				continue;
 
-			return (-1);
+			return MISSING_UID;
 		}
 
 		if (ret == 0)
-			return (-1);
+			return MISSING_UID;
 
 		h = (struct nlmsghdr *) buf;
 
@@ -660,7 +661,7 @@ static int lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 			}
 
 			if (h->nlmsg_type == NLMSG_DONE || h->nlmsg_type == NLMSG_ERROR)
-				return (-1);
+				return MISSING_UID;
 
 			r = NLMSG_DATA(h);
 
@@ -670,19 +671,19 @@ static int lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 				!memcmp(r->id.tcpdiag_src, sin_addr(src_addr), addr_len))
 			{
 				if (r->tcpdiag_inode == 0 && r->tcpdiag_uid == 0)
-					return (-1);
+					return MISSING_UID;
 
 				return (r->tcpdiag_uid);
 			}
 
-			return (-1);
+			return MISSING_UID;
 		}
 
 		if ((msghdr.msg_flags & MSG_TRUNC) || uret != 0)
-			return (-1);
+			return MISSING_UID;
 	}
 
-	return (-1);
+	return MISSING_UID;
 }
 
 /*

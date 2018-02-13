@@ -54,8 +54,9 @@
 #include <oidentd_options.h>
 
 /*
-** System dependant initialization. Call only once!
-** On failure, return false.
+** System-dependent initialization; called only once.
+** Called before privileges are dropped.
+** Returns false on failure.
 */
 
 bool core_init(void) {
@@ -67,17 +68,18 @@ int k_open(void) {
 }
 
 /*
-** Return the UID of the connection owner
+** Returns the UID of the owner of an IPv4 connection,
+** or MISSING_UID on failure.
 */
 
-int get_user4(	in_port_t lport,
+uid_t get_user4(	in_port_t lport,
 				in_port_t fport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
 {
 	int mib[] = { CTL_NET, PF_INET, IPPROTO_TCP, TCPCTL_IDENT };
 	struct sockaddr_storage ss[2];
-	int uid = -1;
+	uid_t uid = MISSING_UID;
 	size_t uidlen;
 	size_t sslen;
 	int error;
@@ -90,25 +92,30 @@ int get_user4(	in_port_t lport,
 	sslen = sizeof(ss);
 	error = sysctl(mib, sizeof(mib) / sizeof(int), &uid, &uidlen, ss, sslen);
 
-	if (error == 0 && uid != -1)
+	if (error == 0 && uid != MISSING_UID)
 		return uid;
 
 	if (error == -1)
 		debug("sysctl: %s", strerror(errno));
 
-	return (-1);
+	return MISSING_UID;
 }
 
 #ifdef WANT_IPV6
 
-int get_user6(	in_port_t lport,
+/*
+** Returns the UID of the owner of an IPv6 connection,
+** or MISSING_UID on failure.
+*/
+
+uid_t get_user6(	in_port_t lport,
 				in_port_t fport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
 {
 	int mib[] = { CTL_NET, PF_INET6, IPPROTO_TCP, TCPCTL_IDENT };
 	struct sockaddr_storage ss[2];
-	int uid = -1;
+	int uid = MISSING_UID;
 	size_t uidlen;
 	size_t sslen;
 	int error;
@@ -117,17 +124,17 @@ int get_user6(	in_port_t lport,
 	memcpy(&ss[1], laddr, sizeof(ss[1]));
 	SIN6(&ss[0])->sin6_port = fport;
 	SIN6(&ss[1])->sin6_port = lport;
-	uidlen = sizeof(int);
+	uidlen = sizeof(uid);
 	sslen = sizeof(ss);
 	error = sysctl(mib, sizeof(mib) / sizeof(int), &uid, &uidlen, ss, sslen);
 
-	if (error == 0 && uid != -1)
+	if (error == 0 && uid != MISSING_UID)
 		return uid;
 
 	if (error == -1)
 		debug("sysctl: %s", strerror(errno));
 
-	return (-1);
+	return MISSING_UID;
 }
 
 #endif
