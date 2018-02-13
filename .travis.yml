@@ -1,12 +1,6 @@
 language: c
 
-os:
-  - linux
-  - osx
-
 matrix:
-  allow_failures:
-    - os: osx
   include:
     - os: linux
       addons:
@@ -20,7 +14,7 @@ matrix:
     - os: osx
       osx_image: xcode8
       env:
-        - MATRIX_EVAL="brew install gcc && CC=gcc-7 && CXX=g++-7"
+        - MATRIX_EVAL="brew update && brew install gcc && CC=gcc-7 && CXX=g++-7"
 
 before_install:
   - eval "${MATRIX_EVAL}"
