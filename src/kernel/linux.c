@@ -303,10 +303,10 @@ out_success:
 
 /*
 ** Handle a request to a host that's IP masquerading through us.
-** Returns 0 on success, -1 on failure.
+** Returns true on success, false on failure.
 */
 
-int masq(	int sock,
+bool masq(	int sock,
 			in_port_t lport,
 			in_port_t fport,
 			struct sockaddr_storage *laddr,
@@ -319,14 +319,14 @@ int masq(	int sock,
 	*/
 
 	if (faddr->ss_family != AF_INET)
-		return (-1);
+		return false;
 
 	lport = ntohs(lport);
 	fport = ntohs(fport);
 
 	/* masq support failed to initialize */
 	if (masq_fp == NULL || conntrack == CT_UNKNOWN)
-		return (-1);
+		return false;
 
 	/* rewind fp to read new contents */
 	rewind(masq_fp);
@@ -477,7 +477,7 @@ int masq(	int sock,
 			/* Add call to get_user6 when IPv6 NAT is supported. */
 
 			if (con_uid == MISSING_UID)
-				return (-1);
+				return false;
 
 			pw = getpwuid(con_uid);
 			if (pw == NULL) {
@@ -485,7 +485,7 @@ int masq(	int sock,
 					lport, fport, ERROR("NO-USER"));
 
 				debug("getpwuid(%u): %s", con_uid, strerror(errno));
-				return (0);
+				return true;
 			}
 
 			ret = get_ident(pw, masq_lport, masq_fport, laddr, &ss, suser, sizeof(suser));
@@ -550,10 +550,10 @@ int masq(	int sock,
 		}
 	}
 
-	return (-1);
+	return false;
 
 out_success:
-	return (0);
+	return true;
 }
 
 #endif

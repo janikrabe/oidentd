@@ -142,17 +142,18 @@ uid_t get_user6(	in_port_t lport,
 #ifdef MASQ_SUPPORT
 
 /*
-** Check ident requests for NAT connection
+** Handle a request to a host that's IP masquerading through us.
+** Returns true on success, false on failure.
 */
 
-int masq(	int sock,
+bool masq(	int sock,
 			in_port_t lport,
 			in_port_t fport,
 			struct sockaddr_storage *laddr,
 			struct sockaddr_storage *faddr)
 {
 	// TODO Not yet implemented.
-	return (-1);
+	return false;
 }
 
 #endif

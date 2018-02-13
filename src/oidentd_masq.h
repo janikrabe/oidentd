@@ -36,7 +36,7 @@ int fwd_request(int sock,
 
 #endif
 
-int masq(	int sock,
+bool masq(	int sock,
 			in_port_t lport,
 			in_port_t fport,
 			struct sockaddr_storage *laddr,

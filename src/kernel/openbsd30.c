@@ -114,7 +114,12 @@ uid_t get_user4(	in_port_t lport,
 
 #ifdef MASQ_SUPPORT
 
-int masq(	int sock,
+/*
+** Handle a request to a host that's IP masquerading through us.
+** Returns true on success, false on failure.
+*/
+
+bool masq(	int sock,
 			in_port_t lport,
 			in_port_t fport,
 			struct sockaddr_storage *laddr,
@@ -135,12 +140,12 @@ int masq(	int sock,
 	*/
 
 	if (faddr->ss_family != AF_INET || laddr->ss_family != AF_INET)
-		return (-1);
+		return false;
 
 	pfdev = open("/dev/pf", O_RDWR);
 	if (pfdev == -1) {
 		debug("open: %s", strerror(errno));
-		return (-1);
+		return false;
 	}
 
 	memset(&natlook, 0, sizeof(struct pfioc_natlook));
@@ -159,7 +164,7 @@ int masq(	int sock,
 
 	if (ioctl(pfdev, DIOCNATLOOK, &natlook) != 0) {
 		debug("ioctl: %s", strerror(errno));
-		return (-1);
+		return false;
 	}
 
 	fport = ntohs(fport);
@@ -175,7 +180,7 @@ int masq(	int sock,
 		retf = fwd_request(sock, lport, masq_lport, fport, masq_fport, &ss);
 		if (retf == 0) {
 			if (retm != 0)
-				return (0);
+				return true;
 		} else {
 			char ipbuf[MAX_IPLEN];
 
@@ -197,10 +202,10 @@ int masq(	int sock,
 				"[%s] (NAT) Successful lookup: %d , %d : %s",
 				ipbuf, lport, fport, user);
 
-		return (0);
+		return true;
 	}
 
-	return (-1);
+	return false;
 }
 
 #endif

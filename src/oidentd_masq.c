@@ -338,16 +338,17 @@ static void fwd_alarm(int sig) {
 #else
 
 /*
-** Define a stub masq function.
+** Handle a request to a host that's IP masquerading through us.
+** Returns true on success, false on failure.
 */
 
-int masq(	int sock __notused,
+bool masq(	int sock __notused,
 			in_port_t lport __notused,
 			in_port_t fport __notused,
 			struct sockaddr_storage *local __notused,
 			struct sockaddr_storage *remote __notused)
 {
-	return (-1);
+	return false;
 }
 
 #endif
