@@ -70,6 +70,9 @@ static int setup_bind(const struct addrinfo *ai, in_port_t listen_port) {
 		case AF_INET:
 			SIN4(ai->ai_addr)->sin_port = listen_port;
 			break;
+		default:
+			debug("address family %d not supported", ai->ai_family);
+			return (-1);
 	}
 
 	ret = setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one));
@@ -118,6 +121,11 @@ int *setup_listen(struct sockaddr_storage **listen_addr, in_port_t listen_port) 
 				case AF_INET:
 					cur->ai_addrlen = sizeof(struct sockaddr_in);
 					break;
+				default:
+					debug("address family %d not supported", cur->ai_family);
+					free(cur);
+					free(listen_addr[naddr]);
+					return (NULL);
 			}
 
 			cur->ai_addr = xmalloc(cur->ai_addrlen);
