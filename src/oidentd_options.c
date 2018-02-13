@@ -333,7 +333,7 @@ int get_options(int argc, char *const argv[]) {
 
 			case 'v':
 				print_version();
-				return (-1);
+				exit(EXIT_SUCCESS);
 
 			case 'h':
 				print_usage();
