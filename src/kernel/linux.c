@@ -55,7 +55,7 @@ static int netlink_sock;
 extern struct sockaddr_storage proxy;
 extern char *ret_os;
 
-static int lookup_tcp_diag(	struct sockaddr_storage *src_addr,
+static uid_t lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 							struct sockaddr_storage *dst_addr,
 							in_port_t src_port,
 							in_port_t dst_port);
