@@ -57,7 +57,7 @@
 #include <oidentd_missing.h>
 #include <oidentd_masq.h>
 #include <oidentd_options.h>
-	
+
 extern struct sockaddr_storage proxy;
 
 #define N_TCB			0
