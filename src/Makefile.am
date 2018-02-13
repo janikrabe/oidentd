@@ -8,14 +8,6 @@ AM_CPPFLAGS = "-Imissing"
 
 EXTRA_DIST = kernel
 
-AM_TESTS_FD_REDIRECT = 9>&2
-AM_TESTS_ENVIRONMENT = \
-	. $(srcdir)/../test/env.sh; \
-	if test -d /usr/xpg4/bin; then \
-		PATH=/usr/xpg4/bin:$$PATH; export PATH; \
-	fi;
-TESTS = ../test/version.sh
-
 DISTCLEANFILES = \
 	os.c
 

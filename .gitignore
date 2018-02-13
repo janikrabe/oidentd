@@ -1,8 +1,6 @@
 # http://www.gnu.org/software/automake
 Makefile
 Makefile.in
-*.log
-*.trs
 /ar-lib
 /dist
 /mdate-sh
