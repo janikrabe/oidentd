@@ -261,6 +261,7 @@ int get_options(int argc, char *const argv[]) {
 				}
 
 				connection_limit = temp_limit;
+				break;
 			}
 
 			case 'o':
