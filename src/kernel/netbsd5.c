@@ -115,7 +115,7 @@ uid_t get_user6(	in_port_t lport,
 {
 	int mib[] = { CTL_NET, PF_INET6, IPPROTO_TCP, TCPCTL_IDENT };
 	struct sockaddr_storage ss[2];
-	int uid = MISSING_UID;
+	uid_t uid = MISSING_UID;
 	size_t uidlen;
 	size_t sslen;
 	int error;
