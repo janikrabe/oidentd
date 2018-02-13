@@ -407,7 +407,7 @@ case "$host_os" in
 	;;
 
 	*darwin* )
-		CFLAGS="-no-cpp-precomp $CFLAGS"
+		CFLAGS="$CFLAGS"
 		use_kmem=yes
 		os_src=darwin.c
 		if test "$ac_cv_ipf_nat_p" = "no"; then
