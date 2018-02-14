@@ -6,17 +6,16 @@ find . \( -name .deps -or -name Makefile -or -name Makefile.in -or -name \*.o -o
 	aclocal.m4	\
 	autom4te.cache	\
 	configure	\
-	config.sub	\
-	config.status	\
-	config.log	\
+	config.guess	\
 	config.h	\
 	config.h.in	\
 	config.h.in~	\
-	config.guess	\
+	config.log	\
+	config.status	\
+	config.sub	\
 	depcomp		\
 	dist		\
 	install-sh	\
-	mkinstalldirs	\
 	missing		\
 	src/oidentd	\
 	src/os.c	\
