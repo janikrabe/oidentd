@@ -100,12 +100,11 @@ bool core_init(void) {
 
 			masq_fp = fopen(IPCONNTRACK, "r");
 			if (masq_fp == NULL) {
-				if (errno != ENOENT) {
+				if (errno != ENOENT)
 					o_log(LOG_CRIT, "fopen: %s: %s", IPCONNTRACK, strerror(errno));
-					return false;
-				}
 
-				masq_fp = fopen("/dev/null", "r");
+				o_log(LOG_CRIT, "NAT/IP masquerading is not supported on this system");
+				return false;
 			} else {
 				conntrack = CT_IPCONNTRACK;
 			}
@@ -116,7 +115,6 @@ bool core_init(void) {
 		conntrack = CT_MASQFILE;
 	}
 #endif
-
 	return true;
 }
 
@@ -323,10 +321,6 @@ bool masq(	int sock,
 
 	lport = ntohs(lport);
 	fport = ntohs(fport);
-
-	/* masq support failed to initialize */
-	if (masq_fp == NULL || conntrack == CT_UNKNOWN)
-		return false;
 
 	/* rewind fp to read new contents */
 	rewind(masq_fp);
