@@ -35,20 +35,23 @@ ADD_LIB=""
 use_kmem=no
 
 masq_support=yes
-AC_ARG_ENABLE(masq, [  --disable-masq          Disable NAT/IP masquerading support])
+AC_ARG_ENABLE(masq,
+[  --disable-masq          disable NAT/IP masquerading support])
 if test "$enableval" = "no"; then
 	masq_support=no
 fi
 
 enableval=""
-AC_ARG_ENABLE(nat, [  --disable-nat           Disable NAT/IP masquerading support])
+AC_ARG_ENABLE(nat,
+[  --disable-nat           disable NAT/IP masquerading support])
 if test "$enableval" = "no"; then
 	masq_support=no
 fi
 
 enableval=""
 ipv6_support=yes
-AC_ARG_ENABLE(ipv6, [  --disable-ipv6          Disable IPv6 support])
+AC_ARG_ENABLE(ipv6,
+[  --disable-ipv6          disable IPv6 support])
 if test "$enableval" = "no"; then
 	ipv6_support=no
 fi
@@ -56,7 +59,7 @@ fi
 
 enableval=""
 AC_ARG_ENABLE(debug,
-[  --enable-debug          Enable debugging])
+[  --enable-debug          enable debugging support])
 if test "$enableval" = "yes"; then
 	AC_DEFINE(ENABLE_DEBUGGING, 1, [Define to enable debugging])
 	DEBUG_CFLAGS="-O0 -fvar-tracking -g3 -ggdb"
@@ -64,7 +67,7 @@ fi
 
 enableval=""
 AC_ARG_ENABLE(warn,
-[  --enable-warn		  Enable a bunch of compiler warnings])
+[  --enable-warn           enable a variety of compiler warnings])
 if test "$enableval" = "yes"; then
 	WARN_CFLAGS="-O3 -ggdb -fstack-protector -fstrict-aliasing -W -Wall -Wextra -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wdeclaration-after-statement -Wredundant-decls -Wmissing-format-attribute -Wmissing-noreturn -Wstrict-aliasing=2 -Wlong-long -Wcomment -Wunreachable-code -Wswitch-enum -Wswitch-default -Wvolatile-register-var -Wformat=2 -Winit-self -Winvalid-pch -Winline -Wpointer-arith -Wbad-function-cast -Wcast-align -Wchar-subscripts -Wunsafe-loop-optimizations -Wdisabled-optimization -Wwrite-strings -Wsign-compare -Wconversion -Wmissing-field-initializers -Wnested-externs -Wstack-protector -Wunused-macros -Wendif-labels -Wno-cast-qual"
 fi
@@ -118,46 +121,46 @@ if test "$ac_cv_type_u_int8_t" = "no"; then
 fi
 
 AC_MSG_CHECKING(for AF_INET6)
-AC_TRY_COMPILE([#include <unistd.h>
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <unistd.h>
 				#include <sys/types.h>
 				#include <sys/socket.h>
 				#include <netdb.h>
 				#include <netinet/in_systm.h>
 				#include <netinet/in.h>],
-					[AF_INET6+1;],
+					[AF_INET6+1;])],
 			[AC_MSG_RESULT(yes)],
 			[AC_DEFINE(AF_INET6, 10, [Define if AF_INET6 is missing])
 			AC_MSG_RESULT(no)])
 
 AC_MSG_CHECKING(for socklen_t)
-AC_TRY_COMPILE([#include <unistd.h>
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <unistd.h>
 				#include <sys/types.h>
 				#include <sys/socket.h>],
-					[sizeof(socklen_t);],
+					[sizeof(socklen_t);])],
 			[AC_MSG_RESULT(yes)],
 			[AC_DEFINE(socklen_t, int, [Define to int if socklen_t is missing])
 			AC_MSG_RESULT(no)])
 
 AC_MSG_CHECKING(for in_addr_t)
-AC_TRY_COMPILE([#include <unistd.h>
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <unistd.h>
 				#include <sys/types.h>
 				#include <sys/socket.h>
 				#include <netdb.h>
 				#include <netinet/in_systm.h>
 				#include <netinet/in.h>],
-					[sizeof(in_addr_t);],
+					[sizeof(in_addr_t);])],
 			[AC_MSG_RESULT(yes)],
 			[AC_DEFINE(in_addr_t, unsigned int, [Define to unsigned int if in_addr_t is missing])
 			AC_MSG_RESULT(no)])
 
 AC_MSG_CHECKING(for in_port_t)
-AC_TRY_COMPILE([#include <unistd.h>
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <unistd.h>
 				#include <sys/types.h>
 				#include <sys/socket.h>
 				#include <netdb.h>
 				#include <netinet/in_systm.h>
 				#include <netinet/in.h>],
-					[sizeof(in_port_t);],
+					[sizeof(in_port_t);])],
 			[AC_MSG_RESULT(yes)],
 			[AC_DEFINE(in_port_t, unsigned short, [Define to unsigned short if in_port_t is missing])
 			AC_MSG_RESULT(no)])
@@ -166,25 +169,25 @@ AC_CHECK_SIZEOF(void *)
 AC_DEFINE_UNQUOTED(SIZEOF_VOID_P, $ac_cv_sizeof_void_p, [Size of the 'void *' type])
 
 AC_MSG_CHECKING(for __attribute__ unused)
-AC_TRY_COMPILE([#include <stdlib.h>],
-			[int x __attribute__((unused));],
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <stdlib.h>],
+			[int x __attribute__((unused));])],
 			[AC_MSG_RESULT(yes)
 			AC_DEFINE(HAVE___ATTRIBUTE__UNUSED, 1, [Define if your compiler has __attribute__ unused])],
 			[AC_MSG_RESULT(no)])
 
 AC_MSG_CHECKING(for __attribute__ noreturn)
-AC_TRY_COMPILE([#include <stdlib.h>],
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <stdlib.h>],
 			[ exit(0); } static void foo(void) __attribute__((noreturn));
-			static void foo(void) {exit(0); ],
+			static void foo(void) {exit(0); ])],
 			[AC_MSG_RESULT(yes)
 			AC_DEFINE(HAVE___ATTRIBUTE__NORETURN, 1, [Define if your compiler has __attribute__ noreturn])],
 			[AC_MSG_RESULT(no)])
 
 AC_MSG_CHECKING(for __attribute__ format)
-AC_TRY_COMPILE([#include <stdlib.h>
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <stdlib.h>
 				#include <stdarg.h>],
 			[ exit(0); } static int foo(char *fmt, ...) __attribute__((format (printf, 1, 2)));
-			static int foo(char *fmt, ...) { ],
+			static int foo(char *fmt, ...) { ])],
 			[AC_MSG_RESULT(yes)
 			AC_DEFINE(HAVE___ATTRIBUTE__FORMAT, 1, [Define if your compiler has __attribute__ format])],
 			[AC_MSG_RESULT(no)])
@@ -217,9 +220,9 @@ AC_CHECK_FUNC(inet_ntop, AC_DEFINE(HAVE_INET_NTOP, 1, [Define to 1 if you have t
 AC_CHECK_LIB(udb, main)
 
 AC_MSG_CHECKING(for struct sockaddr_storage)
-AC_TRY_COMPILE(	[	#include <sys/types.h>
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 					#include <sys/socket.h>],
-				[ struct sockaddr_storage ss; ],
+				[ struct sockaddr_storage ss; ])],
 				[ have_sockaddr_storage=yes ],
 				[ have_sockaddr_storage=no ])
 AC_MSG_RESULT($have_sockaddr_storage)
@@ -228,20 +231,20 @@ if test "$have_sockaddr_storage" = "yes"; then
 	AC_DEFINE(HAVE_STRUCT_SOCKADDR_STORAGE, 1, [Define to 1 if you have struct sockaddr_storage])
 
 	AC_MSG_CHECKING(for ss_family member in struct sockaddr_storage)
-	AC_TRY_COMPILE(	[	#include <sys/types.h>
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 						#include <sys/socket.h>],
 					[ size_t test =
-						sizeof(((struct sockaddr_storage *)0)->ss_family);],
+						sizeof(((struct sockaddr_storage *)0)->ss_family);])],
 					[ have_ss_family=yes ],
 					[ have_ss_family=no ])
 	AC_MSG_RESULT($have_ss_family)
 
 	if test "$have_ss_family" = "no"; then
 		AC_MSG_CHECKING(for __ss_family member in struct sockaddr_storage)
-		AC_TRY_COMPILE(	[	#include <sys/types.h>
+		AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 							#include <sys/socket.h>],
 						[ size_t test =
-							sizeof(((struct sockaddr_storage *)0)->__ss_family);],
+							sizeof(((struct sockaddr_storage *)0)->__ss_family);])],
 						[ have_ss_family=yes ],
 						[ have_ss_family=no ])
 		AC_MSG_RESULT($have_ss_family)
@@ -253,9 +256,9 @@ if test "$have_sockaddr_storage" = "yes"; then
 fi
 
 AC_MSG_CHECKING(for struct sockaddr_in6)
-AC_TRY_COMPILE(	[	#include <sys/types.h>
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 					#include <netinet/in.h>],
-				[ struct sockaddr_in6 s; ],
+				[ struct sockaddr_in6 s; ])],
 				[ have_sockaddr_in6=yes ],
 				[ have_sockaddr_in6=no ])
 AC_MSG_RESULT($have_sockaddr_in6)
@@ -265,9 +268,9 @@ if test "$have_sockaddr_in6" = "yes"; then
 fi
 
 AC_MSG_CHECKING(for struct in6_addr)
-AC_TRY_COMPILE(	[	#include <sys/types.h>
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 					#include <netinet/in.h>],
-				[ struct in6_addr s; ],
+				[ struct in6_addr s; ])],
 				[ have_in6_addr=yes ],
 				[ have_in6_addr=no ])
 AC_MSG_RESULT($have_in6_addr)
@@ -277,11 +280,11 @@ if test "$have_in6_addr" = "yes"; then
 fi
 
 AC_MSG_CHECKING(for struct addrinfo)
-AC_TRY_COMPILE( [	#include <sys/types.h>
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 					#include <sys/socket.h>
 					#include <netdb.h>],
 				[ size_t test =
-					sizeof(((struct addrinfo *)0)->ai_flags);],
+					sizeof(((struct addrinfo *)0)->ai_flags);])],
 				[ have_struct_addrinfo=yes ],
 				[ have_struct_addrinfo=no ])
 AC_MSG_RESULT($have_struct_addrinfo)
@@ -349,7 +352,7 @@ if test "$masq_support" = "yes"; then
 
 	AC_MSG_CHECKING(if nat_t has nat_p member)
 	AC_CACHE_VAL(ac_cv_ipf_nat_p,
-		AC_TRY_COMPILE(
+		AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
 			[
 				#include <sys/types.h>
 				#include <sys/socket.h>
@@ -375,7 +378,7 @@ if test "$masq_support" = "yes"; then
 				#include <netinet/ip_fil.h>
 				#include <netinet/ip_nat.h>
 			],
-			[int i = sizeof(((nat_t *)0)->nat_p);],
+			[int i = sizeof(((nat_t *)0)->nat_p);])],
 			ac_cv_ipf_nat_p=yes,
 			ac_cv_ipf_nat_p=no))
 	AC_MSG_RESULT($ac_cv_ipf_nat_p)
