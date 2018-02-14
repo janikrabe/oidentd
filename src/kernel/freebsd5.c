@@ -483,7 +483,7 @@ bool masq(	int sock,
 		if (retm == 0) {
 			char ipbuf[MAX_IPLEN];
 
-			sockprintf(sock, "%d , %d : USERID : %s : %s\r\n",
+			sockprintf(sock, "%d,%d:USERID:%s:%s\r\n",
 				lport, fport, os, user);
 
 			get_ip(faddr, ipbuf, sizeof(ipbuf));
