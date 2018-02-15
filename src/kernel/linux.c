@@ -100,11 +100,13 @@ bool core_init(void) {
 
 			masq_fp = fopen(IPCONNTRACK, "r");
 			if (masq_fp == NULL) {
-				if (errno != ENOENT)
+				if (errno != ENOENT) {
 					o_log(LOG_CRIT, "fopen: %s: %s", IPCONNTRACK, strerror(errno));
+					return false;
+				}
 
 				o_log(LOG_CRIT, "NAT/IP masquerading is not supported on this system");
-				return false;
+				disable_opt(MASQ);
 			} else {
 				conntrack = CT_IPCONNTRACK;
 			}
@@ -115,6 +117,7 @@ bool core_init(void) {
 		conntrack = CT_MASQFILE;
 	}
 #endif
+
 	return true;
 }
 
