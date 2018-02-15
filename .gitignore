@@ -1,3 +1,6 @@
+# Backup files
+*~
+
 # http://www.gnu.org/software/automake
 Makefile
 Makefile.in
@@ -18,7 +21,6 @@ Makefile.in
 /config.guess
 /config.h
 /config.h.in
-/config.h.in~
 /config.status
 /config.sub
 /configure
@@ -47,6 +49,7 @@ autom4te.cache
 *.a
 *.d
 *.o
+*.tar.gz
 
 # Generated source files and executables
 src/oidentd
