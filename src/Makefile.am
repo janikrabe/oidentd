@@ -1,5 +1,6 @@
 SUBDIRS = missing
 sbin_PROGRAMS = oidentd
+sysconf_DATA = oidentd.conf
 
 oidentd_LDADD = -Lmissing -lmissing $(ADD_LIB)
 
