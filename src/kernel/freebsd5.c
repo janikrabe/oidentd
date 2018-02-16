@@ -64,12 +64,12 @@
 #	include <netinet/ip_nat.h>
 #endif
 
-#include <oidentd.h>
-#include <oidentd_util.h>
-#include <oidentd_inet_util.h>
-#include <oidentd_missing.h>
-#include <oidentd_options.h>
-#include <oidentd_masq.h>
+#include "oidentd.h"
+#include "util.h"
+#include "inet_util.h"
+#include "missing.h"
+#include "options.h"
+#include "masq.h"
 
 extern struct sockaddr_storage proxy;
 

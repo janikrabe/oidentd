@@ -39,11 +39,11 @@
 #include <netinet/tcp_timer.h>
 #include <netinet/tcp_var.h>
 
-#include <oidentd.h>
-#include <oidentd_util.h>
-#include <oidentd_inet_util.h>
-#include <oidentd_missing.h>
-#include <oidentd_options.h>
+#include "oidentd.h"
+#include "util.h"
+#include "inet_util.h"
+#include "missing.h"
+#include "options.h"
 
 extern struct sockaddr_storage proxy;
 

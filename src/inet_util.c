@@ -36,11 +36,11 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#include <oidentd.h>
-#include <oidentd_util.h>
-#include <oidentd_missing.h>
-#include <oidentd_inet_util.h>
-#include <oidentd_options.h>
+#include "oidentd.h"
+#include "util.h"
+#include "missing.h"
+#include "inet_util.h"
+#include "options.h"
 
 static int setup_bind(const struct addrinfo *ai, in_port_t listen_port);
 

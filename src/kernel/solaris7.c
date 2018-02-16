@@ -61,10 +61,10 @@
 #include <inet/common.h>
 #include <inet/ip.h>
 
-#include <oidentd.h>
-#include <oidentd_util.h>
-#include <oidentd_inet_util.h>
-#include <oidentd_missing.h>
+#include "oidentd.h"
+#include "util.h"
+#include "inet_util.h"
+#include "missing.h"
 
 #define FANOUT_OFFSET(n)	(kip->nl[N_FANOUT].n_value + (n) * sizeof(icf_t) + offsetof(icf_t, icf_ipc))
 

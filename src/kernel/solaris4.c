@@ -50,10 +50,10 @@
 #include <syslog.h>
 #include <pwd.h>
 
-#include <oidentd.h>
-#include <oidentd_util.h>
-#include <oidentd_inet_util.h>
-#include <oidentd_missing.h>
+#include "oidentd.h"
+#include "util.h"
+#include "inet_util.h"
+#include "missing.h"
 
 #define N_FANOUT		0
 #define N_PRACTIVE		1

@@ -37,7 +37,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#include <oidentd_missing.h>
+#include "missing.h"
 
 #ifndef HAVE_GAI_STRERROR
 

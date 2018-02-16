@@ -40,11 +40,11 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#include <oidentd.h>
-#include <oidentd_util.h>
-#include <oidentd_inet_util.h>
-#include <oidentd_missing.h>
-#include <oidentd_options.h>
+#include "oidentd.h"
+#include "util.h"
+#include "inet_util.h"
+#include "missing.h"
+#include "options.h"
 
 #ifdef HAVE_LIBUDB
 #	include <udb.h>

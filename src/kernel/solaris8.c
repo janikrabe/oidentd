@@ -63,10 +63,10 @@
 #include <netinet/ip6.h>
 #include <net/if.h>
 
-#include <oidentd.h>
-#include <oidentd_util.h>
-#include <oidentd_inet_util.h>
-#include <oidentd_missing.h>
+#include "oidentd.h"
+#include "util.h"
+#include "inet_util.h"
+#include "missing.h"
 
 typedef struct hashentry {
 	tcpb_t		*he_tcp;

@@ -37,12 +37,12 @@
 #	include <udb.h>
 #endif
 
-#include <oidentd.h>
-#include <oidentd_util.h>
-#include <oidentd_missing.h>
-#include <oidentd_inet_util.h>
-#include <oidentd_masq.h>
-#include <oidentd_options.h>
+#include "oidentd.h"
+#include "util.h"
+#include "missing.h"
+#include "inet_util.h"
+#include "masq.h"
+#include "options.h"
 
 struct sockaddr_storage proxy;
 

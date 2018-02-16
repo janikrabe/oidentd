@@ -34,12 +34,12 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#include <oidentd.h>
-#include <oidentd_util.h>
-#include <oidentd_missing.h>
-#include <oidentd_inet_util.h>
-#include <oidentd_user_db.h>
-#include <oidentd_options.h>
+#include "oidentd.h"
+#include "util.h"
+#include "missing.h"
+#include "inet_util.h"
+#include "user_db.h"
+#include "options.h"
 
 extern struct user_info *default_user;
 extern u_int32_t current_line;

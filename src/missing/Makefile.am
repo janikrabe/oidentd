@@ -12,4 +12,4 @@ libmissing_a_SOURCES = \
 
 noinst_HEADERS = \
 	getopt_missing.h	\
-	oidentd_missing.h
+	missing.h

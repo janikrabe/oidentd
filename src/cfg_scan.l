@@ -33,12 +33,12 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#include <oidentd.h>
-#include <oidentd_util.h>
-#include <oidentd_missing.h>
-#include <oidentd_user_db.h>
-#include <oidentd_options.h>
-#include <oidentd_cfg_parse.h>
+#include "oidentd.h"
+#include "util.h"
+#include "missing.h"
+#include "user_db.h"
+#include "options.h"
+#include "cfg_parse.h"
 
 #define STRING_CHUNK_LEN 256
 
