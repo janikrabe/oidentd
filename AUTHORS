@@ -1,24 +1,52 @@
 Bjarni R. Einarsson <bre at mmedia.is>
-	libudb support.
-      
+	Support for libudb
+
+Chris Taylor <chris@equate.dyndns.org>
+	Linux masquerading improvements
+
 Christof Douma <christof@douma.eu.org>
-	netfilter premissions fix
+	Linux netfilter permissions fix
 
 Daniel Brafford <pod@charter.net>
-	Initial IPv6 support, Initial IPv6 support on Linux.
+	Initial IPv6 support and IPv6 implementation for Linux
+
+Fabian Knittel <fabien.knittel@avona.com>
+	Bind to IPv6 socket by default
 
 Guus Sliepen <sliepen@phys.uu.nl>
-	Initial netfilter (Linux >= 2.3 Support).
+	Initial netfilter (Linux >= 2.3 Support)
+
+Jan Rękorajski <baggins@pld-linux.org>
+	Allow listening on multiple IPs
 
 Janik Rabe <info@janikrabe.com>
-	Maintainer
-	Bugfixes
+	Everything else (project maintainer)
+
+Joerg Sonnenberger <joerg@bec.de>
+	Initial DragonFly BSD support
+
+Johnny A. Solbu <johnny@solbu.net>
+	Various improvements to the build system
 
 Kamil Andrusz <wizz@mniam.net>
-	OpenBSD >= 3.0 Packet Filter support.
+	OpenBSD >= 3.0 Packet Filter support
+
+Kufat <kufat@kufat.net>
+	Compatibility of inline functions with C99
+
+Matthias Scheler <tron@NetBSD.org>
+	Replace hardcoded configuration file path
+
+Petr Písař <ppisar@redhat.com>
+	Linux masquerading improvements
 
 Ryan McCabe <ryan@numb.org>
-	Everything else.
+	Everything else (original author)
+
+Simon Arlott <oidentd@fire.lp0.eu>
+	Local NAT support for Linux
+	Linux nf_conntrack support
+	MASQ_OVERRIDE (--forward-last) option
 
 Slawomir Piotrowski <slawek@telsatgp.com.pl>
-	IP masq (NAT) support for OpenBSD.
+	IP masquerading (NAT) support for OpenBSD
