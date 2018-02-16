@@ -421,8 +421,7 @@ case "$host_os" in
 	*openbsd* )
 		case "$host_os" in
 			*openbsd1.* )
-				echo "$host_os is not supported; oidentd requires OpenBSD 2.0 or newer." 1>&2
-				exit 1
+				AC_MSG_ERROR([cannot build on $host_os; oidentd requires OpenBSD 2.0 or newer])
 			;;
 
 			*openbsd2.* )
@@ -519,8 +518,7 @@ case "$host_os" in
 
 		case "$host_os" in
 			*solaris2.[[0-3]]* )
-				echo "$host_os is not supported; oidentd requires Solaris 2.4 or newer." 1>&2
-				exit 1
+				AC_MSG_ERROR([cannot build on $host_os; oidentd requires Solaris 2.4 or newer])
 			;;
 
 			*solaris2.4* )
@@ -554,15 +552,13 @@ case "$host_os" in
 			;;
 
 			* )
-				echo "$host_os is not supported; oidentd requires Solaris 5.0 or older." 1>&2
-				exit 1
+				AC_MSG_ERROR([cannot build on $host_os; oidentd requires Solaris 5.0 or older])
 			;;
 		esac
 	;;
 
 	* )
-		echo "$host_os is not yet supported." 1>&2
-		exit 1
+		AC_MSG_ERROR([oidentd does not yet support $host_os])
 	;;
 esac
 
