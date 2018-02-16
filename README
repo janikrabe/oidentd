@@ -1,19 +1,26 @@
 oidentd v2.1.0 by Janik Rabe <info@janikrabe.com>
 Originally written by Ryan McCabe <ryan@numb.org>
 
-oidentd is an RFC 1413 compliant ident daemon that runs on Linux, Darwin,
-FreeBSD, OpenBSD, and DragonFly BSD. oidentd can handle IP masqueraded/NAT
-connections on Linux, Darwin, FreeBSD (ipf only), OpenBSD, and DragonFly BSD.
-oidentd has a flexible mechanism for specifying ident responses. Users can be
-granted permission to specify their own responses, and different responses can
-be sent depending on host and port pairs.
+oidentd is an RFC 1413 compliant ident daemon that runs on Linux, FreeBSD,
+OpenBSD, NetBSD, DragonFly BSD, and some versions of Darwin and Solaris.
+oidentd can handle IP/NAT masqueraded connections on many operating system
+kernels.  oidentd has a flexible mechanism for specifying ident responses.
+Users can be granted permission to specify their own responses, and different
+responses can be sent depending on host and port pairs.  oidentd features
+a capability-based permission system that allows system administrators fine-
+grained control over which functionalities may be used by each user.
+
+For more information on the operating system kernels oidentd supports,
+consult the KERNEL_SUPPORT.md file.
 
 For details on how to install oidentd see the INSTALL file.
 
-For a complete list of features, consult the manual page or run oidentd --help.
+For a complete list of features, consult the manual pages or run
+oidentd --help.
 
 The most recent version of oidentd will always be available at
 ftp://ftp.janikrabe.com/pub/oidentd/releases/latest.
 
-Please mail any suggestions, questions, comments, bug reports, et cetera to
-me at info@janikrabe.com or open an issue at the link above.
+Please mail any feedback, suggestions, patches, questions, comments, bug
+reports, et cetera to Janik Rabe <info@janikrabe.com> or open an issue on
+GitHub at https://github.com/janikrabe/oidentd.

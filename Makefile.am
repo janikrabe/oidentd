@@ -1,1 +1,3 @@
 SUBDIRS = src doc
+
+EXTRA_DIST = KERNEL_SUPPORT.md
