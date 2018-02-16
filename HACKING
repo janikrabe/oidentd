@@ -48,8 +48,9 @@ Kernel Support
 
     The `./configure' script copies the appropriate source file for the
 current operating system from the `src/kernel/' directory to `src/os.c'.
-This behavior can be modified by editing `configure.ac' and issuing the
-command `./autogen.sh' to regenerate the `./configure' script.
+This behavior can be modified by editing `configure.ac'. The `./configure'
+script will automatically be regenerated the next time the `make' command
+is issued.
 
     When making changes that affect kernel support, please ensure that the
 file `KERNEL_SUPPORT.md' is updated to reflect these changes.
