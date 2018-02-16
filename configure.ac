@@ -200,22 +200,22 @@ AC_CHECK_FUNCS(memcmp strftime vprintf gethostbyname)
 AC_CHECK_FUNCS(vasprintf asprintf snprintf vsnprintf)
 AC_CHECK_FUNCS(inet_aton getpagesize getopt_long)
 
-AC_SEARCH_LIBS(socket, socket, , [AC_CHECK_LIB(socket, socket, LIBS="$LIBS -lsocket -lnsl", , -lsocket)])
+AC_SEARCH_LIBS(socket, socket, , [AC_SEARCH_LIBS(socket, socket, LIBS="$LIBS -lsocket -lnsl", , -lsocket)])
 
 AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO, 1, [Define to 1 if you have the 'getaddrinfo' function.]),
-	AC_CHECK_LIB(socket, getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO, 1, [Define to 1 if you have the 'getaddrinfo' function.])))
+	AC_SEARCH_LIBS(getaddrinfo, socket, AC_DEFINE(HAVE_GETADDRINFO, 1, [Define to 1 if you have the 'getaddrinfo' function.])))
 
 AC_CHECK_FUNC(freeaddrinfo, AC_DEFINE(HAVE_FREEADDRINFO, 1, [Define to 1 if you have the 'freeaddrinfo' function.]),
-	AC_CHECK_LIB(socket, freeaddrinfo), AC_DEFINE(HAVE_FREEADDRINFO, 1, [Define to 1 if you have the 'freeaddrinfo' function.]))
+	AC_SEARCH_LIBS(freeaddrinfo, socket, AC_DEFINE(HAVE_FREEADDRINFO, 1, [Define to 1 if you have the 'freeaddrinfo' function.])))
 
 AC_CHECK_FUNC(gai_strerror, AC_DEFINE(HAVE_GAI_STRERROR, 1, [Define to 1 if you have the 'gai_strerror' function.]),
-	AC_CHECK_LIB(socket, gai_strerror, AC_DEFINE(HAVE_GAI_STRERROR, 1, [Define to 1 if you have the 'gai_strerror' function.])))
+	AC_SEARCH_LIBS(gai_strerror, socket, AC_DEFINE(HAVE_GAI_STRERROR, 1, [Define to 1 if you have the 'gai_strerror' function.])))
 
 AC_CHECK_FUNC(getnameinfo, AC_DEFINE(HAVE_GETNAMEINFO, 1, [Define to 1 if you have the 'getnameinfo' function.]),
-	AC_CHECK_LIB(socket, gai_strerror, AC_DEFINE(HAVE_GETNAMEINFO, 1, [Define to 1 if you have the 'getnameinfo' function.])))
+	AC_SEARCH_LIBS(gai_strerror, socket, AC_DEFINE(HAVE_GETNAMEINFO, 1, [Define to 1 if you have the 'getnameinfo' function.])))
 
 AC_CHECK_FUNC(inet_ntop, AC_DEFINE(HAVE_INET_NTOP, 1, [Define to 1 if you have the 'inet_ntop' function.]),
-	AC_CHECK_LIB(nsl, inet_ntop, AC_DEFINE(HAVE_INET_NTOP, 1, [Define to 1 if you have the 'inet_ntop' function.])))
+	AC_SEARCH_LIBS(inet_ntop, nsl, AC_DEFINE(HAVE_INET_NTOP, 1, [Define to 1 if you have the 'inet_ntop' function.])))
 
 AC_CHECK_LIB(udb, main)
 
