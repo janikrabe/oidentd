@@ -1,25 +1,17 @@
 Tue Jan 27 19:00:00 IST 2018    Janik Rabe <info@janikrabe.com>
 
     * Fix build and missing prerequisite headers on FreeBSD.
-
     * Update documentation and manual pages.
-
     * Change priorities of log messages.
-
     * Always show error message when socket initialization fails.
-
     * Add missing user_db header to linux.c.
-
     * Various changes to the build system.
-
     * Warn when --debug is used but not supported.
-
     * Remove negative exit codes and use constants where possible.
 
 Sun Jan  7 10:05:00 IST 2018    Janik Rabe <info@janikrabe.com>
 
     * Released as version 2.1.0.
-
     * Fix memory corruption on FreeBSD.
 
 Sun Apr 24 02:52:25 UTC 2017    Kufat <kufat@kufat.net>
@@ -49,31 +41,21 @@ Thu Jun  1 22:17:32 UTC 2006    Joerg Sonnenberger <joerg@bec.de>
 Mon May 22 00:20:15 EDT 2006    Ryan McCabe <ryan@numb.org>
 
     * Released as version 2.0.8.
-
     * Removed spaces between commas and colons from responses.
-
     * Pulled in patches for Linux from Debian.
-
     * Pulled in Darwin patches from fink and
       http://sbutler.typepad.com/oidentd-2.0.7-darwin-fix.patch.
-
     * Pulled in NetBSD patches from pkgsrc/net/oidentd/patches/patch-ac.
-
     * Pulled in patches for FreeBSD from FreeBSD ports
       (ports/security/oidentd/files/patch-unprivileged_ipv6).
 
 Tue Apr 10 22:14:00 BST 2006    Simon Arlott <oidentd@fire.lp0.eu>
 
     * Fix bug handling NAT with a different destination port on Linux.
-
     * Fix forwarding when the destination port is different.
-
     * Add an option that does forwarding only if the masquerading file lookup fails.
-
     * Support Layer 3 Independent Connection tracking on Linux.
-
     * Handle local NAT on Linux (instead of fowarding to self).
-
     * Copy fport before converting v4-mapped v6 addresses.
 
 Thu Jan 26 16:32:18 CET 2006    Christof Douma <christof@douma.eu.org>
@@ -93,11 +75,9 @@ Fri Jul 11 10:11:38 EDT 2003    Ryan McCabe <ryan@numb.org>
 Sun Apr 27 16:01:51 EDT 2003    Ryan McCabe <ryan@numb.org>
 
     * Released as version 2.0.6.
-
     * Fixed a build problem on some versions of FreeBSD when NAT support
       is included.
         - Problem reported by John Blazek <freebsd@logicalsolutns.com>
-
     * Made random replies 12 characters long. I guess some programs don't
       like it when they get a 512-byte long random reply.
 
@@ -105,7 +85,6 @@ Wed Apr 23 19:59:42 EDT 2003    Ryan McCabe <ryan@numb.org>
 
     * Applied patches from henke@insync.net to
         - Improve PRNG seeding and random number selection.
-
         - Add support for running in the foreground, logging only to stderr,
           and for inetd support and daemontools support.
 
@@ -121,17 +100,14 @@ Tue Feb 11 19:04:19 EST 2003    Ryan McCabe <ryan@numb.org>
 
     * Added support for connection forwarding on recent versions of
       OpenBSD and on FreeBSD when NAT is disabled.
-
     * Added a patch from Mieczyslaw Nalewaj  <nami@polbox.com> to add
       support for FreeBSD 5.
-
     * Added a patch from Elliott Mitchell <ehem@m5p.com> to prevent
       memory leaks in parts of the configuration parser.
 
 Thu Jan  9 13:49:15 EST 2003    Ryan McCabe <ryan@numb.org>
 
     * Added DNAT patch for Linux from Christian Kellner <gicmo@gmx.net>
-
     * Added a ptch from Krzysztof Ol?dzki <ole@ans.pl> that fixes
       lookups of IPv6 connections.
 
@@ -154,7 +130,6 @@ Wed Aug  7 23:05:56 EDT 2002    Ryan McCabe <ryan@numb.org>
 
     * Added support for Solaris 9.
         - Thanks to Douglas Palmer <palmer@nyed.uscourts.gov>
-
     * Use the netlink socket diagnostics interface to look up
       connection owners on Linux, if available.
 
@@ -170,29 +145,24 @@ Tue Jan 22 16:07:39 EST 2002    Ryan McCabe <ryan@numb.org>
 Wed Jan 16 00:25:02 EST 2002    Ryan McCabe <ryan@numb.org>
 
     * Really fixed forwarding and proxy support on FreeBSD.
-
     * Fixes for NAT on OpenBSD >= 3.0.
 
 Tue Jan  1 10:17:30 EST 2002    Ryan McCabe <ryan@numb.org>
 
     * Added support for NetBSD.
-
     * Fixed a bug in the OpenBSD connection forwarding code.
 
 Sat Dec 29 16:23:52 EST 2001    Ryan McCabe <ryan@numb.org>
 
     * Released as version 2.0.3.
-
     * Fixed a bug in the configure script that caused a compile
       error on OpenBSD 3.0.
-
     * Moved all the OS-specific user lookup functions into the src/kernel
       directory.
 
 Fri Dec 28 12:27:51 EST 2001    Ryan McCabe <ryan@numb.org>
 
     * Released as version 2.0.2.
-
     * Fixed a bug in the forwarding code.
 
 Fri Dec 28 02:03:21 EST 2001    Ryan McCabe <ryan@numb.org>
@@ -216,7 +186,6 @@ Mon Oct 29 15:19:30 EST 2001    Ryan McCabe <ryan@numb.org>
 Wed Oct  3 14:01:46 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Released as version 2.0.1.
-
     * Fixed a crash that occurred when oidentd reloaded its
       configuration file.
 
@@ -242,7 +211,6 @@ Sun Sep 30 12:37:47 EDT 2001    Ryan McCabe <ryan@numb.org>
 Sat Sep 29 15:41:47 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Released as version 2.0.0.
-
     * Fixed a bug that caused freebsd.c to be built instead of
       freebsd4.c when IP masq/NAT is diabled on FreeBSD.
 
@@ -251,7 +219,6 @@ Fri Sep 28 21:00:28 EDT 2001    Ryan McCabe <ryan@numb.org>
     * Removed the debugging code from the FreeBSD NAT handler.
         - Thanks to Steven Nikkel <steven_nikkel@bigfoot.com> for
           making NAT support on FreeBSD possible.
-
     * Made debugging messages a compile time option.
         - They're only included if configure is passed --enable-debug
 
@@ -304,7 +271,6 @@ Mon Sep 17 15:29:32 EDT 2001    Ryan McCabe <ryan@numb.org>
 Mon Sep 17 14:19:49 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Fixed bugs that caused openbsd.c not to compile.
-
     * Add OpenBSD 2.9 support.
         - Thanks to Stephen Marley <stephen@openkast.com> for access to
           a machine running OpenBSD 2.9.
@@ -337,7 +303,6 @@ Tue Sep  4 10:17:38 EDT 2001    Ryan McCabe <ryan@numb.org>
 Tue Sep  4 09:50:33 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * IPv4/IPv6 interoperability cleanups.
-
     * Fixed the configure --enable-ivp6 and --enable-masq options.
         - Thanks to Arkadiusz Miskiewicz <misiek@pld.ORG.PL> for
           input and the bug report concerning the configure flags.
@@ -355,13 +320,11 @@ Fri Aug 31 10:26:38 EDT 2001    Ryan McCabe <ryan@numb.org>
 Wed Aug 29 14:09:59 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Solaris 7 support.
-
     * Cleaned up the Solaris 2.[456] support.
 
 Tue Aug 28 16:25:30 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * Solaris 8 support.
-
     * Small cleanups.
 
 Tue Aug 28 10:00:10 EDT 2001    Ryan McCabe <ryan@numb.org>
@@ -375,7 +338,6 @@ Mon Aug 27 16:28:39 EDT 2001    Ryan McCabe <ryan@numb.org>
 Mon Aug 27 09:46:06 EDT 2001    Ryan McCabe <ryan@numb.org>
 
     * autoconf tweaks.
-
     * Fixed to work with automake 1.5.
 
 Sat Aug 25 10:09:44 EDT 2001    Ryan McCabe <ryan@numb.org>
