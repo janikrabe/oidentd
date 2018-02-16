@@ -200,7 +200,7 @@ AC_CHECK_FUNCS(memcmp strftime vprintf gethostbyname)
 AC_CHECK_FUNCS(vasprintf asprintf snprintf vsnprintf)
 AC_CHECK_FUNCS(inet_aton getpagesize getopt_long)
 
-AC_SEARCH_LIBS(socket, socket, , [AC_SEARCH_LIBS(socket, socket, LIBS="$LIBS -lsocket -lnsl", , -lsocket)])
+AC_SEARCH_LIBS(socket, socket, , [AC_CHECK_LIB(socket, socket, LIBS="$LIBS -lsocket -lnsl", , -lsocket)])
 
 AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO, 1, [Define to 1 if you have the 'getaddrinfo' function.]),
 	AC_SEARCH_LIBS(getaddrinfo, socket, AC_DEFINE(HAVE_GETADDRINFO, 1, [Define to 1 if you have the 'getaddrinfo' function.])))
@@ -410,7 +410,6 @@ case "$host_os" in
 	;;
 
 	*darwin* )
-		CFLAGS="$CFLAGS"
 		use_kmem=yes
 		os_src=darwin.c
 		if test "$ac_cv_ipf_nat_p" = "no"; then
