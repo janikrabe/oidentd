@@ -105,7 +105,7 @@ bool core_init(void) {
 					return false;
 				}
 
-				o_log(LOG_CRIT, "NAT/IP masquerading is not supported on this system");
+				o_log(LOG_CRIT, "NAT/IP masquerading support is unavailable");
 				disable_opt(MASQ);
 			} else {
 				conntrack = CT_IPCONNTRACK;

@@ -125,8 +125,10 @@ int k_open(void) {
 	}
 
 #ifdef MASQ_SUPPORT
-	if (kinfo->nl[N_NATLIST].n_value == 0)
+	if (opt_enabled(MASQ) && kinfo->nl[N_NATLIST].n_value == 0) {
+		o_log(LOG_CRIT, "NAT/IP masquerading support is unavailable");
 		disable_opt(MASQ);
+	}
 #endif
 
 	return (0);
