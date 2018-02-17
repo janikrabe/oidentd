@@ -368,6 +368,7 @@ int get_options(int argc, char *const argv[]) {
 	*/
 
 	if (!opt_enabled(CHANGE_UID)) {
+		enable_opt(CHANGE_UID);
 		if (find_user("nobody", &uid) == -1) {
 			o_log(NORMAL,
 				"User \"nobody\" does not exist; using %u as default UID",
@@ -382,6 +383,7 @@ int get_options(int argc, char *const argv[]) {
 	*/
 
 	if (!opt_enabled(CHANGE_GID)) {
+		enable_opt(CHANGE_GID);
 		if (find_group("nobody", &gid) == -1) {
 			if (find_group("nogroup", &gid) == -1) {
 				o_log(NORMAL,
