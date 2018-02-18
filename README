@@ -1,4 +1,4 @@
-oidentd v2.1.0 by Janik Rabe <info@janikrabe.com>
+oidentd 2.1.0 by Janik Rabe <oidentd@janikrabe.com>
 Originally written by Ryan McCabe <ryan@numb.org>
 
 oidentd is an RFC 1413 compliant ident daemon that runs on Linux, FreeBSD,
@@ -22,5 +22,5 @@ The most recent version of oidentd will always be available at
 ftp://ftp.janikrabe.com/pub/oidentd/releases/latest.
 
 Please mail any feedback, suggestions, patches, questions, comments, bug
-reports, et cetera to Janik Rabe <info@janikrabe.com> or open an issue on
+reports, et cetera to Janik Rabe <oidentd@janikrabe.com> or open an issue on
 GitHub at https://github.com/janikrabe/oidentd.

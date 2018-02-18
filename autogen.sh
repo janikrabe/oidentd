@@ -26,7 +26,7 @@ ACLOCAL=aclocal
 	echo
 	echo "Error: Automatic generation of the configuration scripts has failed."
 	echo "Please try to generate them manually. If you believe this failure"
-	echo "is the result of a bug in oidentd, please email info@janikrabe.com"
+	echo "is the result of a bug in oidentd, please email oidentd@janikrabe.com"
 	echo "with any relevant details."
 	exit 1
 }

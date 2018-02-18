@@ -444,8 +444,9 @@ static void print_usage(void) {
 }
 
 static void print_version(void) {
-	printf("%s\n", PACKAGE_STRING);
-	printf("Written by %s\n", PACKAGE_AUTHOR);
-	printf("Maintained by %s <%s>\n", PACKAGE_MAINTAINER, PACKAGE_BUGREPORT);
+	printf("%s by %s <%s>\n", PACKAGE_STRING,
+			PACKAGE_AUTHOR, PACKAGE_BUGREPORT);
+	printf("Originally written by %s <%s>\n",
+			PACKAGE_ORIG_AUTHOR, PACKAGE_ORIG_EMAIL);
 	printf("%s\n", PACKAGE_WEBSITE);
 }

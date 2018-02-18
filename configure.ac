@@ -1,11 +1,27 @@
-dnl Copyright (C) 2006 Ryan McCabe <ryan@numb.org> (GPL v2)
+dnl configure.ac - oidentd ident (RFC 1413) implementation.
+dnl Copyright (C) 2006-2018 Ryan McCabe <ryan@numb.org>
+dnl Copyright (C) 2018      Janik Rabe  <oidentd@janikrabe.com>
+dnl
+dnl This program is free software; you can redistribute it and/or modify
+dnl it under the terms of the GNU General Public License, version 2,
+dnl as published by the Free Software Foundation.
+dnl
+dnl This program is distributed in the hope that it will be useful,
+dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
+dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+dnl GNU General Public License for more details.
+dnl
+dnl You should have received a copy of the GNU General Public License
+dnl along with this program; if not, write to the Free Software
+dnl Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA
 
-AC_INIT(oidentd, 2.1.0, info@janikrabe.com)
+AC_INIT([oidentd], [2.1.0], [oidentd@janikrabe.com])
 AM_INIT_AUTOMAKE
 
-AC_DEFINE(PACKAGE_WEBSITE, ["https://github.com/janikrabe/oidentd"], [website])
-AC_DEFINE(PACKAGE_MAINTAINER, ["Janik Rabe"], [maintainer])
-AC_DEFINE(PACKAGE_AUTHOR, ["Ryan McCabe"], [author])
+AC_DEFINE(PACKAGE_AUTHOR, ["Janik Rabe"], [maintainer])
+AC_DEFINE(PACKAGE_WEBSITE, ["https://oidentd.janikrabe.com"], [website])
+AC_DEFINE(PACKAGE_ORIG_AUTHOR, ["Ryan McCabe"], [original author])
+AC_DEFINE(PACKAGE_ORIG_EMAIL, ["ryan@numb.org"], [original author's email])
 
 AM_CONFIG_HEADER(config.h)
 

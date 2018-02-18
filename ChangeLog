@@ -1,4 +1,4 @@
-Tue Jan 27 19:00:00 IST 2018    Janik Rabe <info@janikrabe.com>
+Tue Jan 27 19:00:00 IST 2018    Janik Rabe <oidentd@janikrabe.com>
 
     * Fix build and missing prerequisite headers on FreeBSD.
     * Update documentation and manual pages.
@@ -9,7 +9,7 @@ Tue Jan 27 19:00:00 IST 2018    Janik Rabe <info@janikrabe.com>
     * Warn when --debug is used but not supported.
     * Remove negative exit codes and use constants where possible.
 
-Sun Jan  7 10:05:00 IST 2018    Janik Rabe <info@janikrabe.com>
+Sun Jan  7 10:05:00 IST 2018    Janik Rabe <oidentd@janikrabe.com>
 
     * Released as version 2.1.0.
     * Fix memory corruption on FreeBSD.
