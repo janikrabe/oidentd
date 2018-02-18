@@ -108,9 +108,11 @@
 #define PORT_MIN		1
 
 /*
-** POSIX reserves this UID value for this purpose.
+** POSIX reserves these UID and GID values for this purpose.
 */
+
 #define MISSING_UID		((uid_t) -1)
+#define MISSING_GID		((gid_t) -1)
 
 #define VALID_PORT(p)	(((p) >= PORT_MIN && (((p) & PORT_MAX) == (p))))
 #define ERROR(x)		(opt_enabled(HIDE_ERRORS) ? "UNKNOWN-ERROR" : (x))
@@ -163,6 +165,10 @@ struct sockaddr_storage {
 
 #ifdef HAVE___SS_FAMILY
 	#define ss_family __ss_family
+#endif
+
+#ifdef LIBNFCT_SUPPORT
+	bool drop_privs_libnfct(uid_t uid, gid_t gid);
 #endif
 
 /*

@@ -120,8 +120,15 @@ int main(int argc, char **argv) {
 		exit(EXIT_FAILURE);
 	}
 
+#ifdef LIBNFCT_SUPPORT
+	if (!drop_privs_libnfct(uid, gid)) {
+		o_log(LOG_CRIT, "Fatal: Failed to drop privileges (kernel)");
+		exit(EXIT_FAILURE);
+	}
+#endif
+
 	if (drop_privs(uid, gid) == -1) {
-		o_log(LOG_CRIT, "Fatal: Failed to drop privileges");
+		o_log(LOG_CRIT, "Fatal: Failed to drop privileges (global)");
 		exit(EXIT_FAILURE);
 	}
 
