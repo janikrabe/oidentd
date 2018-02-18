@@ -1,9 +1,10 @@
 /*
 ** solaris4.c - SunOS 5.4 kernel access functions
 **
-** Copyright (c) 1995-1997	Casper Dik <Casper.Dik@Holland.Sun.COM>
-** Copyright (c) 1997-1999	Peter Eriksson <pen@lysator.liu.se>
-** Copyright (c) 2001-2018	Ryan McCabe <ryan@numb.org>
+** Copyright (c) 1995-1997 Casper Dik     <Casper.Dik@Holland.Sun.COM>
+** Copyright (c) 1997-1999 Peter Eriksson <pen@lysator.liu.se>
+** Copyright (c) 2001-2018 Ryan McCabe    <ryan@numb.org>
+** Copyright (c) 2018      Janik Rabe     <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or
 ** modify it as you wish - as long as you don't claim that you wrote

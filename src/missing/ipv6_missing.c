@@ -11,7 +11,7 @@
 ** This code was taken from OpenSSH. It is distributed
 ** under a two-term BSD license.
 **
-** Modifications are Copyright (C) 2001-2018 Ryan McCabe <ryan@numb.org>
+** Modifications Copyright (c) 2001-2018 Ryan McCabe <ryan@numb.org>
 */
 
 #ifndef _GNU_SOURCE

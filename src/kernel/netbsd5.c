@@ -1,6 +1,6 @@
 /*
 ** netbsd5.c - Ident lookup routines for >= NetBSD 5
-** Copyright (C) 2018 Janik Rabe <info@janikrabe.com>
+** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,

@@ -1,7 +1,7 @@
 /*
 ** getopt_missing.h - Declarations for getopt.
 **
-** Copyright (C) 1989-1994, 1996-1999, 2001 Free Software Foundation, Inc.
+** Copyright (c) 1989-1994, 1996-1999, 2001 Free Software Foundation, Inc.
 ** This file is part of the GNU C Library.
 **
 ** The GNU C Library is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 ** Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 ** 02111-1307 USA.
 **
-** Cleanup Copyright (C) 2001-2018 Ryan McCabe <ryan@numb.org>
+** Cleanup Copyright (c) 2001-2018 Ryan McCabe <ryan@numb.org>
 */
 
 #ifndef _GETOPT_MISSING_H

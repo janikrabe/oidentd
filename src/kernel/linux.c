@@ -1,7 +1,7 @@
 /*
 ** linux.c - Linux user lookup facility.
-** Copyright (C) 1998-2018 Ryan McCabe <ryan@numb.org>
-** Copyright (C) 2018      Janik Rabe <info@janikrabe.com>
+** Copyright (c) 1998-2018 Ryan McCabe <ryan@numb.org>
+** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,

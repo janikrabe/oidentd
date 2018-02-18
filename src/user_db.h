@@ -1,6 +1,7 @@
 /*
 ** oidentd_user_db.h - oidentd user database routines.
-** Copyright (C) 2001-2018 Ryan McCabe <ryan@numb.org>
+** Copyright (c) 2001-2018 Ryan McCabe <ryan@numb.org>
+** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -19,42 +20,42 @@
 #ifndef __OIDENTD_USER_DB_H
 #define __OIDENTD_USER_DB_H
 
-#define PARSE_USER				0x00
-#define PARSE_SYSTEM			0x01
+#define PARSE_USER		0x00
+#define PARSE_SYSTEM		0x01
 
-#define ACTION_DENY				0x00
-#define ACTION_ALLOW			0x01
-#define ACTION_FORCE			0x03
+#define ACTION_DENY		0x00
+#define ACTION_ALLOW		0x01
+#define ACTION_FORCE		0x03
 
-#define CAP_SPOOF				(1 << 0x01)
-#define CAP_SPOOF_ALL			(1 << 0x02)
-#define CAP_SPOOF_PRIVPORT		(1 << 0x03)
-#define CAP_HIDE				(1 << 0x04)
-#define CAP_RANDOM				(1 << 0x05)
-#define CAP_RANDOM_NUMERIC		(1 << 0x06)
-#define CAP_NUMERIC				(1 << 0x07)
-#define CAP_REPLY				(1 << 0x08)
+#define CAP_SPOOF		(1 << 0x01)
+#define CAP_SPOOF_ALL		(1 << 0x02)
+#define CAP_SPOOF_PRIVPORT	(1 << 0x03)
+#define CAP_HIDE		(1 << 0x04)
+#define CAP_RANDOM		(1 << 0x05)
+#define CAP_RANDOM_NUMERIC	(1 << 0x06)
+#define CAP_NUMERIC		(1 << 0x07)
+#define CAP_REPLY		(1 << 0x08)
 
-#define DB_HASH_SIZE			32
+#define DB_HASH_SIZE		32
 
 struct user_cap {
 	struct port_range {
-		in_port_t	min;
-		in_port_t	max;
+		in_port_t min;
+		in_port_t max;
 	} *lport, *fport;
 
 	struct sockaddr_storage *src;
 	struct sockaddr_storage	*dest;
 
-	u_int16_t	caps;
-	u_int16_t	action;
-	u_int8_t	num_replies;
-	char		**force_data;
+	u_int16_t caps;
+	u_int16_t action;
+	u_int8_t num_replies;
+	char **force_data;
 };
 
 struct user_info {
-	uid_t	user;
-	list_t	*cap_list;
+	uid_t user;
+	list_t *cap_list;
 };
 
 struct user_info *user_db_lookup(uid_t uid);

@@ -1,9 +1,10 @@
 /*
 ** solaris5.c - SunOS 5.5 kernel access functions
 **
-** Copyright (c) 1995-1997	Casper Dik <Casper.Dik@Holland.Sun.COM>
-** Copyright (c) 1997		Peter Eriksson <pen@lysator.liu.se>
-** Copyright (c) 2001-2018	Ryan McCabe <ryan@numb.org>
+** Copyright (c) 1995-1997 Casper Dik     <Casper.Dik@Holland.Sun.COM>
+** Copyright (c) 1997      Peter Eriksson <pen@lysator.liu.se>
+** Copyright (c) 2001-2018 Ryan McCabe    <ryan@numb.org>
+** Copyright (c) 2018      Janik Rabe     <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or
 ** modify it as you wish - as long as you don't claim that you wrote
@@ -19,7 +20,7 @@
 #define _KMEMUSER
 #define _KERNEL
 
-/* some definition conflicts. but we must define _KERNEL */
+/* some definition conflicts, but we must define _KERNEL */
 
 #define exit			kernel_exit
 #define strsignal		kernel_strsignal
@@ -93,13 +94,13 @@ static int getbuf(kvm_t *kd, off_t addr, void *dst, size_t len);
 
 /*
 ** This is needed as stdlib.h can't be included as it causes
-** a clash with exit(), as declared by another header file.
+** a clash with exit() as declared by another header file.
 */
 
 extern void free(void *ptr);
 
 /*
-** Open kernel devices, lookup kernel symbols etc...
+** Open kernel devices, lookup kernel symbols, etc.
 */
 
 int k_open(void) {

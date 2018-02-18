@@ -9,7 +9,7 @@ Fri Feb  9 05:11:08 EST 2001    Ryan McCabe <ryan@numb.org>
 Fri Jan 12 23:40:56 EST 2001    Ryan McCabe <ryan@numb.org>
 
     * Applied patches from Arkadiusz Miskiewicz <misiek@pld.ORG.PL>
-      to fix some IPv6 problems 
+      to fix some IPv6 problems
 
 Sat Dec 09 17:47:15 EST 2000    Ryan McCabe <ryan@numb.org>
 
