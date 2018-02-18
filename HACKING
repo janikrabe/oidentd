@@ -39,6 +39,7 @@ Source Tree
 
 .
 |-- doc:         Documentation and manual pages
+|-- m4:          Macros for autoconf
 `-- src:         Source code
     |-- kernel:      Kernel-specific functions
     `-- missing:     Portable implementations of missing functions

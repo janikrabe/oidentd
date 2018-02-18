@@ -17,6 +17,7 @@ AC_PATH_PROG(LEX, flex)
 AC_PROG_RANLIB
 AC_PROG_INSTALL
 AC_PATH_PROG(sedpath, sed)
+AC_CONFIG_MACRO_DIR([m4])
 
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
@@ -56,6 +57,13 @@ if test "$enableval" = "no"; then
 	ipv6_support=no
 fi
 
+enableval=""
+libnfct_support=yes
+AC_ARG_ENABLE(libnfct,
+[  --disable-libnfct       disable libnetfilter_conntrack support])
+if test "$enableval" = "no"; then
+	libnfct_support=no
+fi
 
 enableval=""
 AC_ARG_ENABLE(debug,
@@ -385,10 +393,34 @@ if test "$masq_support" = "yes"; then
 	CPPFLAGS=$old_CPPFLAGS
 fi
 
+if test "$masq_support" = "no"; then
+	libnfct_support=no
+fi
+
+want_libnfct=no
+
 case "$host_os" in
 
 	*linux* )
 		os_src=linux.c
+
+		if test "$masq_support" = "yes"; then
+			want_libnfct=yes
+		fi
+
+		if test "$libnfct_support" = "yes"; then
+			AC_CHECK_LIB(netfilter_conntrack, nfct_query, ,
+					[libnfct_support=no])
+			if test "$libnfct_support" = "yes"; then
+				LIBCAP_NG_PATH
+				if test -n "$CAPNG_LDADD"; then
+					LIBS="$LIBS -lcap-ng"
+				else
+					AC_MSG_WARN(libnetfilter_conntrack support requires libcap-ng)
+					libnfct_support=no
+				fi
+			fi
+		fi
 	;;
 
 	*netbsd* )
@@ -569,13 +601,19 @@ fi
 if test "$masq_support" = "yes"; then
 	AC_DEFINE(MASQ_SUPPORT, 1, [Define to include NAT/IP masq support])
 else
-	AC_MSG_WARN(not including NAT/IP masquerade support.)
+	AC_MSG_WARN(not including NAT/IP masquerade support)
 fi
 
 if test "$ipv6_support" = "yes"; then
 	AC_DEFINE(WANT_IPV6, 1, [Define to include IPv6 support])
 else
-	AC_MSG_WARN(not including IPv6 support.)
+	AC_MSG_WARN(not including IPv6 support)
+fi
+
+if test "$libnfct_support" = "yes"; then
+	AC_DEFINE(LIBNFCT_SUPPORT, 1, [Define to include libnetfilter_conntrack support])
+elif test "$want_libnfct" = "yes"; then
+	AC_MSG_WARN(not including libnetfilter_conntrack support)
 fi
 
 if test -n "$DEBUG_CFLAGS"; then
