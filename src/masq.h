@@ -1,6 +1,6 @@
 /*
 ** oidentd_masq.h - oidentd IP masquerading handler.
-** Copyright (c) 1998-2018 Ryan McCabe <ryan@numb.org>
+** Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
 ** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify

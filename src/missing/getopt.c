@@ -18,7 +18,7 @@
 ** Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 ** 02110-1301 USA.
 **
-** Code cleanup Copyright (c) 2001-2018 Ryan McCabe <ryan@numb.org>
+** Code cleanup Copyright (c) 2001-2006 Ryan McCabe <ryan@numb.org>
 */
 
 #include <config.h>

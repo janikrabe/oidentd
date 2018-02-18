@@ -1,6 +1,6 @@
 /*
 ** oidentd_util.c - oidentd utility functions.
-** Copyright (c) 2001-2018 Ryan McCabe <ryan@numb.org>
+** Copyright (c) 2001-2006 Ryan McCabe <ryan@numb.org>
 ** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify

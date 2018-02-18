@@ -11,10 +11,10 @@
 ** NAT code taken from the OpenBSD NAT code by
 ** Slawomir Piotrowski <slawek@telsatgp.com.pl>
 **
-** Modifications Copyright (c) 1998-2018 Ryan McCabe <ryan@numb.org>
+** Modifications Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
 ** Modifications Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
 **
-** All IPv6 code Copyright (c) 2002-2018 Ryan McCabe <ryan@numb.org>
+** All IPv6 code Copyright (c) 2002-2006 Ryan McCabe <ryan@numb.org>
 */
 
 #include <config.h>

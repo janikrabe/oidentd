@@ -1,6 +1,6 @@
 /*
 ** freebsd4.c - Ident lookup routines for >= FreeBSD 4
-** Copyright (c) 2000-2018 Ryan McCabe <ryan@numb.org>
+** Copyright (c) 2000-2006 Ryan McCabe <ryan@numb.org>
 ** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify

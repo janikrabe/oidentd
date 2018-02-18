@@ -1,5 +1,5 @@
 dnl configure.ac - oidentd ident (RFC 1413) implementation.
-dnl Copyright (c) 2006-2018 Ryan McCabe <ryan@numb.org>
+dnl Copyright (c) 2006      Ryan McCabe <ryan@numb.org>
 dnl Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
 dnl
 dnl This program is free software; you can redistribute it and/or modify

@@ -7,7 +7,7 @@
 **		This program is in the public domain and may be used freely
 **		by anyone who wants to.
 **
-** Modifications Copyright (c) 1998-2018 Ryan McCabe <ryan@numb.org>
+** Modifications Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
 ** Modifications Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
 */
 
