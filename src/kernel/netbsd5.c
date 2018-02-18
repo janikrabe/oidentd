@@ -152,7 +152,7 @@ bool masq(	int sock,
 			struct sockaddr_storage *laddr,
 			struct sockaddr_storage *faddr)
 {
-	// TODO Not yet implemented.
+	/* TODO masquerading is not yet supported. */
 	return false;
 }
 
