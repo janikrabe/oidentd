@@ -64,11 +64,6 @@ is up-to-date.  This includes the files `AUTHORS', `ChangeLog', `HACKING',
 `INSTALL', `KERNEL_SUPPORT.md', `README', and the manual pages in the `doc/'
 directory.  New versions should be released only by the project maintainers.
 
-    This project uses the Semantic Versioning 2.0.0 specification.  Given a
-version number of the format `x.y.z', increment `x' when making incompatible
-changes to the API, `y' when adding functionality, and `z' when fixing bugs.
-For more information, please see the `doc/semver.md' file.
-
     In `ChangeLog', add the line "* Released as version <version>." before all
 changes included in the release, replacing `<version>' with the version number
 of the new release.
