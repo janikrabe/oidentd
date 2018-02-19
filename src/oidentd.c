@@ -103,17 +103,17 @@ int main(int argc, char **argv) {
 		exit(EXIT_FAILURE);
 	}
 
-	if (!opt_enabled(FOREGROUND) && go_background() == -1) {
-		o_log(LOG_CRIT, "Fatal: Error creating daemon process");
-		exit(EXIT_FAILURE);
-	}
-
 	if (!opt_enabled(STDIO)) {
 		listen_fds = setup_listen(addr, htons(listen_port));
 		if (listen_fds == NULL || listen_fds[0] == -1) {
 			o_log(LOG_CRIT, "Fatal: Unable to set up listening socket");
 			exit(EXIT_FAILURE);
 		}
+	}
+
+	if (!opt_enabled(FOREGROUND) && go_background() == -1) {
+		o_log(LOG_CRIT, "Fatal: Error creating daemon process");
+		exit(EXIT_FAILURE);
 	}
 
 	if (k_open() != 0) {
