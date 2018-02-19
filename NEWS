@@ -1,4 +1,4 @@
-Unreleased changes
+Changes in version 2.2.0
 
 	* Security: privileges were not being dropped without the `--user`
 	            and `--group` options.
