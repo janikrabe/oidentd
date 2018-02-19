@@ -138,22 +138,3 @@ uid_t get_user6(	in_port_t lport,
 }
 
 #endif
-
-#ifdef MASQ_SUPPORT
-
-/*
-** Handle a request to a host that's IP masquerading through us.
-** Returns true on success, false on failure.
-*/
-
-bool masq(	int sock,
-			in_port_t lport,
-			in_port_t fport,
-			struct sockaddr_storage *laddr,
-			struct sockaddr_storage *faddr)
-{
-	/* TODO masquerading is not yet supported. */
-	return false;
-}
-
-#endif
