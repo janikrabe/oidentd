@@ -35,33 +35,33 @@ Unreleased changes
 	* Linux: open connection tracking file only when necessary.
 	* Removed Solaris 5.1+ support (build is broken due to kernel changes).
 
-Changes in 2.1.0
+Changes in version 2.1.0
 
 	* Fixed memory corruption on FreeBSD.
 	* Changed maintainer to Janik Rabe <oidentd@janikrabe.com>.
 	* Migrated project from CVS to git.
 
-Changes in 2.0.9
+Changes in version 2.0.9
 
 	* Internal changes.
 
-Changes in 2.0.8
+Changes in version 2.0.8
 
 	* So, I guess some things have changed in the past 3 years.
 	* Fixed bugs.
 
-Changes in 2.0.7
+Changes in version 2.0.7
 
 	* Bug fixes.
 	* Build fixes.
 
-Changes in 2.0.6
+Changes in version 2.0.6
 
 	* Bug fixes.
 	* Build fixes for Darwin and FreeBSD.
 	* Support for inetd/xinetd/daemontools.
 
-Changes in 2.0.5
+Changes in version 2.0.5
 
 	* Bugfixes for connection forwarding on BSD.
 	* DNAT support on linux.
@@ -72,7 +72,7 @@ Changes in 2.0.5
 	* Made connection forwarding work on recent versions of OpenBSD and on FreeBSD
 	  when NAT is disabled.
 
-Changes in 2.0.4
+Changes in version 2.0.4
 
 	* Support for lookups using the netlink socket diagnostics interface on Linux.
 	* Support for Solaris 9.
@@ -80,12 +80,12 @@ Changes in 2.0.4
 	* Support for Darwin.
 	* Bugfixes for NAT on *BSD.
 
-Changes in 2.0.3
+Changes in version 2.0.3
 
 	* Fixed a bug in the configure script that caused a compile error on OpenBSD
 	  3.0.
 
-Changes in 2.0.2
+Changes in version 2.0.2
 
 	* Added support for OpenBSD (>= 3.0) Packet Filter.
 	* Allow multiple strings to be specified after a "reply" statement from which
@@ -98,13 +98,13 @@ Changes in 2.0.2
 	  supported).
 	    - See the TODO file for slightly more info.
 
-Changes in 2.0.1
+Changes in version 2.0.1
 
 	* NAT support on OpenBSD 2.9 and greater has been enabled again.
 	* Allow comments and whitespace in /etc/oidentd_masq.conf.
 	* Fix a crash that occurred when oidentd reloaded its configuration file.
 
-Changes in 2.0.0
+Changes in version 2.0.0
 
 	* A new command-line flag, --config, can be used to specify the config file.
 	* Support for OpenBSD 2.9
@@ -112,28 +112,28 @@ Changes in 2.0.0
 	* The bug that caused IP masquerading to fail was fixed.
 	* More bug fixes.
 
-Changes in 1.9.9.1
+Changes in version 1.9.9.1
 
 	* Lots of bugfixes.
 	* Support for Solaris 5.4 - 5.8
 
-Changes in 1.9.9
+Changes in version 1.9.9
 
 	* Complete rewrite.
 	* Addition of system-wide and per-user configuration files.
 	* IPv6 support.
 
-Changes in 1.7.1
+Changes in version 1.7.1
 
 	* Fixed a bug that prevented oidentd from running in standalone mode.
 
-Changes in 1.7.0
+Changes in version 1.7.0
 
 	* IP masquerading support for OpenBSD.
 	* Support for FreeBSD 4.*
 	* Support for libudb.
 
-Changes in 1.6.4
+Changes in version 1.6.4
 
 	* Add -F and -O flags.  See the manual page for a description.
 	* Add the capability to set an identd reply for a specific user in
@@ -141,12 +141,12 @@ Changes in 1.6.4
 	  to return "reply" for every successful query for a connection of the user
 	  "user"
 
-Changes in 1.6.3
+Changes in version 1.6.3
 
 	* Fix a few small bugs.
 	* Add -q (quiet) flag, which suppresses normal system logging.
 
-Changes in 1.6.2
+Changes in version 1.6.2
 
 	* New flag: -x (see the man page or ChangeLog)
 	* Service names as well as port numbers are accepted where a port is supplied.
@@ -154,25 +154,25 @@ Changes in 1.6.2
 	* If our attempt to forward a connection to a host times out, fall back to
 	  masquerading lookup results
 
-Changes in 1.6.1
+Changes in version 1.6.1
 
 	* -r works correctly in standalone mode.
 	* You can now specify masks for networks in /etc/oidentd.users (See man page)
 	  (It used to only accept quad-dot IP notation)
 	* You can now specify a hostname in /etc/oidentd.users
 
-Changes in 1.6.0
+Changes in version 1.6.0
 
 	* The man page gets installed now
 	* Rewrote "INSTALL"
 	* Fixed (hopefully) the forwarding stuff.
 
-Changes in 1.5.1
+Changes in version 1.5.1
 
 	* Code and documentation cleanups.
 	* Regenerate autoconf scripts using version 2.13.
 
-Changes in 1.5
+Changes in version 1.5
 
 	* Various small fixes and improvements.
 	* Added support for OpenBSD, FreeBSD.
