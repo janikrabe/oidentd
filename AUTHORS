@@ -1,14 +1,28 @@
-Bjarni R. Einarsson <bre at mmedia.is>
+Bjarni R. Einarsson <bre@mmedia.is>
 	Support for libudb
 
 Chris Taylor <chris@equate.dyndns.org>
 	Linux masquerading improvements
+
+Christian Kellner <gicmo@gmx.net>
+	Linux DNAT patch
 
 Christof Douma <christof@douma.eu.org>
 	Linux netfilter permissions fix
 
 Daniel Brafford <pod@charter.net>
 	Initial IPv6 support and IPv6 implementation for Linux
+
+Douglas Henke <henke@insync.net>
+	Improvements to PRNG seeding
+	Flags --foreground and --nosyslog
+	Support for inetd and daemontools
+
+Elliott Mitchell <ehem@m5p.com>
+	Fixed memory leaks in configuration parser
+
+Eric LeBlanc <inouk@toutatis.igt.net>
+	Fixed a bug that caused IP masquerading to fail
 
 Fabian Knittel <fabien.knittel@avona.com>
 	Bind to IPv6 socket by default
@@ -17,7 +31,7 @@ Guus Sliepen <sliepen@phys.uu.nl>
 	Initial netfilter (Linux >= 2.3 Support)
 
 Jan Rękorajski <baggins@pld-linux.org>
-	Allow listening on multiple IPs
+	Support for listening on multiple IPs
 
 Janik Rabe <oidentd@janikrabe.com>
 	Everything else (project maintainer)
@@ -31,11 +45,22 @@ Johnny A. Solbu <johnny@solbu.net>
 Kamil Andrusz <wizz@mniam.net>
 	OpenBSD >= 3.0 Packet Filter support
 
+Krzysztof Oledzki <ole@ans.pl>
+	Fix for IPv6 connection lookups
+
 Kufat <kufat@kufat.net>
 	Compatibility of inline functions with C99
 
+Martin Waitz <tali@stud.uni-erlangen.de>
+	UDB fixes
+
 Matthias Scheler <tron@NetBSD.org>
-	Replace hardcoded configuration file path
+	Replaced hardcoded configuration file path
+
+Motohiko Takemura <takemura@pharmaco.crl.hyo-med.ac.jp>
+	Fixed a bug in the command-line argument handler
+	Fixed a bug that caused IP masquerading to fail
+	Fixed bugs with the --forward and --other flags
 
 Petr Písař <ppisar@redhat.com>
 	Linux masquerading improvements

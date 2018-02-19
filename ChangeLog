@@ -1,351 +1,350 @@
-Tue Jan 27 19:00:00 IST 2018    Janik Rabe <oidentd@janikrabe.com>
+2018-01-27  Janik Rabe  <oidentd@janikrabe.com>
 
-    * Fix build and missing prerequisite headers on FreeBSD.
-    * Update documentation and manual pages.
-    * Change priorities of log messages.
-    * Always show error message when socket initialization fails.
-    * Add missing user_db header to linux.c.
-    * Various changes to the build system.
-    * Warn when --debug is used but not supported.
-    * Remove negative exit codes and use constants where possible.
+	* Fix build and missing prerequisite headers on FreeBSD.
+	* Update documentation and manual pages.
+	* Change priorities of log messages.
+	* Always show error message when socket initialization fails.
+	* Add missing user_db header to linux.c.
+	* Various changes to the build system.
+	* Warn when --debug is used but not supported.
+	* Remove negative exit codes and use constants where possible.
 
-Sun Jan  7 10:05:00 IST 2018    Janik Rabe <oidentd@janikrabe.com>
+2018-01-07  Janik Rabe  <oidentd@janikrabe.com>
 
-    * Released as version 2.1.0.
-    * Fix memory corruption on FreeBSD.
+	* Released as version 2.1.0.
+	* Fix memory corruption on FreeBSD.
 
-Sun Apr 24 02:52:25 UTC 2017    Kufat <kufat@kufat.net>
+2017-04-24  Kufat  <kufat@kufat.net>
 
-    * Fix gcc linker error due to inline function being defined in source file
+	* Fix gcc linker error due to inline function being defined in source file
 
-Fri Mar 11 10:38:10 CET 2016    Petr Písař <ppisar@redhat.com>
+2016-03-11  Petr Písař  <ppisar@redhat.com>
 
-    * Only open conntracking table when IP masquerading is enabled.
+	* Only open conntracking table when IP masquerading is enabled.
 
-Thu Aug 18 22:42:50 BST 2011    Chris Taylor <chris@equate.dyndns.org>
+2011-08-18  Chris Taylor  <chris@equate.dyndns.org>
 
-    * Add handling for nf_conntrack_acct being off (Thanks to Jonas Gorski)
+	* Add handling for nf_conntrack_acct being off (Thanks to Jonas Gorski)
 
-Mon Mar  1 20:26:11 CET 2010    Fabian Knittel <fabian.knittel@avona.com>
+2010-03-01  Fabian Knittel  <fabian.knittel@avona.com>
 
-    * Bind to IPv6 socket as well.
+	* Bind to IPv6 socket as well.
 
-Tue Apr 15 14:38:35 UTC 2008    Jan Rękorajski <baggins@pld-linux.org>
+2008-04-15  Jan Rękorajski  <baggins@pld-linux.org>
 
-    * Allow oidentd to listen on multiple specified IPs.
+	* Allow oidentd to listen on multiple specified IPs.
 
-Thu Jun  1 22:17:32 UTC 2006    Joerg Sonnenberger <joerg@bec.de>
+2006-06-01  Joerg Sonnenberger  <joerg@bec.de>
 
-    * Add basic support for DragonFly BSD.
+	* Add basic support for DragonFly BSD.
 
-Mon May 22 00:20:15 EDT 2006    Ryan McCabe <ryan@numb.org>
+2006-05-22  Ryan McCabe  <ryan@numb.org>
 
-    * Released as version 2.0.8.
-    * Removed spaces between commas and colons from responses.
-    * Pulled in patches for Linux from Debian.
-    * Pulled in Darwin patches from fink and
-      http://sbutler.typepad.com/oidentd-2.0.7-darwin-fix.patch.
-    * Pulled in NetBSD patches from pkgsrc/net/oidentd/patches/patch-ac.
-    * Pulled in patches for FreeBSD from FreeBSD ports
-      (ports/security/oidentd/files/patch-unprivileged_ipv6).
+	* Released as version 2.0.8.
+	* Removed spaces between commas and colons from responses.
+	* Pulled in patches for Linux from Debian.
+	* Pulled in Darwin patches from fink and
+	  http://sbutler.typepad.com/oidentd-2.0.7-darwin-fix.patch.
+	* Pulled in NetBSD patches from pkgsrc/net/oidentd/patches/patch-ac.
+	* Pulled in patches for FreeBSD from FreeBSD ports
+	  (ports/security/oidentd/files/patch-unprivileged_ipv6).
 
-Tue Apr 10 22:14:00 BST 2006    Simon Arlott <oidentd@fire.lp0.eu>
+2006-04-10  Simon Arlott  <oidentd@fire.lp0.eu>
 
-    * Fix bug handling NAT with a different destination port on Linux.
-    * Fix forwarding when the destination port is different.
-    * Add an option that does forwarding only if the masquerading file lookup fails.
-    * Support Layer 3 Independent Connection tracking on Linux.
-    * Handle local NAT on Linux (instead of fowarding to self).
-    * Copy fport before converting v4-mapped v6 addresses.
+	* Fix bug handling NAT with a different destination port on Linux.
+	* Fix forwarding when the destination port is different.
+	* Add an option that does forwarding only if the masquerading file
+	  lookup fails.
+	* Support Layer 3 Independent Connection tracking on Linux.
+	* Handle local NAT on Linux (instead of fowarding to self).
+	* Copy fport before converting v4-mapped v6 addresses.
 
-Thu Jan 26 16:32:18 CET 2006    Christof Douma <christof@douma.eu.org>
+2006-01-26  Christof Douma  <christof@douma.eu.org>
 
-    * Open masquerading options before dropping permissions on linux.
+	* Open masquerading options before dropping permissions on linux.
 
-Sat Jan  3 23:21:45 UTC 2004    Matthias Scheler <tron@NetBSD.org>
+2004-01-03  Matthias Scheler  <tron@NetBSD.org>
 
-    * Replace hardcoded CONFFILE path in usage instructions.
+	* Replace hardcoded CONFFILE path in usage instructions.
 
-Fri Jul 11 10:11:38 EDT 2003    Ryan McCabe <ryan@numb.org>
+2003-07-11  Ryan McCabe  <ryan@numb.org>
 
-    * Really fix the bug with random ident replies.
+	* Really fix the bug with random ident replies.
 
-    * Build fixes (specifically, for Solaris).
+	* Build fixes (specifically, for Solaris).
 
-Sun Apr 27 16:01:51 EDT 2003    Ryan McCabe <ryan@numb.org>
+2003-04-27  Ryan McCabe  <ryan@numb.org>
 
-    * Released as version 2.0.6.
-    * Fixed a build problem on some versions of FreeBSD when NAT support
-      is included.
-        - Problem reported by John Blazek <freebsd@logicalsolutns.com>
-    * Made random replies 12 characters long. I guess some programs don't
-      like it when they get a 512-byte long random reply.
+	* Released as version 2.0.6.
+	* Fixed a build problem on some versions of FreeBSD when NAT support
+	  is included.
+		- Problem reported by John Blazek <freebsd@logicalsolutns.com>
+	* Made random replies 12 characters long. I guess some programs don't
+	  like it when they get a 512-byte long random reply.
 
-Wed Apr 23 19:59:42 EDT 2003    Ryan McCabe <ryan@numb.org>
+2003-04-23  Douglas Henke  <henke@insync.net>
 
-    * Applied patches from henke@insync.net to
-        - Improve PRNG seeding and random number selection.
-        - Add support for running in the foreground, logging only to stderr,
-          and for inetd support and daemontools support.
+	* Improve PRNG seeding and random number selection.
+	* Add support for running in the foreground, logging only to stderr,
+	  and for inetd support and daemontools support.
 
-Thu Feb 13 23:28:14 EST 2003    Ryan McCabe <ryan@numb.org>
+2003-02-14  Ryan McCabe  <ryan@numb.org>
 
-    * Make it build again on recent versions of Darwin.
+	* Make it build again on recent versions of Darwin.
 
-Tue Feb 12 01:30:45 EST 2003    Ryan McCabe <ryan@numb.org>
+2003-02-12  Ryan McCabe  <ryan@numb.org>
 
-    * Released as version 2.0.5.
+	* Released as version 2.0.5.
 
-Tue Feb 11 19:04:19 EST 2003    Ryan McCabe <ryan@numb.org>
+2003-02-12  Ryan McCabe  <ryan@numb.org>
 
-    * Added support for connection forwarding on recent versions of
-      OpenBSD and on FreeBSD when NAT is disabled.
-    * Added a patch from Mieczyslaw Nalewaj  <nami@polbox.com> to add
-      support for FreeBSD 5.
-    * Added a patch from Elliott Mitchell <ehem@m5p.com> to prevent
-      memory leaks in parts of the configuration parser.
+	* Added support for connection forwarding on recent versions of
+	  OpenBSD and on FreeBSD when NAT is disabled.
 
-Thu Jan  9 13:49:15 EST 2003    Ryan McCabe <ryan@numb.org>
+2003-02-12  Mieczyslaw Nalewaj  <nami@polbox.com>
 
-    * Added DNAT patch for Linux from Christian Kellner <gicmo@gmx.net>
-    * Added a ptch from Krzysztof Ol?dzki <ole@ans.pl> that fixes
-      lookups of IPv6 connections.
+	* Add support for FreeBSD 5.
 
-Sat Aug 24 09:20:43 EDT 2002    Ryan McCabe <ryan@numb.org>
+2003-02-12  Elliott Mitchell  <ehem@m5p.com>
 
-    * Fixed a compile error for older versions of libc on Linux.
-        - Thanks to Motohiko Takemura <takemura@pharmaco.crl.hyo-med.ac.jp>
+	* Prevent memory leaks in parts of the configuration parser.
 
-Thu Aug 22 11:44:20 EDT 2002    Ryan McCabe <ryan@numb.org>
+2003-01-09  Christian Kellner  <gicmo@gmx.net>
 
-    * Cleaned up the connection forwarding code, made connection
-      forwarding actually work on BSD.
-        - Thanks to Ewen McNeill <ewen@naos.co.nz>
+	* DNAT patch for Linux
 
-Wed Aug 20 13:21:34 EDT 2002    Ryan McCabe <ryan@numb.org>
+2003-01-09  Krzysztof Oledzki  <ole@ans.pl>
 
-    * Released as version 2.0.4.
+	* Fix lookups of IPv6 connections.
 
-Wed Aug  7 23:05:56 EDT 2002    Ryan McCabe <ryan@numb.org>
+2002-08-24  Ryan McCabe  <ryan@numb.org>
 
-    * Added support for Solaris 9.
-        - Thanks to Douglas Palmer <palmer@nyed.uscourts.gov>
-    * Use the netlink socket diagnostics interface to look up
-      connection owners on Linux, if available.
+	* Fixed a compile error for older versions of libc on Linux.
+		- Thanks to Motohiko Takemura <takemura@pharmaco.crl.hyo-med.ac.jp>
 
-Wed Jan 30 15:22:39 EST 2002    Ryan McCabe <ryan@numb.org>
+2002-08-22  Ryan McCabe  <ryan@numb.org>
 
-    * Added support for Darwin.
+	* Cleaned up the connection forwarding code, made connection
+	  forwarding actually work on BSD.
+		- Thanks to Ewen McNeill <ewen@naos.co.nz>
 
-Tue Jan 22 16:07:39 EST 2002    Ryan McCabe <ryan@numb.org>
+2002-08-20  Ryan McCabe  <ryan@numb.org>
 
-    * Kill the "Address family not supported by protocol" warning
-      when running with --debug.
+	* Released as version 2.0.4.
 
-Wed Jan 16 00:25:02 EST 2002    Ryan McCabe <ryan@numb.org>
+2002-08-08  Ryan McCabe  <ryan@numb.org>
 
-    * Really fixed forwarding and proxy support on FreeBSD.
-    * Fixes for NAT on OpenBSD >= 3.0.
+	* Added support for Solaris 9.
+		- Thanks to Douglas Palmer <palmer@nyed.uscourts.gov>
+	* Use the netlink socket diagnostics interface to look up
+	  connection owners on Linux, if available.
 
-Tue Jan  1 10:17:30 EST 2002    Ryan McCabe <ryan@numb.org>
+2002-01-30  Ryan McCabe  <ryan@numb.org>
 
-    * Added support for NetBSD.
-    * Fixed a bug in the OpenBSD connection forwarding code.
+	* Added support for Darwin.
 
-Sat Dec 29 16:23:52 EST 2001    Ryan McCabe <ryan@numb.org>
+2002-01-22  Ryan McCabe  <ryan@numb.org>
 
-    * Released as version 2.0.3.
-    * Fixed a bug in the configure script that caused a compile
-      error on OpenBSD 3.0.
-    * Moved all the OS-specific user lookup functions into the src/kernel
-      directory.
+	* Kill the "Address family not supported by protocol" warning
+	  when running with --debug.
 
-Fri Dec 28 12:27:51 EST 2001    Ryan McCabe <ryan@numb.org>
+2002-01-16  Ryan McCabe  <ryan@numb.org>
 
-    * Released as version 2.0.2.
-    * Fixed a bug in the forwarding code.
+	* Really fixed forwarding and proxy support on FreeBSD.
+	* Fixes for NAT on OpenBSD >= 3.0.
 
-Fri Dec 28 02:03:21 EST 2001    Ryan McCabe <ryan@numb.org>
+2002-01-01  Ryan McCabe  <ryan@numb.org>
 
-    * Applied a patch from Kamil Andrusz <wizz@mniam.net> adding
-      support for OpenBSD >= 3.0 packet filter.
+	* Added support for NetBSD.
+	* Fixed a bug in the OpenBSD connection forwarding code.
 
-Sun Nov 11 23:24:07 EST 2001    Ryan McCabe <ryan@numb.org>
+2001-12-29  Ryan McCabe  <ryan@numb.org>
 
-    * Cleaned up the parsing of $HOME/.oidentd.conf files.
+	* Released as version 2.0.3.
+	* Fixed a bug in the configure script that caused a compile
+	  error on OpenBSD 3.0.
+	* Moved all the OS-specific user lookup functions into the src/kernel
+	  directory.
 
-Sat Nov  3 13:33:53 EST 2001    Ryan McCabe <ryan@numb.org>
+2001-12-28  Ryan McCabe  <ryan@numb.org>
 
-    * Allow multiple strings after a reply statement, from which
-      one of them will be selected randomly.
+	* Released as version 2.0.2.
+	* Fixed a bug in the forwarding code.
 
-Mon Oct 29 15:19:30 EST 2001    Ryan McCabe <ryan@numb.org>
+2001-12-28  Kamil Andrusz  <wizz@mniam.net>
 
-    * Added a --limit command-line option.
+	* Add support for OpenBSD >= 3.0 packet filter.
 
-Wed Oct  3 14:01:46 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-11-12  Ryan McCabe  <ryan@numb.org>
 
-    * Released as version 2.0.1.
-    * Fixed a crash that occurred when oidentd reloaded its
-      configuration file.
+	* Cleaned up the parsing of $HOME/.oidentd.conf files.
 
-Tue Oct  2 22:03:32 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-11-03  Ryan McCabe  <ryan@numb.org>
 
-    * Only lookup the "_nat_instances" symbol on BSD if the --masq
-      option is given.
-        - Without this patch, oidentd fails on FreeBSD (at least) if
-          NAT support is not compiled into the kernel.
+	* Allow multiple strings after a reply statement, from which
+	  one of them will be selected randomly.
 
-Tue Oct  2 19:48:16 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-10-29  Ryan McCabe  <ryan@numb.org>
 
-    * Blank lines and lines beginning with # (comments) are ignored
-      in /etc/oidentd_masq.conf.
+	* Added a --limit command-line option.
 
-Sun Sep 30 12:37:47 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-10-03  Ryan McCabe  <ryan@numb.org>
 
-    * Re-enable NAT support for OpenBSD 2.9 and greater.
-        - Eric LeBlanc <inouk@toutatis.igt.net> noted that
-          the kernel access method used for earlier OpenBSD
-          versions still works for version 2.9.
+	* Released as version 2.0.1.
+	* Fixed a crash that occurred when oidentd reloaded its
+	  configuration file.
 
-Sat Sep 29 15:41:47 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-10-03  Ryan McCabe  <ryan@numb.org>
 
-    * Released as version 2.0.0.
-    * Fixed a bug that caused freebsd.c to be built instead of
-      freebsd4.c when IP masq/NAT is diabled on FreeBSD.
+	* Only lookup the "_nat_instances" symbol on BSD if the --masq
+	  option is given.
+		- Without this patch, oidentd fails on FreeBSD (at least) if
+		  NAT support is not compiled into the kernel.
 
-Fri Sep 28 21:00:28 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-10-02  Ryan McCabe  <ryan@numb.org>
 
-    * Removed the debugging code from the FreeBSD NAT handler.
-        - Thanks to Steven Nikkel <steven_nikkel@bigfoot.com> for
-          making NAT support on FreeBSD possible.
-    * Made debugging messages a compile time option.
-        - They're only included if configure is passed --enable-debug
+	* Blank lines and lines beginning with # (comments) are ignored
+	  in /etc/oidentd_masq.conf.
 
-Thu Sep 27 12:18:15 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-09-30  Ryan McCabe  <ryan@numb.org>
 
-    * Applied patch from Motohiko Takemura <takemura@pharmaco.crl.hyo-med.ac.jp>
-      that fixed a bug in the command-line argument handler.
+	* Re-enable NAT support for OpenBSD 2.9 and greater.
+		- Eric LeBlanc <inouk@toutatis.igt.net> noted that
+		  the kernel access method used for earlier OpenBSD
+		  versions still works for version 2.9.
 
-Mon Sep 24 22:05:00 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-09-29  Ryan McCabe  <ryan@numb.org>
 
-    * Allow oidentd to bind more than one interface returned
-      by getaddrinfo().
+	* Released as version 2.0.0.
+	* Fixed a bug that caused freebsd.c to be built instead of
+	  freebsd4.c when IP masq/NAT is diabled on FreeBSD.
 
-Wed Sep 19 17:01:05 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-09-29  Ryan McCabe  <ryan@numb.org>
 
-    * Fixed a potential problem with the default port binding mechanism.
+	* Removed the debugging code from the FreeBSD NAT handler.
+		- Thanks to Steven Nikkel <steven_nikkel@bigfoot.com> for
+		  making NAT support on FreeBSD possible.
+	* Made debugging messages a compile time option.
+		- They're only included if configure is passed --enable-debug
 
-Wed Sep 19 14:32:45 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-09-27  Motohiko Takemura  <takemura@pharmaco.crl.hyo-med.ac.jp>
 
-    * Added a new command-line flag, --config, that is used to specify
-      the location of the configuration file.  The default is
-      /etc/oidentd.conf.
+	* Fix a bug in the command-line argument handler.
 
-Tue Sep 18 21:23:13 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-09-25  Ryan McCabe  <ryan@numb.org>
 
-    * Make sure the trailing new line is trimmed from the operating
-      system parameter in the /etc/oidentd_masq.conf file.
-        - Thanks to Eric LeBlanc <inouk@toutatis.igt.net> for noticing this.
+	* Allow oidentd to bind more than one interface returned
+	  by getaddrinfo().
 
-Tue Sep 18 17:19:15 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-09-19  Ryan McCabe  <ryan@numb.org>
 
-    * Fixes for IP masquerading and connection forwarding on OpenBSD
-      and FreeBSD.
+	* Fixed a potential problem with the default port binding mechanism.
 
-Tue Sep 18 12:40:57 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-09-19  Ryan McCabe  <ryan@numb.org>
 
-    * Applied a patch that fixes the bug that caused IP masquerading to fail.
-        - Fix reported by
-          Motohiko Takemura <takemura@pharmaco.crl.hyo-med.ac.jp>
-          and Eric LeBlanc <inouk@toutatis.igt.net>
+	* Added a new command-line flag, --config, that is used to specify
+	  the location of the configuration file.  The default is
+	  /etc/oidentd.conf.
 
-Tue Sep 18 09:35:29 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-09-19  Ryan McCabe  <ryan@numb.org>
 
-    * Applied UDB fixes from Martin Waitz <tali@stud.uni-erlangen.de>
+	* Make sure the trailing new line is trimmed from the operating
+	  system parameter in the /etc/oidentd_masq.conf file.
+		- Thanks to Eric LeBlanc <inouk@toutatis.igt.net> for
+		  noticing this.
 
-Mon Sep 17 15:29:32 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-09-18  Ryan McCabe  <ryan@numb.org>
 
-    * Added IP masquerade support for FreeBSD.
+	* Fixes for IP masquerading and connection forwarding on OpenBSD
+	  and FreeBSD.
 
-Mon Sep 17 14:19:49 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-09-18  Eric LeBlanc  <inouk@toutatis.igt.net>
+2001-09-18  Motohiko Takemura  <takemura@pharmaco.crl.hyo-med.ac.jp>
 
-    * Fixed bugs that caused openbsd.c not to compile.
-    * Add OpenBSD 2.9 support.
-        - Thanks to Stephen Marley <stephen@openkast.com> for access to
-          a machine running OpenBSD 2.9.
+	* Fix a bug that caused IP masquerading to fail.
 
-Fri Sep 14 17:31:07 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-09-18  Martin Waitz  <tali@stud.uni-erlangen.de>
 
-    * Released as version 1.9.9.1
+	* UDB fixes
 
-Fri Sep 14 11:43:21 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-09-17  Ryan McCabe  <ryan@numb.org>
 
-    * Merged the --other and --os command-line flags.  See the manual
-      page for details.
+	* Added IP masquerade support for FreeBSD.
 
-Tue Sep 11 22:50:47 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-09-17  Ryan McCabe  <ryan@numb.org>
 
-    * Merged fixes from Motohiko Takemura <takemura@pharmaco.crl.hyo-med.ac.jp>
-        - Includes fixes for:
-            * Typo in the oidentd_masq.conf man file.
-            * Bugs with the -f (--forward) command-line flag.
-            * Bugs with the -o (--other) command-line flag.
-            * Typo that caused the the UDB and forward options to
-              use the same bit mask.
+	* Fixed bugs that caused openbsd.c not to compile.
+	* Add OpenBSD 2.9 support.
+		- Thanks to Stephen Marley <stephen@openkast.com> for access to
+		  a machine running OpenBSD 2.9.
 
-Tue Sep  4 10:17:38 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-09-14  Ryan McCabe  <ryan@numb.org>
 
-    * Fix a crash when no configuration file is used.
-        - If you saw crashes with oidentd 1.9.9, this will
-          fix it.
+	* Released as version 1.9.9.1
 
-Tue Sep  4 09:50:33 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-09-14  Ryan McCabe  <ryan@numb.org>
 
-    * IPv4/IPv6 interoperability cleanups.
-    * Fixed the configure --enable-ivp6 and --enable-masq options.
-        - Thanks to Arkadiusz Miskiewicz <misiek@pld.ORG.PL> for
-          input and the bug report concerning the configure flags.
+	* Merged the --other and --os command-line flags.  See the manual
+	  page for details.
 
-Fri Aug 31 11:43:39 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-09-12  Motohiko Takemura  <takemura@pharmaco.crl.hyo-med.ac.jp>
 
-    * It's $HOME/.oidentd.conf.  Fix everywhere...
+	* Fixed a typo in the oidentd_masq.conf man file.
+	* Fixed bugs with the -f (--forward) command-line flag.
+	* Fixed bugs with the -o (--other) command-line flag.
+	* Fixed a typo that caused the the UDB and forward options to
+	  use the same bit mask.
 
-Fri Aug 31 10:26:38 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-09-04  Ryan McCabe  <ryan@numb.org>
 
-    * Fixed Solaris 8 support.
-        - Thanks to Carlton Clark <rstark@manatrip.ath.cx> for
-          access to his Solaris 8 box.
+	* Fix a crash when no configuration file was used.
 
-Wed Aug 29 14:09:59 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-09-04  Ryan McCabe  <ryan@numb.org>
 
-    * Solaris 7 support.
-    * Cleaned up the Solaris 2.[456] support.
+	* IPv4/IPv6 interoperability cleanups.
+	* Fixed the configure --enable-ivp6 and --enable-masq options.
+		- Thanks to Arkadiusz Miskiewicz <misiek@pld.ORG.PL> for
+		  input and the bug report concerning the configure flags.
 
-Tue Aug 28 16:25:30 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-08-31  Ryan McCabe  <ryan@numb.org>
 
-    * Solaris 8 support.
-    * Small cleanups.
+	* It's $HOME/.oidentd.conf.  Fix everywhere...
 
-Tue Aug 28 10:00:10 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-08-31  Ryan McCabe  <ryan@numb.org>
 
-    * Compile fix for systems that have __ss_family instead of ss_family.
+	* Fixed Solaris 8 support.
+		- Thanks to Carlton Clark <rstark@manatrip.ath.cx> for
+		  access to his Solaris 8 box.
 
-Mon Aug 27 16:28:39 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-08-29  Ryan McCabe  <ryan@numb.org>
 
-    * Fix the port binding mechanism.
+	* Solaris 7 support.
+	* Cleaned up the Solaris 2.[456] support.
 
-Mon Aug 27 09:46:06 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-08-28  Ryan McCabe  <ryan@numb.org>
 
-    * autoconf tweaks.
-    * Fixed to work with automake 1.5.
+	* Solaris 8 support.
+	* Small cleanups.
 
-Sat Aug 25 10:09:44 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-08-28  Ryan McCabe  <ryan@numb.org>
 
-    * Fixed compile bugs that showed up when you passed configure a
-      --srcdir argument.
-        - Reported by Frederic L. W. Meunier <0@pervalidus.net>
+	* Compile fix for systems that have __ss_family instead of ss_family.
 
-Fri Aug 24 10:06:05 EDT 2001    Ryan McCabe <ryan@numb.org>
+2001-08-27  Ryan McCabe  <ryan@numb.org>
 
-    * Released version 1.9.9
+	* Fix the port binding mechanism.
+
+2001-08-27  Ryan McCabe  <ryan@numb.org>
+
+	* autoconf tweaks.
+	* Fixed to work with automake 1.5.
+
+2001-08-25  Ryan McCabe  <ryan@numb.org>
+
+	* Fixed compile bugs that showed up when you passed configure a
+	  --srcdir argument.
+		- Reported by Frederic L. W. Meunier <0@pervalidus.net>
+
+2001-08-24  Ryan McCabe  <ryan@numb.org>
+
+	* Released version 1.9.9
