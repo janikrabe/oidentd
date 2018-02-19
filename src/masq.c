@@ -311,7 +311,7 @@ int fwd_request(	int sock,
 		return (-1);
 	}
 
-	sockprintf(sock, "%d , %d : USERID : %s : %s\r\n",
+	sockprintf(sock, "%d,%d:USERID:%s:%s\r\n",
 		real_lport, real_fport, ret_os, user);
 
 	o_log(NORMAL,

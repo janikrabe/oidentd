@@ -466,7 +466,7 @@ struct udb_lookup_res get_udb_user(	in_port_t lport,
 	}
 
 	/* User not local, reply with string from UDB table. */
-	sockprintf(sock, "%d , %d : USERID : %s : %s\r\n",
+	sockprintf(sock, "%d,%d:USERID:%s:%s\r\n",
 		lport, fport, ret_os, buf.username);
 
 	o_log(NORMAL, "[%s] UDB lookup: %d , %d : (returned %s)",
