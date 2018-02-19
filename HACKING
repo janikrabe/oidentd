@@ -54,7 +54,7 @@ script will automatically be regenerated the next time the `make' command
 is issued.
 
     When making changes that affect kernel support, please ensure that the
-file `KERNEL_SUPPORT.md' is updated to reflect these changes.
+`KERNEL_SUPPORT.md' file is updated to reflect these changes.
 
 Releasing
 =========
@@ -67,7 +67,7 @@ directory.  New versions should be released only by the project maintainers.
     In `ChangeLog', add an entry '* Released as version <version>.' to the top
 of the file, replacing `<version>' with the version number of the new release.
 
-    Prepend a summary of all significant changes to the file `NEWS'.  Each
+    Prepend a summary of all significant changes to the `NEWS' file.  Each
 change should be added as a separate line and prefixed with an asterisk and a
 space character (`* ').  The last change should be followed by a blank line to
 separate the summary from that of the previous version.  At the top of the
