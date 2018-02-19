@@ -1,42 +1,175 @@
-2018-01-27  Janik Rabe  <oidentd@janikrabe.com>
+2018-02-18  Janik Rabe  <oidentd@janikrabe.com>
 
-	* Fix build and missing prerequisite headers on FreeBSD.
+	* Add libnetfilter_conntrack support for IP masquerading on Linux.
+		- Enabled by default if libnetfilter_conntrack and libcap-ng
+		  libraries and headers are present during configuration.
+		- Can be disabled by passing the --disable-libnfct flag to
+		  the './configure' script.
+		- Feature requested by Johnny A. Solbu <johnny@solbu.net>.
+	* Bind socket before forking.
+		- This allows errors (most commonly EACCES) to be shown.
+
+2018-02-17  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Update the default configuration file.
+		- Add header comment.
+		- Disable all capabilities by default.
+		- Properly hide superuser connections instead of simply
+		  responding with "UNKNOWN" (commented out by default).
+	* Properly drop privileges without the --user and --group options.
+		- This seems to always have been the intention, but a
+		  bug prevented this feature from working correctly.
+
+2018-02-17  Johnny A. Solbu  <johnny@solbu.net>
+
+	* Use the configuration file shipped by distributions.
+
+2018-02-16  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Install a default configuration file to sysconfdir.
+	* Warn when k_open() functions disable masquerading.
+	* Replace some AC_CHECK_LIB macros with AC_SEARCH_LIBS.
+	* Consistently use AC_MSG_ERROR macro.
+
+2018-02-15  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Only show a warning when masquerading support is unavailable.
+		- Instead of exiting immediately, show a warning and
+		  continue without masquerading support.
+	* Removed scripts "dist.sh" and "scrub.sh".
+		- These scripts should no longer be necessary with the
+		  presence of "make distcheck" and "git clean -dfx".
+
+2018-02-14  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Follow RFC 1413 recommendations on white space.
+		- Remove unnecessary white space from ident replies.
+	* Fail when masquerading on Linux is requested but not supported.
+	* Replaced deprecated AC_TRY_* macros.
+
+2018-02-13  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix libudb support and various inconsistencies.
+	* Return exit code 0 when --version is used.
+	* Prevent --limit option from falling through.
+		- This caused --limit to also enable --other.
+	* Fix "make distcheck" attempting to include missing files.
+	* Change masq function to return bool.
+
+2018-02-12  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix --disable-masq option to ./configure.
+		- NAT/IP masquerading support was re-enabled after processing
+		  this flag.
+
+2018-02-12  Johnny A. Solbu  <johnny@solbu.net>
+
+	* Add missing required files to "make dist".
+
+2018-02-12  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Return exit code 0 when --help is used.
+
+2018-02-08  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Add basic NetBSD 5+ support.
+		- IP masquerading is not yet supported.
+
+2018-02-06  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Re-add legacy FreeBSD support.
+
+2018-02-03  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Explicitly drop support for NetBSD 5+ and SunOS 5.1+.
+		- oidentd does not compile on these versions, so fail
+		  directly in configure.ac instead of trying to compile
+		  an incompatible source file.
+
+2018-02-02  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix build on OpenBSD.
+
+2018-02-01  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Add missing OpenBSD prerequisite headers.
+
+2018-01-28  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Suggest use of --debug when core_init fails.
+
+2018-01-27  Jan Rękorajski  <baggins@pld-linux.org>
+
+	* Support listening on multiple specified IP addresses.
+
+2018-01-25  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix build on FreeBSD.
+	* Add missing FreeBSD prerequisite headers.
+
+2018-01-19  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Use exit code constants where possible.
+
+2018-01-19  Matthias Scheler  <tron@NetBSD.org>
+
+	* Replace hardcoded CONFFILE path in usage instructions.
+
+2018-01-18  Joerg Sonnenberger  <joerg@bec.de>
+
+	* Add basic DragonFly BSD support.
+
+2018-01-13  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Declare randval() function static.
+
+2018-01-10  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Always show errors when socket initialization fails.
+
+2018-01-10  Fabian Knittel  <fabian.knittel@avona.com>
+
+	* Bind to IPv6 socket as well.
+
+2018-01-10  Petr Písař  <ppisar@redhat.com>
+
+	* Open connection tracking table only when necessary.
+
+2018-01-09  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Update logging priorities to ensure that errors are shown.
 	* Update documentation and manual pages.
-	* Change priorities of log messages.
-	* Always show error message when socket initialization fails.
+	* Warn when --debug is used in a build without debugging support.
+
+2018-01-08  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix and modernize build system.
 	* Add missing user_db header to linux.c.
-	* Various changes to the build system.
-	* Warn when --debug is used but not supported.
-	* Remove negative exit codes and use constants where possible.
+
+2018-01-07  Kufat  <kufat@kufat.net>
+
+	* Move inline function randval() to header.
+	* Header for rand in randval().
+
+2018-01-07  Chris Taylor  <chris@equate.dyndns.org>
+
+	* Add handling for nf_conntrack_acct being off.
+		- Thanks to Jonas Gorski
+
+2018-01-07  Simon Arlott  <oidentd@fire.lp0.eu>
+
+	* Fix bug handling NAT with a different destination port on Linux.
+	* Fix forwarding when the destination port is different.
+	* Add an option that does forwarding only if the masquerading file
+	  lookup fails.
+	* Support Layer 3 Independent Connection tracking on Linux.
+	* Handle local NAT on Linux (instead of forwarding to self).
+	* Copy fport before converting v4-mapped v6 addresses.
 
 2018-01-07  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Released as version 2.1.0.
 	* Fix memory corruption on FreeBSD.
-
-2017-04-24  Kufat  <kufat@kufat.net>
-
-	* Fix gcc linker error due to inline function being defined in source file
-
-2016-03-11  Petr Písař  <ppisar@redhat.com>
-
-	* Only open conntracking table when IP masquerading is enabled.
-
-2011-08-18  Chris Taylor  <chris@equate.dyndns.org>
-
-	* Add handling for nf_conntrack_acct being off (Thanks to Jonas Gorski)
-
-2010-03-01  Fabian Knittel  <fabian.knittel@avona.com>
-
-	* Bind to IPv6 socket as well.
-
-2008-04-15  Jan Rękorajski  <baggins@pld-linux.org>
-
-	* Allow oidentd to listen on multiple specified IPs.
-
-2006-06-01  Joerg Sonnenberger  <joerg@bec.de>
-
-	* Add basic support for DragonFly BSD.
 
 2006-05-22  Ryan McCabe  <ryan@numb.org>
 
@@ -49,23 +182,9 @@
 	* Pulled in patches for FreeBSD from FreeBSD ports
 	  (ports/security/oidentd/files/patch-unprivileged_ipv6).
 
-2006-04-10  Simon Arlott  <oidentd@fire.lp0.eu>
-
-	* Fix bug handling NAT with a different destination port on Linux.
-	* Fix forwarding when the destination port is different.
-	* Add an option that does forwarding only if the masquerading file
-	  lookup fails.
-	* Support Layer 3 Independent Connection tracking on Linux.
-	* Handle local NAT on Linux (instead of fowarding to self).
-	* Copy fport before converting v4-mapped v6 addresses.
-
 2006-01-26  Christof Douma  <christof@douma.eu.org>
 
 	* Open masquerading options before dropping permissions on linux.
-
-2004-01-03  Matthias Scheler  <tron@NetBSD.org>
-
-	* Replace hardcoded CONFFILE path in usage instructions.
 
 2003-07-11  Ryan McCabe  <ryan@numb.org>
 
