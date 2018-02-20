@@ -1,14 +1,12 @@
 SUBDIRS = missing
 sbin_PROGRAMS = oidentd
-sysconf_DATA = oidentd.conf
 
 oidentd_LDADD = -Lmissing -lmissing $(ADD_LIB)
 
 AM_CFLAGS = $(DEBUG_CFLAGS) $(WARN_CFLAGS)
 AM_CPPFLAGS = "-I$(srcdir)/missing"
 
-EXTRA_DIST = kernel \
-	$(sysconf_DATA)
+EXTRA_DIST = kernel
 
 DISTCLEANFILES = \
 	os.c
