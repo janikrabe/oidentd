@@ -626,10 +626,13 @@ else
 	AC_MSG_WARN(not including IPv6 support)
 fi
 
-if test "$libnfct_support" = "yes"; then
-	AC_DEFINE(LIBNFCT_SUPPORT, 1, [Define to include libnetfilter_conntrack support])
-elif test "$want_libnfct" = "yes"; then
-	AC_MSG_WARN(not including libnetfilter_conntrack support)
+
+if test "$want_libnfct" = "yes"; then
+	if test "$libnfct_support" = "yes"; then
+		AC_DEFINE(LIBNFCT_SUPPORT, 1, [Define to include libnetfilter_conntrack support])
+	else
+		AC_MSG_WARN(not including libnetfilter_conntrack support)
+	fi
 fi
 
 if test -n "$DEBUG_CFLAGS"; then

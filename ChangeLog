@@ -1,6 +1,8 @@
 2018-02-20  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Move configuration file out of src directory
+	* Fix LIBNFCT_SUPPORT being defined on systems where
+	  $want_libnfct = "no"
 
 2018-02-19  Janik Rabe  <oidentd@janikrabe.com>
 
