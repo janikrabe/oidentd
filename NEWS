@@ -1,3 +1,7 @@
+Changes in version 2.2.1
+
+	* Fixed LIBNFCT_SUPPORT being defined incorrectly on some systems
+
 Changes in version 2.2.0
 
 	* Security: privileges were not being dropped without the `--user`
