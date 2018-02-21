@@ -21,7 +21,9 @@ connections owned by them.
 .PP
 The \fB$HOME/.oidentd.conf\fP file allows a user to specify what ident response
 will be returned for specific connections.
+
 .SH /etc/oidentd.conf SYNTAX
+
 .TP
 .B USER DIRECTIVE
 The \fBoidentd.conf\fP file consists of 0 or more \fIuser\fP directives. The
@@ -48,6 +50,7 @@ definition will inherit the capabilities of the default user. Capabilities can
 then be allowed, denied, or forced on a per-user basis by way of the \fIuser\fP
 statement followed by the username of the user to whom the properties that
 follow will apply.
+
 .TP
 .B RANGE DIRECTIVE
 The body of a \fIuser\fP directive consists of 1 or more \fIrange\fP directives.
@@ -57,7 +60,7 @@ of capabilities is binding. A range directive consists of 1 or more statements
 of the following form:
 
 .nf
-default {
+\fIdefault\fP {
 	<capability directive>
 }
 
@@ -100,6 +103,7 @@ The omission of any of the \fIto\fP, \fIlport\fP, \fIfrom\fP and \fIfport\fP
 parameters acts like a wildcard for that parameter. For example, the statement
 "from localhost" matches all connections from localhost on any port to any host
 on any port.
+
 .TP
 .B CAPABILITY DIRECTIVE
 The body of a \fIrange\fP directive consists of one or more capability directives.
@@ -117,9 +121,10 @@ The capability argument must be one of the capabilities described in the
 
 The force action takes a third argument when the capability is \fIreply\fP. For
 example, \fIforce reply "randomuser"\fP.
+
 .SH $HOME/.oidentd.conf SYNTAX
-A user's .oidentd.conf configuration file may contain 0 or more of the
-following statements:
+A user's \fB$HOME/.oidentd.conf\fP configuration file may contain 0 or more of
+the following statements:
 
 .nf
 \fIglobal\fP {
@@ -134,16 +139,19 @@ OR
 .fi
 
 The \fIglobal\fP directive acts as a wildcard, matching all connections, so if
-used at all, the global directive should be the first entry in the file and
-should be used only once. Use is permitted anywhere in the file and infinitely
-many times, however it doesn't make much sense to use it in this manner.
+used at all, the \fIglobal\fP directive should be the first entry in the file
+and should be used only once. Use is permitted anywhere in the file and
+infinitely many times, however it doesn't make much sense to use it in this
+manner.
 
 The range directive has the same syntax and semantics as the range directive in
 the \fB/etc/oidentd.conf\fP file. See above for a description.
 
 Valid capabilities are \fIreply\fP, \fIrandom\fP, \fInumeric\fP,
 \fIrandom_numeric\fP, and \fIhide\fP. Descriptions can be found below.
+
 .SH CAPABILITIES
+
 .TP
 .B spoof
 Allow spoofed ident responses; allow the user to specify any string as the
@@ -152,16 +160,19 @@ be the username of another user. When a user spoofs their ident reply, the
 login name of the user is recorded along with the forged reply.
 .br
 This capability does not apply to the \fIforce\fP action.
+
 .TP
 .B spoof_all
 Allow the usernames of other users to be used as ident responses.
 .br
 This capability does not apply to the \fIforce\fP action.
+
 .TP
 .B spoof_privport
 Allow ident replies to be spoofed on privileged ports (ports lower than 1024).
 .br
 This capability does not apply to the \fIforce\fP action.
+
 .TP
 \fBreply\fP <string> [<string1> ... <stringN>]
 Reply to successful ident lookups with the ident response specified in
@@ -212,26 +223,31 @@ The character with the ASCII code \fINNN\fP in the octal base system.
 .TP
 .B \ex\fINNN\fP
 The character with the ASCII code \fINNN\fP in the hexadecimal base system.
-.PP
 
+.PP
 \tThis capability only applies to the \fIforce\fP action.
 .PD
 .RE
 .LP
+
 .TP
 .B hide
 Hide the user; report a "HIDDEN-USER" error when an ident lookup succeeds.
+
 .TP
 .B random
 Reply to successful ident lookups with a randomly generated ident response of
 consisting of alphanumeric characters.
+
 .TP
 .B numeric
 Reply to successful ident lookups with the UID of the user that was looked up.
+
 .TP
 .B random_numeric
 Reply to successful with a randomly generated ident response of the form userN,
 where N is a random number between 0 and 100000.
+
 .SH EXAMPLE /etc/oidentd.conf FILE
 .nf
 default {
@@ -281,6 +297,7 @@ ability to use other usernames as ident replies, generate random replies and
 hide his ident for all connections, and grant the user "ryan" the capability to
 spoof ident replies to privileged ports (< 1024) on connections originating
 from the host 127.0.0.1.
+
 .SH EXAMPLE $HOME/.oidentd.conf FILE
 .nf
 global {
