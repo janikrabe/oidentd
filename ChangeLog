@@ -1,8 +1,19 @@
+2018-02-21  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Run as oidentd:oidentd by default.
+		- Only if the oidentd user does not exist, fall back to
+		  running as nobody, or UID 65534, in this order.
+		- Only if the oidentd group does not exist, fall back to
+		  running as nobody, nogroup, or GID 65534, in this order.
+		- Thanks to Johannes Löthberg <johannes@kyriasis.com> for
+		  this suggestion.
+
 2018-02-20  Janik Rabe  <oidentd@janikrabe.com>
 
-	* Move configuration file out of src directory
+	* Released as version 2.2.1.
+	* Move configuration file out of src directory.
 	* Fix LIBNFCT_SUPPORT being defined on systems where
-	  $want_libnfct = "no"
+	  $want_libnfct = "no".
 
 2018-02-19  Janik Rabe  <oidentd@janikrabe.com>
 

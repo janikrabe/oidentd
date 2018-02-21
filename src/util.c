@@ -70,10 +70,10 @@ int random_seed(void) {
 
 /*
 ** Find the user specified by "temp_user"
-** Returns 0 on success, -1 on failure.
+** Returns true on success, false on failure.
 */
 
-int find_user(const char *temp_user, uid_t *uid) {
+bool find_user(const char *temp_user, uid_t *uid) {
 	struct passwd *pw;
 
 	pw = getpwnam(temp_user);
@@ -82,21 +82,21 @@ int find_user(const char *temp_user, uid_t *uid) {
 		u_int32_t temp_uid = strtoul(temp_user, &end, 10);
 
 		if (*end != '\0')
-			return (-1);
+			return false;
 		else
 			*uid = temp_uid;
 	} else
 		*uid = pw->pw_uid;
 
-	return (0);
+	return true;
 }
 
 /*
 ** Find the group specified by "temp_group"
-** Returns 0 on success, -1 on failure.
+** Returns true on success, false on failure.
 */
 
-int find_group(const char *temp_group, gid_t *gid) {
+bool find_group(const char *temp_group, gid_t *gid) {
 	struct group *gr;
 
 	gr = getgrnam(temp_group);
@@ -105,13 +105,13 @@ int find_group(const char *temp_group, gid_t *gid) {
 		u_int32_t temp_gid = strtoul(temp_group, &end, 10);
 
 		if (*end != '\0')
-			return (-1);
+			return false;
 		else
 			*gid = temp_gid;
 	} else
 		*gid = gr->gr_gid;
 
-	return (0);
+	return true;
 }
 
 /*
@@ -241,7 +241,7 @@ int go_background(void) {
 			_exit(0);
 	}
 
-	if (setsid() == -1) {
+	if (setsid() == (pid_t) -1) {
 		debug("setsid: %s", strerror(errno));
 		return (-1);
 	}

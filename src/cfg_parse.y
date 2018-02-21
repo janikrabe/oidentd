@@ -130,7 +130,7 @@ user_statement:
 		cur_user = xmalloc(sizeof(struct user_info));
 		cur_user->cap_list = NULL;
 
-		if (find_user($2, &cur_user->user) == -1) {
+		if (!find_user($2, &cur_user->user)) {
 			o_log(LOG_CRIT, "[line %u] Invalid user: \"%s\"", current_line, $2);
 			free($2);
 			free_cap_entries(cur_cap);

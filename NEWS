@@ -1,3 +1,7 @@
+Unreleased changes
+
+	* Try to run as oidentd:oidentd before falling back to nobody etc.
+
 Changes in version 2.2.1
 
 	* Fixed LIBNFCT_SUPPORT being defined incorrectly on some systems
