@@ -87,7 +87,8 @@ static const struct option longopts[] = {
 #ifdef MASQ_SUPPORT
 	{"forward",				optional_argument,	0, 'f'},
 	{"masquerade",				no_argument,		0, 'm'},
-	{"forward-last",			no_argument,		0, 'M'},
+	{"masquerade-first",			no_argument,		0, 'M'},
+	{"forward-last",			no_argument,		0, '0'}, /* deprecated */
 #endif
 	{"proxy",				required_argument,	0, 'P'},
 	{NULL, 0, NULL, 0}
@@ -214,6 +215,12 @@ int get_options(int argc, char *const argv[]) {
 			case 'm':
 				enable_opt(MASQ);
 				break;
+
+			case '0':
+				o_log(LOG_CRIT, "Warning: Flag --forward-last is deprecated "
+				                "and will be removed in the future. Please use "
+				                "--masquerade-first (-M) instead.");
+				/* fall through */
 
 			case 'M':
 				enable_opt(MASQ);
@@ -425,7 +432,7 @@ static void print_usage(void) {
 #ifdef MASQ_SUPPORT
 "-f or --forward [<port>]     Forward requests for masqueraded hosts to the host on port <port>\n"
 "-m or --masquerade           Enable support for IP masquerading\n"
-"-M or --forward-last         Check IP masquerading file before forwarding\n"
+"-M or --masquerade-first     Check IP masquerading file before forwarding\n"
 #endif
 
 "-P or --proxy <host>         Let <host> act as a proxy, forwarding connections to us\n"

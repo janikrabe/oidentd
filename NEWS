@@ -1,11 +1,12 @@
 Unreleased changes
 
 	* Try to run as oidentd:oidentd before falling back to nobody etc.
-	* Search for configuration files in sysconfdir instead of `/etc`
+	* Search for configuration files in sysconfdir instead of `/etc`.
+	* Deprecated option --forward-last in favor of --masquerade-first.
 
 Changes in version 2.2.1
 
-	* Fixed LIBNFCT_SUPPORT being defined incorrectly on some systems
+	* Fixed LIBNFCT_SUPPORT being defined incorrectly on some systems.
 
 Changes in version 2.2.0
 

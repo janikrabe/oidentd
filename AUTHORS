@@ -71,7 +71,7 @@ Ryan McCabe <ryan@numb.org>
 Simon Arlott <oidentd@fire.lp0.eu>
 	Local NAT support for Linux
 	Linux nf_conntrack support
-	MASQ_OVERRIDE (--forward-last) option
+	MASQ_OVERRIDE (--masquerade-first) option
 
 Slawomir Piotrowski <slawek@telsatgp.com.pl>
 	IP masquerading (NAT) support for OpenBSD
