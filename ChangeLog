@@ -1,5 +1,6 @@
 2018-02-24  Janik Rabe  <oidentd@janikrabe.com>
 
+	* Replace --masq with --masquerade in manual pages
 	* Make the -M option imply -f in addition to -m
 	* Don't assume sysconfdir is /etc
 		- Previously it was possible to specify a custom
