@@ -1,6 +1,7 @@
 Unreleased changes
 
 	* Try to run as oidentd:oidentd before falling back to nobody etc.
+	* Search for configuration files in sysconfdir instead of `/etc`
 
 Changes in version 2.2.1
 

@@ -20,12 +20,16 @@
 #ifndef __OIDENTD_H_
 #define __OIDENTD_H_
 
+#ifndef SYSCONFDIR
+	#define SYSCONFDIR "/etc"
+#endif
+
 /*
 ** File containing the ident replies to be used for hosts that
 ** masquerade through us.
 */
 
-#define MASQ_MAP		"/etc/oidentd_masq.conf"
+#define MASQ_MAP		SYSCONFDIR "/oidentd_masq.conf"
 
 /*
 ** String prepended to a random number when the -r flag is specified
@@ -37,7 +41,7 @@
 ** System-wide configuration file.
 */
 
-#define CONFFILE		"/etc/oidentd.conf"
+#define CONFFILE		SYSCONFDIR "/oidentd.conf"
 
 /*
 ** Per-user configuration file.  This file is relative to the user's

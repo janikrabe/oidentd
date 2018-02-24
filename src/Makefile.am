@@ -4,7 +4,8 @@ sbin_PROGRAMS = oidentd
 oidentd_LDADD = -Lmissing -lmissing $(ADD_LIB)
 
 AM_CFLAGS = $(DEBUG_CFLAGS) $(WARN_CFLAGS)
-AM_CPPFLAGS = "-I$(srcdir)/missing"
+AM_CPPFLAGS = -I "$(srcdir)/missing" \
+	-D "SYSCONFDIR=\"$(sysconfdir)\""
 
 EXTRA_DIST = kernel
 

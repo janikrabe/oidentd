@@ -1,3 +1,10 @@
+2018-02-24  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Don't assume sysconfdir is /etc
+		- Previously it was possible to specify a custom
+		  configuration file using the -C option, but the
+		  path to /etc/oidentd_masq.conf was hardcoded.
+
 2018-02-21  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Run as oidentd:oidentd by default.
