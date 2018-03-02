@@ -419,7 +419,7 @@ static void print_usage(void) {
 "\nUsage: oidentd [options]\n"
 "-a or --address <address>    Bind to <address> (can be specified multiple times)\n"
 "-c or --charset <charset>    Specify an alternate charset\n"
-"-C or --config <config file> Use the specifed file instead of " CONFFILE "\n"
+"-C or --config <config file> Use the specified file instead of " CONFFILE "\n"
 
 #ifdef ENABLE_DEBUGGING
 "-d or --debug                Enable debugging\n"
