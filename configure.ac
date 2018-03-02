@@ -51,6 +51,7 @@ ADD_LIB=""
 
 use_kmem=no
 
+enableval=""
 masq_support=yes
 AC_ARG_ENABLE(masq,
 [  --disable-masq          disable NAT/IP masquerading support])
