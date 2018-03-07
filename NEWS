@@ -1,5 +1,7 @@
 Unreleased changes
 
+Changes in version 2.2.2
+
 	* Implicitly drop privileges only when running as root.
 	* Try to run as oidentd:oidentd before falling back to nobody etc.
 	* Search for configuration files in sysconfdir instead of `/etc`.

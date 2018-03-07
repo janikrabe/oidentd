@@ -1,5 +1,6 @@
 2018-03-07  Janik Rabe  <oidentd@janikrabe.com>
 
+	* Released as version 2.2.2.
 	* Implicitly drop privileges only when running as root.
 
 2018-03-02  Magnus Holmgren  <holmgren@debian.org>
