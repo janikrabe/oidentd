@@ -1,3 +1,7 @@
+2018-03-07  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Implicitly drop privileges only when running as root.
+
 2018-03-02  Magnus Holmgren  <holmgren@debian.org>
 
 	* Don't let --enable-debug mess with build flags.

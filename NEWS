@@ -1,5 +1,6 @@
 Unreleased changes
 
+	* Implicitly drop privileges only when running as root.
 	* Try to run as oidentd:oidentd before falling back to nobody etc.
 	* Search for configuration files in sysconfdir instead of `/etc`.
 	* Deprecated option --forward-last in favor of --masquerade-first.

@@ -376,7 +376,7 @@ int get_options(int argc, char *const argv[]) {
 	** If no user was specified, use a reasonable default.
 	*/
 
-	if (!opt_enabled(CHANGE_UID)) {
+	if (!opt_enabled(CHANGE_UID) && (getuid() == 0 || geteuid() == 0)) {
 		enable_opt(CHANGE_UID);
 		if (!find_user("oidentd", &uid)) {
 			if (!find_user("nobody", &uid)) {
@@ -394,7 +394,7 @@ int get_options(int argc, char *const argv[]) {
 	** If no group is specified, use a reasonable default.
 	*/
 
-	if (!opt_enabled(CHANGE_GID)) {
+	if (!opt_enabled(CHANGE_GID) && (getgid() == 0 || getegid() == 0)) {
 		enable_opt(CHANGE_GID);
 		if (!find_group("oidentd", &gid)) {
 			if (!find_group("nobody", &gid)) {
@@ -438,7 +438,7 @@ static void print_usage(void) {
 "-P or --proxy <host>         Let <host> act as a proxy, forwarding connections to us\n"
 "-g or --group <group>        Run with specified group or GID\n"
 "-i or --foreground           Don't run as a daemon\n"
-"-I or --stdio                Service a single client connected to stdin/stdout, then exit (use when running from inetd/xinetd/etc.)\n"
+"-I or --stdio                Service a single client connected to stdin/stdout, then exit (use with inetd/xinetd/etc.)\n"
 "-l or --limit <number>       Limit the number of open connections to the specified number\n"
 "-o or --other [<os>]         Return <os> instead of the operating system.  Uses \"OTHER\" if no argument is given.\n"
 "-p or --port <port>          Listen for connections on specified port\n"
