@@ -6,6 +6,7 @@ oidentd_LDADD = -Lmissing -lmissing $(ADD_LIB)
 AM_CFLAGS = $(DEBUG_CFLAGS) $(WARN_CFLAGS)
 AM_CPPFLAGS = -I "$(srcdir)/missing" \
 	-D "SYSCONFDIR=\"$(sysconfdir)\""
+AM_YFLAGS = -d
 
 EXTRA_DIST = kernel
 
@@ -32,3 +33,6 @@ noinst_HEADERS = \
 	options.h	\
 	user_db.h	\
 	util.h
+
+BUILT_SOURCES = \
+	cfg_parse.h
