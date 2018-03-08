@@ -292,7 +292,11 @@ uid_t get_user6(	in_port_t lport,
 	}
 
 	/* Eat the header line. */
-	fgets(buf, sizeof(buf), fp);
+	if (NULL == fgets(buf, sizeof(buf), fp)) {
+		debug("fgets: %s: Could not read header", CFILE6);
+		fclose(fp);
+		return MISSING_UID;
+	}
 
 	while (fgets(buf, sizeof(buf), fp)) {
 		struct in6_addr remote6;
@@ -376,7 +380,11 @@ uid_t get_user4(	in_port_t lport,
 	}
 
 	/* Eat the header line. */
-	fgets(buf, sizeof(buf), fp);
+	if (NULL == fgets(buf, sizeof(buf), fp)) {
+		debug("fgets: %s: Could not read header", CFILE);
+		fclose(fp);
+		return MISSING_UID;
+	}
 
 	/*
 	** The line should never be longer than 1024 chars, so fgets should be OK.
@@ -477,7 +485,10 @@ bool masq(	int sock,
 
 	if (conntrack == CT_MASQFILE) {
 		/* eat the header line */
-		fgets(buf, sizeof(buf), masq_fp);
+		if (NULL == fgets(buf, sizeof(buf), masq_fp)) {
+			debug("fgets: conntrack file: Could not read header");
+			return false;
+		}
 	}
 
 	while (fgets(buf, sizeof(buf), masq_fp)) {
