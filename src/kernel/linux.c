@@ -730,6 +730,8 @@ static int masq_ct_line(char *line,
 
 		return 0;
 	}
+
+	return -1;
 }
 
 #endif
