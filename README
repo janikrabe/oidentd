@@ -17,7 +17,7 @@ For a complete list of features, consult the manual pages or run
 oidentd --help.
 
 The most recent version of oidentd will always be available at
-ftp://ftp.janikrabe.com/pub/oidentd/releases/latest.
+https://ftp.janikrabe.com/pub/oidentd/releases/latest.
 
 Please mail any feedback, suggestions, patches, questions, comments, bug
 reports, et cetera to Janik Rabe <oidentd@janikrabe.com> or open an issue on
