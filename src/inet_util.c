@@ -400,7 +400,7 @@ inline bool sin4_equal(	struct sockaddr_storage *ss1,
 void sin_setv4(in_addr_t addr, struct sockaddr_storage *ss) {
 	memset(ss, 0, sizeof(struct sockaddr_storage));
 	ss->ss_family = AF_INET;
-	memcpy(&SIN4(ss)->sin_addr, &addr, sizeof(struct sockaddr_in));
+	memcpy(&SIN4(ss)->sin_addr, &addr, sizeof(addr));
 }
 
 #ifdef WANT_IPV6
