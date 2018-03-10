@@ -54,5 +54,6 @@ autom4te.cache
 # Generated source files and executables
 src/oidentd
 src/cfg_parse.c
+src/cfg_parse.h
 src/cfg_scan.c
 src/os.c
