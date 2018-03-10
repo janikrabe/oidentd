@@ -1,3 +1,10 @@
+2018-03-08  Petr Písař  <ppisar@redhat.com>
+
+	* Regenerate Bison header file using Automake
+	* Fix an out-of-bound read/write issue
+	* Check for fgets() failure when reading header lines
+	* Return error if masq_ct_line() cannot decide
+
 2018-03-07  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Released as version 2.2.2.

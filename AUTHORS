@@ -64,6 +64,7 @@ Motohiko Takemura <takemura@pharmaco.crl.hyo-med.ac.jp>
 
 Petr Písař <ppisar@redhat.com>
 	Linux masquerading improvements
+	Fixes for several compiler warnings
 
 Ryan McCabe <ryan@numb.org>
 	Everything else (original author)

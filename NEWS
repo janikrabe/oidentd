@@ -1,5 +1,8 @@
 Unreleased changes
 
+	* Fixed an out-of-buffer read/write issue
+	* Fixed several compiler warnings
+
 Changes in version 2.2.2
 
 	* Implicitly drop privileges only when running as root.
