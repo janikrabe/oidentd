@@ -1,7 +1,7 @@
 Unreleased changes
 
-	* Fixed an out-of-buffer read/write issue
-	* Fixed several compiler warnings
+	* Fixed an out-of-buffer read/write issue.
+	* Fixed several compiler warnings.
 
 Changes in version 2.2.2
 
