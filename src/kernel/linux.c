@@ -252,6 +252,10 @@ bool core_init(void) {
 		} else {
 			conntrack = CT_NFCONNTRACK;
 		}
+	} else if (opt_enabled(PROXY) || opt_enabled(FORWARD)) {
+		o_log(LOG_CRIT, "Only local NAT is supported on your system; "
+		                "please consider upgrading your kernel");
+		return false;
 	} else {
 		conntrack = CT_MASQFILE;
 	}
@@ -523,10 +527,10 @@ static int masq_ct_line(char *line,
 	in_port_t masq_lport;
 	in_port_t masq_fport;
 	char user[MAX_ULEN];
-	in_addr_t remoten;
 	in_addr_t localm;
 	in_addr_t remotem;
 	in_addr_t localn;
+	in_addr_t remoten;
 	struct sockaddr_storage ss;
 	int ret;
 
@@ -547,6 +551,10 @@ static int masq_ct_line(char *line,
 		nport = (in_port_t) nport_temp;
 		masq_lport = (in_port_t) masq_lport_temp;
 		masq_fport = (in_port_t) masq_fport_temp;
+
+		/* Assume local NAT. */
+		remoten = localm;
+		localn = remotem;
 	} else if (conntrack == CT_IPCONNTRACK) {
 		int l1, l2, l3, l4, r1, r2, r3, r4;
 		int nl1, nl2, nl3, nl4, nr1, nr2, nr3, nr4;
