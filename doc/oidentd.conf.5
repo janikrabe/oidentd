@@ -66,7 +66,7 @@ of the following form:
 
 OR
 
-\fIto\fP <host> \fIlport\fP <lport> \fIfrom\fP <host> \fIfport\fP <fport> {
+\fIto\fP <host> \fIfport\fP <fport> \fIfrom\fP <host> \fIlport\fP <lport> {
 	<capability directive>
 }
 .fi
@@ -75,8 +75,8 @@ The \fIdefault\fP directive matches all host/port pairs for which rules are not
 defined. There should only be one \fIdefault\fP directive, and it should be the
 first statement in the block.
 
-Anywhere from 1 to all 4 of the \fIto\fP, \fIlport\fP, \fIfrom\fP, and
-\fIfport\fP parameters may be specified.
+Anywhere from 1 to all 4 of the \fIto\fP, \fIfport\fP, \fIfrom\fP, and
+\fIlport\fP parameters may be specified.
 
 The \fIto\fP parameter is used to specify the address to which a connection is made.
 
@@ -93,13 +93,13 @@ connection originates.
 The \fIfport\fP parameter is used to specify the destination port of a
 connection.
 
-The \fIlport\fP and \fIfport\fP parameters take either a port or a port range.
+The \fIfport\fP and \fIlport\fP parameters take either a port or a port range.
 Ports can be specified numerically (e.g. 113) or by giving a service name
 (e.g. "auth"). Ranges of ports take the form <starting port>:<ending port>.
 The ending port is optional. If the ending port is omitted, the range is taken
 to be any port greater than or equal to the starting port.
 
-The omission of any of the \fIto\fP, \fIlport\fP, \fIfrom\fP and \fIfport\fP
+The omission of any of the \fIto\fP, \fIfport\fP, \fIfrom\fP and \fIlport\fP
 parameters acts like a wildcard for that parameter. For example, the statement
 "from localhost" matches all connections from localhost on any port to any host
 on any port.
