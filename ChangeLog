@@ -1,3 +1,11 @@
+2018-03-22  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Allow to, fport, from, lport to be specified in any order.
+
+2018-03-22  Fardale  <fardale+github@crans.org>
+
+	* Fix incorrect order of lport and fport in manual pages.
+
 2018-03-10  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Allow only local NAT if /proc/net/ip_masquerade is used.

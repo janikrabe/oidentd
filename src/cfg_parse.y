@@ -174,31 +174,42 @@ range_rule:
 			default_caps = cur_cap->caps;
 	}
 |
-	dest_rule '{' cap_rule '}'
-|
-	src_rule '{' cap_rule '}'
-|
-	dest_rule src_rule '{' cap_rule '}'
+	rule_specification_list_req '{' cap_rule '}'
 ;
 
-src_rule:
-	from_statement
-|
-	lport_statement
-|
-	from_statement lport_statement
+rule_specification_list_req:
+	rule_specification_list rule_specification
 ;
 
-dest_rule:
+rule_specification_list:
+	/* empty */
+|
+	rule_specification_list rule_specification
+;
+
+rule_specification:
 	to_statement
 |
 	fport_statement
 |
-	to_statement fport_statement
+	from_statement
+|
+	lport_statement
 ;
 
 to_statement:
 	TOK_TO TOK_STRING {
+		if (cur_cap->dest) {
+			if (parser_mode == PARSE_SYSTEM) {
+				o_log(LOG_CRIT, "[line %u] 'to' can only be specified once",
+					current_line);
+			}
+
+			free($2);
+			free_cap_entries(cur_cap);
+			YYABORT;
+		}
+
 		cur_cap->dest = xmalloc(sizeof(struct sockaddr_storage));
 
 		if (get_addr($2, cur_cap->dest) == -1) {
@@ -218,6 +229,17 @@ to_statement:
 
 fport_statement:
 	TOK_FPORT TOK_STRING {
+		if (cur_cap->fport) {
+			if (parser_mode == PARSE_SYSTEM) {
+				o_log(LOG_CRIT, "[line %u] 'fport' can only be specified once",
+					current_line);
+			}
+
+			free($2);
+			free_cap_entries(cur_cap);
+			YYABORT;
+		}
+
 		cur_cap->fport = xmalloc(sizeof(struct port_range));
 
 		if (extract_port_range($2, cur_cap->fport) == -1) {
@@ -235,6 +257,17 @@ fport_statement:
 
 from_statement:
 	TOK_FROM TOK_STRING {
+		if (cur_cap->src) {
+			if (parser_mode == PARSE_SYSTEM) {
+				o_log(LOG_CRIT, "[line %u] 'from' can only be specified once",
+					current_line);
+			}
+
+			free($2);
+			free_cap_entries(cur_cap);
+			YYABORT;
+		}
+
 		cur_cap->src = xmalloc(sizeof(struct sockaddr_storage));
 
 		if (get_addr($2, cur_cap->src) == -1) {
@@ -254,6 +287,17 @@ from_statement:
 
 lport_statement:
 	TOK_LPORT TOK_STRING {
+		if (cur_cap->lport) {
+			if (parser_mode == PARSE_SYSTEM) {
+				o_log(LOG_CRIT, "[line %u] 'lport' can only be specified once",
+					current_line);
+			}
+
+			free($2);
+			free_cap_entries(cur_cap);
+			YYABORT;
+		}
+
 		cur_cap->lport = xmalloc(sizeof(struct port_range));
 
 		if (extract_port_range($2, cur_cap->lport) == -1) {
@@ -312,11 +356,7 @@ cap_statement:
 user_range_rule:
 	TOK_GLOBAL '{' user_cap_rule '}'
 |
-	dest_rule '{' user_cap_rule '}'
-|
-	src_rule '{' user_cap_rule '}'
-|
-	dest_rule src_rule '{' user_cap_rule '}'
+	rule_specification_list_req '{' user_cap_rule '}'
 ;
 
 user_reply:
