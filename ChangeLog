@@ -1,3 +1,7 @@
+2018-03-26  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix lookup of connections to IPv6-mapped IPv4 addresses.
+
 2018-03-22  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Allow to, fport, from, lport to be specified in any order.

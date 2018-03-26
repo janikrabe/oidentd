@@ -509,6 +509,17 @@ inline bool sin_equal(	struct sockaddr_storage *ss1,
 
 inline void sin_extractv4(void *in6, struct in_addr *in4) {
 	/* XXX - Is there a cleaner portable way to do this? */
-
 	memcpy(in4, ((char *) in6) + 12, sizeof(struct in_addr));
+}
+
+/*
+** Converts an IPv4 address to an IPv6-mapped IPv4 address.
+*/
+
+inline void sin_mapv4to6(void *in4, struct in6_addr *in6) {
+	/* XXX - Is there a cleaner portable way to do this? */
+	char *in6_ptr = (char *) in6;
+	memset(in6_ptr, 0, 10);
+	memset(in6_ptr + 10, 0xFF, 2);
+	memcpy(in6_ptr + 12, in4, sizeof(struct in_addr));
 }

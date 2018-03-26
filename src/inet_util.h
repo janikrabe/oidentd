@@ -48,6 +48,7 @@ ssize_t sock_write(int sock, void *buf, size_t len);
 
 void sin_setv4(in_addr_t addr, struct sockaddr_storage *ss);
 void sin_extractv4(void *sin6, struct in_addr *sin4);
+void sin_mapv4to6(void *in4, struct in6_addr *in6);
 size_t sin_len(const struct sockaddr_storage *ss);
 size_t sin_addr_len(const struct sockaddr_storage *ss);
 void sin_copy(struct sockaddr_storage *ss1, const struct sockaddr_storage *ss2);

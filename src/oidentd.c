@@ -305,6 +305,23 @@ static int service_request(int insock, int outsock) {
 		con_uid = get_user4(htons(lport), htons(fport), &laddr, &faddr);
 
 #ifdef WANT_IPV6
+	/*
+	 * Check for IPv6-mapped IPv4 addresses. This ensures that the correct
+	 * ident response is returned for connections to a mapped address.
+	 */
+	if (con_uid == MISSING_UID && laddr.ss_family == AF_INET) {
+		struct sockaddr_storage laddr_m6, faddr_m6;
+		struct in6_addr in6;
+
+		sin_mapv4to6(&SIN4(&laddr)->sin_addr, &in6);
+		sin_setv6(&in6, &laddr_m6);
+
+		sin_mapv4to6(&SIN4(&faddr)->sin_addr, &in6);
+		sin_setv6(&in6, &faddr_m6);
+
+		con_uid = get_user6(htons(lport), htons(fport), &laddr_m6, &faddr_m6);
+	}
+
 	if (con_uid == MISSING_UID && laddr6.ss_family == AF_INET6)
 		con_uid = get_user6(htons(lport), htons(fport), &laddr6, &faddr6);
 #endif
