@@ -1,6 +1,7 @@
 2018-03-26  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Fix lookup of connections to IPv6-mapped IPv4 addresses.
+	* Warn when lexer or parser generator cannot be found.
 
 2018-03-22  Janik Rabe  <oidentd@janikrabe.com>
 

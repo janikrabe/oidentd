@@ -28,8 +28,7 @@ AM_CONFIG_HEADER(config.h)
 AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_YACC
-AM_PROG_LEX
-AC_PATH_PROG(LEX, flex)
+AC_PROG_LEX
 AC_PROG_RANLIB
 AC_PROG_INSTALL
 AC_PATH_PROG(sedpath, sed)
@@ -96,9 +95,16 @@ if test "$enableval" = "yes"; then
 	WARN_CFLAGS="-O3 -ggdb -fstack-protector -fstrict-aliasing -W -Wall -Wextra -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wdeclaration-after-statement -Wredundant-decls -Wmissing-format-attribute -Wmissing-noreturn -Wstrict-aliasing=2 -Wlong-long -Wcomment -Wunreachable-code -Wswitch-enum -Wswitch-default -Wvolatile-register-var -Wformat=2 -Winit-self -Winvalid-pch -Winline -Wpointer-arith -Wbad-function-cast -Wcast-align -Wchar-subscripts -Wunsafe-loop-optimizations -Wdisabled-optimization -Wwrite-strings -Wsign-compare -Wconversion -Wmissing-field-initializers -Wnested-externs -Wstack-protector -Wunused-macros -Wendif-labels -Wno-cast-qual"
 fi
 
+if test "$LEX" = ":" || ! ($LEX --version) < /dev/null > /dev/null 2>&1; then
+	AC_MSG_ERROR([No lexer generator found; please install flex])
+fi
+
+if ! ($YACC --version) < /dev/null > /dev/null 2>&1; then
+	AC_MSG_ERROR([No parser generator found; please install bison])
+fi
+
 AC_SUBST(WARN_CFLAGS)
 AC_SUBST(DEBUG_CFLAGS)
-AC_SUBST(FLEX_PATH)
 
 # Don't rely on __STDC_VERSION__ as kernels may use C99 booleans
 AC_CHECK_HEADERS(stdbool.h)
