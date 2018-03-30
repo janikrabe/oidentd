@@ -372,6 +372,16 @@ int get_options(int argc, char *const argv[]) {
 		return (-1);
 	}
 
+#ifdef NEED_ROOT
+	/*
+	** Warn the user that privileges will not be dropped automatically.
+	*/
+
+	if (!opt_enabled(CHANGE_UID) || !opt_enabled(CHANGE_GID)) {
+		o_log(LOG_CRIT, "Warning: privileges will not be dropped "
+		                "automatically on this system");
+	}
+#else
 	/*
 	** If no user was specified, use a reasonable default.
 	*/
@@ -410,6 +420,7 @@ int get_options(int argc, char *const argv[]) {
 			}
 		}
 	}
+#endif
 
 	return (0);
 }

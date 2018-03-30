@@ -5,6 +5,7 @@ Unreleased changes
 	* Fixed incorrect order of lport and fport in manual pages.
 	* Fixed lookup of connections to IPv6-mapped IPv4 addresses.
 	* Allow to, fport, from and lport to be specified in any order.
+	* Warn when privileges cannot be dropped automatically.
 
 Changes in version 2.2.2
 

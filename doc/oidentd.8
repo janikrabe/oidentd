@@ -95,7 +95,10 @@ windows IRC client), it is not necessary to run \fBoidentd\fP on that host.
 
 .TP
 .B "\-g or \-\-group=<group|GID>"
-Run with specified GID or group.
+Run as the specified group or GID. If this option is not given, \fBoidentd\fP
+falls back to running as \fIoidentd\fP, \fInobody\fP, \fInogroup\fP, or GID
+\fI65534\fP, in this order. On systems where \fBoidentd\fP requires superuser
+privileges, a warning is displayed and the group is not changed implicitly.
 
 .TP
 .B "\-i or \-\-foreground"
@@ -164,7 +167,10 @@ connection.
 
 .TP
 .B "\-u or \-\-user=<user|UID>"
-Run with specified username or UID.
+Run as the specified user or UID. If this option is not given, \fBoidentd\fP
+falls back to running as \fIoidentd\fP, \fInobody\fP, or UID \fI65534\fP, in
+this order. On systems where \fBoidentd\fP requires superuser privileges, a
+warning is displayed and the user is not changed implicitly.
 
 .TP
 .B "\-U or \-\-udb"

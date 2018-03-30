@@ -1,3 +1,8 @@
+2018-03-30  Janik Rabe  <oidentd@janikrabe.com>
+
+	* On systems where oidentd needs to run as root, do not drop
+	  privileges automatically and show a warning instead.
+
 2018-03-26  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Fix lookup of connections to IPv6-mapped IPv4 addresses.

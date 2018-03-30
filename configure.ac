@@ -49,6 +49,7 @@ DEBUG_CFLAGS=""
 ADD_LIB=""
 
 use_kmem=no
+require_superuser=no
 
 enableval=""
 masq_support=yes
@@ -457,6 +458,7 @@ case "$host_os" in
 
 			* )
 				use_kmem=no
+				require_superuser=yes
 				os_src=netbsd5.c
 				masq_support=no
 			;;
@@ -531,6 +533,7 @@ case "$host_os" in
 
 				* )
 					use_kmem=no
+					require_superuser=yes
 					os_src=freebsd4.c
 				;;
 			esac
@@ -556,6 +559,7 @@ case "$host_os" in
 
 		if test "$masq_support" = "no"; then
 			use_kmem=no
+			require_superuser=yes
 			os_src=freebsd4.c
 		else
 			use_kmem=yes
@@ -618,6 +622,11 @@ esac
 if test "$use_kmem" = "yes"; then
 	AC_DEFINE(USE_KMEM, 1, [Define if using /dev/kmem])
 	ADD_LIB="$ADD_LIB -lkvm"
+fi
+
+if test "$require_superuser" = "yes"; then
+	AC_DEFINE(NEED_ROOT, 1, [Define if privileges cannot be dropped])
+	AC_MSG_WARN(privileges will not be dropped automatically on this system)
 fi
 
 if test "$masq_support" = "yes"; then
