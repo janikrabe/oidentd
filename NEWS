@@ -1,5 +1,7 @@
 Unreleased changes
 
+Changes in version 2.2.3
+
 	* Fixed an out-of-buffer read/write issue.
 	* Fixed several compiler warnings.
 	* Fixed incorrect order of lport and fport in manual pages.

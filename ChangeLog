@@ -1,5 +1,6 @@
 2018-03-30  Janik Rabe  <oidentd@janikrabe.com>
 
+	* Released as version 2.2.3.
 	* On systems where oidentd needs to run as root, do not drop
 	  privileges automatically and show a warning instead.
 
