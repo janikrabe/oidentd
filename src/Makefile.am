@@ -35,4 +35,9 @@ noinst_HEADERS = \
 	util.h
 
 BUILT_SOURCES = \
-	cfg_parse.h
+	cfg_parse.h	\
+	cfg_parse.c	\
+	cfg_scan.c
+
+CLEANFILES = \
+	$(BUILT_SOURCES)
