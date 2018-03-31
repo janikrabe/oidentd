@@ -445,7 +445,7 @@ int read_config(const char *path) {
 }
 
 /*
-** Open the user's ~/.oidentd_config file for reading
+** Open the user's ~/.oidentd.conf file for reading
 ** by the parser.
 */
 
