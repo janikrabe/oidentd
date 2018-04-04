@@ -43,21 +43,21 @@
 #include "options.h"
 #include "netlink.h"
 
-#ifdef HAVE_LIBCAP_NG
+#if HAVE_LIBCAP_NG
 #	include <cap-ng.h>
 #else
 #	undef LIBNFCT_SUPPORT
 #endif
 
-#ifndef MASQ_SUPPORT
+#if !MASQ_SUPPORT
 #	undef LIBNFCT_SUPPORT
 #endif
 
-#ifdef LIBNFCT_SUPPORT
+#if LIBNFCT_SUPPORT
 #	include <libnetfilter_conntrack/libnetfilter_conntrack.h>
 #endif
 
-#ifdef HAVE_LIBUDB
+#if HAVE_LIBUDB
 #	include <udb.h>
 #endif
 
@@ -74,7 +74,7 @@ extern char *ret_os;
 extern uid_t uid;
 extern gid_t gid;
 
-#ifdef LIBNFCT_SUPPORT
+#if LIBNFCT_SUPPORT
 struct ct_masq_query {
 	int sock;
 	in_port_t lport;
@@ -85,7 +85,7 @@ struct ct_masq_query {
 };
 #endif
 
-#ifdef MASQ_SUPPORT
+#if MASQ_SUPPORT
 static int masq_ct_line(char *line,
 			int sock,
 			in_port_t lport,
@@ -94,7 +94,7 @@ static int masq_ct_line(char *line,
 			struct sockaddr_storage *faddr);
 #endif
 
-#ifdef LIBNFCT_SUPPORT
+#if LIBNFCT_SUPPORT
 bool drop_privs_libnfct(uid_t uid, gid_t gid);
 static bool dispatch_libnfct_query(struct ct_masq_query *queryp);
 static int callback_nfct(enum nf_conntrack_msg_type type,
@@ -107,13 +107,13 @@ static uid_t lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 							in_port_t src_port,
 							in_port_t dst_port);
 
-#ifdef MASQ_SUPPORT
+#if MASQ_SUPPORT
 enum {
 	CT_UNKNOWN,
 	CT_MASQFILE,
 	CT_IPCONNTRACK,
 	CT_NFCONNTRACK,
-#	ifdef LIBNFCT_SUPPORT
+#	if LIBNFCT_SUPPORT
 	CT_LIBNFCT,
 #	endif
 };
@@ -121,7 +121,7 @@ FILE *masq_fp;
 static int conntrack = CT_UNKNOWN;
 #endif
 
-#ifdef LIBNFCT_SUPPORT
+#if LIBNFCT_SUPPORT
 bool drop_privs_libnfct(uid_t uid, gid_t gid) {
 	if (conntrack != CT_LIBNFCT)
 		return true;
@@ -212,7 +212,7 @@ static int callback_nfct(enum nf_conntrack_msg_type type,
 */
 
 bool core_init(void) {
-#ifdef MASQ_SUPPORT
+#if MASQ_SUPPORT
 	if (!opt_enabled(MASQ)) {
 		masq_fp = NULL;
 		return true;
@@ -239,7 +239,7 @@ bool core_init(void) {
 					return false;
 				}
 
-#	ifdef LIBNFCT_SUPPORT
+#	if LIBNFCT_SUPPORT
 				conntrack = CT_LIBNFCT;
 				return true;
 #	else
@@ -264,7 +264,7 @@ bool core_init(void) {
 }
 
 
-#ifdef WANT_IPV6
+#if WANT_IPV6
 
 /*
 ** Returns the UID of the owner of an IPv6 connection,
@@ -450,7 +450,7 @@ out_success:
 	return (uid);
 }
 
-#ifdef MASQ_SUPPORT
+#if MASQ_SUPPORT
 
 /*
 ** Handle a request to a host that's IP masquerading through us.
@@ -475,7 +475,7 @@ bool masq(	int sock,
 	lport = ntohs(lport);
 	fport = ntohs(fport);
 
-#ifdef LIBNFCT_SUPPORT
+#if LIBNFCT_SUPPORT
 	if (conntrack == CT_LIBNFCT) {
 		struct ct_masq_query query = { sock,
 				lport, fport,
@@ -593,7 +593,7 @@ static int masq_ct_line(char *line,
 
 		localn = nl1 << 24 | nl2 << 16 | nl3 << 8 | nl4;
 		remoten = nr1 << 24 | nr2 << 16 | nr3 << 8 | nr4;
-#ifdef LIBNFCT_SUPPORT
+#if LIBNFCT_SUPPORT
 	} else if (conntrack == CT_NFCONNTRACK || conntrack == CT_LIBNFCT) {
 #else
 	} else if (conntrack == CT_NFCONNTRACK) {

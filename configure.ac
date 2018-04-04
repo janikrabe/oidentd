@@ -86,7 +86,9 @@ enableval=""
 AC_ARG_ENABLE(debug,
 [  --enable-debug          enable debugging support])
 if test "$enableval" = "yes"; then
-	AC_DEFINE(ENABLE_DEBUGGING, 1, [Define to enable debugging])
+	AC_DEFINE(ENABLE_DEBUGGING, 1, [Set to enable debugging])
+else
+	AC_DEFINE(ENABLE_DEBUGGING, 0, [Set to enable debugging])
 fi
 
 enableval=""
@@ -619,32 +621,39 @@ case "$host_os" in
 	;;
 esac
 
+AC_DEFINE_UNQUOTED(KERNEL_DRIVER, "$os_src", [The name of the detected kernel driver])
+
 if test "$use_kmem" = "yes"; then
-	AC_DEFINE(USE_KMEM, 1, [Define if using /dev/kmem])
+	AC_DEFINE(USE_KMEM, 1, [Set if using /dev/kmem])
 	ADD_LIB="$ADD_LIB -lkvm"
+else
+	AC_DEFINE(USE_KMEM, 0, [Set if using /dev/kmem])
 fi
 
 if test "$require_superuser" = "yes"; then
-	AC_DEFINE(NEED_ROOT, 1, [Define if privileges cannot be dropped])
+	AC_DEFINE(NEED_ROOT, 1, [Set if privileges cannot be dropped])
 	AC_MSG_WARN(privileges will not be dropped automatically on this system)
+else
+	AC_DEFINE(NEED_ROOT, 0, [Set if privileges cannot be dropped])
 fi
 
 if test "$masq_support" = "yes"; then
-	AC_DEFINE(MASQ_SUPPORT, 1, [Define to include NAT/IP masq support])
+	AC_DEFINE(MASQ_SUPPORT, 1, [Set to include NAT/IP masquerading support])
 else
+	AC_DEFINE(MASQ_SUPPORT, 0, [Set to include NAT/IP masquerading support])
 	AC_MSG_WARN(not including NAT/IP masquerade support)
 fi
 
 if test "$ipv6_support" = "yes"; then
-	AC_DEFINE(WANT_IPV6, 1, [Define to include IPv6 support])
+	AC_DEFINE(WANT_IPV6, 1, [Set to include IPv6 support])
 else
+	AC_DEFINE(WANT_IPV6, 0, [Set to include IPv6 support])
 	AC_MSG_WARN(not including IPv6 support)
 fi
 
-
 if test "$want_libnfct" = "yes"; then
 	if test "$libnfct_support" = "yes"; then
-		AC_DEFINE(LIBNFCT_SUPPORT, 1, [Define to include libnetfilter_conntrack support])
+		AC_DEFINE(LIBNFCT_SUPPORT, 1, [Set to include libnetfilter_conntrack support])
 	else
 		AC_MSG_WARN(not including libnetfilter_conntrack support)
 	fi

@@ -34,7 +34,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#ifdef HAVE_LIBUDB
+#if HAVE_LIBUDB
 #	include <udb.h>
 #endif
 
@@ -47,7 +47,7 @@
 
 struct sockaddr_storage proxy;
 
-#ifdef MASQ_SUPPORT
+#if MASQ_SUPPORT
 
 static sigjmp_buf timebuf;
 static int fsock;
@@ -92,7 +92,7 @@ int find_masq_entry(struct sockaddr_storage *host,
 	u_int32_t line_num;
 	char buf[4096];
 
-#ifdef HAVE_LIBUDB
+#if HAVE_LIBUDB
 	if (opt_enabled(USEUDB)) {
 		struct udb_ip_user ibuf;
 		struct sockaddr_storage hostaddr;

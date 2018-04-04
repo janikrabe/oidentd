@@ -1,5 +1,7 @@
 Unreleased changes
 
+	* Added build information to `--version` output.
+
 Changes in version 2.2.3
 
 	* Fixed an out-of-buffer read/write issue.

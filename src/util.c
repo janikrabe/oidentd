@@ -47,7 +47,7 @@
 #include "missing.h"
 #include "options.h"
 
-#ifdef HAVE_LIBUDB
+#if HAVE_LIBUDB
 #	include <udb.h>
 #endif
 
@@ -412,7 +412,7 @@ int o_log(int priority, const char *fmt, ...) {
 	return (ret);
 }
 
-#ifdef HAVE_LIBUDB
+#if HAVE_LIBUDB
 /*
 ** Look up a connection in the UDB shared memory tables.
 **

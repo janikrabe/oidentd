@@ -36,6 +36,18 @@
 #define STDIO         (1 << 0x0c)
 #define MASQ_OVERRIDE (1 << 0x0d)
 
+#ifndef LIBNFCT_SUPPORT
+#define LIBNFCT_SUPPORT 0
+#endif
+
+#ifndef HAVE_LIBUDB
+#define HAVE_LIBUDB 0
+#endif
+
+#ifndef HAVE_LIBCAP_NG
+#define HAVE_LIBCAP_NG 0
+#endif
+
 bool opt_enabled(u_int32_t option);
 void disable_opt(u_int32_t option);
 int get_options(int argc, char *const argv[]);

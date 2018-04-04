@@ -40,7 +40,7 @@
 #include "user_db.h"
 #include "options.h"
 
-#ifdef MASQ_SUPPORT
+#if MASQ_SUPPORT
 #	define OPTSTRING "a:c:C:def::g:hiIl:mMo::p:P:qr:St:u:Uv"
 	extern in_port_t fwdport;
 #else
@@ -59,7 +59,9 @@ extern uid_t uid;
 extern gid_t gid;
 
 static void print_usage(void);
-static void print_version(void);
+static void print_version_str(char *desc, char *val);
+static void print_version_bool(char *desc, bool val);
+static void print_version(bool verbose);
 static inline void enable_opt(u_int32_t option);
 
 static const struct option longopts[] = {
@@ -80,11 +82,11 @@ static const struct option longopts[] = {
 	{"nosyslog",				no_argument,		0, 'S'},
 	{"timeout",				required_argument,	0, 't'},
 	{"user",				required_argument,	0, 'u'},
-#ifdef HAVE_LIBUDB
+#if HAVE_LIBUDB
 	{"udb",					no_argument,		0, 'U'},
 #endif
 	{"version",				no_argument,		0, 'v'},
-#ifdef MASQ_SUPPORT
+#if MASQ_SUPPORT
 	{"forward",				optional_argument,	0, 'f'},
 	{"masquerade",				no_argument,		0, 'm'},
 	{"masquerade-first",			no_argument,		0, 'M'},
@@ -131,7 +133,7 @@ int get_options(int argc, char *const argv[]) {
 	char *charset = NULL;
 	int naddrs = 0;
 
-#ifdef MASQ_SUPPORT
+#if MASQ_SUPPORT
 	if (get_port(DEFAULT_FPORT, &fwdport) == -1) {
 		o_log(LOG_CRIT, "Fatal: Bad port: \"%s\"", DEFAULT_FPORT);
 		return (-1);
@@ -182,7 +184,7 @@ int get_options(int argc, char *const argv[]) {
 
 			case 'd':
 				enable_opt(DEBUG_MSGS);
-#ifndef ENABLE_DEBUGGING
+#if !ENABLE_DEBUGGING
 				o_log(LOG_CRIT, "Fatal: oidentd was compiled without --enable-debug");
 				return (-1);
 #endif
@@ -192,7 +194,7 @@ int get_options(int argc, char *const argv[]) {
 				enable_opt(HIDE_ERRORS);
 				break;
 
-#ifdef MASQ_SUPPORT
+#if MASQ_SUPPORT
 			case 'f':
 			{
 				const char *p;
@@ -335,14 +337,14 @@ int get_options(int argc, char *const argv[]) {
 				}
 				break;
 
-#ifdef HAVE_LIBUDB
+#if HAVE_LIBUDB
 			case 'U':
 				enable_opt(USEUDB);
 				break;
 #endif
 
 			case 'v':
-				print_version();
+				print_version(true);
 				exit(EXIT_SUCCESS);
 
 			case 'h':
@@ -372,7 +374,7 @@ int get_options(int argc, char *const argv[]) {
 		return (-1);
 	}
 
-#ifdef NEED_ROOT
+#if NEED_ROOT
 	/*
 	** Warn the user that privileges will not be dropped automatically.
 	*/
@@ -432,7 +434,7 @@ static void print_usage(void) {
 "-c or --charset <charset>    Specify an alternate charset\n"
 "-C or --config <config file> Use the specified file instead of " CONFFILE "\n"
 
-#ifdef ENABLE_DEBUGGING
+#if ENABLE_DEBUGGING
 "-d or --debug                Enable debugging\n"
 #else
 "-d or --debug                Enable debugging (not available in this build)\n"
@@ -440,7 +442,7 @@ static void print_usage(void) {
 
 "-e or --error                Return \"UNKNOWN-ERROR\" for all errors\n"
 
-#ifdef MASQ_SUPPORT
+#if MASQ_SUPPORT
 "-f or --forward [<port>]     Forward requests for masqueraded hosts to the host on port <port>\n"
 "-m or --masquerade           Enable support for IP masquerading\n"
 "-M or --masquerade-first     Check IP masquerading file before forwarding\n"
@@ -458,7 +460,7 @@ static void print_usage(void) {
 "-t or --timeout <seconds>    Wait at most <seconds> before closing connections\n"
 "-u or --user <user>          Run as specified user or UID\n"
 
-#ifdef HAVE_LIBUDB
+#if HAVE_LIBUDB
 "-U or --udb                  Perform lookups in UDB shared memory tables\n"
 #endif
 
@@ -466,14 +468,35 @@ static void print_usage(void) {
 "-r or --reply <string>       If a query fails, pretend it succeeded, returning <string>\n"
 "-h or --help                 Display this help and exit\n";
 
-	print_version();
+	print_version(false);
 	printf("%s", usage);
 }
 
-static void print_version(void) {
+static inline void print_version_str(char *desc, char *val) {
+	printf("\t%s%s\n", desc, val);
+}
+
+static inline void print_version_bool(char *desc, bool val) {
+	print_version_str(desc, val ? "Yes" : "No");
+}
+
+static void print_version(bool verbose) {
 	printf("%s by %s <%s>\n", PACKAGE_STRING,
 			PACKAGE_AUTHOR, PACKAGE_BUGREPORT);
 	printf("Originally written by %s <%s>\n",
 			PACKAGE_ORIG_AUTHOR, PACKAGE_ORIG_EMAIL);
 	printf("%s\n", PACKAGE_WEBSITE);
+
+	if (verbose) {
+		printf("\nBuild information:\n");
+		print_version_str ("Kernel driver: ", KERNEL_DRIVER);
+		print_version_bool("Needs kmem access: ", USE_KMEM);
+		print_version_bool("Needs root access: ", NEED_ROOT);
+		print_version_bool("Debugging build: ", ENABLE_DEBUGGING);
+		print_version_bool("Masquerading support: ", MASQ_SUPPORT);
+		print_version_bool("IPv6 support: ", WANT_IPV6);
+		print_version_bool("Linux libcap-ng support: ", HAVE_LIBCAP_NG);
+		print_version_bool("Linux libnfct support: ", LIBNFCT_SUPPORT);
+		print_version_bool("UDB library support: ", HAVE_LIBUDB);
+	}
 }

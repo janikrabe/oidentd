@@ -53,7 +53,7 @@
 #undef _KERNEL
 #endif
 
-#ifdef WANT_IPV6
+#if WANT_IPV6
 #	include <sys/sysctl.h>
 #	include <netinet/ip_var.h>
 #	include <netinet/tcp_timer.h>
@@ -62,7 +62,7 @@
 #	include <netinet6/in6_pcb.h>
 #endif
 
-#ifdef MASQ_SUPPORT
+#if MASQ_SUPPORT
 #	include <netinet/ip_fil.h>
 #	include <netinet/ip_nat.h>
 #endif
@@ -79,7 +79,7 @@ extern struct sockaddr_storage proxy;
 #define N_TCB			0
 #define N_TCB6			1
 
-#ifdef MASQ_SUPPORT
+#if MASQ_SUPPORT
 #	define N_NATLIST	2
 #	define N_TOTAL		4
 #else
@@ -111,7 +111,7 @@ int k_open(void) {
 
 	kinfo->nl[N_TCB].n_name = "_tcbtable";
 
-#ifdef WANT_IPV6
+#if WANT_IPV6
 #if __NetBSD_Version__ >= 106250000	/* 1.6Y */
 	kinfo->nl[N_TCB6].n_name = "_tcbtable";
 #else
@@ -121,7 +121,7 @@ int k_open(void) {
 	kinfo->nl[N_TCB6].n_name = "_oidentd_nonexistent";
 #endif
 
-#ifdef MASQ_SUPPORT
+#if MASQ_SUPPORT
 	if (opt_enabled(MASQ))
 		kinfo->nl[N_NATLIST].n_name = "_nat_instances";
 	else
@@ -137,7 +137,7 @@ int k_open(void) {
 		return (-1);
 	}
 
-#ifdef MASQ_SUPPORT
+#if MASQ_SUPPORT
 	if (opt_enabled(MASQ) && kinfo->nl[N_NATLIST].n_value == 0) {
 		o_log(LOG_CRIT, "NAT/IP masquerading support is unavailable");
 		disable_opt(MASQ);
@@ -264,7 +264,7 @@ uid_t get_user4(	in_port_t lport,
 #endif
 }
 
-#ifdef MASQ_SUPPORT
+#if MASQ_SUPPORT
 
 /*
 ** Handle a request to a host that's IP masquerading through us.
@@ -369,7 +369,7 @@ bool masq(	int sock,
 
 #endif
 
-#ifdef WANT_IPV6
+#if WANT_IPV6
 
 /*
 ** Traverse the tcb6 list until a match is found.

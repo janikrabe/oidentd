@@ -42,7 +42,7 @@
 #include <netinet/tcp_timer.h>
 #include <netinet/tcp_var.h>
 
-#ifdef MASQ_SUPPORT
+#if MASQ_SUPPORT
 #	include <sys/ioctl.h>
 #	include <sys/fcntl.h>
 #	include <net/if.h>
@@ -113,7 +113,7 @@ uid_t get_user4(	in_port_t lport,
 	return MISSING_UID;
 }
 
-#ifdef MASQ_SUPPORT
+#if MASQ_SUPPORT
 
 /*
 ** Handle a request to a host that's IP masquerading through us.
@@ -211,7 +211,7 @@ bool masq(	int sock,
 
 #endif
 
-#ifdef WANT_IPV6
+#if WANT_IPV6
 
 /*
 ** Returns the UID of the owner of an IPv6 connection,

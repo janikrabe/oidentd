@@ -57,7 +57,7 @@ static int setup_bind(const struct addrinfo *ai, in_port_t listen_port) {
 	}
 
 	switch (ai->ai_family) {
-#ifdef WANT_IPV6
+#if WANT_IPV6
 		case AF_INET6:
 			SIN6(ai->ai_addr)->sin6_port = listen_port;
 			if (setsockopt(listenfd, IPPROTO_IPV6, IPV6_V6ONLY, &one,
@@ -114,7 +114,7 @@ int *setup_listen(struct sockaddr_storage **listen_addr, in_port_t listen_port) 
 			cur->ai_family = listen_addr[naddr]->ss_family;
 
 			switch (cur->ai_family) {
-#ifdef WANT_IPV6
+#if WANT_IPV6
 				case AF_INET6:
 					cur->ai_addrlen = sizeof(struct sockaddr_in6);
 					break;
@@ -331,7 +331,7 @@ int get_addr(const char *hostname, struct sockaddr_storage *addr) {
 		case AF_INET:
 			len = sizeof(struct sockaddr_in);
 			break;
-#ifdef WANT_IPV6
+#if WANT_IPV6
 		case AF_INET6:
 			len = sizeof(struct sockaddr_in6);
 			break;
@@ -359,7 +359,7 @@ out_fail:
 */
 
 inline void *sin_addr(struct sockaddr_storage *ss) {
-#ifdef WANT_IPV6
+#if WANT_IPV6
 	if (ss->ss_family == AF_INET6)
 		return (&SIN6(ss)->sin6_addr);
 #endif
@@ -403,7 +403,7 @@ void sin_setv4(in_addr_t addr, struct sockaddr_storage *ss) {
 	memcpy(&SIN4(ss)->sin_addr, &addr, sizeof(addr));
 }
 
-#ifdef WANT_IPV6
+#if WANT_IPV6
 
 inline bool sin6_equal(	struct sockaddr_storage *ss1,
 						struct sockaddr_storage *ss2)
@@ -429,7 +429,7 @@ void sin_setv6(struct in6_addr *sin6, struct sockaddr_storage *ss) {
 */
 
 inline size_t sin_len(const struct sockaddr_storage *ss __notused) {
-#ifdef WANT_IPV6
+#if WANT_IPV6
 	if (ss->ss_family == AF_INET6)
 		return (sizeof(struct sockaddr_in6));
 #endif
@@ -443,7 +443,7 @@ inline size_t sin_len(const struct sockaddr_storage *ss __notused) {
 */
 
 inline size_t sin_addr_len(const struct sockaddr_storage *ss __notused) {
-#ifdef WANT_IPV6
+#if WANT_IPV6
 	if (ss->ss_family == AF_INET6)
 		return (sizeof(struct in6_addr));
 #endif
@@ -467,7 +467,7 @@ inline void sin_copy(	struct sockaddr_storage *ss1,
 */
 
 inline in_port_t sin_port(const struct sockaddr_storage *ss) {
-#ifdef WANT_IPV6
+#if WANT_IPV6
 	if (ss->ss_family == AF_INET6)
 		return (SIN6(ss)->sin6_port);
 #endif
@@ -480,7 +480,7 @@ inline in_port_t sin_port(const struct sockaddr_storage *ss) {
 */
 
 inline void sin_set_port(in_port_t port, struct sockaddr_storage *ss) {
-#ifdef WANT_IPV6
+#if WANT_IPV6
 	if (ss->ss_family == AF_INET6)
 		SIN6(ss)->sin6_port = port;
 #endif
@@ -495,7 +495,7 @@ inline void sin_set_port(in_port_t port, struct sockaddr_storage *ss) {
 inline bool sin_equal(	struct sockaddr_storage *ss1,
 						struct sockaddr_storage *ss2)
 {
-#ifdef WANT_IPV6
+#if WANT_IPV6
 	if (ss1->ss_family == AF_INET6)
 		return (sin6_equal(ss1, ss2));
 #endif

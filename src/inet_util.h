@@ -42,7 +42,7 @@ ssize_t sock_write(int sock, void *buf, size_t len);
 	const char *inet_ntop(int af, const void *src, char *dst, size_t len);
 #endif
 
-#ifdef WANT_IPV6
+#if WANT_IPV6
 	void sin_setv6(struct in6_addr *sin6, struct sockaddr_storage *ss);
 #endif
 

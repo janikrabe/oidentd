@@ -100,7 +100,7 @@
 #	define INET_ADDRSTRLEN		16
 #endif
 
-#ifdef WANT_IPV6
+#if WANT_IPV6
 #	ifndef INET6_ADDRSTRLEN
 #		define INET6_ADDRSTRLEN	46
 #	endif
@@ -172,7 +172,7 @@ struct sockaddr_storage {
 	#define ss_family __ss_family
 #endif
 
-#ifdef LIBNFCT_SUPPORT
+#if LIBNFCT_SUPPORT
 	bool drop_privs_libnfct(uid_t uid, gid_t gid);
 #endif
 

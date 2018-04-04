@@ -104,7 +104,7 @@ uid_t get_user4(	in_port_t lport,
 	return (ucred.cr_uid);
 }
 
-#ifdef WANT_IPV6
+#if WANT_IPV6
 
 /*
 ** Returns the UID of the owner of an IPv6 connection,

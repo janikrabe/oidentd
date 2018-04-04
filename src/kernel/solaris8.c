@@ -232,7 +232,7 @@ uid_t get_user4(	in_port_t lport,
 	if (faddr->ss_family == AF_INET)
 		iphash = (char *) &faddr4;
 	else
-#ifdef WANT_IPV6
+#if WANT_IPV6
 		iphash = ((char *) &SIN6(faddr)->sin6_addr) + 12;
 #else
 		return MISSING_UID;

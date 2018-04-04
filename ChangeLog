@@ -1,3 +1,11 @@
+2018-04-04  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Add build information to `--version` output.
+
+2018-04-03  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Add spoofed replies to the default configuration file.
+
 2018-03-30  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Released as version 2.2.3.

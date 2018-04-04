@@ -37,11 +37,11 @@
 #include <netinet/tcp_timer.h>
 #include <netinet/tcp_var.h>
 
-#ifdef WANT_IPV6
+#if WANT_IPV6
 #	include <netinet/ip6.h>
 #endif
 
-#ifdef MASQ_SUPPORT
+#if MASQ_SUPPORT
 #	include <netinet/ip_fil.h>
 #	include <netinet/ip_nat.h>
 #endif
@@ -101,7 +101,7 @@ uid_t get_user4(	in_port_t lport,
 	return MISSING_UID;
 }
 
-#ifdef WANT_IPV6
+#if WANT_IPV6
 
 /*
 ** Returns the UID of the owner of an IPv6 connection,

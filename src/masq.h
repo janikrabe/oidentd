@@ -20,7 +20,7 @@
 #ifndef __OIDENTD_MASQ_H
 #define __OIDENTD_MASQ_H
 
-#ifdef MASQ_SUPPORT
+#if MASQ_SUPPORT
 
 int find_masq_entry(struct sockaddr_storage *host,
 					char *user,

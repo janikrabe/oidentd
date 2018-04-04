@@ -46,7 +46,7 @@
 #include "options.h"
 #include "masq.h"
 
-#ifdef HAVE_LIBUDB
+#if HAVE_LIBUDB
 #	include <udb.h>
 #endif
 
@@ -121,7 +121,7 @@ int main(int argc, char **argv) {
 		exit(EXIT_FAILURE);
 	}
 
-#ifdef LIBNFCT_SUPPORT
+#if LIBNFCT_SUPPORT
 	if (!drop_privs_libnfct(uid, gid)) {
 		o_log(LOG_CRIT, "Fatal: Failed to drop privileges (kernel)");
 		exit(EXIT_FAILURE);
@@ -133,7 +133,7 @@ int main(int argc, char **argv) {
 		exit(EXIT_FAILURE);
 	}
 
-#ifdef HAVE_LIBUDB
+#if HAVE_LIBUDB
 	if (opt_enabled(USEUDB)) {
 		if (udb_init(UDB_ENV_BASE_KEY) == 0) {
 			o_log(LOG_CRIT, "Fatal: Can't open UDB shared memory tables");
@@ -240,7 +240,7 @@ static int service_request(int insock, int outsock) {
 
 	fport = htons(sin_port(&faddr));
 
-#ifdef WANT_IPV6
+#if WANT_IPV6
 	laddr6 = laddr;
 	faddr6 = faddr;
 
@@ -291,7 +291,7 @@ static int service_request(int insock, int outsock) {
 	/* User ID is unknown. */
 	con_uid = MISSING_UID;
 
-#ifdef HAVE_LIBUDB
+#if HAVE_LIBUDB
 	if (opt_enabled(USEUDB)) {
 		struct udb_lookup_res udb_res = get_udb_user(
 				lport, fport, &laddr, &faddr, insock);
@@ -304,7 +304,7 @@ static int service_request(int insock, int outsock) {
 	if (con_uid == MISSING_UID && laddr.ss_family == AF_INET)
 		con_uid = get_user4(htons(lport), htons(fport), &laddr, &faddr);
 
-#ifdef WANT_IPV6
+#if WANT_IPV6
 	/*
 	 * Check for IPv6-mapped IPv4 addresses. This ensures that the correct
 	 * ident response is returned for connections to a mapped address.
