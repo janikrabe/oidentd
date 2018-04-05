@@ -508,9 +508,9 @@ bool masq(	int sock,
 /*
 ** Process a connection tracking file entry.
 ** The lport and fport arguments are in host byte order.
-** Returns -1 if an error occurs.
-** Returns  0 if the entry matches and the request has been handled.
-** Returns  1 if the entry does not match the query.
+** Returns -1 if an error occurred.
+** Returns  0 if the entry matched and the request has been handled.
+** Returns  1 if the entry did not match the query.
 **/
 
 static int masq_ct_line(char *line,

@@ -289,7 +289,7 @@ inline int get_hostname(struct sockaddr_storage *addr,
 }
 
 /*
-** Get the port associated with a tcp service name.
+** Get the port associated with a TCP service name.
 */
 
 int get_port(const char *name, in_port_t *port) {
@@ -317,7 +317,7 @@ int get_port(const char *name, in_port_t *port) {
 }
 
 /*
-** Return a network byte ordered ipv4 or ipv6 address.
+** Return a network byte ordered IPv4 or IPv6 address.
 */
 
 int get_addr(const char *hostname, struct sockaddr_storage *addr) {
