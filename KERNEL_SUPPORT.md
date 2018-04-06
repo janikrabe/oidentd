@@ -7,7 +7,7 @@
 | FreeBSD 1-3       | Yes  | Yes  | ipf only | No       | Yes        | No         |
 | FreeBSD 4         | Yes  | Yes  | ipf only | No       | NAT only   | If no NAT  |
 | FreeBSD 5+        | Yes  | Yes  | ipf only | No       | NAT only   | If no NAT  |
-| Linux             | Yes  | Yes  | Yes      | No       | No         | No         |
+| Linux             | Yes  | Yes  | Yes      | Yes      | No         | No         |
 | NetBSD 1-4        | Yes  | Yes  | ipf only | No       | Yes        | No         |
 | NetBSD 5+         | Yes  | Yes  | No       | No       | No         | Yes        |
 | OpenBSD 2.0 - 2.3 | Yes  | Yes  | ipf only | No       | Yes        | No         |
