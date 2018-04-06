@@ -188,10 +188,12 @@ static int callback_nfct(enum nf_conntrack_msg_type,
 			struct nf_conntrack *ct,
 			void *data) {
 	char buf[1024];
+	struct ct_masq_query *query;
+
 	nfct_snprintf(buf, sizeof(buf), ct, NFCT_T_UNKNOWN,
 			NFCT_O_DEFAULT, NFCT_OF_SHOW_LAYER3);
 
-	struct ct_masq_query *query = (struct ct_masq_query *) data;
+	query = (struct ct_masq_query *) data;
 	int ret = masq_ct_line(buf, query->sock,
 			query->lport, query->fport,
 			query->laddr, query->faddr);
@@ -464,7 +466,9 @@ bool masq(	int sock,
 			struct sockaddr_storage *faddr)
 {
 	char buf[1024];
+#if LIBNFCT_SUPPORT
 	struct ct_masq_query query;
+#endif
 
 	/*
 	** There's no masq support for IPv6 yet.
