@@ -453,5 +453,5 @@ static void seed_prng(void) {
 	struct timeval tv;
 
 	gettimeofday(&tv, NULL);
-	srandom(tv.tv_sec ^ (tv.tv_usec << 11));
+	srandom((unsigned int) tv.tv_sec ^ (tv.tv_usec << 11));
 }
