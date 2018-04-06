@@ -390,7 +390,7 @@ void list_destroy(list_t *list, void (*free_data)(void *)) {
 
 int o_log(int priority, const char *fmt, ...) {
 	va_list ap;
-	ssize_t ret;
+	int ret;
 	char *buf;
 
 	if (opt_enabled(QUIET) && priority != LOG_CRIT)
