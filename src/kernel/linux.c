@@ -464,6 +464,7 @@ bool masq(	int sock,
 			struct sockaddr_storage *faddr)
 {
 	char buf[1024];
+	struct ct_masq_query query;
 
 	/*
 	** There's no masq support for IPv6 yet.
@@ -477,9 +478,7 @@ bool masq(	int sock,
 
 #if LIBNFCT_SUPPORT
 	if (conntrack == CT_LIBNFCT) {
-		struct ct_masq_query query = { sock,
-				lport, fport,
-				laddr, faddr, 1 };
+		query = { sock, lport, fport, laddr, faddr, 1 };
 		return dispatch_libnfct_query(&query);
 	}
 #endif

@@ -1,3 +1,7 @@
+2018-04-06  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Separate declarations from code (ISO C90).
+
 2018-04-04  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Add build information to `--version` output.
