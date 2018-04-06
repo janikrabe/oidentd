@@ -184,7 +184,7 @@ static bool dispatch_libnfct_query(struct ct_masq_query *queryp) {
 ** Callback for libnetfilter_conntrack queries
 */
 
-static int callback_nfct(enum nf_conntrack_msg_type type,
+static int callback_nfct(enum nf_conntrack_msg_type,
 			struct nf_conntrack *ct,
 			void *data) {
 	char buf[1024];
