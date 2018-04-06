@@ -88,6 +88,7 @@ struct ct_masq_query {
 #if MASQ_SUPPORT
 static int masq_ct_line(char *line,
 			int sock,
+			int ct_type,
 			in_port_t lport,
 			in_port_t fport,
 			struct sockaddr_storage *laddr,
@@ -113,9 +114,6 @@ enum {
 	CT_MASQFILE,
 	CT_IPCONNTRACK,
 	CT_NFCONNTRACK,
-#	if LIBNFCT_SUPPORT
-	CT_LIBNFCT,
-#	endif
 };
 FILE *masq_fp;
 static int conntrack = CT_UNKNOWN;
@@ -123,9 +121,6 @@ static int conntrack = CT_UNKNOWN;
 
 #if LIBNFCT_SUPPORT
 bool drop_privs_libnfct(uid_t uid, gid_t gid) {
-	if (conntrack != CT_LIBNFCT)
-		return true;
-
 	/* drop privileges, keeping only CAP_NET_ADMIN for libnfct queries */
 
 	int ret;
@@ -192,7 +187,7 @@ static int callback_nfct(enum nf_conntrack_msg_type type,
 			NFCT_O_DEFAULT, NFCT_OF_SHOW_LAYER3);
 
 	struct ct_masq_query *query = (struct ct_masq_query *) data;
-	int ret = masq_ct_line(buf, query->sock,
+	int ret = masq_ct_line(buf, query->sock, CT_NFCONNTRACK,
 			query->lport, query->fport,
 			query->laddr, query->faddr);
 
@@ -202,7 +197,6 @@ static int callback_nfct(enum nf_conntrack_msg_type type,
 	query->status = ret;
 	return NFCT_CB_STOP;
 }
-
 #endif
 
 /*
@@ -240,7 +234,6 @@ bool core_init(void) {
 				}
 
 #	if LIBNFCT_SUPPORT
-				conntrack = CT_LIBNFCT;
 				return true;
 #	else
 				o_log(LOG_CRIT, "NAT/IP masquerading support is unavailable");
@@ -469,12 +462,11 @@ bool masq(	int sock,
 	fport = ntohs(fport);
 
 #if LIBNFCT_SUPPORT
-	if (conntrack == CT_LIBNFCT) {
-		struct ct_masq_query query = { sock,
-				lport, fport,
-				laddr, faddr, 1 };
-		return dispatch_libnfct_query(&query);
-	}
+	struct ct_masq_query query = { sock,
+			lport, fport,
+			laddr, faddr, 1 };
+	if (dispatch_libnfct_query(&query))
+		return true;
 #endif
 
 	/* rewind fp to read new contents */
@@ -489,7 +481,8 @@ bool masq(	int sock,
 	}
 
 	while (fgets(buf, sizeof(buf), masq_fp)) {
-		int ret = masq_ct_line(buf, sock, lport, fport, laddr, faddr);
+		int ret = masq_ct_line(buf, sock, conntrack,
+			lport, fport, laddr, faddr);
 		if (ret == 1)
 			continue;
 		return !ret;
@@ -508,6 +501,7 @@ bool masq(	int sock,
 
 static int masq_ct_line(char *line,
 			int sock,
+			int ct_type,
 			in_port_t lport,
 			in_port_t fport,
 			struct sockaddr_storage *laddr,
@@ -526,7 +520,7 @@ static int masq_ct_line(char *line,
 	struct sockaddr_storage remoten_ss;
 	int ret;
 
-	if (conntrack == CT_MASQFILE) {
+	if (ct_type == CT_MASQFILE) {
 		in_addr_t localm4;
 		in_addr_t remotem4;
 		u_int32_t mport_temp;
@@ -555,7 +549,7 @@ static int masq_ct_line(char *line,
 		/* Assume local NAT. */
 		sin_setv4(localm4, &remoten_ss);
 		sin_setv4(remotem4, &localn_ss);
-	} else if (conntrack == CT_IPCONNTRACK) {
+	} else if (ct_type == CT_IPCONNTRACK) {
 		int l1, l2, l3, l4, r1, r2, r3, r4;
 		int nl1, nl2, nl3, nl4, nr1, nr2, nr3, nr4;
 		in_addr_t localm4;
@@ -605,11 +599,7 @@ static int masq_ct_line(char *line,
 		sin_setv4(remotem4, &remotem_ss);
 		sin_setv4(localn4, &localn_ss);
 		sin_setv4(remoten4, &remoten_ss);
-#if LIBNFCT_SUPPORT
-	} else if (conntrack == CT_NFCONNTRACK || conntrack == CT_LIBNFCT) {
-#else
-	} else if (conntrack == CT_NFCONNTRACK) {
-#endif
+	} else if (ct_type == CT_NFCONNTRACK) {
 		char ml[MAX_IPLEN];
 		char mr[MAX_IPLEN];
 		char nl[MAX_IPLEN];
