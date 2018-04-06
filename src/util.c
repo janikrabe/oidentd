@@ -79,12 +79,15 @@ bool find_user(const char *temp_user, uid_t *uid) {
 	pw = getpwnam(temp_user);
 	if (pw == NULL) {
 		char *end;
-		u_int32_t temp_uid = strtoul(temp_user, &end, 10);
+		unsigned long int temp_uid = strtoul(temp_user, &end, 10);
 
 		if (*end != '\0')
 			return false;
-		else
-			*uid = temp_uid;
+
+		if (temp_uid >= MISSING_UID)
+			return false;
+
+		*uid = (uid_t) temp_uid;
 	} else
 		*uid = pw->pw_uid;
 
@@ -102,12 +105,15 @@ bool find_group(const char *temp_group, gid_t *gid) {
 	gr = getgrnam(temp_group);
 	if (gr == NULL) {
 		char *end;
-		u_int32_t temp_gid = strtoul(temp_group, &end, 10);
+		unsigned long int temp_gid = strtoul(temp_group, &end, 10);
 
 		if (*end != '\0')
 			return false;
-		else
-			*gid = temp_gid;
+
+		if (temp_gid >= MISSING_GID)
+			return false;
+
+		*gid = (gid_t) temp_gid;
 	} else
 		*gid = gr->gr_gid;
 

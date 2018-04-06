@@ -6,6 +6,7 @@
 	* Explicitly cast tv_sec to unsigned int.
 	* Fix incorrect vasprintf return type.
 	* Remove unused type parameter from callback_nfct.
+	* Prevent overflows when parsing UIDs and GIDs.
 
 2018-04-04  Janik Rabe  <oidentd@janikrabe.com>
 
