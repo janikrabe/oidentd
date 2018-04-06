@@ -59,8 +59,8 @@ extern uid_t uid;
 extern gid_t gid;
 
 static void print_usage(void);
-static void print_version_str(char *desc, char *val);
-static void print_version_bool(char *desc, bool val);
+static void print_version_str(const char *desc, const char *val);
+static void print_version_bool(const char *desc, const bool val);
 static void print_version(bool verbose);
 static inline void enable_opt(u_int32_t option);
 
@@ -472,11 +472,11 @@ static void print_usage(void) {
 	printf("%s", usage);
 }
 
-static inline void print_version_str(char *desc, char *val) {
+static inline void print_version_str(const char *desc, const char *val) {
 	printf("\t%s%s\n", desc, val);
 }
 
-static inline void print_version_bool(char *desc, bool val) {
+static inline void print_version_bool(const char *desc, const bool val) {
 	print_version_str(desc, val ? "Yes" : "No");
 }
 

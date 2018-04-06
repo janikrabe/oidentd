@@ -1,6 +1,7 @@
 2018-04-06  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Separate declarations from code (ISO C90).
+	* Made a couple of function arguments constant.
 
 2018-04-04  Janik Rabe  <oidentd@janikrabe.com>
 
