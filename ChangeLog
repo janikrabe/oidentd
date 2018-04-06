@@ -2,6 +2,7 @@
 
 	* Separate declarations from code (ISO C90).
 	* Made a couple of function arguments constant.
+	* Fix incorrect conversion from ssize_t to int.
 
 2018-04-04  Janik Rabe  <oidentd@janikrabe.com>
 

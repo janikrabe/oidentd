@@ -213,6 +213,7 @@ int main(int argc, char **argv) {
 */
 
 static int service_request(int insock, int outsock) {
+	ssize_t slen;
 	int len;
 	int ret;
 	uid_t con_uid;
@@ -265,8 +266,8 @@ static int service_request(int insock, int outsock) {
 	} else
 		o_log(NORMAL, "Connection from %s (%s):%d", host_buf, ip_buf, fport);
 
-	len = sock_read(insock, line, sizeof(line));
-	if (len <= 0)
+	slen = sock_read(insock, line, sizeof(line));
+	if (slen <= 0)
 		return (-1);
 
 	len = sscanf(line, "%d , %d", &lport_temp, &fport_temp);

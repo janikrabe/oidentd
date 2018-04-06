@@ -1,6 +1,7 @@
 Unreleased changes
 
 	* Added build information to `--version` output.
+	* Minor bugfixes.
 
 Changes in version 2.2.3
 
