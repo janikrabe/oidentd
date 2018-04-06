@@ -550,8 +550,8 @@ static int masq_ct_line(char *line,
 		sin_setv4(localm4, &remoten_ss);
 		sin_setv4(remotem4, &localn_ss);
 	} else if (ct_type == CT_IPCONNTRACK) {
-		int l1, l2, l3, l4, r1, r2, r3, r4;
-		int nl1, nl2, nl3, nl4, nr1, nr2, nr3, nr4;
+		unsigned int ml1, ml2, ml3, ml4, mr1, mr2, mr3, mr4;
+		unsigned int nl1, nl2, nl3, nl4, nr1, nr2, nr3, nr4;
 		in_addr_t localm4;
 		in_addr_t remotem4;
 		in_addr_t localn4;
@@ -566,7 +566,8 @@ static int masq_ct_line(char *line,
 
 		ret = sscanf(line,
 			"%15s %*d %*d ESTABLISHED src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d",
-			proto, &l1, &l2, &l3, &l4, &r1, &r2, &r3, &r4,
+			proto,
+			&ml1, &ml2, &ml3, &ml4, &mr1, &mr2, &mr3, &mr4,
 			&masq_lport_temp, &masq_fport_temp,
 			&nl1, &nl2, &nl3, &nl4, &nr1, &nr2, &nr3, &nr4,
 			&nport_temp, &mport_temp);
@@ -574,7 +575,8 @@ static int masq_ct_line(char *line,
 		if (ret != 21) {
 			ret = sscanf(line,
 				"%15s %*d %*d ESTABLISHED src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d packets=%*d bytes=%*d src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d",
-			proto, &l1, &l2, &l3, &l4, &r1, &r2, &r3, &r4,
+			proto,
+			&ml1, &ml2, &ml3, &ml4, &mr1, &mr2, &mr3, &mr4,
 			&masq_lport_temp, &masq_fport_temp,
 			&nl1, &nl2, &nl3, &nl4, &nr1, &nr2, &nr3, &nr4,
 			&nport_temp, &mport_temp);
@@ -589,8 +591,8 @@ static int masq_ct_line(char *line,
 		nport = (in_port_t) nport_temp;
 		mport = (in_port_t) mport_temp;
 
-		localm4 = l1 << 24 | l2 << 16 | l3 << 8 | l4;
-		remotem4 = r1 << 24 | r2 << 16 | r3 << 8 | r4;
+		localm4 = ml1 << 24 | ml2 << 16 | ml3 << 8 | ml4;
+		remotem4 = mr1 << 24 | mr2 << 16 | mr3 << 8 | mr4;
 
 		localn4 = nl1 << 24 | nl2 << 16 | nl3 << 8 | nl4;
 		remoten4 = nr1 << 24 | nr2 << 16 | nr3 << 8 | nr4;

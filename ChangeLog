@@ -2,6 +2,7 @@
 
 	* Add Linux IPv6 masquerading support.
 	* Always use libnetfilter_conntrack when available.
+	* Fix signed/unsigned bit shifting on Linux.
 
 2018-04-04  Janik Rabe  <oidentd@janikrabe.com>
 
