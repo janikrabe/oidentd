@@ -95,7 +95,6 @@ static int masq_ct_line(char *line,
 #endif
 
 #if LIBNFCT_SUPPORT
-bool drop_privs_libnfct(uid_t uid, gid_t gid);
 static bool dispatch_libnfct_query(struct ct_masq_query *queryp);
 static int callback_nfct(enum nf_conntrack_msg_type type,
 			struct nf_conntrack *ct,

@@ -206,8 +206,4 @@ uid_t get_user6(	in_port_t lport,
 
 int read_config(const char *config_file);
 
-int yyparse(void);
-int yylex(void);
-void yyrestart(FILE *fp);
-
 #endif

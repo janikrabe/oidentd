@@ -1,6 +1,7 @@
 2018-04-07  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Fix a few signed/unsigned conversion issues.
+	* Remove some redundant redeclarations.
 
 2018-04-06  Janik Rabe  <oidentd@janikrabe.com>
 
