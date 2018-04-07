@@ -105,7 +105,7 @@ int *setup_listen(struct sockaddr_storage **listen_addr, in_port_t listen_port) 
 	int *bound_fds = NULL;
 	char listen_port_str[64];
 	struct addrinfo hints, *res, *cur;
-	int naddr = 0;
+	unsigned int naddr = 0;
 
 	if (listen_addr != NULL) {
 		do {
@@ -205,18 +205,19 @@ ssize_t sock_read(int sock, char *buf, size_t len) {
 	if (buf == NULL)
 		return (-1);
 
-	for (i = 1 ; i < len ; i++) {
+	for (i = 1; i < len; i++) {
 		top:
 			ret = read(sock, &c, 1);
 			if (ret == 1) {
 				*buf++ = c;
+
 				if (c == '\n')
 					break;
 			} else if (ret == 0) {
 				if (i == 1)
 					return (0);
-				else
-					break;
+
+				break;
 			} else {
 				if (errno == EINTR)
 					goto top;
