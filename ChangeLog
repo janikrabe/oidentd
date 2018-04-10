@@ -5,6 +5,9 @@
 
 2018-04-06  Janik Rabe  <oidentd@janikrabe.com>
 
+	* Add Linux IPv6 masquerading support.
+	* Always use libnetfilter_conntrack when available.
+	* Fix signed/unsigned bit shifting on Linux.
 	* Separate declarations from code (ISO C90).
 	* Made a couple of function arguments constant.
 	* Fix incorrect conversion from ssize_t to int.

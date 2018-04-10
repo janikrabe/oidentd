@@ -1,6 +1,9 @@
 Unreleased changes
 
+	* Added Linux IPv6 masquerading support.
 	* Added build information to `--version` output.
+	* Always use libnetfilter_conntrack when available.
+	* Fixed signed/unsigned bit shifting on Linux.
 	* Minor bugfixes.
 
 Changes in version 2.2.3

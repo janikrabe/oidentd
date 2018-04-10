@@ -88,6 +88,7 @@ struct ct_masq_query {
 #if MASQ_SUPPORT
 static int masq_ct_line(char *line,
 			int sock,
+			int ct_type,
 			in_port_t lport,
 			in_port_t fport,
 			struct sockaddr_storage *laddr,
@@ -112,9 +113,6 @@ enum {
 	CT_MASQFILE,
 	CT_IPCONNTRACK,
 	CT_NFCONNTRACK,
-#	if LIBNFCT_SUPPORT
-	CT_LIBNFCT,
-#	endif
 };
 FILE *masq_fp;
 static int conntrack = CT_UNKNOWN;
@@ -122,9 +120,6 @@ static int conntrack = CT_UNKNOWN;
 
 #if LIBNFCT_SUPPORT
 bool drop_privs_libnfct(uid_t uid, gid_t gid) {
-	if (conntrack != CT_LIBNFCT)
-		return true;
-
 	/* drop privileges, keeping only CAP_NET_ADMIN for libnfct queries */
 
 	int ret;
@@ -193,7 +188,7 @@ static int callback_nfct(enum nf_conntrack_msg_type,
 			NFCT_O_DEFAULT, NFCT_OF_SHOW_LAYER3);
 
 	query = (struct ct_masq_query *) data;
-	int ret = masq_ct_line(buf, query->sock,
+	int ret = masq_ct_line(buf, query->sock, CT_NFCONNTRACK,
 			query->lport, query->fport,
 			query->laddr, query->faddr);
 
@@ -203,7 +198,6 @@ static int callback_nfct(enum nf_conntrack_msg_type,
 	query->status = ret;
 	return NFCT_CB_STOP;
 }
-
 #endif
 
 /*
@@ -241,7 +235,6 @@ bool core_init(void) {
 				}
 
 #	if LIBNFCT_SUPPORT
-				conntrack = CT_LIBNFCT;
 				return true;
 #	else
 				o_log(LOG_CRIT, "NAT/IP masquerading support is unavailable");
@@ -469,20 +462,14 @@ bool masq(	int sock,
 	struct ct_masq_query query;
 #endif
 
-	/*
-	** There's no masq support for IPv6 yet.
-	*/
-
-	if (faddr->ss_family != AF_INET)
-		return false;
-
 	lport = ntohs(lport);
 	fport = ntohs(fport);
 
 #if LIBNFCT_SUPPORT
 	if (conntrack == CT_LIBNFCT) {
 		query = { sock, lport, fport, laddr, faddr, 1 };
-		return dispatch_libnfct_query(&query);
+		if (dispatch_libnfct_query(&query))
+			return true;
 	}
 #endif
 
@@ -498,7 +485,8 @@ bool masq(	int sock,
 	}
 
 	while (fgets(buf, sizeof(buf), masq_fp)) {
-		int ret = masq_ct_line(buf, sock, lport, fport, laddr, faddr);
+		int ret = masq_ct_line(buf, sock, conntrack,
+			lport, fport, laddr, faddr);
 		if (ret == 1)
 			continue;
 		return !ret;
@@ -517,6 +505,7 @@ bool masq(	int sock,
 
 static int masq_ct_line(char *line,
 			int sock,
+			int ct_type,
 			in_port_t lport,
 			in_port_t fport,
 			struct sockaddr_storage *laddr,
@@ -529,22 +518,26 @@ static int masq_ct_line(char *line,
 	in_port_t masq_lport;
 	in_port_t masq_fport;
 	char user[MAX_ULEN];
-	in_addr_t localm;
-	in_addr_t remotem;
-	in_addr_t localn;
-	in_addr_t remoten;
-	struct sockaddr_storage ss;
+	struct sockaddr_storage localm_ss;
+	struct sockaddr_storage remotem_ss;
+	struct sockaddr_storage localn_ss;
+	struct sockaddr_storage remoten_ss;
 	int ret;
 
-	if (conntrack == CT_MASQFILE) {
+	if (ct_type == CT_MASQFILE) {
+		in_addr_t localm4;
+		in_addr_t remotem4;
 		u_int32_t mport_temp;
 		u_int32_t nport_temp;
 		u_int32_t masq_lport_temp;
 		u_int32_t masq_fport_temp;
 
+		if (faddr->ss_family != AF_INET)
+			return -1;
+
 		ret = sscanf(line, "%15s %X:%X %X:%X %X %X %*d %*d %*u",
-				proto, &localm, &masq_lport_temp,
-				&remotem, &masq_fport_temp, &mport_temp, &nport_temp);
+				proto, &localm4, &masq_lport_temp,
+				&remotem4, &masq_fport_temp, &mport_temp, &nport_temp);
 
 		if (ret != 7)
 			return 1;
@@ -554,20 +547,31 @@ static int masq_ct_line(char *line,
 		masq_lport = (in_port_t) masq_lport_temp;
 		masq_fport = (in_port_t) masq_fport_temp;
 
+		sin_setv4(localm4, &localm_ss);
+		sin_setv4(remotem4, &remotem_ss);
+
 		/* Assume local NAT. */
-		remoten = localm;
-		localn = remotem;
-	} else if (conntrack == CT_IPCONNTRACK) {
-		int l1, l2, l3, l4, r1, r2, r3, r4;
-		int nl1, nl2, nl3, nl4, nr1, nr2, nr3, nr4;
+		sin_setv4(localm4, &remoten_ss);
+		sin_setv4(remotem4, &localn_ss);
+	} else if (ct_type == CT_IPCONNTRACK) {
+		unsigned int ml1, ml2, ml3, ml4, mr1, mr2, mr3, mr4;
+		unsigned int nl1, nl2, nl3, nl4, nr1, nr2, nr3, nr4;
+		in_addr_t localm4;
+		in_addr_t remotem4;
+		in_addr_t localn4;
+		in_addr_t remoten4;
 		u_int32_t nport_temp;
 		u_int32_t mport_temp;
 		u_int32_t masq_lport_temp;
 		u_int32_t masq_fport_temp;
 
+		if (faddr->ss_family != AF_INET)
+			return -1;
+
 		ret = sscanf(line,
 			"%15s %*d %*d ESTABLISHED src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d",
-			proto, &l1, &l2, &l3, &l4, &r1, &r2, &r3, &r4,
+			proto,
+			&ml1, &ml2, &ml3, &ml4, &mr1, &mr2, &mr3, &mr4,
 			&masq_lport_temp, &masq_fport_temp,
 			&nl1, &nl2, &nl3, &nl4, &nr1, &nr2, &nr3, &nr4,
 			&nport_temp, &mport_temp);
@@ -575,7 +579,8 @@ static int masq_ct_line(char *line,
 		if (ret != 21) {
 			ret = sscanf(line,
 				"%15s %*d %*d ESTABLISHED src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d packets=%*d bytes=%*d src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d",
-			proto, &l1, &l2, &l3, &l4, &r1, &r2, &r3, &r4,
+			proto,
+			&ml1, &ml2, &ml3, &ml4, &mr1, &mr2, &mr3, &mr4,
 			&masq_lport_temp, &masq_fport_temp,
 			&nl1, &nl2, &nl3, &nl4, &nr1, &nr2, &nr3, &nr4,
 			&nport_temp, &mport_temp);
@@ -590,57 +595,95 @@ static int masq_ct_line(char *line,
 		nport = (in_port_t) nport_temp;
 		mport = (in_port_t) mport_temp;
 
-		localm = l1 << 24 | l2 << 16 | l3 << 8 | l4;
-		remotem = r1 << 24 | r2 << 16 | r3 << 8 | r4;
+		localm4 = ml1 << 24 | ml2 << 16 | ml3 << 8 | ml4;
+		remotem4 = mr1 << 24 | mr2 << 16 | mr3 << 8 | mr4;
 
-		localn = nl1 << 24 | nl2 << 16 | nl3 << 8 | nl4;
-		remoten = nr1 << 24 | nr2 << 16 | nr3 << 8 | nr4;
-#if LIBNFCT_SUPPORT
-	} else if (conntrack == CT_NFCONNTRACK || conntrack == CT_LIBNFCT) {
-#else
-	} else if (conntrack == CT_NFCONNTRACK) {
-#endif
-		int l1, l2, l3, l4, r1, r2, r3, r4;
-		int nl1, nl2, nl3, nl4, nr1, nr2, nr3, nr4;
+		localn4 = nl1 << 24 | nl2 << 16 | nl3 << 8 | nl4;
+		remoten4 = nr1 << 24 | nr2 << 16 | nr3 << 8 | nr4;
+
+		sin_setv4(localm4, &localm_ss);
+		sin_setv4(remotem4, &remotem_ss);
+		sin_setv4(localn4, &localn_ss);
+		sin_setv4(remoten4, &remoten_ss);
+	} else if (ct_type == CT_NFCONNTRACK) {
+		char ml[MAX_IPLEN];
+		char mr[MAX_IPLEN];
+		char nl[MAX_IPLEN];
+		char nr[MAX_IPLEN];
+		in_addr_t localm4;
+		in_addr_t remotem4;
+		in_addr_t localn4;
+		in_addr_t remoten4;
+		struct in6_addr localm6;
+		struct in6_addr remotem6;
+		struct in6_addr localn6;
+		struct in6_addr remoten6;
 		u_int32_t nport_temp;
 		u_int32_t mport_temp;
 		u_int32_t masq_lport_temp;
 		u_int32_t masq_fport_temp;
 
 		ret = sscanf(line,
-			"%15s %*d %15s %*d %*d ESTABLISHED src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d packets=%*d bytes=%*d src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d",
-			family, proto, &l1, &l2, &l3, &l4, &r1, &r2, &r3, &r4,
-			&masq_lport_temp, &masq_fport_temp,
-			&nl1, &nl2, &nl3, &nl4, &nr1, &nr2, &nr3, &nr4,
+			"%15s %*d %15s %*d %*d ESTABLISHED src=%45s dst=%45s sport=%d dport=%d packets=%*d bytes=%*d src=%45s dst=%45s sport=%d dport=%d",
+			family, proto, ml, mr,
+			&masq_lport_temp, &masq_fport_temp, nl, nr,
 			&nport_temp, &mport_temp);
 
 		/* Added to handle /proc/sys/net/netfilter/nf_conntrack_acct = 0 */
-		if (ret != 22) {
+		if (ret != 10) {
 			ret = sscanf(line,
-				"%15s %*d %15s %*d %*d ESTABLISHED src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d",
-				family, proto, &l1, &l2, &l3, &l4, &r1, &r2, &r3, &r4,
-				&masq_lport_temp, &masq_fport_temp,
-				&nl1, &nl2, &nl3, &nl4, &nr1, &nr2, &nr3, &nr4,
+				"%15s %*d %15s %*d %*d ESTABLISHED src=%45s dst=%45s sport=%d dport=%d src=%45s dst=%45s sport=%d dport=%d",
+				family, proto, ml, mr,
+				&masq_lport_temp, &masq_fport_temp, nl, nr,
 				&nport_temp, &mport_temp);
 		}
 
-		if (ret != 22)
+		if (ret != 10)
 			return 1;
 
-		if (strcasecmp(family, "ipv4"))
-			return 1;
+		switch (faddr->ss_family) {
+		case AF_INET:
+			if (strcasecmp(family, "ipv4"))
+				return 1;
+
+			if (inet_pton(AF_INET, ml, &localm4)  < 0 ||
+			    inet_pton(AF_INET, mr, &remotem4) < 0 ||
+			    inet_pton(AF_INET, nl, &localn4)  < 0 ||
+			    inet_pton(AF_INET, nr, &remoten4) < 0)
+				return 1;
+
+			sin_setv4(localm4, &localm_ss);
+			sin_setv4(remotem4, &remotem_ss);
+			sin_setv4(localn4, &localn_ss);
+			sin_setv4(remoten4, &remoten_ss);
+
+			break;
+		case AF_INET6:
+			if (strcasecmp(family, "ipv6"))
+				return 1;
+
+			if (inet_pton(AF_INET6, ml, &localm6)  < 0 ||
+			    inet_pton(AF_INET6, mr, &remotem6) < 0 ||
+			    inet_pton(AF_INET6, nl, &localn6)  < 0 ||
+			    inet_pton(AF_INET6, nr, &remoten6) < 0)
+				return 1;
+
+			sin_setv6(&localm6, &localm_ss);
+			sin_setv6(&remotem6, &remotem_ss);
+			sin_setv6(&localn6, &localn_ss);
+			sin_setv6(&remoten6, &remoten_ss);
+
+			break;
+		default:
+			debug("masq_ct_line: bad address family %d", faddr->ss_family);
+			return -1;
+		}
 
 		masq_lport = (in_port_t) masq_lport_temp;
 		masq_fport = (in_port_t) masq_fport_temp;
 
 		nport = (in_port_t) nport_temp;
 		mport = (in_port_t) mport_temp;
-
-		localm = l1 << 24 | l2 << 16 | l3 << 8 | l4;
-		remotem = r1 << 24 | r2 << 16 | r3 << 8 | r4;
-
-		localn = nl1 << 24 | nl2 << 16 | nl3 << 8 | nl4;
-		remoten = nr1 << 24 | nr2 << 16 | nr3 << 8 | nr4;
 	} else
 		return -1;
 
@@ -654,19 +697,19 @@ static int masq_ct_line(char *line,
 		return 1;
 
 	/* Local NAT, don't forward or do masquerade entry lookup. */
-	if (localm == remoten) {
+	if (sin_equal(&localm_ss, &remoten_ss)) {
 		uid_t con_uid = MISSING_UID;
 		struct passwd *pw;
 		char suser[MAX_ULEN];
 		char ipbuf[MAX_IPLEN];
 
-		sin_setv4(htonl(remotem), &ss);
 		get_ip(faddr, ipbuf, sizeof(ipbuf));
 
 		if (con_uid == MISSING_UID && faddr->ss_family == AF_INET)
-			con_uid = get_user4(htons(masq_lport), htons(masq_fport), laddr, &ss);
+			con_uid = get_user4(htons(masq_lport), htons(masq_fport), laddr, &remotem_ss);
 
-		/* Add call to get_user6 when IPv6 NAT is supported. */
+		if (con_uid == MISSING_UID && faddr->ss_family == AF_INET6)
+			con_uid = get_user6(htons(masq_lport), htons(masq_fport), laddr, &remotem_ss);
 
 		if (con_uid == MISSING_UID)
 			return -1;
@@ -680,7 +723,7 @@ static int masq_ct_line(char *line,
 			return 0;
 		}
 
-		ret = get_ident(pw, masq_lport, masq_fport, laddr, &ss, suser, sizeof(suser));
+		ret = get_ident(pw, masq_lport, masq_fport, laddr, &remotem_ss, suser, sizeof(suser));
 		if (ret == -1) {
 			sockprintf(sock, "%d,%d:ERROR:%s\r\n",
 				lport, fport, ERROR("HIDDEN-USER"));
@@ -700,28 +743,26 @@ static int masq_ct_line(char *line,
 		return 0;
 	}
 
-	if (localn != ntohl(SIN4(faddr)->sin_addr.s_addr)) {
+	if (!sin_equal(&localn_ss, faddr)) {
 		if (!opt_enabled(PROXY))
 			return 1;
 
-		if (SIN4(faddr)->sin_addr.s_addr != SIN4(&proxy)->sin_addr.s_addr)
+		if (!sin_equal(faddr, &proxy))
 			return 1;
 
-		if (localn == SIN4(&proxy)->sin_addr.s_addr)
+		if (sin_equal(&localn_ss, &proxy))
 			return 1;
 	}
 
-	sin_setv4(htonl(localm), &ss);
-
-	ret = find_masq_entry(&ss, user, sizeof(user), os, sizeof(os));
+	ret = find_masq_entry(&localm_ss, user, sizeof(user), os, sizeof(os));
 
 	if (opt_enabled(FORWARD) && (ret != 0 || !opt_enabled(MASQ_OVERRIDE))) {
 		char ipbuf[MAX_IPLEN];
 
-		if (fwd_request(sock, lport, masq_lport, fport, masq_fport, &ss) == 0)
+		if (fwd_request(sock, lport, masq_lport, fport, masq_fport, &localm_ss) == 0)
 			return 0;
 
-		get_ip(&ss, ipbuf, sizeof(ipbuf));
+		get_ip(&localm_ss, ipbuf, sizeof(ipbuf));
 
 		debug("Forward to %s (%d %d) failed", ipbuf, masq_lport, fport);
 	}
