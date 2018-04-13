@@ -11,7 +11,6 @@
 	* Separate declarations from code (ISO C90).
 	* Made a couple of function arguments constant.
 	* Fix incorrect conversion from ssize_t to int.
-	* Explicitly cast tv_sec to unsigned int.
 	* Fix incorrect vasprintf return type.
 	* Remove unused type parameter from callback_nfct.
 	* Prevent overflows when parsing UIDs and GIDs.
