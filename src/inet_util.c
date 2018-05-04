@@ -194,40 +194,38 @@ int *setup_listen(struct sockaddr_storage **listen_addr, in_port_t listen_port) 
 }
 
 /*
-** Read at most len bytes from a socket, "sock", store in "buf"
+** Read at most "len" bytes from socket "sock" into "buf".
 */
 
-ssize_t sock_read(int sock, char *buf, size_t len) {
+ssize_t sock_read(int sock, char *buf, ssize_t len) {
 	char c;
-	size_t i;
+	ssize_t i;
 	ssize_t ret;
 
-	if (buf == NULL)
-		return (-1);
+	if (!buf)
+		return 0;
 
-	for (i = 1; i < len; i++) {
-		top:
-			ret = read(sock, &c, 1);
-			if (ret == 1) {
-				*buf++ = c;
+	for (i = 1; i < len; ++i) {
+top:
+		ret = read(sock, &c, 1);
+		if (ret == 1) {
+			*buf++ = c;
 
-				if (c == '\n')
-					break;
-			} else if (ret == 0) {
-				if (i == 1)
-					return (0);
-
+			if (c == '\n')
 				break;
-			} else {
-				if (errno == EINTR)
-					goto top;
+		} else if (ret == 0) {
+			if (i == 1)
+				return 0;
 
-				return (-1);
-			}
+			break;
+		} else if (errno == EINTR) {
+			goto top;
+		} else
+			return 0;
 	}
 
 	*buf = '\0';
-	return (i);
+	return i;
 }
 
 /*

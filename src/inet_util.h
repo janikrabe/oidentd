@@ -31,7 +31,7 @@ void get_ip(struct sockaddr_storage *ss, char *buf, size_t len);
 int get_hostname(struct sockaddr_storage *addr, char *hostname, size_t len);
 
 int sockprintf(int fd, const char *fmt, ...) __format((printf, 2, 3));
-ssize_t sock_read(int fd, char *srbuf, size_t len);
+ssize_t sock_read(int fd, char *srbuf, ssize_t len);
 ssize_t sock_write(int sock, void *buf, size_t len);
 
 #ifndef HAVE_INET_ATON

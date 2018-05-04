@@ -287,7 +287,7 @@ int fwd_request(	int sock,
 		goto out_fail;
 	}
 
-	if (sock_read(fsock, buf, sizeof(buf)) < 1) {
+	if (!sock_read(fsock, buf, sizeof(buf))) {
 		debug("read(%d): %s\n", fsock, strerror(errno));
 		goto out_fail;
 	}
