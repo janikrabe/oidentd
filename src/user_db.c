@@ -183,8 +183,7 @@ int get_ident(	const struct passwd *pwd,
 		switch (caps) {
 			case CAP_HIDE:
 				if (user_db_have_cap(user_cap, CAP_HIDE) == true) {
-					user_db_cap_destroy_data(user_pref);
-					return (-1);
+					goto out_hide;
 				}
 
 				break;
@@ -237,6 +236,10 @@ int get_ident(	const struct passwd *pwd,
 out_success:
 	user_db_cap_destroy_data(user_pref);
 	return (0);
+
+out_hide:
+	user_db_cap_destroy_data(user_pref);
+	return (-1);
 }
 
 /*
