@@ -35,6 +35,7 @@
 #define CAP_RANDOM_NUMERIC	(1 << 0x06)
 #define CAP_NUMERIC		(1 << 0x07)
 #define CAP_REPLY		(1 << 0x08)
+#define CAP_FORWARD		(1 << 0x09)
 
 #define DB_HASH_SIZE		32
 
@@ -55,6 +56,10 @@ struct user_cap {
 			char **data;
 			u_int8_t num;
 		} replies;
+		struct forward_data {
+			struct sockaddr_storage *host;
+			in_port_t port;
+		} forward;
 	} data;
 };
 

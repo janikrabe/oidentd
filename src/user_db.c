@@ -40,6 +40,7 @@
 #include "inet_util.h"
 #include "user_db.h"
 #include "options.h"
+#include "forward.h"
 
 #define USER_DB_HASH(x) ((x) % DB_HASH_SIZE)
 
@@ -156,6 +157,11 @@ int get_ident(	const struct passwd *pwd,
 				xstrncpy(reply, select_reply(user_cap), len);
 				break;
 
+			case CAP_FORWARD:
+				return forward_request(user_cap->data.forward.host,
+					user_cap->data.forward.port, lport, fport, reply, len);
+				break;
+
 			case CAP_HIDE:
 				return (-1);
 				break;
@@ -201,6 +207,25 @@ int get_ident(	const struct passwd *pwd,
 
 				break;
 			}
+
+			case CAP_FORWARD:
+				if (user_db_have_cap(user_cap, CAP_FORWARD) == true) {
+					int ret;
+
+					ret = forward_request(user_pref->data.forward.host,
+						user_pref->data.forward.port, lport, fport,
+						reply, len);
+
+					if (ret == 0) {
+						if (user_db_can_reply(user_cap, reply, cur_uid, fport))
+							goto out_success;
+					} else {
+						if (user_db_have_cap(user_cap, CAP_HIDE) == true)
+							goto out_hide;
+					}
+				}
+
+				break;
 
 			case CAP_RANDOM:
 				if (user_db_have_cap(user_cap, CAP_RANDOM) == true) {
@@ -263,6 +288,10 @@ void user_db_cap_destroy_data(void *data) {
 		for (i = 0 ; i < user_cap->data.replies.num ; i++)
 			free(user_cap->data.replies.data[i]);
 		free(user_cap->data.replies.data);
+	}
+
+	if (user_cap->caps == CAP_FORWARD) {
+		free(user_cap->data.forward.host);
 	}
 }
 

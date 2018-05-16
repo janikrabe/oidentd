@@ -81,6 +81,7 @@ RANDOM_NUMERIC		random_numeric
 SPOOF				spoof
 SPOOF_ALL			spoof_all
 SPOOF_PRIVPORT		spoof_privport
+FORWARD				forward
 
 %%
 
@@ -175,6 +176,10 @@ SPOOF_PRIVPORT		spoof_privport
 
 {REPLY} {
 	return (TOK_REPLY);
+}
+
+{FORWARD} {
+	return (TOK_FORWARD);
 }
 
 \" {
