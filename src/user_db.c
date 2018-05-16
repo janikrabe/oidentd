@@ -97,7 +97,7 @@ static void random_ident(char *buf, size_t len) {
 */
 
 static inline u_char *select_reply(const struct user_cap *user) {
-	return (user->force_data[randval(user->num_replies)]);
+	return (user->data.replies.data[randval(user->data.replies.num)]);
 }
 
 /*
@@ -256,10 +256,11 @@ void user_db_cap_destroy_data(void *data) {
 	free(user_cap->src);
 	free(user_cap->dest);
 
-	for (i = 0 ; i < user_cap->num_replies ; i++)
-		free(user_cap->force_data[i]);
-
-	free(user_cap->force_data);
+	if (user_cap->caps == CAP_REPLY) {
+		for (i = 0 ; i < user_cap->data.replies.num ; i++)
+			free(user_cap->data.replies.data[i]);
+		free(user_cap->data.replies.data);
+	}
 }
 
 /*

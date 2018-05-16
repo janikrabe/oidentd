@@ -323,15 +323,15 @@ force_reply:
 	TOK_FORCE TOK_REPLY TOK_STRING {
 		cur_cap->caps = CAP_REPLY;
 		cur_cap->action = ACTION_FORCE;
-		cur_cap->force_data = xrealloc(cur_cap->force_data,
-			++cur_cap->num_replies * sizeof(u_char *));
-		cur_cap->force_data[cur_cap->num_replies - 1] = $3;
+		cur_cap->data.replies.data = xrealloc(cur_cap->data.replies.data,
+			++cur_cap->data.replies.num * sizeof(u_char *));
+		cur_cap->data.replies.data[cur_cap->data.replies.num - 1] = $3;
 	}
 |
 	force_reply TOK_STRING {
-		cur_cap->force_data = xrealloc(cur_cap->force_data,
-			++cur_cap->num_replies * sizeof(u_char *));
-		cur_cap->force_data[cur_cap->num_replies - 1] = $2;
+		cur_cap->data.replies.data = xrealloc(cur_cap->data.replies.data,
+			++cur_cap->data.replies.num * sizeof(u_char *));
+		cur_cap->data.replies.data[cur_cap->data.replies.num - 1] = $2;
 	}
 ;
 
@@ -362,16 +362,16 @@ user_range_rule:
 user_reply:
 	TOK_REPLY TOK_STRING {
 		cur_cap->caps = CAP_REPLY;
-		cur_cap->force_data = xrealloc(cur_cap->force_data,
-			++cur_cap->num_replies * sizeof(u_char *));
-		cur_cap->force_data[cur_cap->num_replies - 1] = $2;
+		cur_cap->data.replies.data = xrealloc(cur_cap->data.replies.data,
+			++cur_cap->data.replies.num * sizeof(u_char *));
+		cur_cap->data.replies.data[cur_cap->data.replies.num - 1] = $2;
 	}
 |
 	user_reply TOK_STRING {
-		if (cur_cap->num_replies < MAX_RANDOM_REPLIES) {
-			cur_cap->force_data = xrealloc(cur_cap->force_data,
-				++cur_cap->num_replies * sizeof(u_char *));
-			cur_cap->force_data[cur_cap->num_replies - 1] = $2;
+		if (cur_cap->data.replies.num < MAX_RANDOM_REPLIES) {
+			cur_cap->data.replies.data = xrealloc(cur_cap->data.replies.data,
+				++cur_cap->data.replies.num * sizeof(u_char *));
+			cur_cap->data.replies.data[cur_cap->data.replies.num - 1] = $2;
 		}
 	}
 ;

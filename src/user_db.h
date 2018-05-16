@@ -49,8 +49,13 @@ struct user_cap {
 
 	u_int16_t caps;
 	u_int16_t action;
-	u_int8_t num_replies;
-	char **force_data;
+
+	union user_cap_data {
+		struct replies_data {
+			char **data;
+			u_int8_t num;
+		} replies;
+	} data;
 };
 
 struct user_info {
