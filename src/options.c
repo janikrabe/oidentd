@@ -138,7 +138,6 @@ int get_options(int argc, char *const argv[]) {
 		o_log(LOG_CRIT, "Fatal: Bad port: \"%s\"", DEFAULT_FPORT);
 		return (-1);
 	}
-	fwdport = htons(fwdport);
 #endif
 
 	connection_limit = 0xffffffff;
@@ -208,7 +207,6 @@ int get_options(int argc, char *const argv[]) {
 					o_log(LOG_CRIT, "Fatal: Bad port: \"%s\"", p);
 					return (-1);
 				}
-				fwdport = htons(fwdport);
 
 				enable_opt(FORWARD);
 				break;

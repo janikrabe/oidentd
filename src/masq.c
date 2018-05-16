@@ -22,8 +22,6 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <signal.h>
-#include <setjmp.h>
 #include <syslog.h>
 #include <string.h>
 #include <errno.h>
@@ -44,19 +42,16 @@
 #include "inet_util.h"
 #include "masq.h"
 #include "options.h"
+#include "forward.h"
 
 struct sockaddr_storage proxy;
 
 #if MASQ_SUPPORT
 
-static sigjmp_buf timebuf;
-static int fsock;
-
 in_port_t fwdport;
 
 extern char *ret_os;
 
-static void fwd_alarm(int sig) __noreturn;
 static bool blank_line(const char *buf);
 
 /*
@@ -250,90 +245,22 @@ int fwd_request(	int sock,
 {
 	char ipbuf[MAX_IPLEN];
 	char user[512];
-	char buf[1024];
+	int ret;
 
-	fsock = socket(mrelay->ss_family, SOCK_STREAM, 0);
-	if (fsock == -1) {
-		debug("socket: %s", strerror(errno));
+	ret = forward_request(mrelay, fwdport, masq_lport, masq_fport,
+		user, sizeof user);
+	if (ret == -1)
 		return (-1);
-	}
-
-	sin_set_port(fwdport, mrelay);
-
-	if (sigsetjmp(timebuf, 1) != 0) {
-		debug("sigsetjmp: %s", strerror(errno));
-		return (-1);
-	}
-
-	signal(SIGALRM, fwd_alarm);
-
-	/*
-	** Five seconds should be plenty, seeing as we're forwarding to a machine
-	** on a local network.
-	*/
-
-	alarm(5);
-
-	if (connect(fsock, (struct sockaddr *) mrelay, sin_len(mrelay)) != 0) {
-		get_ip(mrelay, ipbuf, sizeof(ipbuf));
-
-		debug("connect to %s:%d: %s",
-			ipbuf, ntohs(sin_port(mrelay)), strerror(errno));
-		goto out_fail;
-	}
-
-	if (sockprintf(fsock, "%d , %d\r\n", masq_lport, masq_fport) < 1) {
-		debug("write: %s", strerror(errno));
-		goto out_fail;
-	}
-
-	if (!sock_read(fsock, buf, sizeof(buf))) {
-		debug("read(%d): %s\n", fsock, strerror(errno));
-		goto out_fail;
-	}
-
-	/*
-	** Don't time out once we've finished processing the request.
-	*/
-
-	alarm(0);
-	close(fsock);
-
-	get_ip(mrelay, ipbuf, sizeof(ipbuf));
-
-	if (sscanf(buf, "%*d , %*d : USERID :%*[^:]:%511s", user) != 1) {
-		char *p = strchr(buf, '\r');
-
-		if (p != NULL)
-			*p = '\0';
-
-		debug("[%s] Forwarding response: \"%s\"", ipbuf, buf);
-		return (-1);
-	}
 
 	sockprintf(sock, "%d,%d:USERID:%s:%s\r\n",
 		real_lport, real_fport, ret_os, user);
 
+	get_ip(mrelay, ipbuf, sizeof(ipbuf));
 	o_log(NORMAL,
 		"[%s] Successful lookup (by forward): %d (%d) , %d (%d) : %s",
 		ipbuf, real_lport, masq_lport, real_fport, masq_fport, user);
 
 	return (0);
-
-out_fail:
-	alarm(0);
-	close(fsock);
-	return (-1);
-}
-
-/*
-** Handle the timeout of a forward request.
-*/
-
-static void fwd_alarm(int sig) {
-	o_log(NORMAL, "Forward timed out");
-	close(fsock);
-	siglongjmp(timebuf, sig);
 }
 
 #else
