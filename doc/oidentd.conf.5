@@ -122,6 +122,9 @@ The capability argument must be one of the capabilities described in the
 The force action takes a third argument when the capability is \fIreply\fP. For
 example, \fIforce reply "randomuser"\fP.
 
+The force action takes four arguments when the capability is \fIforward\fP. For
+example, \fIforce forward 127.0.0.1 1113\fP.
+
 .SH $HOME/.oidentd.conf SYNTAX
 A user's \fB$HOME/.oidentd.conf\fP configuration file may contain 0 or more of
 the following statements:
@@ -147,7 +150,7 @@ manner.
 The range directive has the same syntax and semantics as the range directive in
 the \fB/etc/oidentd.conf\fP file. See above for a description.
 
-Valid capabilities are \fIreply\fP, \fIrandom\fP, \fInumeric\fP,
+Valid capabilities are \fIreply\fP, \fIforward\fP, \fIrandom\fP, \fInumeric\fP,
 \fIrandom_numeric\fP, and \fIhide\fP. Descriptions can be found below.
 
 .SH CAPABILITIES
@@ -231,6 +234,15 @@ The character with the ASCII code \fINNN\fP in the hexadecimal base system.
 .LP
 
 .TP
+\fBforward\fP <host> <port>
+Forward the request to the specified host and port. If not forced, the
+response is subject to the same spoofing checks as \fIreply\fP.
+.br
+If the request fails for any reason, reports a "HIDDEN-USER" error if the
+forward was forced or the user is allowed to \fIhide\fP. Otherwise, a failure
+is replaced with the real username.
+
+.TP
 .B hide
 Hide the user; report a "HIDDEN-USER" error when an ident lookup succeeds.
 
@@ -255,6 +267,7 @@ default {
 		deny spoof
 		deny spoof_all
 		deny spoof_privport
+		deny forward
 		allow random_numeric
 		allow numeric
 		allow hide
@@ -265,7 +278,7 @@ default {
 Grant all users the ability to generate random numeric ident replies, the
 ability to generate numeric ident replies and the ability to hide their
 identities on all ident queries. Explicitly deny the ability to spoof ident
-responses.
+responses or forward requests.
 
 .nf
 user root {
@@ -297,6 +310,17 @@ ability to use other usernames as ident replies, generate random replies and
 hide his ident for all connections, and grant the user "ryan" the capability to
 spoof ident replies to privileged ports (< 1024) on connections originating
 from the host 127.0.0.1.
+
+.nf
+user jester {
+	default {
+		force forward 127.0.0.1 1113
+	}
+}
+.fi
+
+Forward requests for connections belonging to the user "jester" to the server
+running at 127.0.0.1:1113.
 
 .SH EXAMPLE $HOME/.oidentd.conf FILE
 .nf
