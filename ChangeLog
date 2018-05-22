@@ -1,3 +1,11 @@
+2018-05-16  Jan Alexander Steffens  <jan.steffens@gmail.com>
+
+	* Move reply data into union.
+	* Add out_hide label to get_ident.
+	* Move request forwarding to forward.c.
+	* Implement forward capability.
+	* Document forward capability.
+
 2018-05-04  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Consistently use ssize_t in sock_read.

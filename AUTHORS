@@ -30,6 +30,9 @@ Fabian Knittel <fabien.knittel@avona.com>
 Guus Sliepen <sliepen@phys.uu.nl>
 	Initial netfilter (Linux >= 2.3 Support)
 
+Jan Alexander Steffens <jan.steffens@gmail.com>
+	Forwarding capability
+
 Jan Rękorajski <baggins@pld-linux.org>
 	Support for listening on multiple IPs
 
