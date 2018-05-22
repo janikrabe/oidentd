@@ -17,6 +17,7 @@ oidentd_SOURCES = \
 	oidentd.c	\
 	util.c		\
 	inet_util.c	\
+	forward.c	\
 	user_db.c	\
 	options.c	\
 	masq.c		\
@@ -28,6 +29,7 @@ noinst_HEADERS = \
 	oidentd.h	\
 	cfg_parse.h	\
 	inet_util.h	\
+	forward.h	\
 	masq.h		\
 	netlink.h	\
 	options.h	\

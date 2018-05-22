@@ -40,6 +40,7 @@
 #include "inet_util.h"
 #include "user_db.h"
 #include "options.h"
+#include "forward.h"
 
 #define USER_DB_HASH(x) ((x) % DB_HASH_SIZE)
 
@@ -97,7 +98,7 @@ static void random_ident(char *buf, size_t len) {
 */
 
 static inline u_char *select_reply(const struct user_cap *user) {
-	return (user->force_data[randval(user->num_replies)]);
+	return (user->data.replies.data[randval(user->data.replies.num)]);
 }
 
 /*
@@ -156,6 +157,11 @@ int get_ident(	const struct passwd *pwd,
 				xstrncpy(reply, select_reply(user_cap), len);
 				break;
 
+			case CAP_FORWARD:
+				return forward_request(user_cap->data.forward.host,
+					user_cap->data.forward.port, lport, fport, reply, len);
+				break;
+
 			case CAP_HIDE:
 				return (-1);
 				break;
@@ -183,8 +189,7 @@ int get_ident(	const struct passwd *pwd,
 		switch (caps) {
 			case CAP_HIDE:
 				if (user_db_have_cap(user_cap, CAP_HIDE) == true) {
-					user_db_cap_destroy_data(user_pref);
-					return (-1);
+					goto out_hide;
 				}
 
 				break;
@@ -202,6 +207,25 @@ int get_ident(	const struct passwd *pwd,
 
 				break;
 			}
+
+			case CAP_FORWARD:
+				if (user_db_have_cap(user_cap, CAP_FORWARD) == true) {
+					int ret;
+
+					ret = forward_request(user_pref->data.forward.host,
+						user_pref->data.forward.port, lport, fport,
+						reply, len);
+
+					if (ret == 0) {
+						if (user_db_can_reply(user_cap, reply, cur_uid, fport))
+							goto out_success;
+					} else {
+						if (user_db_have_cap(user_cap, CAP_HIDE) == true)
+							goto out_hide;
+					}
+				}
+
+				break;
 
 			case CAP_RANDOM:
 				if (user_db_have_cap(user_cap, CAP_RANDOM) == true) {
@@ -237,6 +261,10 @@ int get_ident(	const struct passwd *pwd,
 out_success:
 	user_db_cap_destroy_data(user_pref);
 	return (0);
+
+out_hide:
+	user_db_cap_destroy_data(user_pref);
+	return (-1);
 }
 
 /*
@@ -256,10 +284,15 @@ void user_db_cap_destroy_data(void *data) {
 	free(user_cap->src);
 	free(user_cap->dest);
 
-	for (i = 0 ; i < user_cap->num_replies ; i++)
-		free(user_cap->force_data[i]);
+	if (user_cap->caps == CAP_REPLY) {
+		for (i = 0 ; i < user_cap->data.replies.num ; i++)
+			free(user_cap->data.replies.data[i]);
+		free(user_cap->data.replies.data);
+	}
 
-	free(user_cap->force_data);
+	if (user_cap->caps == CAP_FORWARD) {
+		free(user_cap->data.forward.host);
+	}
 }
 
 /*

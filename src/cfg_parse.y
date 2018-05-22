@@ -73,6 +73,7 @@ u_int16_t default_caps;
 %token TOK_LPORT
 %token TOK_FORCE
 %token TOK_REPLY
+%token TOK_FORWARD
 %token <value> TOK_ALLOWDENY
 %token <value> TOK_CAP
 %token <string> TOK_STRING
@@ -323,15 +324,45 @@ force_reply:
 	TOK_FORCE TOK_REPLY TOK_STRING {
 		cur_cap->caps = CAP_REPLY;
 		cur_cap->action = ACTION_FORCE;
-		cur_cap->force_data = xrealloc(cur_cap->force_data,
-			++cur_cap->num_replies * sizeof(u_char *));
-		cur_cap->force_data[cur_cap->num_replies - 1] = $3;
+		cur_cap->data.replies.data = xrealloc(cur_cap->data.replies.data,
+			++cur_cap->data.replies.num * sizeof(u_char *));
+		cur_cap->data.replies.data[cur_cap->data.replies.num - 1] = $3;
 	}
 |
 	force_reply TOK_STRING {
-		cur_cap->force_data = xrealloc(cur_cap->force_data,
-			++cur_cap->num_replies * sizeof(u_char *));
-		cur_cap->force_data[cur_cap->num_replies - 1] = $2;
+		cur_cap->data.replies.data = xrealloc(cur_cap->data.replies.data,
+			++cur_cap->data.replies.num * sizeof(u_char *));
+		cur_cap->data.replies.data[cur_cap->data.replies.num - 1] = $2;
+	}
+;
+
+force_forward:
+	TOK_FORCE TOK_FORWARD TOK_STRING TOK_STRING {
+		cur_cap->caps = CAP_FORWARD;
+		cur_cap->action = ACTION_FORCE;
+		cur_cap->data.forward.host = xmalloc(sizeof(struct sockaddr_storage));
+
+		if (get_addr($3, cur_cap->data.forward.host) == -1) {
+			if (parser_mode == PARSE_SYSTEM) {
+				o_log(LOG_CRIT, "[line %u] Bad address: \"%s\"",
+					current_line, $3);
+			}
+
+			free($3); free($4);
+			free_cap_entries(cur_cap);
+			YYABORT;
+		}
+
+		if (get_port($4, &cur_cap->data.forward.port) == -1) {
+			if (parser_mode == PARSE_SYSTEM)
+				o_log(LOG_CRIT, "[line %u] Bad port: \"%s\"", current_line, $4);
+
+			free($3); free($4);
+			free_cap_entries(cur_cap);
+			YYABORT;
+		}
+
+		free($3); free($4);
 	}
 ;
 
@@ -343,11 +374,22 @@ cap_statement:
 |
 	force_reply
 |
+	force_forward
+|
 	TOK_ALLOWDENY TOK_CAP {
 		if ($1 == ACTION_ALLOW)
 			cur_cap->caps |= $2;
 		else
 			cur_cap->caps &= ~$2;
+
+		cur_cap->action = $1;
+	}
+|
+	TOK_ALLOWDENY TOK_FORWARD {
+		if ($1 == ACTION_ALLOW)
+			cur_cap->caps |= CAP_FORWARD;
+		else
+			cur_cap->caps &= ~CAP_FORWARD;
 
 		cur_cap->action = $1;
 	}
@@ -362,17 +404,46 @@ user_range_rule:
 user_reply:
 	TOK_REPLY TOK_STRING {
 		cur_cap->caps = CAP_REPLY;
-		cur_cap->force_data = xrealloc(cur_cap->force_data,
-			++cur_cap->num_replies * sizeof(u_char *));
-		cur_cap->force_data[cur_cap->num_replies - 1] = $2;
+		cur_cap->data.replies.data = xrealloc(cur_cap->data.replies.data,
+			++cur_cap->data.replies.num * sizeof(u_char *));
+		cur_cap->data.replies.data[cur_cap->data.replies.num - 1] = $2;
 	}
 |
 	user_reply TOK_STRING {
-		if (cur_cap->num_replies < MAX_RANDOM_REPLIES) {
-			cur_cap->force_data = xrealloc(cur_cap->force_data,
-				++cur_cap->num_replies * sizeof(u_char *));
-			cur_cap->force_data[cur_cap->num_replies - 1] = $2;
+		if (cur_cap->data.replies.num < MAX_RANDOM_REPLIES) {
+			cur_cap->data.replies.data = xrealloc(cur_cap->data.replies.data,
+				++cur_cap->data.replies.num * sizeof(u_char *));
+			cur_cap->data.replies.data[cur_cap->data.replies.num - 1] = $2;
 		}
+	}
+;
+
+user_forward:
+	TOK_FORWARD TOK_STRING TOK_STRING {
+		cur_cap->caps = CAP_FORWARD;
+		cur_cap->data.forward.host = xmalloc(sizeof(struct sockaddr_storage));
+
+		if (get_addr($2, cur_cap->data.forward.host) == -1) {
+			if (parser_mode == PARSE_SYSTEM) {
+				o_log(LOG_CRIT, "[line %u] Bad address: \"%s\"",
+					current_line, $2);
+			}
+
+			free($2); free($3);
+			free_cap_entries(cur_cap);
+			YYABORT;
+		}
+
+		if (get_port($3, &cur_cap->data.forward.port) == -1) {
+			if (parser_mode == PARSE_SYSTEM)
+				o_log(LOG_CRIT, "[line %u] Bad port: \"%s\"", current_line, $3);
+
+			free($2); free($3);
+			free_cap_entries(cur_cap);
+			YYABORT;
+		}
+
+		free($2); free($3);
 	}
 ;
 
@@ -388,6 +459,8 @@ user_cap_rule:
 	}
 |
 	user_reply
+|
+	user_forward
 ;
 
 %%
