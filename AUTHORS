@@ -24,7 +24,7 @@ Elliott Mitchell <ehem@m5p.com>
 Eric LeBlanc <inouk@toutatis.igt.net>
 	Fixed a bug that caused IP masquerading to fail
 
-Fabian Knittel <fabien.knittel@avona.com>
+Fabian Knittel <fabian.knittel@avona.com>
 	Bind to IPv6 socket by default
 
 Guus Sliepen <sliepen@phys.uu.nl>
