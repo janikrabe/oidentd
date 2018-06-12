@@ -177,6 +177,9 @@ int get_ident(	const struct passwd *pwd,
 			case CAP_RANDOM_NUMERIC:
 				random_ident_numeric(reply, len);
 				break;
+
+			default:
+				goto out_implicit;
 		}
 
 		return (0);
@@ -247,13 +250,21 @@ int get_ident(	const struct passwd *pwd,
 				}
 
 				break;
+
+			default:
+				goto out_default;
 		}
 
 		user_db_cap_destroy_data(user_pref);
 	}
 
+out_implicit:
 	xstrncpy(reply, pwd->pw_name, len);
 	return (0);
+
+out_default:
+	user_db_cap_destroy_data(user_pref);
+	goto out_implicit;
 
 out_success:
 	user_db_cap_destroy_data(user_pref);

@@ -335,6 +335,9 @@ static char get_esc_char(char c) {
 
 		case 'e':
 			return ('\e');
+
+		default:
+			break;
 	}
 
 	return (c);
