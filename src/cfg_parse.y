@@ -51,6 +51,9 @@ static int extract_port_range(const char *token, struct port_range *range);
 static void free_cap_entries(struct user_cap *free_cap);
 static void yyerror(const char *err);
 
+void yyrestart(FILE *fp);
+int yylex();
+
 static struct user_info *cur_user;
 static struct user_cap *cur_cap;
 list_t *pref_list;

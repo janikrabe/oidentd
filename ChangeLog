@@ -1,3 +1,7 @@
+2018-06-12  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Forward declare yyrestart and yylex.
+
 2018-05-16  Jan Alexander Steffens  <jan.steffens@gmail.com>
 
 	* Move reply data into union.
