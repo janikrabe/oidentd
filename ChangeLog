@@ -1,5 +1,6 @@
 2018-06-12  Janik Rabe  <oidentd@janikrabe.com>
 
+	* Released as version 2.3.0.
 	* Forward declare yyrestart and yylex.
 	* Change sock_write and sockprintf signatures.
 	* Change get_hostname to use socklen_t.

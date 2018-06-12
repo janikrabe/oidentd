@@ -1,5 +1,7 @@
 Unreleased changes
 
+Changes in version 2.3.0
+
 	* Added a forwarding capability.
 	* Added Linux IPv6 masquerading support.
 	* Added build information to `--version` output.
