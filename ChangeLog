@@ -2,6 +2,7 @@
 
 	* Forward declare yyrestart and yylex.
 	* Change sock_write and sockprintf signatures.
+	* Change get_hostname to use socklen_t.
 
 2018-05-16  Jan Alexander Steffens  <jan.steffens@gmail.com>
 

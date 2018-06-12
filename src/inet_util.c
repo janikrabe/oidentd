@@ -281,7 +281,7 @@ ssize_t sockprintf(int fd, const char *fmt, ...) {
 
 inline int get_hostname(struct sockaddr_storage *addr,
 						char *hostbuf,
-						size_t len)
+						socklen_t len)
 {
 	int ret;
 

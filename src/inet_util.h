@@ -28,7 +28,7 @@ int *setup_listen(struct sockaddr_storage **listen_addr, in_port_t listen_port);
 int get_port(const char *name, in_port_t *port);
 int get_addr(const char *const hostname, struct sockaddr_storage *g_addr);
 void get_ip(struct sockaddr_storage *ss, char *buf, size_t len);
-int get_hostname(struct sockaddr_storage *addr, char *hostname, size_t len);
+int get_hostname(struct sockaddr_storage *addr, char *hostname, socklen_t len);
 
 ssize_t sockprintf(int fd, const char *fmt, ...) __format((printf, 2, 3));
 ssize_t sock_read(int fd, char *srbuf, ssize_t len);
