@@ -50,7 +50,7 @@ struct user_cap *pref_cap;
 static list_t *user_hash[DB_HASH_SIZE];
 struct user_info *default_user;
 
-static u_char *select_reply(const struct user_cap *user);
+static char *select_reply(const struct user_cap *user);
 static void db_destroy_user_cb(void *data);
 
 static bool port_match(in_port_t port, const struct port_range *cap_ports);
@@ -97,7 +97,7 @@ static void random_ident(char *buf, size_t len) {
 ** Select a reply randomly.
 */
 
-static inline u_char *select_reply(const struct user_cap *user) {
+static inline char *select_reply(const struct user_cap *user) {
 	return (user->data.replies.data[randval(user->data.replies.num)]);
 }
 

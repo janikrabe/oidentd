@@ -131,7 +131,7 @@ int get_options(int argc, char *const argv[]) {
 	int opt;
 	char *temp_os;
 	char *charset = NULL;
-	int naddrs = 0;
+	unsigned int naddrs = 0;
 
 #if MASQ_SUPPORT
 	if (get_port(DEFAULT_FPORT, &fwdport) == -1) {

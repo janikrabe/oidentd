@@ -181,7 +181,7 @@ int find_masq_entry(struct sockaddr_storage *host,
 					goto failure;
 				}
 
-				mask2 = htonl(~((1 << (32 - mask)) - 1));
+				mask2 = htonl(~(((uint32_t) 1 << (32 - mask)) - 1));
 			}
 
 			SIN4(&addr)->sin_addr.s_addr &= mask2;
