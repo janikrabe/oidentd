@@ -1,6 +1,7 @@
 2018-06-12  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Forward declare yyrestart and yylex.
+	* Change sock_write and sockprintf signatures.
 
 2018-05-16  Jan Alexander Steffens  <jan.steffens@gmail.com>
 

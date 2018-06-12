@@ -234,7 +234,7 @@ top:
 ** the number of characters written to the socket on success, -1 on failure.
 */
 
-ssize_t sock_write(int sock, void *buf, size_t len) {
+ssize_t sock_write(int sock, void *buf, ssize_t len) {
 	ssize_t n, written = 0;
 
 	while (len > 0) {
@@ -257,7 +257,7 @@ ssize_t sock_write(int sock, void *buf, size_t len) {
 ** printf-like function that writes to sockets.
 */
 
-int sockprintf(int fd, const char *fmt, ...) {
+ssize_t sockprintf(int fd, const char *fmt, ...) {
 	va_list ap;
 	char *buf;
 	ssize_t ret;
@@ -265,6 +265,9 @@ int sockprintf(int fd, const char *fmt, ...) {
 	va_start(ap, fmt);
 	ret = vasprintf(&buf, fmt, ap);
 	va_end(ap);
+
+	if (ret == -1)
+		return (-1);
 
 	ret = sock_write(fd, buf, ret);
 	free(buf);
