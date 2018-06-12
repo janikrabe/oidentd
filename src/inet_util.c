@@ -376,7 +376,7 @@ inline void *sin_addr(struct sockaddr_storage *ss) {
 
 inline void get_ip(	struct sockaddr_storage *ss,
 					char *buf,
-					size_t len)
+					socklen_t len)
 {
 	inet_ntop(ss->ss_family, sin_addr(ss), buf, len);
 }
