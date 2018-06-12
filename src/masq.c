@@ -63,7 +63,7 @@ static bool blank_line(const char *buf);
 static bool blank_line(const char *buf) {
 	const char *p;
 
-	for (p = buf ; *p != '\0' ; p++) {
+	for (p = buf; *p; ++p) {
 		if (*p != ' ' && *p != '\t')
 			return (false);
 	}
@@ -111,7 +111,7 @@ int find_masq_entry(struct sockaddr_storage *host,
 #endif
 
 	fp = fopen(MASQ_MAP, "r");
-	if (fp == NULL) {
+	if (!fp) {
 		if (errno != EEXIST)
 			debug("fopen: %s: %s", MASQ_MAP, strerror(errno));
 		return (-1);
@@ -119,13 +119,13 @@ int find_masq_entry(struct sockaddr_storage *host,
 
 	line_num = 0;
 
-	while (fgets(buf, sizeof(buf), fp) != NULL) {
+	while (fgets(buf, sizeof(buf), fp)) {
 		struct sockaddr_storage stemp;
 		char *p, *temp;
 
 		++line_num;
 		p = strchr(buf, '\n');
-		if (p == NULL) {
+		if (!p) {
 			debug("[%s:%d] Long line", MASQ_MAP, line_num);
 			goto failure;
 		}
@@ -134,21 +134,21 @@ int find_masq_entry(struct sockaddr_storage *host,
 		if (buf[0] == '#')
 			continue;
 
-		if (blank_line(buf) == true)
+		if (blank_line(buf))
 			continue;
 
 		p = strchr(buf, '\r');
-		if (p != NULL)
+		if (p)
 			*p = '\0';
 
 		p = strtok(buf, " \t");
-		if (p == NULL) {
+		if (!p) {
 			debug("[%s:%d] Missing address parameter", MASQ_MAP, line_num);
 			goto failure;
 		}
 
 		temp = strchr(p, '/');
-		if (temp != NULL)
+		if (temp)
 			*temp++ = '\0';
 
 		if (get_addr(p, &stemp) == -1) {
@@ -158,7 +158,7 @@ int find_masq_entry(struct sockaddr_storage *host,
 
 		sin_copy(&addr, &stemp);
 
-		if (stemp.ss_family == AF_INET && temp != NULL) {
+		if (stemp.ss_family == AF_INET && temp) {
 			in_addr_t mask, mask2;
 			char *end;
 
@@ -188,11 +188,11 @@ int find_masq_entry(struct sockaddr_storage *host,
 			SIN4(host)->sin_addr.s_addr &= mask2;
 		}
 
-		if (sin_equal(&addr, host) == false)
+		if (!sin_equal(&addr, host))
 			continue;
 
 		p = strtok(NULL, " \t");
-		if (p == NULL) {
+		if (!p) {
 			debug("[%s:%d] Missing user parameter", MASQ_MAP, line_num);
 			goto failure;
 		}
@@ -207,7 +207,7 @@ int find_masq_entry(struct sockaddr_storage *host,
 		xstrncpy(user, p, user_len);
 
 		p = strtok(NULL, " \t");
-		if (p == NULL) {
+		if (!p) {
 			debug("[%s:%d] Missing OS parameter", MASQ_MAP, line_num);
 
 			goto failure;
@@ -276,7 +276,7 @@ bool masq(	int sock __notused,
 			struct sockaddr_storage *local __notused,
 			struct sockaddr_storage *remote __notused)
 {
-	return false;
+	return (false);
 }
 
 #endif

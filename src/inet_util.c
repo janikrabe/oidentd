@@ -107,7 +107,7 @@ int *setup_listen(struct sockaddr_storage **listen_addr, in_port_t listen_port) 
 	struct addrinfo hints, *res, *cur;
 	unsigned int naddr = 0;
 
-	if (listen_addr != NULL) {
+	if (listen_addr) {
 		do {
 			cur = xcalloc(1, sizeof(struct addrinfo));
 
@@ -143,7 +143,7 @@ int *setup_listen(struct sockaddr_storage **listen_addr, in_port_t listen_port) 
 			bound_fds = xrealloc(bound_fds, (naddr + 2) * sizeof(int));
 			bound_fds[naddr] = ret;
 			bound_fds[++naddr] = -1;
-		} while (listen_addr[naddr] != NULL);
+		} while (listen_addr[naddr]);
 
 		return (bound_fds);
 	}
@@ -162,7 +162,7 @@ int *setup_listen(struct sockaddr_storage **listen_addr, in_port_t listen_port) 
 	}
 
 	cur = res;
-	if (cur != NULL) {
+	if (cur) {
 		size_t bound_addr = 0;
 		size_t fdlen = 4;
 
@@ -182,7 +182,7 @@ int *setup_listen(struct sockaddr_storage **listen_addr, in_port_t listen_port) 
 
 			bind_next:
 				cur = cur->ai_next;
-		} while (cur != NULL);
+		} while (cur);
 
 		bound_fds[bound_addr++] = -1;
 		bound_fds = xrealloc(bound_fds, bound_addr * sizeof(int));
@@ -203,7 +203,7 @@ ssize_t sock_read(int sock, char *buf, ssize_t len) {
 	ssize_t ret;
 
 	if (!buf)
-		return 0;
+		return (0);
 
 	for (i = 1; i < len; ++i) {
 top:
@@ -215,17 +215,18 @@ top:
 				break;
 		} else if (ret == 0) {
 			if (i == 1)
-				return 0;
+				return (0);
 
 			break;
 		} else if (errno == EINTR) {
 			goto top;
-		} else
-			return 0;
+		} else {
+			return (0);
+		}
 	}
 
 	*buf = '\0';
-	return i;
+	return (i);
 }
 
 /*
@@ -295,9 +296,9 @@ int get_port(const char *name, in_port_t *port) {
 	struct servent *servent;
 
 	servent = getservbyname(name, "tcp");
-	if (servent != NULL)
+	if (servent) {
 		*port = ntohs(servent->s_port);
-	else {
+	} else {
 		char *end;
 		long temp_port;
 

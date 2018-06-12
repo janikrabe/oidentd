@@ -110,7 +110,7 @@ uid_t get_user4(	in_port_t lport,
 	if (error == -1)
 		debug("sysctl: %s", strerror(errno));
 
-	return MISSING_UID;
+	return (MISSING_UID);
 }
 
 #if MASQ_SUPPORT
@@ -141,12 +141,12 @@ bool masq(	int sock,
 	*/
 
 	if (faddr->ss_family != AF_INET || laddr->ss_family != AF_INET)
-		return false;
+		return (false);
 
 	pfdev = open("/dev/pf", O_RDWR);
 	if (pfdev == -1) {
 		debug("open: %s", strerror(errno));
-		return false;
+		return (false);
 	}
 
 	memset(&natlook, 0, sizeof(struct pfioc_natlook));
@@ -165,7 +165,7 @@ bool masq(	int sock,
 
 	if (ioctl(pfdev, DIOCNATLOOK, &natlook) != 0) {
 		debug("ioctl: %s", strerror(errno));
-		return false;
+		return (false);
 	}
 
 	fport = ntohs(fport);
@@ -181,7 +181,7 @@ bool masq(	int sock,
 		retf = fwd_request(sock, lport, masq_lport, fport, masq_fport, &ss);
 		if (retf == 0) {
 			if (retm != 0)
-				return true;
+				return (true);
 		} else {
 			char ipbuf[MAX_IPLEN];
 
@@ -203,10 +203,10 @@ bool masq(	int sock,
 				"[%s] (NAT) Successful lookup: %d , %d : %s",
 				ipbuf, lport, fport, user);
 
-		return true;
+		return (true);
 	}
 
-	return false;
+	return (false);
 }
 
 #endif
@@ -237,7 +237,7 @@ uid_t get_user6(	in_port_t lport,
 	fin->sin6_len = sizeof(struct sockaddr_in6);
 
 	if (faddr->ss_len > sizeof(tir.faddr))
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	memcpy(&fin->sin6_addr, &SIN6(faddr)->sin6_addr, sizeof(tir.faddr));
 	fin->sin6_port = fport;
@@ -247,7 +247,7 @@ uid_t get_user6(	in_port_t lport,
 	lin->sin6_len = sizeof(struct sockaddr_in6);
 
 	if (laddr->ss_len > sizeof(tir.laddr))
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	memcpy(&lin->sin6_addr, &SIN6(laddr)->sin6_addr, sizeof(tir.laddr));
 	lin->sin6_port = lport;
@@ -261,7 +261,7 @@ uid_t get_user6(	in_port_t lport,
 	if (error == -1)
 		debug("sysctl: %s", strerror(errno));
 
-	return MISSING_UID;
+	return (MISSING_UID);
 }
 
 #endif

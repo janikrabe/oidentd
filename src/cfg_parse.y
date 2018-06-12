@@ -138,7 +138,7 @@ user_statement:
 			YYABORT;
 		}
 
-		if (user_db_lookup(cur_user->user) != NULL) {
+		if (user_db_lookup(cur_user->user)) {
 			o_log(LOG_CRIT,
 				"[line %u] User \"%s\" already has a capability entry",
 				current_line, $2);
@@ -474,7 +474,7 @@ int read_config(const char *path) {
 	int ret;
 
 	fp = fopen(path, "r");
-	if (fp == NULL) {
+	if (!fp) {
 		if (errno == ENOENT) {
 			/*
 			** If a configuration file is specified on the
@@ -507,7 +507,7 @@ int read_config(const char *path) {
 	** Make sure there's a default to fall back on.
 	*/
 
-	if (default_user == NULL) {
+	if (!default_user) {
 		struct user_info *temp_default;
 
 		temp_default = user_db_create_default();
@@ -526,7 +526,7 @@ static FILE *open_user_config(const struct passwd *pw) {
 	FILE *fp;
 
 	fp = safe_open(pw, USER_CONF);
-	if (fp == NULL)
+	if (!fp)
 		return (NULL);
 
 	yyrestart(fp);
@@ -545,7 +545,7 @@ list_t *user_db_get_pref_list(const struct passwd *pw) {
 	int ret;
 
 	fp = open_user_config(pw);
-	if (fp == NULL)
+	if (!fp)
 		return (NULL);
 
 	cur_cap = NULL;
@@ -578,7 +578,7 @@ static int extract_port_range(const char *token, struct port_range *range) {
 	char *p;
 
 	p = strchr(token, ':');
-	if (p != NULL)
+	if (p)
 		*p++ = '\0';
 
 	if (*token == '\0')
@@ -586,9 +586,9 @@ static int extract_port_range(const char *token, struct port_range *range) {
 	else if (get_port(token, &range->min) == -1)
 		return (-1);
 
-	if (p == NULL)
+	if (!p) {
 		range->max = range->min;
-	else {
+	} else {
 		if (*p == '\0')
 			range->max = PORT_MAX;
 		else if (get_port(p, &range->max) == -1)

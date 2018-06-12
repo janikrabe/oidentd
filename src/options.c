@@ -170,13 +170,13 @@ int get_options(int argc, char *const argv[]) {
 			}
 
 			case 'c':
-				if (charset != NULL)
+				if (charset)
 					free(charset);
 				charset = xstrdup(optarg);
 				break;
 
 			case 'C':
-				if (config_file != NULL)
+				if (config_file)
 					free(config_file);
 				config_file = xstrdup(optarg);
 				break;
@@ -196,12 +196,7 @@ int get_options(int argc, char *const argv[]) {
 #if MASQ_SUPPORT
 			case 'f':
 			{
-				const char *p;
-
-				 if (optarg == NULL)
-					p = DEFAULT_FPORT;
-				else
-					p = optarg;
+				const char *p = optarg ? optarg : DEFAULT_FPORT;
 
 				if (get_port(p, &fwdport) == -1) {
 					o_log(LOG_CRIT, "Fatal: Bad port: \"%s\"", p);
@@ -217,7 +212,7 @@ int get_options(int argc, char *const argv[]) {
 				break;
 
 			case '0':
-				o_log(LOG_CRIT, "Warning: Flag --forward-last is deprecated "
+				o_log(LOG_CRIT, "Warning: The --forward-last flag is deprecated "
 				                "and will be removed in the future. Please use "
 				                "--masquerade-first (-M) instead.");
 				/* fall through */
@@ -274,20 +269,20 @@ int get_options(int argc, char *const argv[]) {
 			}
 
 			case 'o':
-				if (temp_os != NULL)
+				if (temp_os)
 					free(temp_os);
 
-				if (optarg != NULL) {
+				if (optarg) {
 					char *p;
 
 					temp_os = xstrdup(optarg);
 
 					p = strchr(temp_os, '\n');
-					if (p != NULL)
+					if (p)
 						*p = '\0';
 
 					p = strchr(temp_os, '\r');
-					if (p != NULL)
+					if (p)
 						*p = '\0';
 				} else
 					temp_os = xstrdup("OTHER");
@@ -306,7 +301,7 @@ int get_options(int argc, char *const argv[]) {
 				break;
 
 			case 'r':
-				if (failuser != NULL)
+				if (failuser)
 					free(failuser);
 				failuser = xstrdup(optarg);
 				break;
@@ -354,18 +349,19 @@ int get_options(int argc, char *const argv[]) {
 		}
 	}
 
-	if (addr != NULL)
+	if (addr)
 		addr[naddrs] = NULL;
 
-	if (charset != NULL) {
+	if (charset) {
 		size_t len = strlen(temp_os) + strlen(charset) + 4;
 
 		ret_os = xmalloc(len);
 		snprintf(ret_os, len, "%s , %s", temp_os, charset);
 		free(temp_os);
 		free(charset);
-	} else
+	} else {
 		ret_os = temp_os;
+	}
 
 	if (opt_enabled(DEBUG_MSGS) && opt_enabled(QUIET)) {
 		o_log(LOG_CRIT, "Fatal: The debug and quiet flags are incompatible");
@@ -401,7 +397,7 @@ int get_options(int argc, char *const argv[]) {
 	}
 
 	/*
-	** If no group is specified, use a reasonable default.
+	** If no group was specified, use a reasonable default.
 	*/
 
 	if (!opt_enabled(CHANGE_GID) && (getgid() == 0 || getegid() == 0)) {

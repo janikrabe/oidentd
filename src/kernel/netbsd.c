@@ -103,7 +103,7 @@ int k_open(void) {
 	kinfo = xmalloc(sizeof(struct kainfo));
 
 	kinfo->kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
-	if (kinfo->kd == NULL) {
+	if (!kinfo->kd) {
 		free(kinfo);
 		debug("kvm_open: %s", strerror(errno));
 		return (-1);
@@ -178,7 +178,7 @@ static struct socket *getlist4(	struct inpcbtable *tcbtablep,
 {
 	struct inpcb *kpcbp, pcb;
 
-	if (tcbtablep == NULL)
+	if (!tcbtablep)
 		return (NULL);
 
 	kpcbp = (struct inpcb *) tcbtablep->inpt_queue.cqh_first;
@@ -239,24 +239,24 @@ uid_t get_user4(	in_port_t lport,
 
 	ret = getbuf(kinfo->nl[N_TCB].n_value, &tcbtable, sizeof(tcbtable));
 	if (ret == -1)
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	sockp = getlist4(&tcbtable,
 				(struct inpcbtable *) kinfo->nl[N_TCB].n_value,
 				lport, fport, &SIN4(laddr)->sin_addr, &SIN4(faddr)->sin_addr);
 
-	if (sockp == NULL)
-		return MISSING_UID;
+	if (!sockp)
+		return (MISSING_UID);
 
 	if (getbuf((u_long) sockp, &sock, sizeof(sock)) == -1)
-		return MISSING_UID;
+		return (MISSING_UID);
 
 #ifdef SO_UIDINFO
-	if (sock.so_uidinfo == NULL)
-		return MISSING_UID;
+	if (!sock.so_uidinfo)
+		return (MISSING_UID);
 
 	if (getbuf((u_long) sock.so_uidinfo, &uidinfo, sizeof(uidinfo)) == -1)
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	return (uidinfo.ui_uid);
 #else
@@ -288,12 +288,12 @@ bool masq(	int sock,
 	*/
 
 	if (faddr->ss_family != AF_INET || laddr->ss_family != AF_INET)
-		return false;
+		return (false);
 
 	if (getbuf(kinfo->nl[N_NATLIST].n_value, &np, sizeof(np)) == -1)
-		return false;
+		return (false);
 
-	for (; np != NULL ; np = nat.nat_next) {
+	for (; np; np = nat.nat_next) {
 		int retm;
 		int retf;
 		in_port_t masq_lport;
@@ -338,7 +338,7 @@ bool masq(	int sock,
 			retf = fwd_request(sock, lport, masq_lport, fport, masq_fport, &ss);
 			if (retf == 0) {
 				if (retm != 0)
-					return true;
+					return (true);
 			} else {
 				char ipbuf[MAX_IPLEN];
 
@@ -360,11 +360,11 @@ bool masq(	int sock,
 				"[%s] (NAT) Successful lookup: %d , %d : %s",
 				ipbuf, lport, fport, user);
 
-			return true;
+			return (true);
 		}
 	}
 
-	return false;
+	return (false);
 }
 
 #endif
@@ -390,7 +390,7 @@ static struct socket *getlist6(	struct in6pcb *tcb6,
 #if __NetBSD_Version__ >= 106250000
 	struct in6pcb *kpcbp, pcb;
 
-	if (tcbtablep == NULL)
+	if (!tcbtablep)
 		return (NULL);
 
 	kpcbp = (struct in6pcb *) tcbtablep->inpt_queue.cqh_first;
@@ -410,7 +410,7 @@ static struct socket *getlist6(	struct in6pcb *tcb6,
 #else
 	struct in6pcb *tcb6_cur, tcb6_temp;
 
-	if (tcb6 == NULL)
+	if (!tcb6)
 		return (NULL);
 
 	tcb6_cur = tcb6;
@@ -454,7 +454,7 @@ uid_t get_user6(	in_port_t lport,
 
 	ret = getbuf(kinfo->nl[N_TCB6].n_value, &tcbtable, sizeof(tcbtable));
 	if (ret == -1)
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	sockp = getlist6(&tcbtable,
 				(struct inpcbtable *) kinfo->nl[N_TCB6].n_value,
@@ -466,24 +466,24 @@ uid_t get_user6(	in_port_t lport,
 
 	ret = getbuf(kinfo->nl[N_TCB6].n_value, &tcb6, sizeof(tcb6));
 	if (ret == -1)
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	sockp = getlist6(&tcb6, lport, fport,
 				&SIN6(laddr)->sin6_addr, &SIN6(faddr)->sin6_addr);
 #endif
 
-	if (sockp == NULL)
-		return MISSING_UID;
+	if (!sockp)
+		return (MISSING_UID);
 
 	if (getbuf((u_long) sockp, &sock, sizeof(sock)) == -1)
-		return MISSING_UID;
+		return (MISSING_UID);
 
 #ifdef SO_UIDINFO
-	if (sock.so_uidinfo == NULL)
-		return MISSING_UID;
+	if (!sock.so_uidinfo)
+		return (MISSING_UID);
 
 	if (getbuf((u_long) sock.so_uidinfo, &uidinfo, sizeof(uidinfo)) == -1)
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	return (uidinfo.ui_uid);
 #else

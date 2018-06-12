@@ -87,7 +87,7 @@ int k_open(void) {
 	kinfo = xmalloc(sizeof(struct kainfo));
 
 	kinfo->kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
-	if (kinfo->kd == NULL) {
+	if (!kinfo->kd) {
 		free(kinfo);
 		debug("kvm_open: %s", strerror(errno));
 		return (-1);
@@ -152,7 +152,7 @@ static struct socket *getlist4(	struct inpcbtable *tcbtablep,
 {
 	struct inpcb *kpcbp, pcb;
 
-	if (tcbtablep == NULL)
+	if (!tcbtablep)
 		return (NULL);
 
 	kpcbp = tcbtablep->inpt_queue.cqh_first;
@@ -210,20 +210,20 @@ uid_t get_user4(	in_port_t lport,
 
 	ret = getbuf(kinfo->nl[N_TCB].n_value, &tcbtable, sizeof(tcbtable));
 	if (ret == -1)
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	sockp = getlist4(&tcbtable,
 				(struct inpcbtable *) kinfo->nl[N_TCB].n_value,
 				lport, fport, &SIN4(laddr)->sin_addr, &SIN4(faddr)->sin_addr);
 
-	if (sockp == NULL)
-		return MISSING_UID;
+	if (!sockp)
+		return (MISSING_UID);
 
 	if (getbuf((u_long) sockp, &sock, sizeof(sock)) == -1)
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	if (!(sock.so_state & SS_CONNECTOUT))
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	return (sock.so_ruid);
 }
@@ -248,16 +248,16 @@ bool masq(	int sock,
 	struct sockaddr_storage ss;
 
 	/*
-	** Only IPv4 is supported right now..
+	** Only IPv4 is supported right now.
 	*/
 
 	if (faddr->ss_family != AF_INET || laddr->ss_family != AF_INET)
-		return false;
+		return (false);
 
 	if (getbuf(kinfo->nl[N_NATLIST].n_value, &np, sizeof(np)) == -1)
-		return false;
+		return (false);
 
-	for (; np != NULL ; np = nat.nat_next) {
+	for (; np; np = nat.nat_next) {
 		int retm;
 		int retf;
 		in_port_t masq_lport;
@@ -302,7 +302,7 @@ bool masq(	int sock,
 			retf = fwd_request(sock, lport, masq_lport, fport, masq_fport, &ss);
 			if (retf == 0) {
 				if (retm != 0)
-					return true;
+					return (true);
 			} else {
 				char ipbuf[MAX_IPLEN];
 
@@ -324,11 +324,11 @@ bool masq(	int sock,
 				"[%s] (NAT) Successful lookup: %d , %d : %s",
 				ipbuf, lport, fport, user);
 
-			return true;
+			return (true);
 		}
 	}
 
-	return false;
+	return (false);
 }
 
 #endif
@@ -359,7 +359,7 @@ uid_t get_user6(	in_port_t lport,
 	fin->sin6_len = sizeof(struct sockaddr_in6);
 
 	if (faddr->ss_len > sizeof(tir.faddr))
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	memcpy(&fin->sin6_addr, &SIN6(faddr)->sin6_addr, sizeof(tir.faddr));
 	fin->sin6_port = fport;
@@ -369,7 +369,7 @@ uid_t get_user6(	in_port_t lport,
 	lin->sin6_len = sizeof(struct sockaddr_in6);
 
 	if (laddr->ss_len > sizeof(tir.laddr))
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	memcpy(&lin->sin6_addr, &SIN6(laddr)->sin6_addr, sizeof(tir.laddr));
 	lin->sin6_port = lport;
@@ -383,7 +383,7 @@ uid_t get_user6(	in_port_t lport,
 	if (error == -1)
 		debug("sysctl: %s", strerror(errno));
 
-	return MISSING_UID;
+	return (MISSING_UID);
 }
 
 #endif

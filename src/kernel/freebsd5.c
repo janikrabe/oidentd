@@ -108,7 +108,7 @@ int k_open(void) {
 	kinfo = xmalloc(sizeof(struct kainfo));
 
 	kinfo->kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
-	if (kinfo->kd == NULL) {
+	if (!kinfo->kd) {
 		free(kinfo);
 		debug("kvm_open: %s", strerror(errno));
 		return (-1);
@@ -173,7 +173,7 @@ static struct socket *getlist(	void *arg,
 	struct inpcb *pcbp = arg;
 	struct inpcb *head;
 
-	if (pcbp == NULL)
+	if (!pcbp)
 		return (NULL);
 
 	head = pcbp->inp_prev;
@@ -231,7 +231,7 @@ static struct socket *getlist(	void *arg,
 	}
 
 	head = pcbhead->lh_first;
-	if (head == NULL)
+	if (!head)
 		return (NULL);
 
 	do {
@@ -271,7 +271,7 @@ static struct socket *getlist(	void *arg,
 		}
 
 		head = pcbp.inp_list.le_next;
-	} while (head != NULL);
+	} while (head);
 
 	return (NULL);
 }
@@ -307,13 +307,13 @@ static uid_t get_user(	in_port_t lport,
 	struct inpcbhead tcb;
 #endif
 	kp = kvm_getprocs(kinfo->kd, KERN_PROC_ALL, 0, &nentries);
-	if (kp == NULL) {
+	if (!kp) {
 		debug("kvm_getprocs: %s", strerror(errno));
-		return MISSING_UID;
+		return (MISSING_UID);
 	}
 
 	if (getbuf(kinfo->nl[N_TCB].n_value, &tcb, sizeof(tcb)) == -1)
-		return MISSING_UID;
+		return (MISSING_UID);
 
 #ifdef _HAVE_OLD_INPCB
 	tcb.inp_prev = (struct inpcb *) kinfo->nl[N_TCB].n_value;
@@ -323,22 +323,22 @@ static uid_t get_user(	in_port_t lport,
 				(struct sockaddr *)laddr,
 				(struct sockaddr *)faddr);
 
-	if (sockp == NULL)
-		return MISSING_UID;
+	if (!sockp)
+		return (MISSING_UID);
 
 	/*
 	** Locate the file descriptor that has the socket in question
 	** open so that we can get the 'ucred' information
 	*/
-	for (i = 0 ; i < nentries ; i++) {
+	for (i = 0; i < nentries; ++i) {
 
-		if ( kp[i].ki_fd != NULL) {
+		if (kp[i].ki_fd) {
 			int j;
 			int ret;
 			struct filedesc pfd;
 			struct file **ofiles;
 			if (getbuf((u_long) kp[i].ki_fd, &pfd, sizeof(pfd)) == -1)
-				return MISSING_UID;
+				return (MISSING_UID);
 			ofiles = xmalloc(pfd.fd_nfiles * sizeof(struct file *));
 
 			ret = getbuf((u_long) pfd.fd_ofiles, ofiles,
@@ -346,19 +346,19 @@ static uid_t get_user(	in_port_t lport,
 
 			if (ret == -1) {
 				free(ofiles);
-				return MISSING_UID;
+				return (MISSING_UID);
 			}
 
-			for (j = 0 ; j < pfd.fd_nfiles ; j++) {
+			for (j = 0; j < pfd.fd_nfiles; ++j) {
 				struct file ofile;
 
-				if (ofiles[j] == NULL)
+				if (!ofiles[j])
 					continue;
 
 				ret = getbuf((u_long) ofiles[j], &ofile, sizeof(struct file));
 				if (ret == -1) {
 					free(ofiles);
-					return MISSING_UID;
+					return (MISSING_UID);
 				}
 
 				if (ofile.f_count == 0)
@@ -379,7 +379,7 @@ static uid_t get_user(	in_port_t lport,
 
 	}
 
-	return MISSING_UID;
+	return (MISSING_UID);
 }
 
 /*
@@ -419,12 +419,12 @@ bool masq(	int sock,
 	*/
 
 	if (faddr->ss_family != AF_INET || laddr->ss_family != AF_INET)
-		return false;
+		return (false);
 
 	if (getbuf(kinfo->nl[N_NATLIST].n_value, &np, sizeof(np)) == -1)
-		return false;
+		return (false);
 
-	for (; np != NULL ; np = nat.nat_next) {
+	for (; np; np = nat.nat_next) {
 		int retm;
 		int retf;
 		in_port_t masq_lport;
@@ -472,7 +472,7 @@ bool masq(	int sock,
 
 			if (retf == 0) {
 				if (retm != 0)
-					return true;
+					return (true);
 			} else {
 				char ipbuf[MAX_IPLEN];
 
@@ -495,11 +495,11 @@ bool masq(	int sock,
 				"[%s] (NAT) Successful lookup: %d , %d : %s",
 				ipbuf, lport, fport, user);
 
-			return true;
+			return (true);
 		}
 	}
 
-	return false;
+	return (false);
 }
 
 #endif

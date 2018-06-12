@@ -113,7 +113,7 @@ int forward_request(const struct sockaddr_storage *host,
 	if (sscanf(buf, "%*d , %*d : USERID :%*[^:]:%511s", user) != 1) {
 		char *p = strchr(buf, '\r');
 
-		if (p != NULL)
+		if (p)
 			*p = '\0';
 
 		get_ip(&addr, ipbuf, sizeof(ipbuf));

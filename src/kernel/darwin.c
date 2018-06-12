@@ -99,7 +99,7 @@ int k_open(void) {
 	kinfo = xmalloc(sizeof(struct kainfo));
 
 	kinfo->kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
-	if (kinfo->kd == NULL) {
+	if (!kinfo->kd) {
 		free(kinfo);
 		debug("kvm_open: %s", strerror(errno));
 		return (-1);
@@ -169,11 +169,11 @@ static struct socket *getlist4(	struct inpcbhead *pcbhead,
 {
 	struct inpcb *pcbp, pcb;
 
-	if (pcbhead == NULL)
+	if (!pcbhead)
 		return (NULL);
 
 	pcbp = pcbhead->lh_first;
-	while (pcbp != NULL) {
+	while (pcbp) {
 		if (getbuf((u_long) pcbp, &pcb, sizeof(struct inpcb)) == -1)
 			break;
 
@@ -227,17 +227,17 @@ uid_t get_user4(	in_port_t lport,
 
 	ret = getbuf(kinfo->nl[N_TCB].n_value, &tcb, sizeof(tcb));
 	if (ret == -1)
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	sockp = getlist4(&tcb, lport, fport,
 				&SIN4(laddr)->sin_addr, &SIN4(faddr)->sin_addr);
 
-	if (sockp == NULL)
-		return MISSING_UID;
+	if (!sockp)
+		return (MISSING_UID);
 
 	ret = getbuf((u_long) sockp, &sock, sizeof(sock));
 	if (ret == -1)
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	return (sock.so_uid);
 }
@@ -266,12 +266,12 @@ bool masq(	int sock,
 	*/
 
 	if (faddr->ss_family != AF_INET || laddr->ss_family != AF_INET)
-		return false;
+		return (false);
 
 	if (getbuf(kinfo->nl[N_NATLIST].n_value, &np, sizeof(np)) == -1)
-		return false;
+		return (false);
 
-	for (; np != NULL ; np = nat.nat_next) {
+	for (; np; np = nat.nat_next) {
 		int retf;
 		int retm;
 		in_port_t masq_lport;
@@ -316,7 +316,7 @@ bool masq(	int sock,
 			retf = fwd_request(sock, lport, masq_lport, fport, masq_fport, &ss);
 			if (retf == 0) {
 				if (retm != 0)
-					return true;
+					return (true);
 			} else {
 				char ipbuf[MAX_IPLEN];
 
@@ -338,11 +338,11 @@ bool masq(	int sock,
 				"[%s] (NAT) Successful lookup: %d , %d : %s",
 				ipbuf, lport, fport, user);
 
-			return true;
+			return (true);
 		}
 	}
 
-	return false;
+	return (false);
 }
 
 #endif
@@ -362,11 +362,11 @@ static struct socket *getlist6(	struct inpcbhead *pcbhead,
 {
 	struct in6pcb *pcb6p, pcb6;
 
-	if (pcbhead == NULL)
+	if (!pcbhead)
 		return (NULL);
 
 	pcb6p = pcbhead->lh_first;
-	while (pcb6p != NULL) {
+	while (pcb6p) {
 		if (getbuf((u_long) pcb6p, &pcb6, sizeof(struct in6pcb)) == -1)
 			break;
 
@@ -400,17 +400,17 @@ uid_t get_user6(	in_port_t lport,
 
 	ret = getbuf(kinfo->nl[N_TCB6].n_value, &pcb6, sizeof(pcb6));
 	if (ret == -1)
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	sockp = getlist6(&pcb6, lport, fport,
 				&SIN6(laddr)->sin6_addr, &SIN6(faddr)->sin6_addr);
 
-	if (sockp == NULL)
-		return MISSING_UID;
+	if (!sockp)
+		return (MISSING_UID);
 
 	ret = getbuf((u_long) sockp, &sock, sizeof(sock));
 	if (ret == -1)
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	return (sock.so_uid);
 }

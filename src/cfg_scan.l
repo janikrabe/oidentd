@@ -291,7 +291,7 @@ FORWARD				forward
 		string_buf = xrealloc(string_buf, max_slen);
 	}
 
-	while (*p != '\0')
+	while (*p)
 		string_buf[str_idx++] = *p++;
 }
 

@@ -112,7 +112,7 @@ int k_open(void) {
 	*/
 
 	kinfo->kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
-	if (kinfo->kd == NULL) {
+	if (!kinfo->kd) {
 		debug("kvm_open: %s", strerror(errno));
 		free(kinfo);
 		return (-1);
@@ -145,7 +145,7 @@ static int getbuf(kvm_t *kd, off_t addr, void *dst, size_t len) {
 	int i;
 	ssize_t status = -1;
 
-	for (i = 0 ; i < 5 ; i++) {
+	for (i = 0; i < 5; ++i) {
 		status = kvm_read(kd, addr, dst, len);
 		if (status >= 0)
 			break;
@@ -198,18 +198,18 @@ uid_t get_user4(	in_port_t lport,
 			&icp, sizeof(ipc_t *));
 
 	if (ret == -1)
-		return MISSING_UID;
+		return (MISSING_UID);
 
-	if (icp == NULL)
-		return MISSING_UID;
+	if (!icp)
+		return (MISSING_UID);
 
 	locaddr = (in_addr_t *) &ic.ipc_laddr;
 	raddr = (in_addr_t *) &ic.ipc_faddr;
 	ports = (in_port_t *) &ic.ipc_ports;
 
-	while (icp != NULL) {
+	while (icp) {
 		if (getbuf(kinfo->kd, (off_t) icp, &ic, sizeof(ic)) == -1)
-			return MISSING_UID;
+			return (MISSING_UID);
 
 		if (fport == ports[0] && lport == ports[1] &&
 			(!memcmp(&laddr4, locaddr, 4) || !memcmp(&zero, locaddr, 4)) &&
@@ -221,14 +221,14 @@ uid_t get_user4(	in_port_t lport,
 		icp = ic.ipc_hash_next;
 	}
 
-	if (icp == NULL)
-		return MISSING_UID;
+	if (!icp)
+		return (MISSING_UID);
 
 	ret = getbuf(kip->kd, (off_t) ic.ipc_rq + offsetof(queue_t, q_stream),
 			&sqr.q_stream, sizeof(sqr.q_stream));
 
 	if (ret == -1)
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	/*
 	** At this point sqr.qstream holds the pointer to the stream we're
@@ -237,9 +237,9 @@ uid_t get_user4(	in_port_t lport,
 	*/
 
 	if (kvm_setproc(kinfo->kd) != 0)
-		return MISSING_UID;
+		return (MISSING_UID);
 
-	while ((procp = kvm_nextproc(kinfo->kd)) != NULL) {
+	while ((procp = kvm_nextproc(kinfo->kd))) {
 		struct uf_entry files[NFPCHUNK];
 		int nfiles = procp->p_user.u_nofiles;
 		off_t addr = (off_t) procp->p_user.u_flist;
@@ -252,18 +252,18 @@ uid_t get_user4(	in_port_t lport,
 			vnode_t vp;
 
 			if (getbuf(kinfo->kd, addr, &files[0], size) == -1)
-				return MISSING_UID;
+				return (MISSING_UID);
 
-			for (i = 0 ; i < nread ; i++) {
+			for (i = 0; i < nread; ++i) {
 				if (files[i].uf_ofile == 0 || files[i].uf_ofile == last)
 					continue;
 
 				last = files[i].uf_ofile;
 
 				if (getbuf(kinfo->kd, (off_t) last, &tf, sizeof(tf)) == -1)
-					return MISSING_UID;
+					return (MISSING_UID);
 
-				if (tf.f_vnode == NULL)
+				if (!tf.f_vnode)
 					continue;
 
 				ret = getbuf(kinfo->kd,
@@ -272,14 +272,14 @@ uid_t get_user4(	in_port_t lport,
 						sizeof(vp.v_stream));
 
 				if (ret == -1)
-					return MISSING_UID;
+					return (MISSING_UID);
 
 				if (vp.v_stream == sqr.q_stream) {
 					cred_t cr;
 
 					ret = getbuf(kinfo->kd, (off_t) tf.f_cred, &cr, sizeof(cr));
 					if (ret == -1)
-						return MISSING_UID;
+						return (MISSING_UID);
 
 					return (cr.cr_ruid);
 				}
@@ -290,5 +290,5 @@ uid_t get_user4(	in_port_t lport,
 		}
 	}
 
-	return MISSING_UID;
+	return (MISSING_UID);
 }

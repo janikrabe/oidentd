@@ -98,7 +98,7 @@ uid_t get_user4(	in_port_t lport,
 
 	if (ret == -1) {
 		debug("sysctlbyname: %s", strerror(errno));
-		return MISSING_UID;
+		return (MISSING_UID);
 	}
 
 	return (ucred.cr_uid);
@@ -142,7 +142,7 @@ uid_t get_user6(	in_port_t lport,
 
 	if (ret == -1) {
 		debug("sysctlbyname: %s", strerror(errno));
-		return MISSING_UID;
+		return (MISSING_UID);
 	}
 
 	return (ucred.cr_uid);

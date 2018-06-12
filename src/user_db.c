@@ -87,7 +87,7 @@ static void random_ident(char *buf, size_t len) {
 	static const char valid[] =
 		"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-	for (i = 0 ; i < len - 1 ; i++)
+	for (i = 0; i < len - 1; ++i)
 		buf[i] = valid[randval(sizeof(valid) - 1)];
 
 	buf[i] = '\0';
@@ -148,7 +148,7 @@ int get_ident(	const struct passwd *pwd,
 	user_cap = user_db_cap_lookup(user_db_lookup(cur_uid),
 				lport, fport, laddr, faddr);
 
-	if (user_cap == NULL)
+	if (!user_cap)
 		user_cap = user_db_cap_lookup(default_user, lport, fport, laddr, faddr);
 
 	if (user_cap->action == ACTION_FORCE) {
@@ -158,8 +158,8 @@ int get_ident(	const struct passwd *pwd,
 				break;
 
 			case CAP_FORWARD:
-				return forward_request(user_cap->data.forward.host,
-					user_cap->data.forward.port, lport, fport, reply, len);
+				return (forward_request(user_cap->data.forward.host,
+					user_cap->data.forward.port, lport, fport, reply, len));
 				break;
 
 			case CAP_HIDE:
@@ -183,12 +183,12 @@ int get_ident(	const struct passwd *pwd,
 	}
 
 	user_pref = user_db_get_pref(pwd, lport, fport, laddr, faddr);
-	if (user_pref != NULL) {
+	if (user_pref) {
 		u_int16_t caps = user_pref->caps;
 
 		switch (caps) {
 			case CAP_HIDE:
-				if (user_db_have_cap(user_cap, CAP_HIDE) == true) {
+				if (user_db_have_cap(user_cap, CAP_HIDE)) {
 					goto out_hide;
 				}
 
@@ -197,10 +197,8 @@ int get_ident(	const struct passwd *pwd,
 			case CAP_REPLY:
 			{
 				char *temp_reply = select_reply(user_pref);
-				bool ret;
 
-				ret = user_db_can_reply(user_cap, temp_reply, cur_uid, fport);
-				if (ret == true) {
+				if (user_db_can_reply(user_cap, temp_reply, cur_uid, fport)) {
 					xstrncpy(reply, temp_reply, len);
 					goto out_success;
 				}
@@ -209,7 +207,7 @@ int get_ident(	const struct passwd *pwd,
 			}
 
 			case CAP_FORWARD:
-				if (user_db_have_cap(user_cap, CAP_FORWARD) == true) {
+				if (user_db_have_cap(user_cap, CAP_FORWARD)) {
 					int ret;
 
 					ret = forward_request(user_pref->data.forward.host,
@@ -219,8 +217,7 @@ int get_ident(	const struct passwd *pwd,
 					if (ret == 0) {
 						if (user_db_can_reply(user_cap, reply, cur_uid, fport))
 							goto out_success;
-					} else {
-						if (user_db_have_cap(user_cap, CAP_HIDE) == true)
+					} else if (user_db_have_cap(user_cap, CAP_HIDE)) {
 							goto out_hide;
 					}
 				}
@@ -228,7 +225,7 @@ int get_ident(	const struct passwd *pwd,
 				break;
 
 			case CAP_RANDOM:
-				if (user_db_have_cap(user_cap, CAP_RANDOM) == true) {
+				if (user_db_have_cap(user_cap, CAP_RANDOM)) {
 					random_ident(reply, MIN(12, len));
 					goto out_success;
 				}
@@ -236,7 +233,7 @@ int get_ident(	const struct passwd *pwd,
 				break;
 
 			case CAP_NUMERIC:
-				if (user_db_have_cap(user_cap, CAP_NUMERIC) == true) {
+				if (user_db_have_cap(user_cap, CAP_NUMERIC)) {
 					numeric_ident(pwd->pw_uid, reply, len);
 					goto out_success;
 				}
@@ -244,7 +241,7 @@ int get_ident(	const struct passwd *pwd,
 				break;
 
 			case CAP_RANDOM_NUMERIC:
-				if (user_db_have_cap(user_cap, CAP_RANDOM_NUMERIC) == true) {
+				if (user_db_have_cap(user_cap, CAP_RANDOM_NUMERIC)) {
 					random_ident_numeric(reply, len);
 					goto out_success;
 				}
@@ -276,7 +273,7 @@ void user_db_cap_destroy_data(void *data) {
 	struct user_cap *user_cap = data;
 	size_t i;
 
-	if (data == NULL)
+	if (!data)
 		return;
 
 	free(user_cap->lport);
@@ -285,7 +282,7 @@ void user_db_cap_destroy_data(void *data) {
 	free(user_cap->dest);
 
 	if (user_cap->caps == CAP_REPLY) {
-		for (i = 0 ; i < user_cap->data.replies.num ; i++)
+		for (i = 0; i < user_cap->data.replies.num; ++i)
 			free(user_cap->data.replies.data[i]);
 		free(user_cap->data.replies.data);
 	}
@@ -321,8 +318,8 @@ inline void user_db_add(struct user_info *user_info) {
 void user_db_destroy(void) {
 	size_t i;
 
-	for (i = 0 ; i < DB_HASH_SIZE ; i++) {
-		if (user_hash[i] != NULL) {
+	for (i = 0; i < DB_HASH_SIZE; ++i) {
+		if (user_hash[i]) {
 			list_destroy(user_hash[i], db_destroy_user_cb);
 			user_hash[i] = NULL;
 		}
@@ -346,7 +343,7 @@ static bool user_db_can_reply(	const struct user_cap *user_cap,
 	struct passwd *pw;
 
 	pw = getpwnam(reply);
-	if (pw != NULL) {
+	if (pw) {
 		/*
 		** A user can always reply with their own username.
 		*/
@@ -354,7 +351,7 @@ static bool user_db_can_reply(	const struct user_cap *user_cap,
 		if (pw->pw_uid == con_uid)
 			return (true);
 
-		if (user_db_have_cap(user_cap, CAP_SPOOF_ALL) == false) {
+		if (!user_db_have_cap(user_cap, CAP_SPOOF_ALL)) {
 			o_log(LOG_INFO, "User %s tried to masquerade as user %s",
 				reply, pw->pw_name);
 
@@ -362,11 +359,10 @@ static bool user_db_can_reply(	const struct user_cap *user_cap,
 		}
 	}
 
-	if (user_db_have_cap(user_cap, CAP_SPOOF) == false)
+	if (!user_db_have_cap(user_cap, CAP_SPOOF))
 		return (false);
 
-	if (fport < 1024 &&
-		user_db_have_cap(user_cap, CAP_SPOOF_PRIVPORT) == false)
+	if (fport < 1024 && !user_db_have_cap(user_cap, CAP_SPOOF_PRIVPORT))
 	{
 		return (false);
 	}
@@ -382,7 +378,7 @@ struct user_info *user_db_lookup(uid_t uid) {
 	list_t *cur;
 
 	cur = user_hash[USER_DB_HASH(uid)];
-	while (cur != NULL) {
+	while (cur) {
 		struct user_info *user_info = cur->data;
 
 		if (user_info->user == uid)
@@ -406,22 +402,22 @@ static struct user_cap *user_db_cap_lookup(	struct user_info *user_info,
 {
 	list_t *cur;
 
-	if (user_info == NULL)
+	if (!user_info)
 		return (NULL);
 
-	for (cur = user_info->cap_list ; cur != NULL ; cur = cur->next) {
+	for (cur = user_info->cap_list; cur; cur = cur->next) {
 		struct user_cap *user_cap = cur->data;
 
-		if (port_match(lport, user_cap->lport) == false)
+		if (!port_match(lport, user_cap->lport))
 			continue;
 
-		if (port_match(fport, user_cap->fport) == false)
+		if (!port_match(fport, user_cap->fport))
 			continue;
 
-		if (addr_match(laddr, user_cap->src) == false)
+		if (!addr_match(laddr, user_cap->src))
 			continue;
 
-		if (addr_match(faddr, user_cap->dest) == false)
+		if (!addr_match(faddr, user_cap->dest))
 			continue;
 
 		return (user_cap);
@@ -453,7 +449,7 @@ struct user_info *user_db_create_default(void) {
 */
 
 void user_db_set_default(struct user_info *user_info) {
-	if (default_user != NULL) {
+	if (default_user) {
 		list_destroy(default_user->cap_list, user_db_cap_destroy_data);
 		free(default_user);
 	}
@@ -476,19 +472,19 @@ static struct user_cap *user_db_get_pref(	const struct passwd *pw,
 
 	cap_list = user_db_get_pref_list(pw);
 
-	for (cur = cap_list ; cur != NULL ; cur = cur->next) {
+	for (cur = cap_list; cur; cur = cur->next) {
 		struct user_cap *cur_cap = cur->data;
 
-		if (port_match(lport, cur_cap->lport) == false)
+		if (!port_match(lport, cur_cap->lport))
 			continue;
 
-		if (port_match(fport, cur_cap->fport) == false)
+		if (!port_match(fport, cur_cap->fport))
 			continue;
 
-		if (addr_match(laddr, cur_cap->src) == false)
+		if (!addr_match(laddr, cur_cap->src))
 			continue;
 
-		if (addr_match(faddr, cur_cap->dest) == false)
+		if (!addr_match(faddr, cur_cap->dest))
 			continue;
 
 		/*
@@ -512,7 +508,7 @@ static struct user_cap *user_db_get_pref(	const struct passwd *pw,
 static bool addr_match(	struct sockaddr_storage *addr,
 						struct sockaddr_storage *cap_addr)
 {
-	if (cap_addr == NULL)
+	if (!cap_addr)
 		return (true);
 
 	return (sin_equal(addr, cap_addr));
@@ -524,7 +520,7 @@ static bool addr_match(	struct sockaddr_storage *addr,
 */
 
 static bool port_match(in_port_t port, const struct port_range *cap_ports) {
-	if (cap_ports == NULL)
+	if (!cap_ports)
 		return (true);
 
 	if (port >= cap_ports->min && port <= cap_ports->max)

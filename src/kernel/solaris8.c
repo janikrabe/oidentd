@@ -131,7 +131,7 @@ int k_open(void) {
 	*/
 
 	kinfo->kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
-	if (kinfo->kd == NULL) {
+	if (!kinfo->kd) {
 		debug("kvm_open: %s", strerror(errno));
 		free(kinfo);
 		return (-1);
@@ -185,7 +185,7 @@ static int getbuf(kvm_t *kd, off_t addr, void *dst, size_t len) {
 	int i;
 	ssize_t status = -1;
 
-	for (i = 0 ; i < 5 ; i++) {
+	for (i = 0; i < 5; ++i) {
 		status = kvm_read(kd, addr, dst, len);
 		if (status >= 0)
 			break;
@@ -235,7 +235,7 @@ uid_t get_user4(	in_port_t lport,
 #if WANT_IPV6
 		iphash = ((char *) &SIN6(faddr)->sin6_addr) + 12;
 #else
-		return MISSING_UID;
+		return (MISSING_UID);
 #endif
 
 	/*
@@ -257,14 +257,14 @@ uid_t get_user4(	in_port_t lport,
 	offset %= kinfo->hash_size;
 
 	if (getbuf(kinfo->kd, FANOUT_OFFSET(offset), &tcpb, sizeof(tcpb)) == -1)
-		return MISSING_UID;
+		return (MISSING_UID);
 
-	if (tcpb == NULL)
-		return MISSING_UID;
+	if (!tcpb)
+		return (MISSING_UID);
 
-	while (tcpb != NULL) {
+	while (tcpb) {
 		if (getbuf(kinfo->kd, (off_t) tcpb, &tb, sizeof(tb)) == -1)
-			return MISSING_UID;
+			return (MISSING_UID);
 
 		if (lport == tb.tcpb_lport && fport == tb.tcpb_fport) {
 			if (faddr->ss_family == AF_INET) {
@@ -290,20 +290,20 @@ uid_t get_user4(	in_port_t lport,
 		tcpb = tb.tcpb_conn_hash;
 	}
 
-	if (tcpb == NULL)
-		return MISSING_UID;
+	if (!tcpb)
+		return (MISSING_UID);
 
 	ret = getbuf(kinfo->kd, (off_t) tb.tcpb_tcp + offsetof(tcp_t, tcp_rq),
 			&q, sizeof(q));
 
 	if (ret == -1)
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	ret = getbuf(kinfo->kd, (off_t) q + offsetof(queue_t, q_stream),
 			&std, sizeof(std));
 
 	if (ret == -1)
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	/*
 	** At this point std holds the pointer to the stream we're
@@ -312,7 +312,7 @@ uid_t get_user4(	in_port_t lport,
 	*/
 
 	if (kvm_setproc(kinfo->kd) != 0)
-		return MISSING_UID;
+		return (MISSING_UID);
 
 	/*
 	** In Solaris 8, the file lists changed dramatically.
@@ -320,7 +320,7 @@ uid_t get_user4(	in_port_t lport,
 	** part of a seperate structure inside user.
 	*/
 
-	while ((procp = kvm_nextproc(kinfo->kd)) != NULL) {
+	while ((procp = kvm_nextproc(kinfo->kd))) {
 		struct uf_entry files[NFPREAD];
 		int nfiles = procp->p_user.u_nofiles;
 		off_t addr = (off_t) procp->p_user.u_flist;
@@ -333,18 +333,18 @@ uid_t get_user4(	in_port_t lport,
 			vnode_t vp;
 
 			if (getbuf(kinfo->kd, addr, &files[0], size) == -1)
-				return MISSING_UID;
+				return (MISSING_UID);
 
-			for (i = 0 ; i < nread ; i++) {
+			for (i = 0; i < nread; ++i) {
 				if (files[i].uf_ofile == 0 || files[i].uf_ofile == last)
 					continue;
 
 				last = files[i].uf_ofile;
 
 				if (getbuf(kinfo->kd, (off_t) last, &tf, sizeof(tf)) == -1)
-					return MISSING_UID;
+					return (MISSING_UID);
 
-				if (tf.f_vnode == NULL)
+				if (!tf.f_vnode)
 					continue;
 
 				ret = getbuf(kinfo->kd,
@@ -353,14 +353,14 @@ uid_t get_user4(	in_port_t lport,
 						sizeof(vp.v_stream));
 
 				if (ret == -1)
-					return MISSING_UID;
+					return (MISSING_UID);
 
 				if (vp.v_stream == std) {
 					cred_t cr;
 
 					ret = getbuf(kinfo->kd, (off_t) tf.f_cred, &cr, sizeof(cr));
 					if (ret == -1)
-						return MISSING_UID;
+						return (MISSING_UID);
 
 					return (cr.cr_ruid);
 				}
@@ -371,5 +371,5 @@ uid_t get_user4(	in_port_t lport,
 		}
 	}
 
-	return MISSING_UID;
+	return (MISSING_UID);
 }

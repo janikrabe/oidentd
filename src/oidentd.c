@@ -105,7 +105,7 @@ int main(int argc, char **argv) {
 
 	if (!opt_enabled(STDIO)) {
 		listen_fds = setup_listen(addr, htons(listen_port));
-		if (listen_fds == NULL || listen_fds[0] == -1) {
+		if (!listen_fds || listen_fds[0] == -1) {
 			o_log(LOG_CRIT, "Fatal: Unable to set up listening socket");
 			exit(EXIT_FAILURE);
 		}
@@ -168,7 +168,7 @@ int main(int argc, char **argv) {
 		if (ret > 0) {
 			size_t i;
 
-			for (i = 0 ; i < fdlen ; i++) {
+			for (i = 0; i < fdlen; ++i) {
 				if (FD_ISSET(listen_fds[i], &rfds)) {
 					int connectfd;
 
@@ -188,7 +188,7 @@ int main(int argc, char **argv) {
 					if (fork() == 0) {
 						size_t idx;
 
-						for (idx = 0 ; listen_fds[idx] != -1 ; ++idx)
+						for (idx = 0; listen_fds[idx] != -1; ++idx)
 							close(listen_fds[idx]);
 
 						free(listen_fds);
@@ -266,7 +266,7 @@ static int service_request(int insock, int outsock) {
 		o_log(NORMAL, "Connection from %s (%s):%d", host_buf, ip_buf, fport);
 
 	if (!sock_read(insock, line, sizeof(line)))
-		return -1;
+		return (-1);
 
 	len = sscanf(line, "%d , %d", &lport_temp, &fport_temp);
 	if (len < 2) {
@@ -332,7 +332,7 @@ static int service_request(int insock, int outsock) {
 	}
 
 	if (con_uid == MISSING_UID) {
-		if (failuser != NULL) {
+		if (failuser) {
 			sockprintf(outsock, "%d,%d:USERID:%s:%s\r\n",
 				lport, fport, ret_os, failuser);
 
@@ -350,7 +350,7 @@ static int service_request(int insock, int outsock) {
 	}
 
 	pw = getpwuid(con_uid);
-	if (pw == NULL) {
+	if (!pw) {
 		sockprintf(outsock, "%d,%d:ERROR:%s\r\n",
 			lport, fport, ERROR("NO-USER"));
 

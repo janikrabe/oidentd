@@ -77,21 +77,22 @@ bool find_user(const char *temp_user, uid_t *uid) {
 	struct passwd *pw;
 
 	pw = getpwnam(temp_user);
-	if (pw == NULL) {
+	if (!pw) {
 		char *end;
 		unsigned long int temp_uid = strtoul(temp_user, &end, 10);
 
 		if (*end != '\0')
-			return false;
+			return (false);
 
 		if (temp_uid >= MISSING_UID)
-			return false;
+			return (false);
 
 		*uid = (uid_t) temp_uid;
-	} else
+	} else {
 		*uid = pw->pw_uid;
+	}
 
-	return true;
+	return (true);
 }
 
 /*
@@ -103,21 +104,22 @@ bool find_group(const char *temp_group, gid_t *gid) {
 	struct group *gr;
 
 	gr = getgrnam(temp_group);
-	if (gr == NULL) {
+	if (!gr) {
 		char *end;
 		unsigned long int temp_gid = strtoul(temp_group, &end, 10);
 
 		if (*end != '\0')
-			return false;
+			return (false);
 
 		if (temp_gid >= MISSING_GID)
-			return false;
+			return (false);
 
 		*gid = (gid_t) temp_gid;
-	} else
+	} else {
 		*gid = gr->gr_gid;
+	}
 
-	return true;
+	return (true);
 }
 
 /*
@@ -140,7 +142,7 @@ int drop_privs(uid_t new_uid, gid_t new_gid) {
 		int ret;
 
 		pw = getpwuid(new_uid);
-		if (pw == NULL) {
+		if (!pw) {
 			debug("getpwuid(%u): No such user", new_uid);
 			return (-1);
 		}
@@ -200,7 +202,7 @@ FILE *safe_open(const struct passwd *pw, const char *filename) {
 	}
 
 	fp = fopen(path, "r");
-	if (fp == NULL) {
+	if (!fp) {
 		if (errno != ENOENT)
 			debug("open: %s: : %s", path, strerror(errno));
 
@@ -279,7 +281,7 @@ int go_background(void) {
 void *xmalloc(size_t size) {
 	void *ret = malloc(size);
 
-	if (ret == NULL) {
+	if (!ret) {
 		o_log(LOG_CRIT, "Fatal: malloc: %s", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
@@ -294,7 +296,7 @@ void *xmalloc(size_t size) {
 void *xcalloc(size_t nmemb, size_t size) {
 	void *ret = calloc(nmemb, size);
 
-	if (ret == NULL) {
+	if (!ret) {
 		o_log(LOG_CRIT, "Fatal: calloc: %s", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
@@ -309,7 +311,7 @@ void *xcalloc(size_t nmemb, size_t size) {
 void *xrealloc(void *ptr, size_t len) {
 	void *ret = realloc(ptr, len);
 
-	if (ret == NULL) {
+	if (!ret) {
 		o_log(LOG_CRIT, "Fatal: realloc: %s", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
@@ -318,7 +320,7 @@ void *xrealloc(void *ptr, size_t len) {
 }
 
 /*
-** Copy at most n-1 characters from src to dest and nul-terminate dest.
+** Copy at most n-1 characters from src to dest and NULL-terminate dest.
 ** Returns a pointer to the destination string.
 */
 
@@ -330,6 +332,7 @@ char *xstrncpy(char *dest, const char *src, size_t n) {
 
 	while (--n > 0 && (*dest++ = *src++) != '\0')
 		;
+
 	*dest = '\0';
 
 	return (ret);
@@ -343,12 +346,12 @@ char *xstrncpy(char *dest, const char *src, size_t n) {
 char *xstrdup(const char *string) {
 	char *ret;
 
-	if (string == NULL)
+	if (!string)
 		return (NULL);
 
 	ret = strdup(string);
 
-	if (ret == NULL) {
+	if (!ret) {
 		o_log(LOG_CRIT, "Fatal: strdup: %s", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
@@ -376,16 +379,15 @@ list_t *list_prepend(list_t **list, void *new_data) {
 */
 
 void list_destroy(list_t *list, void (*free_data)(void *)) {
-	list_t *cur = list ;
+	list_t *cur = list;
 
-	while (cur != NULL) {
+	while (cur) {
 		list_t *next = cur->next;
 
-		if (free_data != NULL)
+		if (free_data)
 			free_data(cur->data);
 
 		free(cur);
-
 		cur = next;
 	}
 }
@@ -440,7 +442,7 @@ struct udb_lookup_res get_udb_user(	in_port_t lport,
 	extern char *ret_os;
 
 	if (laddr->ss_family != AF_INET || faddr->ss_family != AF_INET)
-		return res;
+		return (res);
 
 	memset(&conn, 0, sizeof(conn));
 
@@ -461,14 +463,14 @@ struct udb_lookup_res get_udb_user(	in_port_t lport,
 		faddr_buf, ntohs(conn.to.sin_port));
 
 	if (!udb_conn_get(&conn, &buf))
-		return res;
+		return (res);
 
 	/* If the user is local, return their UID */
 	pw = getpwnam(buf.username);
-	if (pw != NULL) {
+	if (pw) {
 		res.status = 1;
 		res.uid = pw->pw_uid;
-		return res;
+		return (res);
 	}
 
 	/* User not local, reply with string from UDB table. */
@@ -479,7 +481,7 @@ struct udb_lookup_res get_udb_user(	in_port_t lport,
 		faddr_buf, lport, fport, buf.username);
 
 	res.status = 2;
-	return res;
+	return (res);
 }
 
 #endif
