@@ -1,5 +1,6 @@
 2018-06-13  Janik Rabe  <oidentd@janikrabe.com>
 
+	* Released as version 2.3.1.
 	* Fix build with libnetfilter_conntrack on Linux.
 
 2018-06-12  Janik Rabe  <oidentd@janikrabe.com>
