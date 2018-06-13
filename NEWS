@@ -1,5 +1,7 @@
 Unreleased changes
 
+	* Fixed build with libnetfilter_conntrack on Linux.
+
 Changes in version 2.3.0
 
 	* Added a forwarding capability.

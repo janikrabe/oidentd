@@ -178,7 +178,7 @@ static bool dispatch_libnfct_query(struct ct_masq_query *queryp) {
 ** Callback for libnetfilter_conntrack queries
 */
 
-static int callback_nfct(enum nf_conntrack_msg_type,
+static int callback_nfct(enum nf_conntrack_msg_type type __notused,
 			struct nf_conntrack *ct,
 			void *data) {
 	char buf[1024];
@@ -459,18 +459,16 @@ bool masq(	int sock,
 {
 	char buf[1024];
 #if LIBNFCT_SUPPORT
-	struct ct_masq_query query;
+	struct ct_masq_query query = {
+		sock, lport, fport, laddr, faddr, 1 };
 #endif
 
 	lport = ntohs(lport);
 	fport = ntohs(fport);
 
 #if LIBNFCT_SUPPORT
-	if (conntrack == CT_LIBNFCT) {
-		query = { sock, lport, fport, laddr, faddr, 1 };
-		if (dispatch_libnfct_query(&query))
-			return (true);
-	}
+	if (dispatch_libnfct_query(&query))
+		return (true);
 #endif
 
 	/* rewind fp to read new contents */
