@@ -1,3 +1,7 @@
+2018-06-24  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Make `--forward` imply `--masquerade`.
+
 2018-06-13  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Released as version 2.3.1.

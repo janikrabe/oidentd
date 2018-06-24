@@ -203,7 +203,7 @@ int get_options(int argc, char *const argv[]) {
 					return (-1);
 				}
 
-				enable_opt(FORWARD);
+				enable_opt(MASQ | FORWARD);
 				break;
 			}
 
