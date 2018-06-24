@@ -93,7 +93,7 @@ int forward_request(const struct sockaddr_storage *host,
 		goto out_fail;
 	}
 
-	if (sockprintf(fsock, "%d , %d\r\n", lport, fport) < 1) {
+	if (sockprintf(fsock, "%d,%d\r\n", lport, fport) < 1) {
 		debug("write: %s", strerror(errno));
 		goto out_fail;
 	}

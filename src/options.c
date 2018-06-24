@@ -353,10 +353,10 @@ int get_options(int argc, char *const argv[]) {
 		addr[naddrs] = NULL;
 
 	if (charset) {
-		size_t len = strlen(temp_os) + strlen(charset) + 4;
+		size_t len = strlen(temp_os) + strlen(charset) + 2;
 
 		ret_os = xmalloc(len);
-		snprintf(ret_os, len, "%s , %s", temp_os, charset);
+		snprintf(ret_os, len, "%s,%s", temp_os, charset);
 		free(temp_os);
 		free(charset);
 	} else {
