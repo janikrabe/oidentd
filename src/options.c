@@ -218,9 +218,7 @@ int get_options(int argc, char *const argv[]) {
 				/* fall through */
 
 			case 'M':
-				enable_opt(MASQ);
-				enable_opt(FORWARD);
-				enable_opt(MASQ_OVERRIDE);
+				enable_opt(MASQ | FORWARD | MASQ_OVERRIDE);
 				break;
 
 #endif
