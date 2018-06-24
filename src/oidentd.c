@@ -179,6 +179,8 @@ int main(int argc, char **argv) {
 					}
 
 					if (current_connections >= connection_limit) {
+						o_log(NORMAL, "Connection limit exceeded; "
+						              "closing incoming connection");
 						close(connectfd);
 						continue;
 					}

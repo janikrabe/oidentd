@@ -1,6 +1,7 @@
 Unreleased changes
 
 	* Option `--forward` now implies `--masquerade`.
+	* Added a warning when the connection limit is exceeded.
 
 Changes in version 2.3.1
 
