@@ -484,7 +484,7 @@ static void print_version(bool verbose) {
 		print_version_str ("Kernel driver: ", KERNEL_DRIVER);
 		print_version_bool("Needs kmem access: ", USE_KMEM);
 		print_version_bool("Needs root access: ", NEED_ROOT);
-		print_version_bool("Debugging build: ", ENABLE_DEBUGGING);
+		print_version_bool("Debug build: ", ENABLE_DEBUGGING);
 		print_version_bool("Masquerading support: ", MASQ_SUPPORT);
 		print_version_bool("IPv6 support: ", WANT_IPV6);
 		print_version_bool("Linux libcap-ng support: ", HAVE_LIBCAP_NG);
