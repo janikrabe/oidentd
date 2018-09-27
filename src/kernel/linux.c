@@ -237,7 +237,10 @@ bool core_init(void) {
 #	if LIBNFCT_SUPPORT
 				return (true);
 #	else
-				o_log(LOG_CRIT, "NAT/IP masquerading support is unavailable");
+				o_log(LOG_CRIT, "NAT/IP masquerading support is unavailable "
+				                "because " PACKAGE_NAME " was compiled without "
+				                "libnetfilter_conntrack support and no "
+				                "connection tracking file was found.");
 				disable_opt(MASQ);
 #	endif
 			} else {

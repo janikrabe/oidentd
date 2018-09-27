@@ -372,8 +372,9 @@ int get_options(int argc, char *const argv[]) {
 	*/
 
 	if (!opt_enabled(CHANGE_UID) || !opt_enabled(CHANGE_GID)) {
-		o_log(LOG_CRIT, "Warning: privileges will not be dropped "
-		                "automatically on this system");
+		o_log(LOG_CRIT, "Warning: privileges will not be dropped automatically"
+		                " because " PACKAGE_NAME " needs to run as root"
+		                " on this system");
 	}
 #else
 	/*
