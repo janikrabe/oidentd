@@ -1,0 +1,7 @@
+[Unit]
+Description=RFC 1413 compliant per-connection ident daemon
+
+[Service]
+ExecStart=/usr/sbin/oidentd -IS
+StandardInput=socket
+StandardError=syslog

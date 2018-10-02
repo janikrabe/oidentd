@@ -1,0 +1,10 @@
+[Unit]
+Conflicts=oidentd.service
+Description=RFC 1413 compliant ident socket
+
+[Socket]
+Accept=true
+ListenStream=113
+
+[Install]
+WantedBy=sockets.target

@@ -1,0 +1,12 @@
+[Unit]
+Description=RFC 1413 compliant ident daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/oidentd -S
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+Type=forking
+
+[Install]
+WantedBy=multi-user.target
