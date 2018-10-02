@@ -466,7 +466,7 @@ static void print_usage(void) {
 }
 
 static inline void print_version_str(const char *desc, const char *val) {
-	printf("\t%s%s\n", desc, val);
+	printf("\t%s: %s\n", desc, val);
 }
 
 static inline void print_version_bool(const char *desc, const bool val) {
@@ -482,14 +482,18 @@ static void print_version(bool verbose) {
 
 	if (verbose) {
 		printf("\nBuild information:\n");
-		print_version_str ("Kernel driver: ", KERNEL_DRIVER);
-		print_version_bool("Needs kmem access: ", USE_KMEM);
-		print_version_bool("Needs root access: ", NEED_ROOT);
-		print_version_bool("Debug build: ", ENABLE_DEBUGGING);
-		print_version_bool("Masquerading support: ", MASQ_SUPPORT);
-		print_version_bool("IPv6 support: ", WANT_IPV6);
-		print_version_bool("Linux libcap-ng support: ", HAVE_LIBCAP_NG);
-		print_version_bool("Linux libnfct support: ", LIBNFCT_SUPPORT);
-		print_version_bool("UDB library support: ", HAVE_LIBUDB);
+		print_version_str ("Kernel driver", KERNEL_DRIVER);
+		print_version_bool("Needs kmem access", USE_KMEM);
+		print_version_bool("Needs root access", NEED_ROOT);
+		print_version_bool("Debug build", ENABLE_DEBUGGING);
+		print_version_bool("Masquerading support", MASQ_SUPPORT);
+		print_version_bool("IPv6 support", WANT_IPV6);
+		print_version_bool("Linux libcap-ng support", HAVE_LIBCAP_NG);
+		print_version_bool("Linux libnfct support", LIBNFCT_SUPPORT);
+		print_version_bool("UDB library support", HAVE_LIBUDB);
+
+		printf("\nBuild settings:\n");
+		print_version_str("Configuration directory", SYSCONFDIR);
+		print_version_str("User configuration file", USER_CONF);
 	}
 }
