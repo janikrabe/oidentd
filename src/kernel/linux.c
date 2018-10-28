@@ -625,18 +625,23 @@ static int masq_ct_line(char *line,
 		u_int32_t masq_fport_temp;
 
 		ret = sscanf(line,
-			"%15s %*d %15s %*d %*d ESTABLISHED src=%45s dst=%45s sport=%d dport=%d packets=%*d bytes=%*d src=%45s dst=%45s sport=%d dport=%d",
-			family, proto, ml, mr,
-			&masq_lport_temp, &masq_fport_temp, nl, nr,
-			&nport_temp, &mport_temp);
+			"%15s %*d %15s %*d %*d ESTABLISHED"
+			" src=" IP_SCAN_SPEC " dst=" IP_SCAN_SPEC " sport=%d dport=%d"
+			" packets=%*d bytes=%*d"
+			" src=" IP_SCAN_SPEC " dst=" IP_SCAN_SPEC " sport=%d dport=%d",
+			family, proto,
+			ml, mr, &masq_lport_temp, &masq_fport_temp,
+			nl, nr, &nport_temp, &mport_temp);
 
 		/* Added to handle /proc/sys/net/netfilter/nf_conntrack_acct = 0 */
 		if (ret != 10) {
 			ret = sscanf(line,
-				"%15s %*d %15s %*d %*d ESTABLISHED src=%45s dst=%45s sport=%d dport=%d src=%45s dst=%45s sport=%d dport=%d",
-				family, proto, ml, mr,
-				&masq_lport_temp, &masq_fport_temp, nl, nr,
-				&nport_temp, &mport_temp);
+				"%15s %*d %15s %*d %*d ESTABLISHED"
+				" src=" IP_SCAN_SPEC " dst=" IP_SCAN_SPEC " sport=%d dport=%d"
+				" src=" IP_SCAN_SPEC " dst=" IP_SCAN_SPEC " sport=%d dport=%d",
+				family, proto,
+				ml, mr, &masq_lport_temp, &masq_fport_temp,
+				nl, nr, &nport_temp, &mport_temp);
 		}
 
 		if (ret != 10)

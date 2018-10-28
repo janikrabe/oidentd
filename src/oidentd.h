@@ -104,9 +104,17 @@
 #	ifndef INET6_ADDRSTRLEN
 #		define INET6_ADDRSTRLEN	46
 #	endif
+#	if INET6_ADDRSTRLEN < 46
+#		error "INET6_ADDRSTRLEN is too small"
+#	endif
 #	define MAX_IPLEN	INET6_ADDRSTRLEN
+#	define IP_SCAN_SPEC	"%45s"
 #else
+#	if INET_ADDRSTRLEN < 16
+#		error "INET_ADDRSTRLEN is too small"
+#	endif
 #	define MAX_IPLEN	INET_ADDRSTRLEN
+#	define IP_SCAN_SPEC	"%15s"
 #endif
 
 #define PORT_MAX		0xffff
