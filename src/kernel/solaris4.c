@@ -108,8 +108,6 @@ static struct proc *xkvm_nextproc(struct kainfo *kp) {
 */
 
 int k_open(void) {
-	int ret;
-
 	kinfo = xmalloc(sizeof(struct kainfo));
 
 	/*

@@ -103,8 +103,6 @@ extern void free(void *ptr);
 */
 
 int k_open(void) {
-	int ret;
-
 	kinfo = xmalloc(sizeof(struct kainfo));
 
 	/*
