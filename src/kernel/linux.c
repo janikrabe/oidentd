@@ -570,7 +570,9 @@ static int masq_ct_line(char *line,
 			return (-1);
 
 		ret = sscanf(line,
-			"%15s %*d %*d ESTABLISHED src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d",
+			"%15s %*d %*d ESTABLISHED"
+			" src=%u.%u.%u.%u dst=%u.%u.%u.%u sport=%u dport=%u"
+			" src=%u.%u.%u.%u dst=%u.%u.%u.%u sport=%u dport=%u",
 			proto,
 			&ml1, &ml2, &ml3, &ml4, &mr1, &mr2, &mr3, &mr4,
 			&masq_lport_temp, &masq_fport_temp,
@@ -579,7 +581,10 @@ static int masq_ct_line(char *line,
 
 		if (ret != 21) {
 			ret = sscanf(line,
-				"%15s %*d %*d ESTABLISHED src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d packets=%*d bytes=%*d src=%d.%d.%d.%d dst=%d.%d.%d.%d sport=%d dport=%d",
+				"%15s %*d %*d ESTABLISHED"
+				" src=%u.%u.%u.%u dst=%u.%u.%u.%u sport=%u dport=%u"
+				" packets=%*d bytes=%*d"
+				" src=%u.%u.%u.%u dst=%u.%u.%u.%u sport=%u dport=%u",
 			proto,
 			&ml1, &ml2, &ml3, &ml4, &mr1, &mr2, &mr3, &mr4,
 			&masq_lport_temp, &masq_fport_temp,
