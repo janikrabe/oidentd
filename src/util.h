@@ -85,9 +85,9 @@ int random_seed(void);
 ** PRNG functions on systems whose libraries provide them.)
 */
 
-static inline int randval(int i) {
+static inline unsigned int randval(unsigned int i) {
 	/* Per _Numerical Recipes in C_: */
-	return (int) ((double) i * rand() / (RAND_MAX+1.0));
+	return (unsigned int) ((double) i * rand() / (RAND_MAX + 1.0));
 }
 
 #ifndef HAVE_SNPRINTF
