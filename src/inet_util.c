@@ -235,9 +235,11 @@ top:
 */
 
 ssize_t sock_write(int sock, void *buf, ssize_t len) {
-	ssize_t n, written = 0;
+	ssize_t written = 0;
 
 	while (len > 0) {
+		ssize_t n;
+
 		n = write(sock, buf, len);
 		if (n == -1) {
 			if (errno == EINTR)

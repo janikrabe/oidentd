@@ -258,10 +258,9 @@ bool masq(	int sock,
 		return (false);
 
 	for (; np; np = nat.nat_next) {
-		int retm;
-		int retf;
 		in_port_t masq_lport;
 		in_port_t masq_fport;
+		int retm;
 
 		if (getbuf((u_long) np, &nat, sizeof(nat)) == -1)
 			break;
@@ -299,7 +298,10 @@ bool masq(	int sock,
 		retm = find_masq_entry(&ss, user, sizeof(user), os, sizeof(os));
 
 		if (opt_enabled(FORWARD) && (retm != 0 || !opt_enabled(MASQ_OVERRIDE))) {
+			int retf;
+
 			retf = fwd_request(sock, lport, masq_lport, fport, masq_fport, &ss);
+
 			if (retf == 0) {
 				if (retm != 0)
 					return (true);

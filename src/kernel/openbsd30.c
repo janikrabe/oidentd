@@ -129,7 +129,6 @@ bool masq(	int sock,
 	struct pfioc_natlook natlook;
 	int pfdev;
 	int retm;
-	int retf;
 	char os[24];
 	char user[MAX_ULEN];
 	struct sockaddr_storage ss;
@@ -178,7 +177,10 @@ bool masq(	int sock,
 	retm = find_masq_entry(&ss, user, sizeof(user), os, sizeof(os));
 
 	if (opt_enabled(FORWARD) && (retm != 0 || !opt_enabled(MASQ_OVERRIDE))) {
+		int retf;
+
 		retf = fwd_request(sock, lport, masq_lport, fport, masq_fport, &ss);
+
 		if (retf == 0) {
 			if (retm != 0)
 				return (true);

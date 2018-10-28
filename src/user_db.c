@@ -282,7 +282,6 @@ out_hide:
 
 void user_db_cap_destroy_data(void *data) {
 	struct user_cap *user_cap = data;
-	size_t i;
 
 	if (!data)
 		return;
@@ -293,8 +292,11 @@ void user_db_cap_destroy_data(void *data) {
 	free(user_cap->dest);
 
 	if (user_cap->caps == CAP_REPLY) {
+		size_t i;
+
 		for (i = 0; i < user_cap->data.replies.num; ++i)
 			free(user_cap->data.replies.data[i]);
+
 		free(user_cap->data.replies.data);
 	}
 

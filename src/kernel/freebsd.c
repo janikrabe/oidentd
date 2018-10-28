@@ -211,8 +211,7 @@ static struct socket *getlist(	void *arg,
 {
 	struct inpcb *head, pcbp;
 	struct inpcbhead *pcbhead = arg;
-	char *faddr, *laddr, *pfaddr, *pladdr;
-	int alen;
+	char *faddr, *laddr;
 
 	if (remote->sa_family != local->sa_family)
 		return (NULL);
@@ -236,6 +235,9 @@ static struct socket *getlist(	void *arg,
 		return (NULL);
 
 	for (; head; head = pcbp.inp_list.le_next) {
+		char *pfaddr, *pladdr;
+		int alen;
+
 		if (getbuf((u_long) head, &pcbp, sizeof(struct inpcb)) == -1)
 			break;
 
@@ -444,10 +446,9 @@ bool masq(	int sock,
 		return (false);
 
 	for (; np; np = nat.nat_next) {
-		int retm;
-		int retf;
 		in_port_t masq_lport;
 		in_port_t masq_fport;
+		int retm;
 
 		if (getbuf((u_long) np, &nat, sizeof(nat)) == -1) {
 			debug("getbuf: %s", strerror(errno));
@@ -487,6 +488,8 @@ bool masq(	int sock,
 		retm = find_masq_entry(&ss, user, sizeof(user), os, sizeof(os));
 
 		if (opt_enabled(FORWARD) && (retm != 0 || !opt_enabled(MASQ_OVERRIDE))) {
+			int retf;
+
 			retf = fwd_request(sock, lport, masq_lport, fport, masq_fport, &ss);
 
 			if (retf == 0) {
