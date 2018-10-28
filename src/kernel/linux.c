@@ -71,9 +71,6 @@ static int netlink_sock;
 extern struct sockaddr_storage proxy;
 extern char *ret_os;
 
-extern uid_t uid;
-extern gid_t gid;
-
 #if LIBNFCT_SUPPORT
 struct ct_masq_query {
 	int sock;
@@ -183,12 +180,13 @@ static int callback_nfct(enum nf_conntrack_msg_type type __notused,
 			void *data) {
 	char buf[1024];
 	struct ct_masq_query *query;
+	int ret;
 
 	nfct_snprintf(buf, sizeof(buf), ct, NFCT_T_UNKNOWN,
 			NFCT_O_DEFAULT, NFCT_OF_SHOW_LAYER3);
 
 	query = (struct ct_masq_query *) data;
-	int ret = masq_ct_line(buf, query->sock, CT_NFCONNTRACK,
+	ret = masq_ct_line(buf, query->sock, CT_NFCONNTRACK,
 			query->lport, query->fport,
 			query->laddr, query->faddr);
 

@@ -66,8 +66,8 @@ u_int32_t timeout = DEFAULT_TIMEOUT;
 u_int32_t connection_limit;
 u_int32_t current_connections = 0;
 
-uid_t uid;
-gid_t gid;
+uid_t target_uid;
+gid_t target_gid;
 
 char *ret_os;
 char *failuser;
@@ -122,13 +122,13 @@ int main(int argc, char **argv) {
 	}
 
 #if LIBNFCT_SUPPORT
-	if (!drop_privs_libnfct(uid, gid)) {
+	if (!drop_privs_libnfct(target_uid, target_gid)) {
 		o_log(LOG_CRIT, "Fatal: Failed to drop privileges (kernel)");
 		exit(EXIT_FAILURE);
 	}
 #endif
 
-	if (drop_privs(uid, gid) == -1) {
+	if (drop_privs(target_uid, target_gid) == -1) {
 		o_log(LOG_CRIT, "Fatal: Failed to drop privileges (global)");
 		exit(EXIT_FAILURE);
 	}

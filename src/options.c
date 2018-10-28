@@ -55,8 +55,8 @@ extern u_int32_t timeout;
 extern u_int32_t connection_limit;
 extern in_port_t listen_port;
 extern struct sockaddr_storage **addr;
-extern uid_t uid;
-extern gid_t gid;
+extern uid_t target_uid;
+extern gid_t target_gid;
 
 static void print_usage(void);
 static void print_version_str(const char *desc, const char *val);
@@ -235,7 +235,7 @@ int get_options(int argc, char *const argv[]) {
 
 			case 'g':
 				enable_opt(CHANGE_GID);
-				if (!find_group(optarg, &gid)) {
+				if (!find_group(optarg, &target_gid)) {
 					o_log(LOG_CRIT, "Fatal: Unknown group: \"%s\"", optarg);
 					return (-1);
 				}
@@ -322,7 +322,7 @@ int get_options(int argc, char *const argv[]) {
 
 			case 'u':
 				enable_opt(CHANGE_UID);
-				if (!find_user(optarg, &uid)) {
+				if (!find_user(optarg, &target_uid)) {
 					o_log(LOG_CRIT, "Fatal: Unknown user: \"%s\"", optarg);
 					return (-1);
 				}
@@ -383,14 +383,14 @@ int get_options(int argc, char *const argv[]) {
 
 	if (!opt_enabled(CHANGE_UID) && (getuid() == 0 || geteuid() == 0)) {
 		enable_opt(CHANGE_UID);
-		if (!find_user("oidentd", &uid)) {
-			if (!find_user("nobody", &uid)) {
+		if (!find_user("oidentd", &target_uid)) {
+			if (!find_user("nobody", &target_uid)) {
 				o_log(NORMAL,
 					"Users \"oidentd\" and \"nobody\" do "
 					"not exist; using %u as default UID",
 					DEFAULT_UID);
 
-				uid = DEFAULT_UID;
+				target_uid = DEFAULT_UID;
 			}
 		}
 	}
@@ -401,16 +401,16 @@ int get_options(int argc, char *const argv[]) {
 
 	if (!opt_enabled(CHANGE_GID) && (getgid() == 0 || getegid() == 0)) {
 		enable_opt(CHANGE_GID);
-		if (!find_group("oidentd", &gid)) {
-			if (!find_group("nobody", &gid)) {
-				if (!find_group("nogroup", &gid)) {
+		if (!find_group("oidentd", &target_gid)) {
+			if (!find_group("nobody", &target_gid)) {
+				if (!find_group("nogroup", &target_gid)) {
 					o_log(NORMAL,
 						"Groups \"oidentd\", \"nobody\" "
 						"and \"nogroup\" do not exist; "
 						"using %u as default GID",
 						DEFAULT_GID);
 
-					gid = DEFAULT_GID;
+					target_gid = DEFAULT_GID;
 				}
 			}
 		}
