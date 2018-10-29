@@ -330,6 +330,8 @@ int get_options(int argc, char *const argv[]) {
 
 #if HAVE_LIBUDB
 			case 'U':
+				o_log(LOG_CRIT, "Warning: UDB support is deprecated and will "
+				                "be removed in the future.");
 				enable_opt(USEUDB);
 				break;
 #endif
@@ -454,7 +456,7 @@ static void print_usage(void) {
 "-u or --user <user>          Run as specified user or UID\n"
 
 #if HAVE_LIBUDB
-"-U or --udb                  Perform lookups in UDB shared memory tables\n"
+"-U or --udb                  Perform lookups in UDB shared memory tables (deprecated)\n"
 #endif
 
 "-v or --version              Display version information and exit\n"

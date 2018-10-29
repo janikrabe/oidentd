@@ -47,6 +47,7 @@
 #include "masq.h"
 
 #if HAVE_LIBUDB
+#	warning "libudb support is deprecated"
 #	include <udb.h>
 #endif
 
