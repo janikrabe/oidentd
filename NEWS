@@ -2,6 +2,10 @@ Unreleased changes
 
 	* Option `--forward` now implies `--masquerade`.
 	* Added a warning when the connection limit is exceeded.
+	* Added systemd services and a socket file.
+	* Added compile-time configuration to `--version` output.
+	* Fixed incorrect buffer lengths on Linux when compiled with `--disable-ipv6`.
+	* Deprecated libudb (user database library) support.
 
 Changes in version 2.3.1
 
