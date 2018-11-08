@@ -1,0 +1,3 @@
+* Remove --forward-last flag (deprecated in favor of --masquerade-first)
+* Remove libudb support (deprecated)
+* Configuration file: hide root connections by default
