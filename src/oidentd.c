@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
 		exit(EXIT_FAILURE);
 	}
 
-	if (!core_init()) {
+	if (core_init() != 0) {
 		if (opt_enabled(DEBUG_MSGS)) {
 			o_log(LOG_CRIT, "Fatal: Error initializing core");
 		} else {

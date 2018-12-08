@@ -201,39 +201,39 @@ static int callback_nfct(enum nf_conntrack_msg_type type __notused,
 /*
 ** System-dependent initialization; called only once.
 ** Called before privileges are dropped.
-** Returns false on failure.
+** Returns non-zero on failure.
 */
 
-bool core_init(void) {
+int core_init(void) {
 #if MASQ_SUPPORT
 	if (!opt_enabled(MASQ)) {
 		masq_fp = NULL;
-		return (true);
+		return (0);
 	}
 
 	masq_fp = fopen(MASQFILE, "r");
 	if (!masq_fp) {
 		if (errno != ENOENT) {
 			o_log(LOG_CRIT, "fopen: %s: %s", MASQFILE, strerror(errno));
-			return (false);
+			return (-1);
 		}
 
 		masq_fp = fopen(NFCONNTRACK, "r");
 		if (!masq_fp) {
 			if (errno != ENOENT) {
 				o_log(LOG_CRIT, "fopen: %s: %s", NFCONNTRACK, strerror(errno));
-				return (false);
+				return (-1);
 			}
 
 			masq_fp = fopen(IPCONNTRACK, "r");
 			if (!masq_fp) {
 				if (errno != ENOENT) {
 					o_log(LOG_CRIT, "fopen: %s: %s", IPCONNTRACK, strerror(errno));
-					return (false);
+					return (-1);
 				}
 
 #	if LIBNFCT_SUPPORT
-				return (true);
+				return (0);
 #	else
 				o_log(LOG_CRIT, "NAT/IP masquerading support is unavailable "
 				                "because " PACKAGE_NAME " was compiled without "
@@ -250,12 +250,12 @@ bool core_init(void) {
 	} else if (opt_enabled(PROXY) || opt_enabled(FORWARD)) {
 		o_log(LOG_CRIT, "Only local NAT is supported on your system; "
 		                "please consider upgrading your kernel");
-		return (false);
+		return (-1);
 	} else {
 		conntrack = CT_MASQFILE;
 	}
 #endif
-	return (true);
+	return (0);
 }
 
 

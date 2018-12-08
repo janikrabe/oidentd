@@ -56,11 +56,11 @@
 /*
 ** System-dependent initialization; called only once.
 ** Called before privileges are dropped.
-** Returns false on failure.
+** Returns non-zero on failure.
 */
 
-bool core_init(void) {
-	return (true);
+int core_init(void) {
+	return (0);
 }
 
 int k_open(void) {

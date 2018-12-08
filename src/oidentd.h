@@ -187,10 +187,10 @@ struct sockaddr_storage {
 /*
 ** System-dependent initialization; called only once.
 ** Called before privileges are dropped.
-** Returns false on failure.
+** Returns non-zero on failure.
 */
 
-bool core_init(void);
+int core_init(void);
 
 /*
 ** Returns the UID of the owner of an IPv4 connection,

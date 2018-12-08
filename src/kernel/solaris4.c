@@ -164,11 +164,11 @@ static int getbuf(kvm_t *kd, off_t addr, void *dst, size_t len) {
 /*
 ** System-dependent initialization; called only once.
 ** Called before privileges are dropped.
-** Returns false on failure.
+** Returns non-zero on failure.
 */
 
-bool core_init(void) {
-	return (true);
+int core_init(void) {
+	return (0);
 }
 
 /*
