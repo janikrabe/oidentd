@@ -267,16 +267,16 @@ int fwd_request(	int sock,
 
 /*
 ** Handle a request to a host that's IP masquerading through us.
-** Returns true on success, false on failure.
+** Returns non-zero on failure.
 */
 
-bool masq(	int sock __notused,
+int masq(	int sock __notused,
 			in_port_t lport __notused,
 			in_port_t fport __notused,
 			struct sockaddr_storage *local __notused,
 			struct sockaddr_storage *remote __notused)
 {
-	return (false);
+	return (-1);
 }
 
 #endif

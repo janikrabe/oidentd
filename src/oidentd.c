@@ -330,7 +330,7 @@ static int service_request(int insock, int outsock) {
 
 	if (opt_enabled(MASQ)) {
 		if (con_uid == MISSING_UID && laddr.ss_family == AF_INET)
-			if (masq(insock, htons(lport), htons(fport), &laddr, &faddr))
+			if (masq(insock, htons(lport), htons(fport), &laddr, &faddr) == 0)
 				return (0);
 	}
 

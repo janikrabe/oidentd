@@ -449,10 +449,10 @@ out_success:
 
 /*
 ** Handle a request to a host that's IP masquerading through us.
-** Returns true on success, false on failure.
+** Returns non-zero on failure.
 */
 
-bool masq(	int sock,
+int masq(	int sock,
 			in_port_t lport,
 			in_port_t fport,
 			struct sockaddr_storage *laddr,
@@ -469,7 +469,7 @@ bool masq(	int sock,
 
 #if LIBNFCT_SUPPORT
 	if (dispatch_libnfct_query(&query))
-		return (true);
+		return (0);
 #endif
 
 	/* rewind fp to read new contents */
@@ -479,7 +479,7 @@ bool masq(	int sock,
 		/* eat the header line */
 		if (!fgets(buf, sizeof(buf), masq_fp)) {
 			debug("fgets: conntrack file: Could not read header");
-			return (false);
+			return (-1);
 		}
 	}
 
@@ -488,10 +488,10 @@ bool masq(	int sock,
 			lport, fport, laddr, faddr);
 		if (ret == 1)
 			continue;
-		return (!ret);
+		return (ret);
 	}
 
-	return (false);
+	return (-1);
 }
 
 /*

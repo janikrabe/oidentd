@@ -246,10 +246,10 @@ uid_t get_user4(	in_port_t lport,
 
 /*
 ** Handle a request to a host that's IP masquerading through us.
-** Returns true on success, false on failure.
+** Returns non-zero on failure.
 */
 
-bool masq(	int sock,
+int masq(	int sock,
 			in_port_t lport,
 			in_port_t fport,
 			struct sockaddr_storage *laddr,
@@ -266,10 +266,10 @@ bool masq(	int sock,
 	*/
 
 	if (faddr->ss_family != AF_INET || laddr->ss_family != AF_INET)
-		return (false);
+		return (-1);
 
 	if (getbuf(kinfo->nl[N_NATLIST].n_value, &np, sizeof(np)) == -1)
-		return (false);
+		return (-1);
 
 	for (; np; np = nat.nat_next) {
 		int retm;
@@ -315,7 +315,7 @@ bool masq(	int sock,
 			int retf = fwd_request(sock, lport, masq_lport, fport, masq_fport, &ss);
 			if (retf == 0) {
 				if (retm != 0)
-					return (true);
+					return (0);
 			} else {
 				char ipbuf[MAX_IPLEN];
 
@@ -337,11 +337,11 @@ bool masq(	int sock,
 				"[%s] (NAT) Successful lookup: %d , %d : %s",
 				ipbuf, lport, fport, user);
 
-			return (true);
+			return (0);
 		}
 	}
 
-	return (false);
+	return (-1);
 }
 
 #endif
