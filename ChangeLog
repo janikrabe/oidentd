@@ -1,3 +1,8 @@
+2018-12-08  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Change masq() return type from bool to int.
+	* Change core_init() return type from bool to int.
+
 2018-10-29  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Deprecate libudb support.
