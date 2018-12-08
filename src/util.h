@@ -72,8 +72,8 @@ char *xstrdup(const char *string);
 list_t *list_prepend(list_t **list, void *new_data);
 void list_destroy(list_t *list, void (*free_data)(void *));
 
-bool find_user(const char *temp_user, uid_t *uid);
-bool find_group(const char *temp_group, gid_t *gid);
+int find_user(const char *temp_user, uid_t *uid);
+int find_group(const char *temp_group, gid_t *gid);
 
 int random_seed(void);
 

@@ -235,7 +235,7 @@ int get_options(int argc, char *const argv[]) {
 
 			case 'g':
 				enable_opt(CHANGE_GID);
-				if (!find_group(optarg, &target_gid)) {
+				if (find_group(optarg, &target_gid) != 0) {
 					o_log(LOG_CRIT, "Fatal: Unknown group: \"%s\"", optarg);
 					return (-1);
 				}
@@ -322,7 +322,7 @@ int get_options(int argc, char *const argv[]) {
 
 			case 'u':
 				enable_opt(CHANGE_UID);
-				if (!find_user(optarg, &target_uid)) {
+				if (find_user(optarg, &target_uid) != 0) {
 					o_log(LOG_CRIT, "Fatal: Unknown user: \"%s\"", optarg);
 					return (-1);
 				}
@@ -385,8 +385,8 @@ int get_options(int argc, char *const argv[]) {
 
 	if (!opt_enabled(CHANGE_UID) && (getuid() == 0 || geteuid() == 0)) {
 		enable_opt(CHANGE_UID);
-		if (!find_user("oidentd", &target_uid)) {
-			if (!find_user("nobody", &target_uid)) {
+		if (find_user("oidentd", &target_uid) != 0) {
+			if (find_user("nobody", &target_uid) != 0) {
 				o_log(NORMAL,
 					"Users \"oidentd\" and \"nobody\" do "
 					"not exist; using %u as default UID",
@@ -403,9 +403,9 @@ int get_options(int argc, char *const argv[]) {
 
 	if (!opt_enabled(CHANGE_GID) && (getgid() == 0 || getegid() == 0)) {
 		enable_opt(CHANGE_GID);
-		if (!find_group("oidentd", &target_gid)) {
-			if (!find_group("nobody", &target_gid)) {
-				if (!find_group("nogroup", &target_gid)) {
+		if (find_group("oidentd", &target_gid) != 0) {
+			if (find_group("nobody", &target_gid) != 0) {
+				if (find_group("nogroup", &target_gid) != 0) {
 					o_log(NORMAL,
 						"Groups \"oidentd\", \"nobody\" "
 						"and \"nogroup\" do not exist; "
