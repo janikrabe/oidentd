@@ -460,14 +460,15 @@ int masq(	int sock,
 {
 	char buf[1024];
 #if LIBNFCT_SUPPORT
-	struct ct_masq_query query = {
-		sock, lport, fport, laddr, faddr, 1 };
+	struct ct_masq_query query;
 #endif
 
 	lport = ntohs(lport);
 	fport = ntohs(fport);
 
 #if LIBNFCT_SUPPORT
+	query = (struct ct_masq_query) { sock, lport, fport, laddr, faddr, 1 };
+
 	if (dispatch_libnfct_query(&query))
 		return (0);
 #endif
