@@ -1,3 +1,7 @@
+2018-12-14  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix NULL dereference with libnfct on CT_UNKNOWN kernels.
+
 2018-12-13  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Fix byte order of ports in libnfct queries.
