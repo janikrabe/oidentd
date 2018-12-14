@@ -1,6 +1,11 @@
 2018-12-14  Janik Rabe  <oidentd@janikrabe.com>
 
+	* Fix NULL dereference with libnfct on CT_UNKNOWN kernels.
 	* Fix size_t format specifications.
+
+2018-12-13  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix byte order of ports in libnfct queries.
 
 2018-12-08  Janik Rabe  <oidentd@janikrabe.com>
 

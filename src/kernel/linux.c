@@ -460,36 +460,40 @@ int masq(	int sock,
 {
 	char buf[1024];
 #if LIBNFCT_SUPPORT
-	struct ct_masq_query query = {
-		sock, lport, fport, laddr, faddr, 1 };
+	struct ct_masq_query query;
 #endif
 
 	lport = ntohs(lport);
 	fport = ntohs(fport);
 
 #if LIBNFCT_SUPPORT
+	query = (struct ct_masq_query) { sock, lport, fport, laddr, faddr, 1 };
+
 	if (dispatch_libnfct_query(&query))
 		return (0);
 #endif
 
-	/* rewind fp to read new contents */
-	rewind(masq_fp);
+	if (masq_fp) {
+		/* rewind fp to read new contents */
+		rewind(masq_fp);
 
-	if (conntrack == CT_MASQFILE) {
-		/* eat the header line */
-		if (!fgets(buf, sizeof(buf), masq_fp)) {
-			debug("fgets: conntrack file: Could not read header");
-			return (-1);
+		if (conntrack == CT_MASQFILE) {
+			/* eat the header line */
+			if (!fgets(buf, sizeof(buf), masq_fp)) {
+				debug("fgets: conntrack file: Could not read header");
+				return (-1);
+			}
 		}
-	}
 
-	while (fgets(buf, sizeof(buf), masq_fp)) {
-		int ret = masq_ct_line(buf, sock, conntrack,
-			lport, fport, laddr, faddr);
-		if (ret == 1)
-			continue;
-		return (ret);
-	}
+		while (fgets(buf, sizeof(buf), masq_fp)) {
+			int ret = masq_ct_line(buf, sock, conntrack,
+				lport, fport, laddr, faddr);
+			if (ret == 1)
+				continue;
+			return (ret);
+		}
+	} else if (conntrack != CT_UNKNOWN)
+		debug("Connection tracking file is in use but not open");
 
 	return (-1);
 }

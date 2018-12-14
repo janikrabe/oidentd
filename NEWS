@@ -6,6 +6,9 @@ Unreleased changes
 	* Added compile-time configuration to `--version` output.
 	* Fixed incorrect buffer lengths on Linux when compiled with `--disable-ipv6`.
 	* Deprecated libudb (user database library) support.
+	* Fixed incorrect byte order in libnetfilter_conntrack queries.
+	* Fixed a null dereference with libnetfilter_conntrack on kernels without
+	  a connection tracking file.
 
 Changes in version 2.3.1
 
