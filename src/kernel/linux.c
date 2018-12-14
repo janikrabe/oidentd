@@ -473,24 +473,27 @@ int masq(	int sock,
 		return (0);
 #endif
 
-	/* rewind fp to read new contents */
-	rewind(masq_fp);
+	if (masq_fp) {
+		/* rewind fp to read new contents */
+		rewind(masq_fp);
 
-	if (conntrack == CT_MASQFILE) {
-		/* eat the header line */
-		if (!fgets(buf, sizeof(buf), masq_fp)) {
-			debug("fgets: conntrack file: Could not read header");
-			return (-1);
+		if (conntrack == CT_MASQFILE) {
+			/* eat the header line */
+			if (!fgets(buf, sizeof(buf), masq_fp)) {
+				debug("fgets: conntrack file: Could not read header");
+				return (-1);
+			}
 		}
-	}
 
-	while (fgets(buf, sizeof(buf), masq_fp)) {
-		int ret = masq_ct_line(buf, sock, conntrack,
-			lport, fport, laddr, faddr);
-		if (ret == 1)
-			continue;
-		return (ret);
-	}
+		while (fgets(buf, sizeof(buf), masq_fp)) {
+			int ret = masq_ct_line(buf, sock, conntrack,
+				lport, fport, laddr, faddr);
+			if (ret == 1)
+				continue;
+			return (ret);
+		}
+	} else if (conntrack != CT_UNKNOWN)
+		debug("Connection tracking file is in use but not open");
 
 	return (-1);
 }
