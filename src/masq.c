@@ -198,7 +198,7 @@ int find_masq_entry(struct sockaddr_storage *host,
 		}
 
 		if (strlen(p) >= user_len) {
-			debug("[%s:%d] Username too long (limit is %d)",
+			debug("[%s:%d] Username too long (limit is %ld)",
 				MASQ_MAP, line_num, user_len);
 
 			goto failure;
@@ -214,7 +214,7 @@ int find_masq_entry(struct sockaddr_storage *host,
 		}
 
 		if (strlen(p) >= os_len) {
-			debug("[%s:%d] OS name too long (limit is %d)",
+			debug("[%s:%d] OS name too long (limit is %ld)",
 				MASQ_MAP, line_num, os_len);
 
 			goto failure;

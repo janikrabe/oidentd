@@ -1,3 +1,7 @@
+2018-12-14  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix size_t format specifications.
+
 2018-12-08  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Change masq() return type from bool to int.
