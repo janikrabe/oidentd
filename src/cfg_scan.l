@@ -2,7 +2,7 @@
 /*
 ** oidentd_cfg_scan.l - oidentd configuration scanner.
 ** Copyright (c) 2001-2006 Ryan McCabe <ryan@numb.org>
-** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
+** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -86,7 +86,7 @@ FORWARD				forward
 %%
 
 "{"|"}" {
-	return (yytext[0]);
+	return yytext[0];
 }
 
 [ \t]+ {
@@ -98,88 +98,88 @@ FORWARD				forward
 }
 
 {USER} {
-	return (TOK_USER);
+	return TOK_USER;
 }
 
 {DEFAULT} {
-	return (TOK_DEFAULT);
+	return TOK_DEFAULT;
 }
 
 {GLOBAL} {
-	return (TOK_GLOBAL);
+	return TOK_GLOBAL;
 }
 
 {TO} {
-	return (TOK_TO);
+	return TOK_TO;
 }
 
 {FROM} {
-	return (TOK_FROM);
+	return TOK_FROM;
 }
 
 {FPORT} {
-	return (TOK_FPORT);
+	return TOK_FPORT;
 }
 
 {LPORT} {
-	return (TOK_LPORT);
+	return TOK_LPORT;
 }
 
 {ALLOW} {
 	yylval.value = ACTION_ALLOW;
-	return (TOK_ALLOWDENY);
+	return TOK_ALLOWDENY;
 }
 
 {DENY} {
 	yylval.value = ACTION_DENY;
-	return (TOK_ALLOWDENY);
+	return TOK_ALLOWDENY;
 }
 
 {FORCE} {
-	return (TOK_FORCE);
+	return TOK_FORCE;
 }
 
 {HIDE} {
 	yylval.value = CAP_HIDE;
-	return (TOK_CAP);
+	return TOK_CAP;
 }
 
 {RANDOM} {
 	yylval.value = CAP_RANDOM;
-	return (TOK_CAP);
+	return TOK_CAP;
 }
 
 {NUMERIC} {
 	yylval.value = CAP_NUMERIC;
-	return (TOK_CAP);
+	return TOK_CAP;
 }
 
 {RANDOM_NUMERIC} {
 	yylval.value = CAP_RANDOM_NUMERIC;
-	return (TOK_CAP);
+	return TOK_CAP;
 }
 
 {SPOOF} {
 	yylval.value = CAP_SPOOF;
-	return (TOK_CAP);
+	return TOK_CAP;
 }
 
 {SPOOF_ALL} {
 	yylval.value = CAP_SPOOF_ALL;
-	return (TOK_CAP);
+	return TOK_CAP;
 }
 
 {SPOOF_PRIVPORT} {
 	yylval.value = CAP_SPOOF_PRIVPORT;
-	return (TOK_CAP);
+	return TOK_CAP;
 }
 
 {REPLY} {
-	return (TOK_REPLY);
+	return TOK_REPLY;
 }
 
 {FORWARD} {
-	return (TOK_FORWARD);
+	return TOK_FORWARD;
 }
 
 \" {
@@ -210,7 +210,7 @@ FORWARD				forward
 	yylval.string = string_buf;
 
 	BEGIN(INITIAL);
-	return (TOK_STRING);
+	return TOK_STRING;
 }
 
 <state_string>\n {
@@ -220,7 +220,7 @@ FORWARD				forward
 	}
 
 	free(string_buf);
-	return (-1);
+	return -1;
 }
 
 <*>\n {
@@ -239,7 +239,7 @@ FORWARD				forward
 		}
 
 		free(string_buf);
-		return (-1);
+		return -1;
 	}
 
 	if (str_idx >= max_slen - 1) {
@@ -270,7 +270,7 @@ FORWARD				forward
 	}
 
 	free(string_buf);
-	return (-1);
+	return -1;
 }
 
 <state_string>\\. {
@@ -297,11 +297,11 @@ FORWARD				forward
 
 ([^\n\t "/{}]([^\n\t {}]*))|(\/([^*\n\t {}]+)([^\n\t {}]*)) {
 	yylval.string = xstrdup(yytext);
-	return (TOK_STRING);
+	return TOK_STRING;
 }
 
 . {
-	return (yytext[0]);
+	return yytext[0];
 }
 
 %%
@@ -313,32 +313,32 @@ FORWARD				forward
 static char get_esc_char(char c) {
 	switch (c) {
 		case 'n':
-			return ('\n');
+			return '\n';
 
 		case 't':
-			return ('\t');
+			return '\t';
 
 		case 'r':
-			return ('\r');
+			return '\r';
 
 		case 'f':
-			return ('\f');
+			return '\f';
 
 		case 'b':
-			return ('\b');
+			return '\b';
 
 		case 'v':
-			return ('\v');
+			return '\v';
 
 		case 'a':
-			return ('\a');
+			return '\a';
 
 		case 'e':
-			return ('\e');
+			return '\e';
 
 		default:
 			break;
 	}
 
-	return (c);
+	return c;
 }

@@ -1,7 +1,7 @@
 /*
 ** oidentd_util.c - oidentd utility functions.
 ** Copyright (c) 2001-2006 Ryan McCabe <ryan@numb.org>
-** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
+** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -65,11 +65,11 @@ int random_seed(void) {
 	struct timeval tv;
 
 	if (gettimeofday(&tv, NULL))
-		return (-1);
+		return -1;
 
 	srand((u_int32_t) (tv.tv_sec ^ tv.tv_usec));
 #endif
-	return (0);
+	return 0;
 }
 
 /*
@@ -86,17 +86,17 @@ int find_user(const char *temp_user, uid_t *uid) {
 		unsigned long int temp_uid = strtoul(temp_user, &end, 10);
 
 		if (*end != '\0')
-			return (-1);
+			return -1;
 
 		if (temp_uid >= MISSING_UID)
-			return (-1);
+			return -1;
 
 		*uid = (uid_t) temp_uid;
 	} else {
 		*uid = pw->pw_uid;
 	}
 
-	return (0);
+	return 0;
 }
 
 /*
@@ -113,17 +113,17 @@ int find_group(const char *temp_group, gid_t *gid) {
 		unsigned long int temp_gid = strtoul(temp_group, &end, 10);
 
 		if (*end != '\0')
-			return (-1);
+			return -1;
 
 		if (temp_gid >= MISSING_GID)
-			return (-1);
+			return -1;
 
 		*gid = (gid_t) temp_gid;
 	} else {
 		*gid = gr->gr_gid;
 	}
 
-	return (0);
+	return 0;
 }
 
 /*
@@ -136,7 +136,7 @@ int drop_privs(uid_t new_uid, gid_t new_gid) {
 	if (opt_enabled(CHANGE_GID)) {
 		if (setgid(new_gid) != 0) {
 			debug("setgid(%u): %s", new_gid, strerror(errno));
-			return (-1);
+			return -1;
 		}
 	}
 
@@ -148,7 +148,7 @@ int drop_privs(uid_t new_uid, gid_t new_gid) {
 		pw = getpwuid(new_uid);
 		if (!pw) {
 			debug("getpwuid(%u): No such user", new_uid);
-			return (-1);
+			return -1;
 		}
 
 		if (opt_enabled(CHANGE_GID))
@@ -161,16 +161,16 @@ int drop_privs(uid_t new_uid, gid_t new_gid) {
 		if (ret != 0) {
 			debug("initgroups(%s, %u): %s", pw->pw_name, my_gid,
 				strerror(errno));
-			return (-1);
+			return -1;
 		}
 
 		if (setuid(new_uid) != 0) {
 			debug("setuid(%u): %s", new_uid, strerror(errno));
-			return (-1);
+			return -1;
 		}
 	}
 
-	return (0);
+	return 0;
 }
 
 /*
@@ -230,11 +230,11 @@ FILE *safe_open(const struct passwd *pw, const char *filename) {
 	}
 
 	free(path);
-	return (fp);
+	return fp;
 
 out_fail:
 	free(path);
-	return (NULL);
+	return NULL;
 }
 
 /*
@@ -246,7 +246,7 @@ int go_background(void) {
 
 	switch (fork()) {
 		case -1:
-			return (-1);
+			return -1;
 		case 0:
 			break;
 		default:
@@ -255,12 +255,12 @@ int go_background(void) {
 
 	if (setsid() == (pid_t) -1) {
 		debug("setsid: %s", strerror(errno));
-		return (-1);
+		return -1;
 	}
 
 	if (chdir("/") != 0) {
 		debug("chdir: %s", strerror(errno));
-		return (-1);
+		return -1;
 	}
 
 	umask(DEFAULT_UMASK);
@@ -268,14 +268,14 @@ int go_background(void) {
 	fd = open("/dev/null", O_RDWR);
 	if (fd == -1) {
 		debug("open: /dev/null: %s", strerror(errno));
-		return (-1);
+		return -1;
 	}
 
 	dup2(fd, 0);
 	dup2(fd, 1);
 	dup2(fd, 2);
 
-	return (0);
+	return 0;
 }
 
 /*
@@ -290,7 +290,7 @@ void *xmalloc(size_t size) {
 		exit(EXIT_FAILURE);
 	}
 
-	return (ret);
+	return ret;
 }
 
 /*
@@ -305,7 +305,7 @@ void *xcalloc(size_t nmemb, size_t size) {
 		exit(EXIT_FAILURE);
 	}
 
-	return (ret);
+	return ret;
 }
 
 /*
@@ -320,7 +320,7 @@ void *xrealloc(void *ptr, size_t len) {
 		exit(EXIT_FAILURE);
 	}
 
-	return (ret);
+	return ret;
 }
 
 /*
@@ -332,14 +332,14 @@ char *xstrncpy(char *dest, const char *src, size_t n) {
 	char *ret = dest;
 
 	if (n == 0)
-		return (dest);
+		return dest;
 
 	while (--n > 0 && (*dest++ = *src++) != '\0')
 		;
 
 	*dest = '\0';
 
-	return (ret);
+	return ret;
 }
 
 /*
@@ -351,7 +351,7 @@ char *xstrdup(const char *string) {
 	char *ret;
 
 	if (!string)
-		return (NULL);
+		return NULL;
 
 	ret = strdup(string);
 
@@ -360,7 +360,7 @@ char *xstrdup(const char *string) {
 		exit(EXIT_FAILURE);
 	}
 
-	return (ret);
+	return ret;
 }
 
 /*
@@ -375,7 +375,7 @@ list_t *list_prepend(list_t **list, void *new_data) {
 	new_entry->data = new_data;
 	*list = new_entry;
 
-	return (*list);
+	return *list;
 }
 
 /*
@@ -406,10 +406,10 @@ int o_log(int priority, const char *fmt, ...) {
 	char *buf;
 
 	if (opt_enabled(QUIET) && priority != LOG_CRIT)
-		return (0);
+		return 0;
 
 	if (priority == DEBUG && !opt_enabled(DEBUG_MSGS))
-		return (0);
+		return 0;
 
 	va_start(ap, fmt);
 	ret = vasprintf((char **) &buf, fmt, ap);
@@ -421,7 +421,7 @@ int o_log(int priority, const char *fmt, ...) {
 		syslog(priority, "%s", buf);
 
 	free(buf);
-	return (ret);
+	return ret;
 }
 
 #if HAVE_LIBUDB
@@ -446,7 +446,7 @@ struct udb_lookup_res get_udb_user(	in_port_t lport,
 	extern char *ret_os;
 
 	if (laddr->ss_family != AF_INET || faddr->ss_family != AF_INET)
-		return (res);
+		return res;
 
 	memset(&conn, 0, sizeof(conn));
 
@@ -467,14 +467,14 @@ struct udb_lookup_res get_udb_user(	in_port_t lport,
 		faddr_buf, ntohs(conn.to.sin_port));
 
 	if (!udb_conn_get(&conn, &buf))
-		return (res);
+		return res;
 
 	/* If the user is local, return their UID */
 	pw = getpwnam(buf.username);
 	if (pw) {
 		res.status = 1;
 		res.uid = pw->pw_uid;
-		return (res);
+		return res;
 	}
 
 	/* User not local, reply with string from UDB table. */
@@ -485,7 +485,7 @@ struct udb_lookup_res get_udb_user(	in_port_t lport,
 		faddr_buf, lport, fport, buf.username);
 
 	res.status = 2;
-	return (res);
+	return res;
 }
 
 #endif

@@ -1,7 +1,7 @@
 /*
 ** oidentd_user_db.c - oidentd user database routines.
 ** Copyright (c) 2001-2006 Ryan McCabe <ryan@numb.org>
-** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
+** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -98,7 +98,7 @@ static void random_ident(char *buf, size_t len) {
 */
 
 static inline char *select_reply(const struct user_cap *user) {
-	return (user->data.replies.data[randval(user->data.replies.num)]);
+	return user->data.replies.data[randval(user->data.replies.num)];
 }
 
 /*
@@ -125,7 +125,7 @@ static inline void random_ident_numeric(char *buf, size_t len) {
 static inline bool user_db_have_cap(const struct user_cap *user_cap,
 					u_int16_t cap_flag)
 {
-	return ((user_cap->caps & cap_flag) != 0);
+	return (user_cap->caps & cap_flag) != 0;
 }
 
 /*
@@ -158,12 +158,12 @@ int get_ident(	const struct passwd *pwd,
 				break;
 
 			case CAP_FORWARD:
-				return (forward_request(user_cap->data.forward.host,
-					user_cap->data.forward.port, lport, fport, reply, len));
+				return forward_request(user_cap->data.forward.host,
+					user_cap->data.forward.port, lport, fport, reply, len);
 				break;
 
 			case CAP_HIDE:
-				return (-1);
+				return -1;
 				break;
 
 			case CAP_RANDOM:
@@ -182,7 +182,7 @@ int get_ident(	const struct passwd *pwd,
 				goto out_implicit;
 		}
 
-		return (0);
+		return 0;
 	}
 
 	user_pref = user_db_get_pref(pwd, lport, fport, laddr, faddr);
@@ -260,7 +260,7 @@ int get_ident(	const struct passwd *pwd,
 
 out_implicit:
 	xstrncpy(reply, pwd->pw_name, len);
-	return (0);
+	return 0;
 
 out_default:
 	user_db_cap_destroy_data(user_pref);
@@ -268,11 +268,11 @@ out_default:
 
 out_success:
 	user_db_cap_destroy_data(user_pref);
-	return (0);
+	return 0;
 
 out_hide:
 	user_db_cap_destroy_data(user_pref);
-	return (-1);
+	return -1;
 }
 
 /*
@@ -362,25 +362,25 @@ static bool user_db_can_reply(	const struct user_cap *user_cap,
 		*/
 
 		if (pw->pw_uid == con_uid)
-			return (true);
+			return true;
 
 		if (!user_db_have_cap(user_cap, CAP_SPOOF_ALL)) {
 			o_log(LOG_INFO, "User %s tried to masquerade as user %s",
 				reply, pw->pw_name);
 
-			return (false);
+			return false;
 		}
 	}
 
 	if (!user_db_have_cap(user_cap, CAP_SPOOF))
-		return (false);
+		return false;
 
 	if (fport < 1024 && !user_db_have_cap(user_cap, CAP_SPOOF_PRIVPORT))
 	{
-		return (false);
+		return false;
 	}
 
-	return (true);
+	return true;
 }
 
 /*
@@ -395,12 +395,12 @@ struct user_info *user_db_lookup(uid_t uid) {
 		struct user_info *user_info = cur->data;
 
 		if (user_info->user == uid)
-			return (user_info);
+			return user_info;
 
 		cur = cur->next;
 	}
 
-	return (NULL);
+	return NULL;
 }
 
 /*
@@ -416,7 +416,7 @@ static struct user_cap *user_db_cap_lookup(	struct user_info *user_info,
 	list_t *cur;
 
 	if (!user_info)
-		return (NULL);
+		return NULL;
 
 	for (cur = user_info->cap_list; cur; cur = cur->next) {
 		struct user_cap *user_cap = cur->data;
@@ -433,10 +433,10 @@ static struct user_cap *user_db_cap_lookup(	struct user_info *user_info,
 		if (!addr_match(faddr, user_cap->dest))
 			continue;
 
-		return (user_cap);
+		return user_cap;
 	}
 
-	return (NULL);
+	return NULL;
 }
 
 /*
@@ -454,7 +454,7 @@ struct user_info *user_db_create_default(void) {
 	cur_cap = xcalloc(1, sizeof(struct user_cap));
 	list_prepend(&temp_default->cap_list, cur_cap);
 
-	return (temp_default);
+	return temp_default;
 }
 
 /*
@@ -506,11 +506,11 @@ static struct user_cap *user_db_get_pref(	const struct passwd *pw,
 		cur->data = NULL;
 
 		list_destroy(cap_list, user_db_cap_destroy_data);
-		return (cur_cap);
+		return cur_cap;
 	}
 
 	list_destroy(cap_list, user_db_cap_destroy_data);
-	return (NULL);
+	return NULL;
 }
 
 /*
@@ -522,9 +522,9 @@ static bool addr_match(	struct sockaddr_storage *addr,
 						struct sockaddr_storage *cap_addr)
 {
 	if (!cap_addr)
-		return (true);
+		return true;
 
-	return (sin_equal(addr, cap_addr));
+	return sin_equal(addr, cap_addr);
 }
 
 /*
@@ -534,10 +534,10 @@ static bool addr_match(	struct sockaddr_storage *addr,
 
 static bool port_match(in_port_t port, const struct port_range *cap_ports) {
 	if (!cap_ports)
-		return (true);
+		return true;
 
 	if (port >= cap_ports->min && port <= cap_ports->max)
-		return (true);
+		return true;
 
-	return (false);
+	return false;
 }

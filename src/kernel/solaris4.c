@@ -4,7 +4,7 @@
 ** Copyright (c) 1995-1997 Casper Dik     <Casper.Dik@Holland.Sun.COM>
 ** Copyright (c) 1997-1999 Peter Eriksson <pen@lysator.liu.se>
 ** Copyright (c) 2001-2006 Ryan McCabe    <ryan@numb.org>
-** Copyright (c) 2018      Janik Rabe     <oidentd@janikrabe.com>
+** Copyright (c) 2018-2019 Janik Rabe     <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or
 ** modify it as you wish - as long as you don't claim that you wrote
@@ -88,7 +88,7 @@ static int xkvm_setproc(struct kainfo *kp) {
 	ret = getbuf(kp->kd, (off_t) kp->nl[N_PRACTIVE].n_value, &kp->nextp,
 			sizeof(kp->nextp));
 
-	return (ret);
+	return ret;
 }
 
 static struct proc *xkvm_nextproc(struct kainfo *kp) {
@@ -96,11 +96,11 @@ static struct proc *xkvm_nextproc(struct kainfo *kp) {
 				sizeof(kp->currentp));
 
 	if (ret == -1)
-		return (NULL);
+		return NULL;
 
 	kp->nextp = kp->currentp.p_next;
 
-	return (&kp->currentp);
+	return &kp->currentp;
 }
 
 /*
@@ -118,7 +118,7 @@ int k_open(void) {
 	if (!kinfo->kd) {
 		debug("kvm_open: %s", strerror(errno));
 		free(kinfo);
-		return (-1);
+		return -1;
 	}
 
 	kinfo->nl[0].n_name = "ipc_tcp_fanout";
@@ -134,10 +134,10 @@ int k_open(void) {
 		kvm_close(kinfo->kd);
 		free(kinfo);
 
-		return (-1);
+		return -1;
 	}
 
-	return (0);
+	return 0;
 }
 
 /*
@@ -156,9 +156,9 @@ static int getbuf(kvm_t *kd, off_t addr, void *dst, size_t len) {
 	}
 
 	if (status < 0)
-		return (-1);
+		return -1;
 
-	return (0);
+	return 0;
 }
 
 /*
@@ -168,7 +168,7 @@ static int getbuf(kvm_t *kd, off_t addr, void *dst, size_t len) {
 */
 
 int core_init(void) {
-	return (0);
+	return 0;
 }
 
 /*
@@ -229,7 +229,7 @@ uid_t get_user4(	in_port_t lport,
 	}
 
 	if (!icp)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	locaddr = (in_addr_t *) &ic.ipc_tcp_laddr;
 	raddr = (in_addr_t *) &ic.ipc_tcp_faddr;
@@ -237,7 +237,7 @@ uid_t get_user4(	in_port_t lport,
 
 	while (icp) {
 		if (getbuf(kinfo->kd, (off_t) icp, &ic, sizeof(ic)) == -1)
-			return (MISSING_UID);
+			return MISSING_UID;
 
 		if (fport == ports[0] && lport == ports[1] &&
 			(!memcmp(&laddr4, locaddr, 4) || !memcmp(&zero, locaddr, 4)) &&
@@ -255,13 +255,13 @@ uid_t get_user4(	in_port_t lport,
 	}
 
 	if (!icp)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	ret = getbuf(kip->kd, (off_t) ic.ipc_rq + offsetof(queue_t, q_stream),
 			&sqr.q_stream, sizeof(sqr.q_stream));
 
 	if (ret == -1)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	/*
 	** At this point sqr.qstream holds the pointer to the stream we're
@@ -270,7 +270,7 @@ uid_t get_user4(	in_port_t lport,
 	*/
 
 	if (xkvm_setproc(kinfo->kd) != 0)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	while ((procp = xkvm_nextproc(kinfo->kd))) {
 		struct uf_entry files[NFPCHUNK];
@@ -285,7 +285,7 @@ uid_t get_user4(	in_port_t lport,
 			vnode_t vp;
 
 			if (getbuf(kinfo->kd, addr, &files[0], size) == -1)
-				return (MISSING_UID);
+				return MISSING_UID;
 
 			for (i = 0; i < nread; ++i) {
 				if (files[i].uf_ofile == 0 || files[i].uf_ofile == last)
@@ -294,7 +294,7 @@ uid_t get_user4(	in_port_t lport,
 				last = files[i].uf_ofile;
 
 				if (getbuf(kinfo->kd, (off_t) last, &tf, sizeof(tf)) == -1)
-					return (MISSING_UID);
+					return MISSING_UID;
 
 				if (!tf.f_vnode)
 					continue;
@@ -305,16 +305,16 @@ uid_t get_user4(	in_port_t lport,
 						sizeof(vp.v_stream));
 
 				if (ret == -1)
-					return (MISSING_UID);
+					return MISSING_UID;
 
 				if (vp.v_stream == sqr.q_stream) {
 					cred_t cr;
 
 					ret = getbuf(kinfo->kd, (off_t) tf.f_cred, &cr, sizeof(cr));
 					if (ret == -1)
-						return (MISSING_UID);
+						return MISSING_UID;
 
-					return (cr.cr_ruid);
+					return cr.cr_ruid;
 				}
 			}
 
@@ -323,5 +323,5 @@ uid_t get_user4(	in_port_t lport,
 		}
 	}
 
-	return (MISSING_UID);
+	return MISSING_UID;
 }

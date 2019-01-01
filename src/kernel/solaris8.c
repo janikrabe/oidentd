@@ -4,7 +4,7 @@
 ** Copyright (c) 1995-1999 Casper Dik     <Casper.Dik@Holland.Sun.COM>
 ** Copyright (c) 1997      Peter Eriksson <pen@lysator.liu.se>
 ** Copyright (c) 2001-2006 Ryan McCabe    <ryan@numb.org>
-** Copyright (c) 2018      Janik Rabe     <oidentd@janikrabe.com>
+** Copyright (c) 2018-2019 Janik Rabe     <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or
 ** modify it as you wish - as long as you don't claim that you wrote
@@ -134,7 +134,7 @@ int k_open(void) {
 	if (!kinfo->kd) {
 		debug("kvm_open: %s", strerror(errno));
 		free(kinfo);
-		return (-1);
+		return -1;
 	}
 
 	kinfo->nl[0].n_name = "tcp_conn_fanout";
@@ -166,14 +166,14 @@ int k_open(void) {
 	if (ret == -1)
 		goto out_err;
 
-	return (0);
+	return 0;
 
 out_err:
 	kvm_close(kinfo->kd);
 	free(kinfo);
 	debug("getbuf: can't get needed symbols: %s", strerror(errno));
 
-	return (-1);
+	return -1;
 }
 
 /*
@@ -192,9 +192,9 @@ static int getbuf(kvm_t *kd, off_t addr, void *dst, size_t len) {
 	}
 
 	if (status < 0)
-		return (-1);
+		return -1;
 
-	return (0);
+	return 0;
 }
 
 /*
@@ -204,7 +204,7 @@ static int getbuf(kvm_t *kd, off_t addr, void *dst, size_t len) {
 */
 
 int core_init(void) {
-	return (0);
+	return 0;
 }
 
 /*
@@ -235,7 +235,7 @@ uid_t get_user4(	in_port_t lport,
 #if WANT_IPV6
 		iphash = ((char *) &SIN6(faddr)->sin6_addr) + 12;
 #else
-		return (MISSING_UID);
+		return MISSING_UID;
 #endif
 
 	/*
@@ -257,14 +257,14 @@ uid_t get_user4(	in_port_t lport,
 	offset %= kinfo->hash_size;
 
 	if (getbuf(kinfo->kd, FANOUT_OFFSET(offset), &tcpb, sizeof(tcpb)) == -1)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	if (!tcpb)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	while (tcpb) {
 		if (getbuf(kinfo->kd, (off_t) tcpb, &tb, sizeof(tb)) == -1)
-			return (MISSING_UID);
+			return MISSING_UID;
 
 		if (lport == tb.tcpb_lport && fport == tb.tcpb_fport) {
 			if (faddr->ss_family == AF_INET) {
@@ -291,19 +291,19 @@ uid_t get_user4(	in_port_t lport,
 	}
 
 	if (!tcpb)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	ret = getbuf(kinfo->kd, (off_t) tb.tcpb_tcp + offsetof(tcp_t, tcp_rq),
 			&q, sizeof(q));
 
 	if (ret == -1)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	ret = getbuf(kinfo->kd, (off_t) q + offsetof(queue_t, q_stream),
 			&std, sizeof(std));
 
 	if (ret == -1)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	/*
 	** At this point std holds the pointer to the stream we're
@@ -312,7 +312,7 @@ uid_t get_user4(	in_port_t lport,
 	*/
 
 	if (kvm_setproc(kinfo->kd) != 0)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	/*
 	** In Solaris 8, the file lists changed dramatically.
@@ -333,7 +333,7 @@ uid_t get_user4(	in_port_t lport,
 			vnode_t vp;
 
 			if (getbuf(kinfo->kd, addr, &files[0], size) == -1)
-				return (MISSING_UID);
+				return MISSING_UID;
 
 			for (i = 0; i < nread; ++i) {
 				if (files[i].uf_ofile == 0 || files[i].uf_ofile == last)
@@ -342,7 +342,7 @@ uid_t get_user4(	in_port_t lport,
 				last = files[i].uf_ofile;
 
 				if (getbuf(kinfo->kd, (off_t) last, &tf, sizeof(tf)) == -1)
-					return (MISSING_UID);
+					return MISSING_UID;
 
 				if (!tf.f_vnode)
 					continue;
@@ -353,16 +353,16 @@ uid_t get_user4(	in_port_t lport,
 						sizeof(vp.v_stream));
 
 				if (ret == -1)
-					return (MISSING_UID);
+					return MISSING_UID;
 
 				if (vp.v_stream == std) {
 					cred_t cr;
 
 					ret = getbuf(kinfo->kd, (off_t) tf.f_cred, &cr, sizeof(cr));
 					if (ret == -1)
-						return (MISSING_UID);
+						return MISSING_UID;
 
-					return (cr.cr_ruid);
+					return cr.cr_ruid;
 				}
 			}
 
@@ -371,5 +371,5 @@ uid_t get_user4(	in_port_t lport,
 		}
 	}
 
-	return (MISSING_UID);
+	return MISSING_UID;
 }

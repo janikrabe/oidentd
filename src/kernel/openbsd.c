@@ -11,7 +11,7 @@
 ** Slawomir Piotrowski <slawek@telsatgp.com.pl>
 **
 ** Modifications Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
-** Modifications Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
+** Modifications Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 */
 
 #include <config.h>
@@ -90,7 +90,7 @@ int k_open(void) {
 	if (!kinfo->kd) {
 		free(kinfo);
 		debug("kvm_open: %s", strerror(errno));
-		return (-1);
+		return -1;
 	}
 
 	kinfo->nl[N_TCB].n_name = "_tcbtable";
@@ -108,7 +108,7 @@ int k_open(void) {
 		kvm_close(kinfo->kd);
 		free(kinfo);
 		debug("kvm_nlist: %s", strerror(errno));
-		return (-1);
+		return -1;
 	}
 
 #if MASQ_SUPPORT
@@ -118,7 +118,7 @@ int k_open(void) {
 	}
 #endif
 
-	return (0);
+	return 0;
 }
 
 /*
@@ -132,10 +132,10 @@ static int getbuf(u_long addr, void *buf, size_t len) {
 		debug("getbuf: kvm_read(%08lx, %d): %s",
 			addr, len, strerror(errno));
 
-		return (-1);
+		return -1;
 	}
 
-	return (0);
+	return 0;
 }
 
 /*
@@ -153,7 +153,7 @@ static struct socket *getlist4(	struct inpcbtable *tcbtablep,
 	struct inpcb *kpcbp, pcb;
 
 	if (!tcbtablep)
-		return (NULL);
+		return NULL;
 
 	kpcbp = tcbtablep->inpt_queue.cqh_first;
 	while (kpcbp != (struct inpcb *) ktcbtablep) {
@@ -166,7 +166,7 @@ static struct socket *getlist4(	struct inpcbtable *tcbtablep,
 				pcb.inp_fport == fport &&
 				pcb.inp_lport == lport)
 			{
-				return (pcb.inp_socket);
+				return pcb.inp_socket;
 			}
 		}
 
@@ -175,13 +175,13 @@ static struct socket *getlist4(	struct inpcbtable *tcbtablep,
 			pcb.inp_fport == fport &&
 			pcb.inp_lport == lport)
 		{
-			return (pcb.inp_socket);
+			return pcb.inp_socket;
 		}
 
 		kpcbp = pcb.inp_queue.cqe_next;
 	}
 
-	return (NULL);
+	return NULL;
 }
 
 /*
@@ -191,7 +191,7 @@ static struct socket *getlist4(	struct inpcbtable *tcbtablep,
 */
 
 int core_init(void) {
-	return (0);
+	return 0;
 }
 
 /*
@@ -210,22 +210,22 @@ uid_t get_user4(	in_port_t lport,
 
 	ret = getbuf(kinfo->nl[N_TCB].n_value, &tcbtable, sizeof(tcbtable));
 	if (ret == -1)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	sockp = getlist4(&tcbtable,
 				(struct inpcbtable *) kinfo->nl[N_TCB].n_value,
 				lport, fport, &SIN4(laddr)->sin_addr, &SIN4(faddr)->sin_addr);
 
 	if (!sockp)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	if (getbuf((u_long) sockp, &sock, sizeof(sock)) == -1)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	if (!(sock.so_state & SS_CONNECTOUT))
-		return (MISSING_UID);
+		return MISSING_UID;
 
-	return (sock.so_ruid);
+	return sock.so_ruid;
 }
 
 #if MASQ_SUPPORT
@@ -252,10 +252,10 @@ int masq(	int sock,
 	*/
 
 	if (faddr->ss_family != AF_INET || laddr->ss_family != AF_INET)
-		return (-1);
+		return -1;
 
 	if (getbuf(kinfo->nl[N_NATLIST].n_value, &np, sizeof(np)) == -1)
-		return (-1);
+		return -1;
 
 	for (; np; np = nat.nat_next) {
 		in_port_t masq_lport;
@@ -304,7 +304,7 @@ int masq(	int sock,
 
 			if (retf == 0) {
 				if (retm != 0)
-					return (0);
+					return 0;
 			} else {
 				char ipbuf[MAX_IPLEN];
 
@@ -326,11 +326,11 @@ int masq(	int sock,
 				"[%s] (NAT) Successful lookup: %d , %d : %s",
 				ipbuf, lport, fport, user);
 
-			return (0);
+			return 0;
 		}
 	}
 
-	return (-1);
+	return -1;
 }
 
 #endif
@@ -361,7 +361,7 @@ uid_t get_user6(	in_port_t lport,
 	fin->sin6_len = sizeof(struct sockaddr_in6);
 
 	if (faddr->ss_len > sizeof(tir.faddr))
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	memcpy(&fin->sin6_addr, &SIN6(faddr)->sin6_addr, sizeof(tir.faddr));
 	fin->sin6_port = fport;
@@ -371,7 +371,7 @@ uid_t get_user6(	in_port_t lport,
 	lin->sin6_len = sizeof(struct sockaddr_in6);
 
 	if (laddr->ss_len > sizeof(tir.laddr))
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	memcpy(&lin->sin6_addr, &SIN6(laddr)->sin6_addr, sizeof(tir.laddr));
 	lin->sin6_port = lport;
@@ -380,12 +380,12 @@ uid_t get_user6(	in_port_t lport,
 	error = sysctl(mib, sizeof(mib) / sizeof(int), &tir, &i, NULL, 0);
 
 	if (error == 0 && tir.ruid != -1)
-		return (tir.ruid);
+		return tir.ruid;
 
 	if (error == -1)
 		debug("sysctl: %s", strerror(errno));
 
-	return (MISSING_UID);
+	return MISSING_UID;
 }
 
 #endif

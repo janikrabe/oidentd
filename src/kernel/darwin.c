@@ -12,7 +12,7 @@
 ** Slawomir Piotrowski <slawek@telsatgp.com.pl>
 **
 ** Modifications Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
-** Modifications Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
+** Modifications Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **
 ** All IPv6 code Copyright (c) 2002-2006 Ryan McCabe <ryan@numb.org>
 */
@@ -102,7 +102,7 @@ int k_open(void) {
 	if (!kinfo->kd) {
 		free(kinfo);
 		debug("kvm_open: %s", strerror(errno));
-		return (-1);
+		return -1;
 	}
 
 	kinfo->nl[N_TCB].n_name = "_tcb";
@@ -126,7 +126,7 @@ int k_open(void) {
 		kvm_close(kinfo->kd);
 		free(kinfo);
 		debug("kvm_nlist: %s", strerror(errno));
-		return (-1);
+		return -1;
 	}
 
 #if MASQ_SUPPORT
@@ -136,7 +136,7 @@ int k_open(void) {
 	}
 #endif
 
-	return (0);
+	return 0;
 }
 
 /*
@@ -150,10 +150,10 @@ static int getbuf(u_long addr, void *buf, size_t len) {
 		debug("getbuf: kvm_read(%08lx, %d): %s",
 			addr, len, strerror(errno));
 
-		return (-1);
+		return -1;
 	}
 
-	return (0);
+	return 0;
 }
 
 /*
@@ -170,7 +170,7 @@ static struct socket *getlist4(	struct inpcbhead *pcbhead,
 	struct inpcb *pcbp, pcb;
 
 	if (!pcbhead)
-		return (NULL);
+		return NULL;
 
 	pcbp = pcbhead->lh_first;
 	while (pcbp) {
@@ -183,7 +183,7 @@ static struct socket *getlist4(	struct inpcbhead *pcbhead,
 				pcb.inp_fport == fport &&
 				pcb.inp_lport == lport)
 			{
-				return (pcb.inp_socket);
+				return pcb.inp_socket;
 			}
 		}
 
@@ -192,13 +192,13 @@ static struct socket *getlist4(	struct inpcbhead *pcbhead,
 			pcb.inp_fport == fport &&
 			pcb.inp_lport == lport)
 		{
-			return (pcb.inp_socket);
+			return pcb.inp_socket;
 		}
 
 		pcbp = pcb.inp_list.le_next;
 	}
 
-	return (NULL);
+	return NULL;
 }
 
 /*
@@ -208,7 +208,7 @@ static struct socket *getlist4(	struct inpcbhead *pcbhead,
 */
 
 int core_init(void) {
-	return (0);
+	return 0;
 }
 
 /*
@@ -227,19 +227,19 @@ uid_t get_user4(	in_port_t lport,
 
 	ret = getbuf(kinfo->nl[N_TCB].n_value, &tcb, sizeof(tcb));
 	if (ret == -1)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	sockp = getlist4(&tcb, lport, fport,
 				&SIN4(laddr)->sin_addr, &SIN4(faddr)->sin_addr);
 
 	if (!sockp)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	ret = getbuf((u_long) sockp, &sock, sizeof(sock));
 	if (ret == -1)
-		return (MISSING_UID);
+		return MISSING_UID;
 
-	return (sock.so_uid);
+	return sock.so_uid;
 }
 
 #if MASQ_SUPPORT
@@ -266,10 +266,10 @@ int masq(	int sock,
 	*/
 
 	if (faddr->ss_family != AF_INET || laddr->ss_family != AF_INET)
-		return (-1);
+		return -1;
 
 	if (getbuf(kinfo->nl[N_NATLIST].n_value, &np, sizeof(np)) == -1)
-		return (-1);
+		return -1;
 
 	for (; np; np = nat.nat_next) {
 		int retm;
@@ -315,7 +315,7 @@ int masq(	int sock,
 			int retf = fwd_request(sock, lport, masq_lport, fport, masq_fport, &ss);
 			if (retf == 0) {
 				if (retm != 0)
-					return (0);
+					return 0;
 			} else {
 				char ipbuf[MAX_IPLEN];
 
@@ -337,11 +337,11 @@ int masq(	int sock,
 				"[%s] (NAT) Successful lookup: %d , %d : %s",
 				ipbuf, lport, fport, user);
 
-			return (0);
+			return 0;
 		}
 	}
 
-	return (-1);
+	return -1;
 }
 
 #endif
@@ -362,7 +362,7 @@ static struct socket *getlist6(	struct inpcbhead *pcbhead,
 	struct in6pcb *pcb6p, pcb6;
 
 	if (!pcbhead)
-		return (NULL);
+		return NULL;
 
 	pcb6p = pcbhead->lh_first;
 	while (pcb6p) {
@@ -374,13 +374,13 @@ static struct socket *getlist6(	struct inpcbhead *pcbhead,
 			IN6_ARE_ADDR_EQUAL(&pcb6.in6p_laddr, laddr) &&
 			IN6_ARE_ADDR_EQUAL(&pcb6.in6p_faddr, faddr))
 		{
-			return (pcb6.in6p_socket);
+			return pcb6.in6p_socket;
 		}
 
 		pcb6p = pcb6.inp_list.le_next;
 	}
 
-	return (NULL);
+	return NULL;
 }
 
 /*
@@ -399,19 +399,19 @@ uid_t get_user6(	in_port_t lport,
 
 	ret = getbuf(kinfo->nl[N_TCB6].n_value, &pcb6, sizeof(pcb6));
 	if (ret == -1)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	sockp = getlist6(&pcb6, lport, fport,
 				&SIN6(laddr)->sin6_addr, &SIN6(faddr)->sin6_addr);
 
 	if (!sockp)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	ret = getbuf((u_long) sockp, &sock, sizeof(sock));
 	if (ret == -1)
-		return (MISSING_UID);
+		return MISSING_UID;
 
-	return (sock.so_uid);
+	return sock.so_uid;
 }
 
 #endif

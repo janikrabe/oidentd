@@ -1,8 +1,8 @@
 /*
 ** oidentd_forward.c - oidentd request forwarding.
 ** Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
-** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
 ** Copyright (c) 2018      Jan Steffens <jan.steffens@gmail.com>
+** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -69,12 +69,12 @@ int forward_request(const struct sockaddr_storage *host,
 	fsock = socket(addr.ss_family, SOCK_STREAM, 0);
 	if (fsock == -1) {
 		debug("socket: %s", strerror(errno));
-		return (-1);
+		return -1;
 	}
 
 	if (sigsetjmp(timebuf, 1) != 0) {
 		debug("sigsetjmp: %s", strerror(errno));
-		return (-1);
+		return -1;
 	}
 
 	signal(SIGALRM, fwd_alarm);
@@ -118,16 +118,16 @@ int forward_request(const struct sockaddr_storage *host,
 
 		get_ip(&addr, ipbuf, sizeof(ipbuf));
 		debug("[%s] Remote response: \"%s\"", ipbuf, buf);
-		return (-1);
+		return -1;
 	}
 
 	xstrncpy(reply, user, len);
-	return (0);
+	return 0;
 
 out_fail:
 	alarm(0);
 	close(fsock);
-	return (-1);
+	return -1;
 }
 
 /*

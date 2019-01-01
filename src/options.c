@@ -1,7 +1,7 @@
 /*
 ** oidentd_options.c - oidentd command-line handler.
 ** Copyright (c) 2001-2006 Ryan McCabe <ryan@numb.org>
-** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
+** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -103,7 +103,7 @@ static u_int32_t flags;
 */
 
 inline bool opt_enabled(u_int32_t option) {
-	return ((flags & option) != 0);
+	return (flags & option) != 0;
 }
 
 /*
@@ -136,7 +136,7 @@ int get_options(int argc, char *const argv[]) {
 #if MASQ_SUPPORT
 	if (get_port(DEFAULT_FPORT, &fwdport) == -1) {
 		o_log(LOG_CRIT, "Fatal: Bad port: \"%s\"", DEFAULT_FPORT);
-		return (-1);
+		return -1;
 	}
 #endif
 
@@ -147,7 +147,7 @@ int get_options(int argc, char *const argv[]) {
 
 	if (get_port(DEFAULT_PORT, &listen_port) == -1) {
 		o_log(LOG_CRIT, "Fatal: Bad port: \"%s\"", DEFAULT_PORT);
-		return (-1);
+		return -1;
 	}
 
 	while ((opt = getopt_long(argc, argv, OPTSTRING, longopts, NULL)) != EOF) {
@@ -162,7 +162,7 @@ int get_options(int argc, char *const argv[]) {
 				if (get_addr(optarg, temp_ss) == -1) {
 					o_log(LOG_CRIT, "Fatal: Unknown host: \"%s\"", optarg);
 					free(temp_ss);
-					return (-1);
+					return -1;
 				}
 
 				addr[naddrs++] = temp_ss;
@@ -185,7 +185,7 @@ int get_options(int argc, char *const argv[]) {
 				enable_opt(DEBUG_MSGS);
 #if !ENABLE_DEBUGGING
 				o_log(LOG_CRIT, "Fatal: oidentd was compiled without debugging support");
-				return (-1);
+				return -1;
 #endif
 				break;
 
@@ -200,7 +200,7 @@ int get_options(int argc, char *const argv[]) {
 
 				if (get_port(p, &fwdport) == -1) {
 					o_log(LOG_CRIT, "Fatal: Bad port: \"%s\"", p);
-					return (-1);
+					return -1;
 				}
 
 				enable_opt(MASQ | FORWARD);
@@ -226,7 +226,7 @@ int get_options(int argc, char *const argv[]) {
 			{
 				if (get_addr(optarg, &proxy) == -1) {
 					o_log(LOG_CRIT, "Fatal: Unknown host: \"%s\"", optarg);
-					return (-1);
+					return -1;
 				}
 
 				enable_opt(PROXY);
@@ -237,7 +237,7 @@ int get_options(int argc, char *const argv[]) {
 				enable_opt(CHANGE_GID);
 				if (find_group(optarg, &target_gid) != 0) {
 					o_log(LOG_CRIT, "Fatal: Unknown group: \"%s\"", optarg);
-					return (-1);
+					return -1;
 				}
 				break;
 
@@ -259,7 +259,7 @@ int get_options(int argc, char *const argv[]) {
 				temp_limit = strtoul(optarg, &end, 10);
 				if (*end != '\0') {
 					o_log(LOG_CRIT, "Fatal: Not a valid number: \"%s\"", optarg);
-					return (-1);
+					return -1;
 				}
 
 				connection_limit = temp_limit;
@@ -290,7 +290,7 @@ int get_options(int argc, char *const argv[]) {
 			case 'p':
 				if (get_port(optarg, &listen_port) == -1) {
 					o_log(LOG_CRIT, "Fatal: Bad port: \"%s\"", optarg);
-					return (-1);
+					return -1;
 				}
 				break;
 
@@ -315,7 +315,7 @@ int get_options(int argc, char *const argv[]) {
 				timeout = strtoul(optarg, &end, 10);
 				if (*end != '\0') {
 					o_log(LOG_CRIT, "Fatal: Bad timeout value: \"%s\"", optarg);
-					return (-1);
+					return -1;
 				}
 				break;
 			}
@@ -324,7 +324,7 @@ int get_options(int argc, char *const argv[]) {
 				enable_opt(CHANGE_UID);
 				if (find_user(optarg, &target_uid) != 0) {
 					o_log(LOG_CRIT, "Fatal: Unknown user: \"%s\"", optarg);
-					return (-1);
+					return -1;
 				}
 				break;
 
@@ -345,7 +345,7 @@ int get_options(int argc, char *const argv[]) {
 				exit(EXIT_SUCCESS);
 			default:
 				print_usage();
-				return (-1);
+				return -1;
 		}
 	}
 
@@ -365,7 +365,7 @@ int get_options(int argc, char *const argv[]) {
 
 	if (opt_enabled(DEBUG_MSGS) && opt_enabled(QUIET)) {
 		o_log(LOG_CRIT, "Fatal: The debug and quiet flags are incompatible");
-		return (-1);
+		return -1;
 	}
 
 #if NEED_ROOT
@@ -419,7 +419,7 @@ int get_options(int argc, char *const argv[]) {
 	}
 #endif
 
-	return (0);
+	return 0;
 }
 
 static void print_usage(void) {

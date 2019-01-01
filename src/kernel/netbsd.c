@@ -11,7 +11,7 @@
 ** Slawomir Piotrowski <slawek@telsatgp.com.pl>
 **
 ** Modifications Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
-** Modifications Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
+** Modifications Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **
 ** All IPv6 code Copyright 2002-2006 Ryan McCabe <ryan@numb.org>
 */
@@ -106,7 +106,7 @@ int k_open(void) {
 	if (!kinfo->kd) {
 		free(kinfo);
 		debug("kvm_open: %s", strerror(errno));
-		return (-1);
+		return -1;
 	}
 
 	kinfo->nl[N_TCB].n_name = "_tcbtable";
@@ -134,7 +134,7 @@ int k_open(void) {
 		kvm_close(kinfo->kd);
 		free(kinfo);
 		debug("kvm_nlist: %s", strerror(errno));
-		return (-1);
+		return -1;
 	}
 
 #if MASQ_SUPPORT
@@ -144,7 +144,7 @@ int k_open(void) {
 	}
 #endif
 
-	return (0);
+	return 0;
 }
 
 /*
@@ -158,10 +158,10 @@ static int getbuf(u_long addr, void *buf, size_t len) {
 		debug("getbuf: kvm_read(%08lx, %d): %s",
 			addr, len, strerror(errno));
 
-		return (-1);
+		return -1;
 	}
 
-	return (0);
+	return 0;
 }
 
 /*
@@ -179,7 +179,7 @@ static struct socket *getlist4(	struct inpcbtable *tcbtablep,
 	struct inpcb *kpcbp, pcb;
 
 	if (!tcbtablep)
-		return (NULL);
+		return NULL;
 
 	kpcbp = (struct inpcb *) tcbtablep->inpt_queue.cqh_first;
 	while (kpcbp != (struct inpcb *) ktcbtablep) {
@@ -192,7 +192,7 @@ static struct socket *getlist4(	struct inpcbtable *tcbtablep,
 				pcb.inp_fport == fport &&
 				pcb.inp_lport == lport)
 			{
-				return (pcb.inp_socket);
+				return pcb.inp_socket;
 			}
 		}
 
@@ -201,13 +201,13 @@ static struct socket *getlist4(	struct inpcbtable *tcbtablep,
 			pcb.inp_fport == fport &&
 			pcb.inp_lport == lport)
 		{
-			return (pcb.inp_socket);
+			return pcb.inp_socket;
 		}
 
 		kpcbp = (struct inpcb *) pcb.inp_queue.cqe_next;
 	}
 
-	return (NULL);
+	return NULL;
 }
 
 /*
@@ -217,7 +217,7 @@ static struct socket *getlist4(	struct inpcbtable *tcbtablep,
 */
 
 int core_init(void) {
-	return (0);
+	return 0;
 }
 
 /*
@@ -239,28 +239,28 @@ uid_t get_user4(	in_port_t lport,
 
 	ret = getbuf(kinfo->nl[N_TCB].n_value, &tcbtable, sizeof(tcbtable));
 	if (ret == -1)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	sockp = getlist4(&tcbtable,
 				(struct inpcbtable *) kinfo->nl[N_TCB].n_value,
 				lport, fport, &SIN4(laddr)->sin_addr, &SIN4(faddr)->sin_addr);
 
 	if (!sockp)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	if (getbuf((u_long) sockp, &sock, sizeof(sock)) == -1)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 #ifdef SO_UIDINFO
 	if (!sock.so_uidinfo)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	if (getbuf((u_long) sock.so_uidinfo, &uidinfo, sizeof(uidinfo)) == -1)
-		return (MISSING_UID);
+		return MISSING_UID;
 
-	return (uidinfo.ui_uid);
+	return uidinfo.ui_uid;
 #else
-	return (sock.so_uid);
+	return sock.so_uid;
 #endif
 }
 
@@ -288,10 +288,10 @@ int masq(	int sock,
 	*/
 
 	if (faddr->ss_family != AF_INET || laddr->ss_family != AF_INET)
-		return (-1);
+		return -1;
 
 	if (getbuf(kinfo->nl[N_NATLIST].n_value, &np, sizeof(np)) == -1)
-		return (-1);
+		return -1;
 
 	for (; np; np = nat.nat_next) {
 		in_port_t masq_lport;
@@ -340,7 +340,7 @@ int masq(	int sock,
 
 			if (retf == 0) {
 				if (retm != 0)
-					return (0);
+					return 0;
 			} else {
 				char ipbuf[MAX_IPLEN];
 
@@ -362,11 +362,11 @@ int masq(	int sock,
 				"[%s] (NAT) Successful lookup: %d , %d : %s",
 				ipbuf, lport, fport, user);
 
-			return (0);
+			return 0;
 		}
 	}
 
-	return (-1);
+	return -1;
 }
 
 #endif
@@ -393,7 +393,7 @@ static struct socket *getlist6(	struct in6pcb *tcb6,
 	struct in6pcb *kpcbp, pcb;
 
 	if (!tcbtablep)
-		return (NULL);
+		return NULL;
 
 	kpcbp = (struct in6pcb *) tcbtablep->inpt_queue.cqh_first;
 	while (kpcbp != (struct in6pcb *) ktcbtablep) {
@@ -404,7 +404,7 @@ static struct socket *getlist6(	struct in6pcb *tcb6,
 			IN6_ARE_ADDR_EQUAL(&pcb.in6p_laddr, laddr) &&
 			IN6_ARE_ADDR_EQUAL(&pcb.in6p_faddr, faddr))
 		{
-			return (pcb.in6p_socket);
+			return pcb.in6p_socket;
 		}
 
 		kpcbp = (struct in6pcb *) pcb.in6p_queue.cqe_next;
@@ -413,7 +413,7 @@ static struct socket *getlist6(	struct in6pcb *tcb6,
 	struct in6pcb *tcb6_cur, tcb6_temp;
 
 	if (!tcb6)
-		return (NULL);
+		return NULL;
 
 	tcb6_cur = tcb6;
 
@@ -425,7 +425,7 @@ static struct socket *getlist6(	struct in6pcb *tcb6,
 			IN6_ARE_ADDR_EQUAL(&tcb6_temp.in6p_laddr, laddr) &&
 			IN6_ARE_ADDR_EQUAL(&tcb6_temp.in6p_faddr, faddr))
 		{
-			return (tcb6_temp.in6p_socket);
+			return tcb6_temp.in6p_socket;
 		}
 
 		tcb6_cur = tcb6_temp.in6p_next;
@@ -433,7 +433,7 @@ static struct socket *getlist6(	struct in6pcb *tcb6,
 			break;
 	} while ((u_long) tcb6_cur != kinfo->nl[N_TCB6].n_value);
 #endif
-	return (NULL);
+	return NULL;
 }
 
 /*
@@ -456,7 +456,7 @@ uid_t get_user6(	in_port_t lport,
 
 	ret = getbuf(kinfo->nl[N_TCB6].n_value, &tcbtable, sizeof(tcbtable));
 	if (ret == -1)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	sockp = getlist6(&tcbtable,
 				(struct inpcbtable *) kinfo->nl[N_TCB6].n_value,
@@ -468,28 +468,28 @@ uid_t get_user6(	in_port_t lport,
 
 	ret = getbuf(kinfo->nl[N_TCB6].n_value, &tcb6, sizeof(tcb6));
 	if (ret == -1)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	sockp = getlist6(&tcb6, lport, fport,
 				&SIN6(laddr)->sin6_addr, &SIN6(faddr)->sin6_addr);
 #endif
 
 	if (!sockp)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	if (getbuf((u_long) sockp, &sock, sizeof(sock)) == -1)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 #ifdef SO_UIDINFO
 	if (!sock.so_uidinfo)
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	if (getbuf((u_long) sock.so_uidinfo, &uidinfo, sizeof(uidinfo)) == -1)
-		return (MISSING_UID);
+		return MISSING_UID;
 
-	return (uidinfo.ui_uid);
+	return uidinfo.ui_uid;
 #else
-	return (sock.so_uid);
+	return sock.so_uid;
 #endif
 }
 

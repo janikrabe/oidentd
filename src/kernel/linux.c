@@ -1,7 +1,7 @@
 /*
 ** linux.c - Linux user lookup facility.
 ** Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
-** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
+** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -125,7 +125,7 @@ bool drop_privs_libnfct(uid_t uid, gid_t gid) {
 			CAP_NET_ADMIN);
 	if (ret) {
 		debug("capng_update: error %d", ret);
-		return (false);
+		return false;
 	}
 
 	ret = capng_change_id(
@@ -134,14 +134,14 @@ bool drop_privs_libnfct(uid_t uid, gid_t gid) {
 			CAPNG_CLEAR_BOUNDING | CAPNG_DROP_SUPP_GRP);
 	if (ret) {
 		debug("capng_change_id: error %d", ret);
-		return (false);
+		return false;
 	}
 
 	/* don't try to drop privileges again */
 	disable_opt(CHANGE_UID);
 	disable_opt(CHANGE_GID);
 
-	return (true);
+	return true;
 }
 
 static bool dispatch_libnfct_query(struct ct_masq_query *queryp) {
@@ -149,26 +149,26 @@ static bool dispatch_libnfct_query(struct ct_masq_query *queryp) {
 
 	if (!nfcthp) {
 		debug("nfct_open: %s", strerror(errno));
-		return (false);
+		return false;
 	}
 
 	if (nfct_callback_register(nfcthp, NFCT_T_ALL,
 			callback_nfct, (void *) queryp)) {
 		debug("nfct_callback_register: %s", strerror(errno));
-		return (false);
+		return false;
 	}
 
 	if (nfct_query(nfcthp, NFCT_Q_DUMP, &queryp->faddr->ss_family)) {
 		debug("nfct_query: %s", strerror(errno));
-		return (false);
+		return false;
 	}
 
 	if (nfct_close(nfcthp)) {
 		debug("nfct_close: %s", strerror(errno));
-		return (false);
+		return false;
 	}
 
-	return (!queryp->status);
+	return !queryp->status;
 }
 
 /*
@@ -191,10 +191,10 @@ static int callback_nfct(enum nf_conntrack_msg_type type __notused,
 			query->laddr, query->faddr);
 
 	if (ret == 1)
-		return (NFCT_CB_CONTINUE);
+		return NFCT_CB_CONTINUE;
 
 	query->status = ret;
-	return (NFCT_CB_STOP);
+	return NFCT_CB_STOP;
 }
 #endif
 
@@ -208,32 +208,32 @@ int core_init(void) {
 #if MASQ_SUPPORT
 	if (!opt_enabled(MASQ)) {
 		masq_fp = NULL;
-		return (0);
+		return 0;
 	}
 
 	masq_fp = fopen(MASQFILE, "r");
 	if (!masq_fp) {
 		if (errno != ENOENT) {
 			o_log(LOG_CRIT, "fopen: %s: %s", MASQFILE, strerror(errno));
-			return (-1);
+			return -1;
 		}
 
 		masq_fp = fopen(NFCONNTRACK, "r");
 		if (!masq_fp) {
 			if (errno != ENOENT) {
 				o_log(LOG_CRIT, "fopen: %s: %s", NFCONNTRACK, strerror(errno));
-				return (-1);
+				return -1;
 			}
 
 			masq_fp = fopen(IPCONNTRACK, "r");
 			if (!masq_fp) {
 				if (errno != ENOENT) {
 					o_log(LOG_CRIT, "fopen: %s: %s", IPCONNTRACK, strerror(errno));
-					return (-1);
+					return -1;
 				}
 
 #	if LIBNFCT_SUPPORT
-				return (0);
+				return 0;
 #	else
 				o_log(LOG_CRIT, "NAT/IP masquerading support is unavailable "
 				                "because " PACKAGE_NAME " was compiled without "
@@ -250,12 +250,12 @@ int core_init(void) {
 	} else if (opt_enabled(PROXY) || opt_enabled(FORWARD)) {
 		o_log(LOG_CRIT, "Only local NAT is supported on your system; "
 		                "please consider upgrading your kernel");
-		return (-1);
+		return -1;
 	} else {
 		conntrack = CT_MASQFILE;
 	}
 #endif
-	return (0);
+	return 0;
 }
 
 
@@ -278,7 +278,7 @@ uid_t get_user6(	in_port_t lport,
 		uid_t uid = lookup_tcp_diag(laddr, faddr, lport, fport);
 
 		if (uid != MISSING_UID)
-			return (uid);
+			return uid;
 	}
 
 	lport = ntohs(lport);
@@ -287,14 +287,14 @@ uid_t get_user6(	in_port_t lport,
 	fp = fopen(CFILE6, "r");
 	if (!fp) {
 		debug("fopen: %s: %s", CFILE6, strerror(errno));
-		return (MISSING_UID);
+		return MISSING_UID;
 	}
 
 	/* Eat the header line. */
 	if (!fgets(buf, sizeof(buf), fp)) {
 		debug("fgets: %s: Could not read header", CFILE6);
 		fclose(fp);
-		return (MISSING_UID);
+		return MISSING_UID;
 	}
 
 	while (fgets(buf, sizeof(buf), fp)) {
@@ -330,14 +330,14 @@ uid_t get_user6(	in_port_t lport,
 			fclose(fp);
 
 			if (inode == 0 && uid == 0)
-				return (MISSING_UID);
+				return MISSING_UID;
 
-			return (uid);
+			return uid;
 		}
 	}
 
 	fclose(fp);
-	return (MISSING_UID);
+	return MISSING_UID;
 }
 
 #endif
@@ -363,7 +363,7 @@ uid_t get_user4(	in_port_t lport,
 		uid = lookup_tcp_diag(laddr, faddr, lport, fport);
 
 		if (uid != MISSING_UID)
-			return (uid);
+			return uid;
 	}
 
 	laddr4 = SIN4(laddr)->sin_addr.s_addr;
@@ -375,14 +375,14 @@ uid_t get_user4(	in_port_t lport,
 	fp = fopen(CFILE, "r");
 	if (!fp) {
 		debug("fopen: %s: %s", CFILE, strerror(errno));
-		return (MISSING_UID);
+		return MISSING_UID;
 	}
 
 	/* Eat the header line. */
 	if (!fgets(buf, sizeof(buf), fp)) {
 		debug("fgets: %s: Could not read header", CFILE);
 		fclose(fp);
-		return (MISSING_UID);
+		return MISSING_UID;
 	}
 
 	/*
@@ -428,7 +428,7 @@ uid_t get_user4(	in_port_t lport,
 	}
 
 	fclose(fp);
-	return (MISSING_UID);
+	return MISSING_UID;
 
 out_success:
 	fclose(fp);
@@ -440,9 +440,9 @@ out_success:
 	*/
 
 	if (inode == 0 && uid == 0)
-		return (MISSING_UID);
+		return MISSING_UID;
 
-	return (uid);
+	return uid;
 }
 
 #if MASQ_SUPPORT
@@ -470,7 +470,7 @@ int masq(	int sock,
 	query = (struct ct_masq_query) { sock, lport, fport, laddr, faddr, 1 };
 
 	if (dispatch_libnfct_query(&query))
-		return (0);
+		return 0;
 #endif
 
 	if (masq_fp) {
@@ -481,7 +481,7 @@ int masq(	int sock,
 			/* eat the header line */
 			if (!fgets(buf, sizeof(buf), masq_fp)) {
 				debug("fgets: conntrack file: Could not read header");
-				return (-1);
+				return -1;
 			}
 		}
 
@@ -490,12 +490,12 @@ int masq(	int sock,
 				lport, fport, laddr, faddr);
 			if (ret == 1)
 				continue;
-			return (ret);
+			return ret;
 		}
 	} else if (conntrack != CT_UNKNOWN)
 		debug("Connection tracking file is in use but not open");
 
-	return (-1);
+	return -1;
 }
 
 /*
@@ -536,14 +536,14 @@ static int masq_ct_line(char *line,
 		u_int32_t masq_fport_temp;
 
 		if (faddr->ss_family != AF_INET)
-			return (-1);
+			return -1;
 
 		ret = sscanf(line, "%15s %X:%X %X:%X %X %X %*d %*d %*u",
 				proto, &localm4, &masq_lport_temp,
 				&remotem4, &masq_fport_temp, &mport_temp, &nport_temp);
 
 		if (ret != 7)
-			return (1);
+			return 1;
 
 		mport = (in_port_t) mport_temp;
 		nport = (in_port_t) nport_temp;
@@ -569,7 +569,7 @@ static int masq_ct_line(char *line,
 		u_int32_t masq_fport_temp;
 
 		if (faddr->ss_family != AF_INET)
-			return (-1);
+			return -1;
 
 		ret = sscanf(line,
 			"%15s %*d %*d ESTABLISHED"
@@ -595,7 +595,7 @@ static int masq_ct_line(char *line,
 		}
 
 		if (ret != 21)
-			return (1);
+			return 1;
 
 		masq_lport = (in_port_t) masq_lport_temp;
 		masq_fport = (in_port_t) masq_fport_temp;
@@ -652,18 +652,18 @@ static int masq_ct_line(char *line,
 		}
 
 		if (ret != 10)
-			return (1);
+			return 1;
 
 		switch (faddr->ss_family) {
 		case AF_INET:
 			if (strcasecmp(family, "ipv4"))
-				return (1);
+				return 1;
 
 			if (inet_pton(AF_INET, ml, &localm4)  < 0 ||
 			    inet_pton(AF_INET, mr, &remotem4) < 0 ||
 			    inet_pton(AF_INET, nl, &localn4)  < 0 ||
 			    inet_pton(AF_INET, nr, &remoten4) < 0)
-				return (1);
+				return 1;
 
 			sin_setv4(localm4, &localm_ss);
 			sin_setv4(remotem4, &remotem_ss);
@@ -673,13 +673,13 @@ static int masq_ct_line(char *line,
 			break;
 		case AF_INET6:
 			if (strcasecmp(family, "ipv6"))
-				return (1);
+				return 1;
 
 			if (inet_pton(AF_INET6, ml, &localm6)  < 0 ||
 			    inet_pton(AF_INET6, mr, &remotem6) < 0 ||
 			    inet_pton(AF_INET6, nl, &localn6)  < 0 ||
 			    inet_pton(AF_INET6, nr, &remoten6) < 0)
-				return (1);
+				return 1;
 
 			sin_setv6(&localm6, &localm_ss);
 			sin_setv6(&remotem6, &remotem_ss);
@@ -689,7 +689,7 @@ static int masq_ct_line(char *line,
 			break;
 		default:
 			debug("masq_ct_line: bad address family %d", faddr->ss_family);
-			return (-1);
+			return -1;
 		}
 
 		masq_lport = (in_port_t) masq_lport_temp;
@@ -698,16 +698,16 @@ static int masq_ct_line(char *line,
 		nport = (in_port_t) nport_temp;
 		mport = (in_port_t) mport_temp;
 	} else
-		return (-1);
+		return -1;
 
 	if (strcasecmp(proto, "tcp"))
-		return (1);
+		return 1;
 
 	if (mport != lport)
-		return (1);
+		return 1;
 
 	if (nport != fport)
-		return (1);
+		return 1;
 
 	/* Local NAT, don't forward or do masquerade entry lookup. */
 	if (sin_equal(&localm_ss, &remoten_ss)) {
@@ -725,7 +725,7 @@ static int masq_ct_line(char *line,
 			con_uid = get_user6(htons(masq_lport), htons(masq_fport), laddr, &remotem_ss);
 
 		if (con_uid == MISSING_UID)
-			return (-1);
+			return -1;
 
 		pw = getpwuid(con_uid);
 		if (!pw) {
@@ -733,7 +733,7 @@ static int masq_ct_line(char *line,
 				lport, fport, ERROR("NO-USER"));
 
 			debug("getpwuid(%u): %s", con_uid, strerror(errno));
-			return (0);
+			return 0;
 		}
 
 		ret = get_ident(pw, masq_lport, masq_fport, laddr, &remotem_ss, suser, sizeof(suser));
@@ -744,7 +744,7 @@ static int masq_ct_line(char *line,
 			o_log(NORMAL, "[%s] %d (%d) , %d (%d) : HIDDEN-USER (%s)",
 				ipbuf, lport, masq_lport, fport, masq_fport, pw->pw_name);
 
-			return (0);
+			return 0;
 		}
 
 		sockprintf(sock, "%d,%d:USERID:%s:%s\r\n",
@@ -753,18 +753,18 @@ static int masq_ct_line(char *line,
 		o_log(NORMAL, "[%s] Successful lookup: %d (%d) , %d (%d) : %s (%s)",
 			ipbuf, lport, masq_lport, fport, masq_fport, pw->pw_name, suser);
 
-		return (0);
+		return 0;
 	}
 
 	if (!sin_equal(&localn_ss, faddr)) {
 		if (!opt_enabled(PROXY))
-			return (1);
+			return 1;
 
 		if (!sin_equal(faddr, &proxy))
-			return (1);
+			return 1;
 
 		if (sin_equal(&localn_ss, &proxy))
-			return (1);
+			return 1;
 	}
 
 	ret = find_masq_entry(&localm_ss, user, sizeof(user), os, sizeof(os));
@@ -773,7 +773,7 @@ static int masq_ct_line(char *line,
 		char ipbuf[MAX_IPLEN];
 
 		if (fwd_request(sock, lport, masq_lport, fport, masq_fport, &localm_ss) == 0)
-			return (0);
+			return 0;
 
 		get_ip(&localm_ss, ipbuf, sizeof(ipbuf));
 
@@ -792,10 +792,10 @@ static int masq_ct_line(char *line,
 			"[%s] (Masqueraded) Successful lookup: %d , %d : %s",
 			ipbuf, lport, fport, user);
 
-		return (0);
+		return 0;
 	}
 
-	return (-1);
+	return -1;
 }
 
 #endif
@@ -861,7 +861,7 @@ static uid_t lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 			netlink_sock = -1;
 		}
 
-		return (MISSING_UID);
+		return MISSING_UID;
 	}
 
 	iov[0].iov_base = buf;
@@ -885,11 +885,11 @@ static uid_t lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 			if (errno == EINTR || errno == EAGAIN)
 				continue;
 
-			return (MISSING_UID);
+			return MISSING_UID;
 		}
 
 		if (ret == 0)
-			return (MISSING_UID);
+			return MISSING_UID;
 
 		h = (struct nlmsghdr *) buf;
 
@@ -903,7 +903,7 @@ static uid_t lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 			}
 
 			if (h->nlmsg_type == NLMSG_DONE || h->nlmsg_type == NLMSG_ERROR)
-				return (MISSING_UID);
+				return MISSING_UID;
 
 			r = NLMSG_DATA(h);
 
@@ -913,19 +913,19 @@ static uid_t lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 				!memcmp(r->id.tcpdiag_src, sin_addr(src_addr), addr_len))
 			{
 				if (r->tcpdiag_inode == 0 && r->tcpdiag_uid == 0)
-					return (MISSING_UID);
+					return MISSING_UID;
 
-				return (r->tcpdiag_uid);
+				return r->tcpdiag_uid;
 			}
 
-			return (MISSING_UID);
+			return MISSING_UID;
 		}
 
 		if ((msghdr.msg_flags & MSG_TRUNC) || uret != 0)
-			return (MISSING_UID);
+			return MISSING_UID;
 	}
 
-	return (MISSING_UID);
+	return MISSING_UID;
 }
 
 /*
@@ -934,5 +934,5 @@ static uid_t lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 
 int k_open(void) {
 	netlink_sock = socket(AF_NETLINK, SOCK_DGRAM, NETLINK_TCPDIAG);
-	return (0);
+	return 0;
 }

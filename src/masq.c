@@ -1,7 +1,7 @@
 /*
 ** oidentd_masq.c - oidentd IP masquerading handler.
 ** Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
-** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
+** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -65,10 +65,10 @@ static bool blank_line(const char *buf) {
 
 	for (p = buf; *p; ++p) {
 		if (*p != ' ' && *p != '\t')
-			return (false);
+			return false;
 	}
 
-	return (true);
+	return true;
 }
 
 /*
@@ -105,7 +105,7 @@ int find_masq_entry(struct sockaddr_storage *host,
 			xstrncpy(os, ret_os, os_len);
 
 			o_log(NORMAL, "Successful UDB lookup: %s : %s", ipbuf, user);
-			return (0);
+			return 0;
 		}
 	}
 #endif
@@ -114,7 +114,7 @@ int find_masq_entry(struct sockaddr_storage *host,
 	if (!fp) {
 		if (errno != EEXIST)
 			debug("fopen: %s: %s", MASQ_MAP, strerror(errno));
-		return (-1);
+		return -1;
 	}
 
 	line_num = 0;
@@ -223,12 +223,12 @@ int find_masq_entry(struct sockaddr_storage *host,
 		xstrncpy(os, p, os_len);
 
 		fclose(fp);
-		return (0);
+		return 0;
 	}
 
 failure:
 	fclose(fp);
-	return (-1);
+	return -1;
 }
 
 /*
@@ -250,7 +250,7 @@ int fwd_request(	int sock,
 	ret = forward_request(mrelay, fwdport, masq_lport, masq_fport,
 		user, sizeof user);
 	if (ret == -1)
-		return (-1);
+		return -1;
 
 	sockprintf(sock, "%d,%d:USERID:%s:%s\r\n",
 		real_lport, real_fport, ret_os, user);
@@ -260,7 +260,7 @@ int fwd_request(	int sock,
 		"[%s] Successful lookup (by forward): %d (%d) , %d (%d) : %s",
 		ipbuf, real_lport, masq_lport, real_fport, masq_fport, user);
 
-	return (0);
+	return 0;
 }
 
 #else
@@ -276,7 +276,7 @@ int masq(	int sock __notused,
 			struct sockaddr_storage *local __notused,
 			struct sockaddr_storage *remote __notused)
 {
-	return (-1);
+	return -1;
 }
 
 #endif

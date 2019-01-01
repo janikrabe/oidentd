@@ -1,7 +1,7 @@
 /*
 ** freebsd4.c - Ident lookup routines for >= FreeBSD 4
 ** Copyright (c) 2000-2006 Ryan McCabe <ryan@numb.org>
-** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
+** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -57,7 +57,7 @@
 */
 
 int core_init(void) {
-	return (0);
+	return 0;
 }
 
 extern struct sockaddr_storage proxy;
@@ -98,10 +98,10 @@ uid_t get_user4(	in_port_t lport,
 
 	if (ret == -1) {
 		debug("sysctlbyname: %s", strerror(errno));
-		return (MISSING_UID);
+		return MISSING_UID;
 	}
 
-	return (ucred.cr_uid);
+	return ucred.cr_uid;
 }
 
 #if WANT_IPV6
@@ -142,10 +142,10 @@ uid_t get_user6(	in_port_t lport,
 
 	if (ret == -1) {
 		debug("sysctlbyname: %s", strerror(errno));
-		return (MISSING_UID);
+		return MISSING_UID;
 	}
 
-	return (ucred.cr_uid);
+	return ucred.cr_uid;
 }
 
 #endif
@@ -155,5 +155,5 @@ uid_t get_user6(	in_port_t lport,
 */
 
 int k_open(void) {
-	return (0);
+	return 0;
 }

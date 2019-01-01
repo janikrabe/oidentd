@@ -1,7 +1,7 @@
 /*
 ** oidentd.c - oidentd ident (RFC 1413) implementation.
 ** Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
-** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
+** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -247,12 +247,12 @@ static int service_request(int insock, int outsock) {
 
 	if (getpeername(insock, (struct sockaddr *) &faddr, &socklen) != 0) {
 		debug("getpeername: %s", strerror(errno));
-		return (-1);
+		return -1;
 	}
 
 	if (getsockname(insock, (struct sockaddr *) &laddr, &socklen) != 0) {
 		debug("getsockname: %s", strerror(errno));
-		return (-1);
+		return -1;
 	}
 #endif
 
@@ -284,12 +284,12 @@ static int service_request(int insock, int outsock) {
 		o_log(NORMAL, "Connection from %s (%s):%d", host_buf, ip_buf, fport);
 
 	if (!sock_read(insock, line, sizeof(line)))
-		return (-1);
+		return -1;
 
 	len = sscanf(line, "%d , %d", &lport_temp, &fport_temp);
 	if (len < 2) {
 		debug("[%s] Malformed request: \"%s\"", host_buf, line);
-		return (0);
+		return 0;
 	}
 
 	if (!VALID_PORT(lport_temp) || !VALID_PORT(fport_temp)) {
@@ -299,7 +299,7 @@ static int service_request(int insock, int outsock) {
 		debug("[%s] %d , %d : ERROR : INVALID-PORT",
 			host_buf, lport_temp, fport_temp);
 
-		return (0);
+		return 0;
 	}
 
 	lport = (in_port_t) lport_temp;
@@ -313,7 +313,7 @@ static int service_request(int insock, int outsock) {
 		struct udb_lookup_res udb_res = get_udb_user(
 				lport, fport, &laddr, &faddr, insock);
 		if (udb_res.status == 2)
-			return (0);
+			return 0;
 		con_uid = udb_res.uid;
 	}
 #endif
@@ -346,7 +346,7 @@ static int service_request(int insock, int outsock) {
 	if (opt_enabled(MASQ)) {
 		if (con_uid == MISSING_UID && laddr.ss_family == AF_INET)
 			if (masq(insock, htons(lport), htons(fport), &laddr, &faddr) == 0)
-				return (0);
+				return 0;
 	}
 
 	if (con_uid == MISSING_UID) {
@@ -364,7 +364,7 @@ static int service_request(int insock, int outsock) {
 				host_buf, lport, fport);
 		}
 
-		return (0);
+		return 0;
 	}
 
 	pw = getpwuid(con_uid);
@@ -373,7 +373,7 @@ static int service_request(int insock, int outsock) {
 			lport, fport, ERROR("NO-USER"));
 
 		debug("getpwuid(%d): %s", con_uid, strerror(errno));
-		return (0);
+		return 0;
 	} else
 		copy_pw(pw, &pwd);
 
@@ -396,7 +396,7 @@ static int service_request(int insock, int outsock) {
 
 out:
 	free_pw(&pwd);
-	return (0);
+	return 0;
 }
 
 /*

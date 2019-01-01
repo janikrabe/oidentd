@@ -8,7 +8,7 @@
 **		by anyone who wants to.
 **
 ** Modifications Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
-** Modifications Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
+** Modifications Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 */
 
 #include <config.h>
@@ -49,7 +49,7 @@ extern struct sockaddr_storage proxy;
 */
 
 int core_init(void) {
-	return (0);
+	return 0;
 }
 
 /*
@@ -89,12 +89,12 @@ uid_t get_user4(	in_port_t lport,
 	error = sysctl(mib, sizeof(mib) / sizeof(int), &tir, &i, NULL, 0);
 
 	if (error == 0 && tir.ruid != -1)
-		return (tir.ruid);
+		return tir.ruid;
 
 	if (error == -1)
 		debug("sysctl: %s", strerror(errno));
 
-	return (MISSING_UID);
+	return MISSING_UID;
 }
 
 #if WANT_IPV6
@@ -123,7 +123,7 @@ uid_t get_user6(	in_port_t lport,
 	fin->sin6_len = sizeof(struct sockaddr_in6);
 
 	if (faddr->ss_len > sizeof(tir.faddr))
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	memcpy(&fin->sin6_addr, &SIN6(faddr)->sin6_addr, sizeof(tir.faddr));
 	fin->sin6_port = fport;
@@ -133,7 +133,7 @@ uid_t get_user6(	in_port_t lport,
 	lin->sin6_len = sizeof(struct sockaddr_in6);
 
 	if (laddr->ss_len > sizeof(tir.laddr))
-		return (MISSING_UID);
+		return MISSING_UID;
 
 	memcpy(&lin->sin6_addr, &SIN6(laddr)->sin6_addr, sizeof(tir.laddr));
 	lin->sin6_port = lport;
@@ -142,12 +142,12 @@ uid_t get_user6(	in_port_t lport,
 	error = sysctl(mib, sizeof(mib) / sizeof(int), &tir, &i, NULL, 0);
 
 	if (error == 0 && tir.ruid != -1)
-		return (tir.ruid);
+		return tir.ruid;
 
 	if (error == -1)
 		debug("sysctl: %s", strerror(errno));
 
-	return (MISSING_UID);
+	return MISSING_UID;
 }
 
 #endif
@@ -157,5 +157,5 @@ uid_t get_user6(	in_port_t lport,
 */
 
 int k_open(void) {
-	return (0);
+	return 0;
 }

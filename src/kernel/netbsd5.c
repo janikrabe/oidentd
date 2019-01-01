@@ -1,6 +1,6 @@
 /*
 ** netbsd5.c - Ident lookup routines for >= NetBSD 5
-** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
+** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -60,11 +60,11 @@
 */
 
 int core_init(void) {
-	return (0);
+	return 0;
 }
 
 int k_open(void) {
-	return (0);
+	return 0;
 }
 
 /*
@@ -93,12 +93,12 @@ uid_t get_user4(	in_port_t lport,
 	error = sysctl(mib, sizeof(mib) / sizeof(int), &uid, &uidlen, ss, sslen);
 
 	if (error == 0 && uid != MISSING_UID)
-		return (uid);
+		return uid;
 
 	if (error == -1)
 		debug("sysctl: %s", strerror(errno));
 
-	return (MISSING_UID);
+	return MISSING_UID;
 }
 
 #if WANT_IPV6
@@ -129,12 +129,12 @@ uid_t get_user6(	in_port_t lport,
 	error = sysctl(mib, sizeof(mib) / sizeof(int), &uid, &uidlen, ss, sslen);
 
 	if (error == 0 && uid != MISSING_UID)
-		return (uid);
+		return uid;
 
 	if (error == -1)
 		debug("sysctl: %s", strerror(errno));
 
-	return (MISSING_UID);
+	return MISSING_UID;
 }
 
 #endif

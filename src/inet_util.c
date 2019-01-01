@@ -1,7 +1,7 @@
 /*
 ** oidentd_inet_util.c - oidentd network utility functions.
 ** Copyright (c) 2001-2006 Ryan McCabe <ryan@numb.org>
-** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
+** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -53,7 +53,7 @@ static int setup_bind(const struct addrinfo *ai, in_port_t listen_port) {
 	listenfd = socket(ai->ai_family, SOCK_STREAM, 0);
 	if (listenfd == -1) {
 		debug("socket: %s", strerror(errno));
-		return (-1);
+		return -1;
 	}
 
 	switch (ai->ai_family) {
@@ -63,7 +63,7 @@ static int setup_bind(const struct addrinfo *ai, in_port_t listen_port) {
 			if (setsockopt(listenfd, IPPROTO_IPV6, IPV6_V6ONLY, &one,
 						sizeof(one)) != 0) {
 				debug("setsockopt IPV6_V6ONLY: %s", strerror(errno));
-				return (-1);
+				return -1;
 			}
 			break;
 #endif
@@ -73,27 +73,27 @@ static int setup_bind(const struct addrinfo *ai, in_port_t listen_port) {
 			break;
 		default:
 			debug("address family %d not supported", ai->ai_family);
-			return (-1);
+			return -1;
 	}
 
 	ret = setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one));
 	if (ret != 0) {
 		debug("setsockopt: %s", strerror(errno));
-		return (-1);
+		return -1;
 	}
 
 	ret = bind(listenfd, ai->ai_addr, ai->ai_addrlen);
 	if (ret != 0) {
 		debug("bind: %s", strerror(errno));
-		return (-1);
+		return -1;
 	}
 
 	if (listen(listenfd, SOMAXCONN) != 0) {
 		debug("listen: %s", strerror(errno));
-		return (-1);
+		return -1;
 	}
 
-	return (listenfd);
+	return listenfd;
 }
 
 /*
@@ -126,7 +126,7 @@ int *setup_listen(struct sockaddr_storage **listen_addr, in_port_t listen_port) 
 					debug("address family %d not supported", cur->ai_family);
 					free(cur);
 					free(listen_addr[naddr]);
-					return (NULL);
+					return NULL;
 			}
 
 			cur->ai_addr = xmalloc(cur->ai_addrlen);
@@ -138,14 +138,14 @@ int *setup_listen(struct sockaddr_storage **listen_addr, in_port_t listen_port) 
 			free(listen_addr[naddr]);
 
 			if (ret == -1)
-				return (NULL);
+				return NULL;
 
 			bound_fds = xrealloc(bound_fds, (naddr + 2) * sizeof(int));
 			bound_fds[naddr] = ret;
 			bound_fds[++naddr] = -1;
 		} while (listen_addr[naddr]);
 
-		return (bound_fds);
+		return bound_fds;
 	}
 
 	memset(&hints, 0, sizeof(hints));
@@ -158,7 +158,7 @@ int *setup_listen(struct sockaddr_storage **listen_addr, in_port_t listen_port) 
 	ret = getaddrinfo(NULL, listen_port_str, &hints, &res);
 	if (ret != 0) {
 		debug("getaddrinfo: %s", gai_strerror(ret));
-		return (NULL);
+		return NULL;
 	}
 
 	cur = res;
@@ -188,9 +188,9 @@ int *setup_listen(struct sockaddr_storage **listen_addr, in_port_t listen_port) 
 		bound_fds = xrealloc(bound_fds, bound_addr * sizeof(int));
 		freeaddrinfo(res);
 	} else
-		return (NULL);
+		return NULL;
 
-	return (bound_fds);
+	return bound_fds;
 }
 
 /*
@@ -203,7 +203,7 @@ ssize_t sock_read(int sock, char *buf, ssize_t len) {
 	ssize_t ret;
 
 	if (!buf)
-		return (0);
+		return 0;
 
 	for (i = 1; i < len; ++i) {
 top:
@@ -215,18 +215,18 @@ top:
 				break;
 		} else if (ret == 0) {
 			if (i == 1)
-				return (0);
+				return 0;
 
 			break;
 		} else if (errno == EINTR) {
 			goto top;
 		} else {
-			return (0);
+			return 0;
 		}
 	}
 
 	*buf = '\0';
-	return (i);
+	return i;
 }
 
 /*
@@ -244,7 +244,7 @@ ssize_t sock_write(int sock, void *buf, ssize_t len) {
 		if (n == -1) {
 			if (errno == EINTR)
 				continue;
-			return (-1);
+			return -1;
 		}
 
 		written += n;
@@ -252,7 +252,7 @@ ssize_t sock_write(int sock, void *buf, ssize_t len) {
 		buf = (char *) buf + n;
 	}
 
-	return (written);
+	return written;
 }
 
 /*
@@ -269,12 +269,12 @@ ssize_t sockprintf(int fd, const char *fmt, ...) {
 	va_end(ap);
 
 	if (ret == -1)
-		return (-1);
+		return -1;
 
 	ret = sock_write(fd, buf, ret);
 	free(buf);
 
-	return (ret);
+	return ret;
 }
 
 /*
@@ -290,7 +290,7 @@ inline int get_hostname(struct sockaddr_storage *addr,
 	ret = getnameinfo((struct sockaddr *) addr, sizeof(struct sockaddr_storage),
 					hostbuf, len, NULL, 0, NI_NAMEREQD);
 
-	return (ret);
+	return ret;
 }
 
 /*
@@ -310,15 +310,15 @@ int get_port(const char *name, in_port_t *port) {
 		temp_port = strtol(name, &end, 10);
 
 		if (*end != '\0')
-			return (-1);
+			return -1;
 
 		if (!VALID_PORT(temp_port))
-			return (-1);
+			return -1;
 
 		*port = temp_port;
 	}
 
-	return (0);
+	return 0;
 }
 
 /*
@@ -330,7 +330,7 @@ int get_addr(const char *hostname, struct sockaddr_storage *addr) {
 	size_t len;
 
 	if (getaddrinfo(hostname, NULL, NULL, &res) != 0)
-		return (-1);
+		return -1;
 
 	switch (res->ai_addr->sa_family) {
 		case AF_INET:
@@ -351,11 +351,11 @@ int get_addr(const char *hostname, struct sockaddr_storage *addr) {
 	memcpy(addr, res->ai_addr, res->ai_addrlen);
 	freeaddrinfo(res);
 
-	return (0);
+	return 0;
 
 out_fail:
 	freeaddrinfo(res);
-	return (-1);
+	return -1;
 }
 
 /*
@@ -366,10 +366,10 @@ out_fail:
 inline void *sin_addr(struct sockaddr_storage *ss) {
 #if WANT_IPV6
 	if (ss->ss_family == AF_INET6)
-		return (&SIN6(ss)->sin6_addr);
+		return &SIN6(ss)->sin6_addr;
 #endif
 
-	return (&SIN4(ss)->sin_addr);
+	return &SIN4(ss)->sin_addr;
 }
 
 /*
@@ -392,9 +392,9 @@ inline bool sin4_equal(	struct sockaddr_storage *ss1,
 						struct sockaddr_storage *ss2)
 {
 	if (SIN4(ss1)->sin_addr.s_addr == SIN4(ss2)->sin_addr.s_addr)
-		return (true);
+		return true;
 
-	return (false);
+	return false;
 }
 
 /*
@@ -413,7 +413,7 @@ void sin_setv4(in_addr_t addr, struct sockaddr_storage *ss) {
 inline bool sin6_equal(	struct sockaddr_storage *ss1,
 						struct sockaddr_storage *ss2)
 {
-	return (IN6_ARE_ADDR_EQUAL(&SIN6(ss1)->sin6_addr, &SIN6(ss2)->sin6_addr));
+	return IN6_ARE_ADDR_EQUAL(&SIN6(ss1)->sin6_addr, &SIN6(ss2)->sin6_addr);
 }
 
 /*
@@ -436,10 +436,10 @@ void sin_setv6(struct in6_addr *sin6, struct sockaddr_storage *ss) {
 inline size_t sin_len(const struct sockaddr_storage *ss __notused) {
 #if WANT_IPV6
 	if (ss->ss_family == AF_INET6)
-		return (sizeof(struct sockaddr_in6));
+		return sizeof(struct sockaddr_in6);
 #endif
 
-	return (sizeof(struct sockaddr_in));
+	return sizeof(struct sockaddr_in);
 }
 
 /*
@@ -450,10 +450,10 @@ inline size_t sin_len(const struct sockaddr_storage *ss __notused) {
 inline size_t sin_addr_len(const struct sockaddr_storage *ss __notused) {
 #if WANT_IPV6
 	if (ss->ss_family == AF_INET6)
-		return (sizeof(struct in6_addr));
+		return sizeof(struct in6_addr);
 #endif
 
-	return (sizeof(struct in_addr));
+	return sizeof(struct in_addr);
 }
 
 /*
@@ -474,10 +474,10 @@ inline void sin_copy(	struct sockaddr_storage *ss1,
 inline in_port_t sin_port(const struct sockaddr_storage *ss) {
 #if WANT_IPV6
 	if (ss->ss_family == AF_INET6)
-		return (SIN6(ss)->sin6_port);
+		return SIN6(ss)->sin6_port;
 #endif
 
-	return (SIN4(ss)->sin_port);
+	return SIN4(ss)->sin_port;
 }
 
 /*
@@ -502,10 +502,10 @@ inline bool sin_equal(	struct sockaddr_storage *ss1,
 {
 #if WANT_IPV6
 	if (ss1->ss_family == AF_INET6)
-		return (sin6_equal(ss1, ss2));
+		return sin6_equal(ss1, ss2);
 #endif
 
-	return (sin4_equal(ss1, ss2));
+	return sin4_equal(ss1, ss2);
 }
 
 /*

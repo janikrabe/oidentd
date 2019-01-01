@@ -2,7 +2,7 @@
 /*
 ** oidentd_cfg_parse.y - oidentd configuration parser.
 ** Copyright (c) 2001-2006 Ryan McCabe <ryan@numb.org>
-** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
+** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -490,13 +490,13 @@ int read_config(const char *path) {
 
 				temp_default = user_db_create_default();
 				user_db_set_default(temp_default);
-				return (0);
+				return 0;
 			}
 		}
 
 		o_log(LOG_CRIT, "Error opening config file: %s: %s",
 			path, strerror(errno));
-		return (-1);
+		return -1;
 	}
 
 	yyrestart(fp);
@@ -517,7 +517,7 @@ int read_config(const char *path) {
 		user_db_set_default(temp_default);
 	}
 
-	return (ret);
+	return ret;
 }
 
 /*
@@ -530,13 +530,13 @@ static FILE *open_user_config(const struct passwd *pw) {
 
 	fp = safe_open(pw, USER_CONF);
 	if (!fp)
-		return (NULL);
+		return NULL;
 
 	yyrestart(fp);
 	current_line = 1;
 	parser_mode = PARSE_USER;
 
-	return (fp);
+	return fp;
 }
 
 /*
@@ -549,7 +549,7 @@ list_t *user_db_get_pref_list(const struct passwd *pw) {
 
 	fp = open_user_config(pw);
 	if (!fp)
-		return (NULL);
+		return NULL;
 
 	cur_cap = NULL;
 	pref_list = NULL;
@@ -559,10 +559,10 @@ list_t *user_db_get_pref_list(const struct passwd *pw) {
 
 	if (ret != 0) {
 		list_destroy(pref_list, user_db_cap_destroy_data);
-		return (NULL);
+		return NULL;
 	}
 
-	return (pref_list);
+	return pref_list;
 }
 
 static void yyerror(const char *err) {
@@ -587,7 +587,7 @@ static int extract_port_range(const char *token, struct port_range *range) {
 	if (*token == '\0')
 		range->min = PORT_MIN;
 	else if (get_port(token, &range->min) == -1)
-		return (-1);
+		return -1;
 
 	if (!p) {
 		range->max = range->min;
@@ -595,10 +595,10 @@ static int extract_port_range(const char *token, struct port_range *range) {
 		if (*p == '\0')
 			range->max = PORT_MAX;
 		else if (get_port(p, &range->max) == -1)
-			return (-1);
+			return -1;
 	}
 
-	return (0);
+	return 0;
 }
 
 static void free_cap_entries(struct user_cap *free_cap) {
