@@ -51,10 +51,12 @@
 #	include <udb.h>
 #endif
 
+#ifndef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
 static void sig_segv(int unused __notused) __noreturn;
 static void sig_child(int sig);
 static void sig_alarm(int unused __notused) __noreturn;
 static void sig_hup(int unused);
+#endif
 
 static void copy_pw(const struct passwd *pw, struct passwd *pwd);
 static void free_pw(struct passwd *pwd);
@@ -143,10 +145,12 @@ int main(int argc, char **argv) {
 	}
 #endif
 
+#ifndef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
 	signal(SIGALRM, sig_alarm);
 	signal(SIGCHLD, sig_child);
 	signal(SIGHUP, sig_hup);
 	signal(SIGSEGV, sig_segv);
+#endif
 
 	if (opt_enabled(STDIO)) {
 		service_request(fileno(stdin), fileno(stdout));
@@ -229,6 +233,16 @@ static int service_request(int insock, int outsock) {
 	char ip_buf[MAX_IPLEN];
 	struct sockaddr_storage laddr, laddr6, faddr, faddr6;
 	struct passwd *pw, pwd;
+
+#ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
+	in_addr_t fuzz_faddr, fuzz_laddr;
+	(void) inet_pton(AF_INET, "192.0.2.1", &fuzz_faddr);
+	(void) inet_pton(AF_INET, "127.0.0.1", &fuzz_laddr);
+	sin_setv4(fuzz_faddr, &faddr);
+	sin_setv4(fuzz_laddr, &laddr);
+	sin_set_port(49152, &faddr);
+	sin_set_port(113, &faddr);
+#else
 	static socklen_t socklen = sizeof(struct sockaddr_storage);
 
 	if (getpeername(insock, (struct sockaddr *) &faddr, &socklen) != 0) {
@@ -240,6 +254,7 @@ static int service_request(int insock, int outsock) {
 		debug("getsockname: %s", strerror(errno));
 		return (-1);
 	}
+#endif
 
 	fport = htons(sin_port(&faddr));
 
@@ -404,6 +419,7 @@ static void free_pw(struct passwd *pw) {
 	free(pw->pw_dir);
 }
 
+#ifndef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
 /*
 ** Handle SIGSEGV.
 */
@@ -445,14 +461,19 @@ static void sig_hup(int unused __notused) {
 		exit(EXIT_FAILURE);
 	}
 }
+#endif
 
 /*
 ** Seed the PRNG.
 */
 
 static void seed_prng(void) {
+#ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
+	srandom(0);
+#else
 	struct timeval tv;
 
 	gettimeofday(&tv, NULL);
 	srandom(tv.tv_sec ^ (tv.tv_usec << 11));
+#endif
 }

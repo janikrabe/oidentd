@@ -59,12 +59,16 @@
 */
 
 int random_seed(void) {
+#ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
+	srand(0);
+#else
 	struct timeval tv;
 
 	if (gettimeofday(&tv, NULL))
 		return (-1);
 
 	srand((u_int32_t) (tv.tv_sec ^ tv.tv_usec));
+#endif
 	return (0);
 }
 
