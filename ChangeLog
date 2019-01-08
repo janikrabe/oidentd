@@ -1,3 +1,13 @@
+2019-01-03  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix oidentd_masq.conf(5) comment style.
+
+2019-01-01  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Add fuzzing build configuration.
+	* Remove parentheses from return statemenets.
+	* Build with -fPIE and -fstack-protector.
+
 2018-12-14  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Fix NULL dereference with libnfct on CT_UNKNOWN kernels.
