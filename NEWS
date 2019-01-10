@@ -1,5 +1,8 @@
 Unreleased changes
 
+
+Changes in version 2.3.2
+
 	* Option `--forward` now implies `--masquerade`.
 	* Added a warning when the connection limit is exceeded.
 	* Added systemd services and a socket file.

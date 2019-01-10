@@ -15,7 +15,7 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with this program; if not, write to the Free Software
 dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-AC_INIT([oidentd], [2.3.1], [oidentd@janikrabe.com])
+AC_INIT([oidentd], [2.3.2], [oidentd@janikrabe.com])
 AM_INIT_AUTOMAKE
 
 AC_DEFINE(PACKAGE_AUTHOR, ["Janik Rabe"], [maintainer])

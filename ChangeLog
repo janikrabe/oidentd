@@ -1,5 +1,6 @@
 2019-01-03  Janik Rabe  <oidentd@janikrabe.com>
 
+	* Released as version 2.3.2.
 	* Fix oidentd_masq.conf(5) comment style.
 
 2019-01-01  Janik Rabe  <oidentd@janikrabe.com>
