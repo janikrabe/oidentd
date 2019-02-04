@@ -176,6 +176,7 @@ int main(int argc, char **argv) {
 			for (i = 0; i < fdlen; ++i) {
 				if (FD_ISSET(listen_fds[i], &rfds)) {
 					int connectfd;
+					pid_t child;
 
 					connectfd = accept(listen_fds[i], NULL, NULL);
 					if (connectfd == -1) {
@@ -192,7 +193,11 @@ int main(int argc, char **argv) {
 
 					++current_connections;
 
-					if (fork() == 0) {
+					child = fork();
+
+					if (child == -1) {
+						o_log(LOG_CRIT, "fork: %s", strerror(errno));
+					} else if (child == 0) {
 						size_t idx;
 
 						for (idx = 0; listen_fds[idx] != -1; ++idx)
