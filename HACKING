@@ -28,6 +28,8 @@ consult the INSTALL file.
 in release tarballs.  For this reason, flex and bison must be installed before
 building oidentd from any source other than one of the published releases.
 Please consult the documentation of flex and bison for more information.
+Likewise, AsciiDoc is required for building the manual pages and must be
+installed when building from git.
 
     After modifying the sources, oidentd can be recompiled by issuing the
 `make' command.  When making changes to a file in the `src/kernel/' directory,
