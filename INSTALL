@@ -23,32 +23,15 @@ will emit a warning.  This warning can safely be ignored if the target system
 has at least one of the files "nf_conntrack", "ip_conntrack" or "ip_masquerade"
 in "/proc/net".
 
-oidentd version 2 runs only as a standalone daemon.  Therefore, any entries
-for ident in any inetd or xinetd (or any other "super server") configuration
-files must be disabled before running oidentd.  This is the case for
-performance reasons; when oidentd starts up, it parses the /etc/oidentd.conf
-configuration file.  If oidentd ran from inetd (or similar), it would have to
-parse the configuration file for each incoming connection.  Running standalone
-lets oidentd parse the file once at startup and after that only when it
-receives a SIGHUP.
-
-Users running inetd can locate such lines by running the command
-"egrep ^(auth|ident) /etc/inetd.conf".  Lines that show up must be
-commented out by inserting a '#' character at the start of the line.
-After the line is disabled the inetd program must be restarted by sending
-it the SIGHUP signal (signal 1).
-
-oidentd does not ordinarily require superuser privileges and should not
-run as root, if possible.  Do note, however, that oidentd must start up
-as root so that it can bind port 113 (if no --port argument is given),
-and so that it can open /dev/kmem on operating systems on which this is
-required. Once oidentd does this, it can drop any extra privileges. The
-file KERNEL_SUPPORT.md contains a list of operating systems that require
-access to /dev/kmem.  Note, however, that some configurations may require
-oidentd to start up as root even when kernel memory access is not needed.
-For example, this is the case on Linux if IP/NAT masquerade support is
-enabled, so that oidentd can open the connection tracking file.
-
-For information regarding setting the user and group that oidentd will run as,
-please see the descriptions of the "--user" and "--group" command-line
-flags in the oidentd manual page.
+oidentd does not ordinarily require superuser privileges and should not run as
+root, if possible.  Do note, however, that oidentd must start up as root so
+that it can bind port 113 (if no --port argument is given), and so that it can
+open /dev/kmem if required by the kernel.  Once oidentd does this, it can drop
+any extra privileges.  The file KERNEL_SUPPORT.md contains a list of operating
+systems on which access to /dev/kmem is required.  Note, however, that some
+configurations may require oidentd to start up as root even when kernel memory
+access is not needed.  For example, this is the case on Linux if IP/NAT
+masquerade support is enabled, so that oidentd can open the connection tracking
+file.  For information on how to configure which user and group oidentd will
+run as, please see the descriptions of the "--user" and "--group" flags in the
+oidentd manual page.
