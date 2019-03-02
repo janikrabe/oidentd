@@ -57,3 +57,6 @@ src/cfg_parse.c
 src/cfg_parse.h
 src/cfg_scan.c
 src/os.c
+
+# Generated manual pages
+doc/oidentd.8

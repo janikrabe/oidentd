@@ -1,0 +1,188 @@
+////
+Copyright (c)  2019  Janik Rabe
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+A copy of the license is included in the file 'COPYING.NEWDOC'
+////
+
+oidentd(8)
+==========
+:doctype:     manpage
+:man source:  oidentd
+:man version: 2.3.2
+:man manual:  oidentd User Manual
+:revdate:     2019-03-02
+:sysconfdir:  /etc
+
+
+NAME
+----
+oidentd - RFC 1413 compliant Ident Protocol server
+
+
+SYNOPSIS
+--------
+*oidentd* ['OPTIONS']
+
+
+DESCRIPTION
+-----------
+*oidentd* implements the Identification Protocol as described in RFC 1413.  By
+default, *oidentd* replies with the username of the owner of connections.  This
+behavior can be altered in *oidentd.conf*(5) and by using the options specified
+in this document.
+
+
+OPTIONS
+-------
+*-a, --address*='ADDRESS'::
+  Bind to the specified address.  This option causes *oidentd* to listen for
+  incoming connections only on the specified address or addresses instead of on
+  all interfaces.  This option may be specified more than once to configure
+  multiple addresses.
+
+*-c, --charset*='CHARSET'::
+  Set an alternative character set to send alongside ident responses.
+
+*-C, --config*='FILE'::
+  Use the specified system-wide configuration file.  If this option is not
+  specified, the default configuration file *{sysconfdir}/oidentd.conf* is
+  used.
+
+*-d, --debug*::
+  Show debug messages, including detailed lookup information that may be useful
+  for diagnosing issues with failed lookups.  This option is only available if
+  *oidentd* was compiled with debugging support.
+
+*-e, --error*::
+  Hide error messages, returning 'UNKNOWN-ERROR' for all errors.  This includes
+  the 'NO-USER', 'HIDDEN-USER' and 'INVALID-PORT' errors.  This option may be
+  used to conceal the fact that *oidentd* is hiding ident responses for a user.
+
+*-f, --forward*=['PORT']::
+  Forward requests for hosts masquerading through the server *oidentd* is
+  running on to the host that established the corresponding connection.  The
+  target host must be running *oidentd* with the *--proxy* option, or some
+  ident server returning static responses regardless of the query.  If no port
+  is specified, the default ident port '113' is used.  If forwarding fails,
+  *oidentd* falls back to the response specified in *oidentd_masq.conf*(5).
+  This option implies *--masquerade*.
+
+*-g, --group*='GROUP|GID'::
+  Run as the specified group or GID.  If this option is not given, *oidentd*
+  falls back to running as 'oidentd', 'nobody', 'nogroup' or GID '65534', in
+  this order.  On systems that require *oidentd* to run as the superuser, a
+  warning is shown and the group is not changed automatically.
+
+*-h, --help*::
+  Print a summary of options and exit.
+
+*-i, --foreground*::
+  Do not fork to background.  This option may be useful for debugging, or for
+  running *oidentd* from a service manager like *systemd*(1) with
+  'Type=simple'.
+
+*-I, --stdio*::
+  Read a single ident query from standard input, write the response to standard
+  output, then exit.  This option may be useful for debugging, or when running
+  *oidentd* from a listener daemon such as *xinetd*(8).
+
+*-l, --limit*='MAX'::
+  Limit the maximum number of concurrent connections to the specified value.
+  Further connections beyond this limit will be closed immediately without
+  spawning a new process.  If this option is not specified, no limit is
+  enforced.
+
+*-m, --masquerade*::
+  Enable support for NAT connections, allowing Ident lookups intended for hosts
+  masquerading through the server running *oidentd*.  Ident responses for NAT
+  connections can be configured in the *oidentd_masq.conf*(5) configuration
+  file.
+
+*-M, --masquerade-first*::
+  If an entry matching the target host exists in the *oidentd_masq.conf*(5)
+  configuration file, return the configured Ident response instead of
+  forwarding the query.  With this option, queries are forwarded only if no
+  static response is configured.  If this option is not specified, the default
+  behavior of *--forward* is to forward queries before checking the
+  *oidentd_masq.conf*(5) file.  This option implies *--forward* and
+  *--masquerade*.
+
+*-o, --other*=['OS']::
+  Set an alternative operating system string to send alongside ident responses.
+  Note that some clients may interpret queries as having failed when an unknown
+  operating system is returned.  If this option is not specified, the value
+  'UNIX' is used.  If this option is specified without an argument, 'OTHER' is
+  returned.
+
+*-p, --port*='PORT'::
+  Listen on the specified port instead of port '113'.
+
+*-P, --proxy*='ORIGIN'::
+  Allow the specified host to forward queries to this instance using the
+  *--forward* option.  If *--reply* is not specified, this option must be
+  enabled for *oidentd* to correctly handle forwarded connections.
+
+*-q, --quiet*::
+  Suppress normal logging, showing only critical messages.
+
+*-r, --reply*='REPLY'::
+  When a lookup fails, send the specified ident response as if it had
+  succeeded.
+
+*-S, --nosyslog*::
+  Log messages to the standard error stream, even if it is not a terminal.  If
+  standard error is a terminal, messages are written to it by default.
+
+*-t, --timeout*='SECONDS'::
+  Close connections if no ident query is received within the specified number
+  of seconds.  By default, connections are closed after 30 seconds.
+
+*-u, --user*='USER|UID'::
+  Run as the specified user or UID.  If this option is not given, *oidentd*
+  falls back to running as 'oidentd', 'nobody' or UID '65534', in this order.
+  On systems that require *oidentd* to run as the superuser, a warning is shown
+  and the user is not changed automatically.
+
+*-U, --udb*::
+  Look up connection owners using libudb.  Lookup results that do not match any
+  local user are returned verbatim.  If a UDB lookup fails, the operating
+  system is queried directly.  This option also applies to NAT connections if
+  the *--masquerade* option is specified.
+
+*-v, --version*::
+  Print version and build information and exit.
+
+
+FILES
+-----
+*{sysconfdir}/oidentd.conf*::
+  System-wide configuration file; see *oidentd.conf*(5).
+
+*~/.oidentd.conf*::
+  User configuration files; see *oidentd.conf*(5).
+
+*{sysconfdir}/oidentd_masq.conf*::
+  Masquerading configuration file; see *oidentd_masq.conf*(5).
+
+
+AUTHOR
+------
+Janik Rabe <oidentd@janikrabe.com>::
+  https://oidentd.janikrabe.com
+
+Originally written by Ryan McCabe.
+
+
+BUGS
+----
+Please report any bugs to Janik Rabe <oidentd@janikrabe.com>.
+
+
+SEE ALSO
+--------
+*oidentd.conf*(5)
+*oidentd_masq.conf*(5)
