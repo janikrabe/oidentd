@@ -20,11 +20,13 @@ oidentd.conf(5)
 
 NAME
 ----
+
 oidentd.conf - oidentd configuration files
 
 
 DESCRIPTION
 -----------
+
 The *oidentd* configuration files are used to control the responses *oidentd*
 sends to clients after receiving a query for a connection owned by a particular
 user.
@@ -40,6 +42,7 @@ necessary capabilities through the system-wide configuration file.
 
 SYSTEM-WIDE CONFIGURATION FILE
 ------------------------------
+
 The system-wide configuration file is used to grant capabilities to users or
 force users to use a certain capability.  The default behavior is not to grant
 any privileges, which means that all users must send their real usernames in
@@ -78,6 +81,7 @@ This user directive applies only to the specified user.
 
 USER CONFIGURATION FILE
 -----------------------
+
 Each user may create a user configuration file at *~/.oidentd.conf*.  This file
 must be readable by the user *oidentd* runs as.  The user configuration file is
 read automatically after every successful lookup, so any changes take effect
@@ -112,6 +116,7 @@ specification.
 
 RANGE DIRECTIVES
 ----------------
+
 At most one range directive in any given scope may take the following form:
 
 [subs="quotes"]
@@ -140,6 +145,7 @@ specification.
 
 RANGE SPECIFICATIONS
 --------------------
+
 A range specification consists of filters that define which connections a range
 directive applies to.  It takes the following form:
 
@@ -172,6 +178,7 @@ port.
 
 CAPABILITY DIRECTIVES
 ---------------------
+
 A capability directive may take one of the following forms:
 
 [subs="quotes"]
@@ -199,6 +206,7 @@ In this form, the directive forces the user to use the specified capability.
 
 CAPABILITIES
 ------------
+
 The following expressions are valid capabilities:
 
 [subs="quotes"]
@@ -233,6 +241,7 @@ privileged foreign ports (with port numbers below 1024).
 
 CAPABILITY STATEMENTS
 ---------------------
+
 A capability statement may take one of the following forms:
 
 [subs="quotes"]
@@ -358,6 +367,7 @@ Hide ident replies for connections to irc.example.net on port 6667.
 
 STRING FORMATTING
 -----------------
+
 Strings may be enclosed in double quotes.  This is useful for strings containing
 special characters that would otherwise be interpreted in an unintended way.
 
@@ -382,6 +392,7 @@ Quoted strings may contain the following escape sequences:
 
 AUTHOR
 ------
+
 mailto:oidentd@janikrabe.com[Janik Rabe]::
   https://oidentd.janikrabe.com
 
@@ -390,10 +401,12 @@ Originally written by Ryan McCabe.
 
 BUGS
 ----
+
 Please report any bugs to mailto:oidentd@janikrabe.com[Janik Rabe].
 
 
 SEE ALSO
 --------
+
 *oidentd*(8)
 *oidentd_masq.conf*(5)

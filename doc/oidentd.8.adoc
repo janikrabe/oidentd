@@ -20,16 +20,19 @@ oidentd(8)
 
 NAME
 ----
+
 oidentd - flexible, RFC 1413 compliant ident daemon with NAT support
 
 
 SYNOPSIS
 --------
+
 *oidentd* ['OPTIONS']
 
 
 DESCRIPTION
 -----------
+
 *oidentd* implements the Identification Protocol as described in RFC 1413.  By
 default, *oidentd* replies with the username of the owner of connections.  This
 behavior can be altered in *oidentd.conf*(5) and by using the options specified
@@ -38,6 +41,7 @@ in this document.
 
 OPTIONS
 -------
+
 *-a, --address*='ADDRESS'::
   Bind to the specified address.  This option causes *oidentd* to listen for
   incoming connections only on the specified address or addresses instead of on
@@ -159,6 +163,7 @@ OPTIONS
 
 FILES
 -----
+
 *{sysconfdir}/oidentd.conf*::
   System-wide configuration file; see *oidentd.conf*(5).
 
@@ -171,6 +176,7 @@ FILES
 
 AUTHOR
 ------
+
 mailto:oidentd@janikrabe.com[Janik Rabe]::
   https://oidentd.janikrabe.com
 
@@ -179,10 +185,12 @@ Originally written by Ryan McCabe.
 
 BUGS
 ----
+
 Please report any bugs to mailto:oidentd@janikrabe.com[Janik Rabe].
 
 
 SEE ALSO
 --------
+
 *oidentd.conf*(5)
 *oidentd_masq.conf*(5)
