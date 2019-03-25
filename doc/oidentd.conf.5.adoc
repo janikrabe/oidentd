@@ -1,0 +1,399 @@
+////
+Copyright (c)  2019  Janik Rabe
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+A copy of the license is included in the file 'COPYING.NEWDOC'
+////
+
+oidentd.conf(5)
+===============
+:doctype:     manpage
+:man source:  oidentd
+:man version: 2.3.2
+:man manual:  oidentd User Manual
+:revdate:     2019-03-25
+:sysconfdir:  /etc
+
+
+NAME
+----
+oidentd.conf - oidentd configuration files
+
+
+DESCRIPTION
+-----------
+The *oidentd* configuration files are used to control the responses *oidentd*
+sends to clients after receiving a query for a connection owned by a particular
+user.
+
+The system configuration file *{sysconfdir}/oidentd.conf* specifies the types
+of responses individual users are permitted to send.  By default, users must
+respond with the name of their user account.
+
+The user configuration files *~/.oidentd.conf* allow users to send custom ident
+responses or to hide their identities, provided that they have been granted the
+necessary capabilities through the system-wide configuration file.
+
+
+SYSTEM CONFIGURATION FILE
+-------------------------
+The system configuration file is used to grant capabilities to users or force
+users to use a certain capability.  The default behavior is not to grant any
+privileges, which means that all users must send their real usernames in
+response to ident queries.  The system configuration file may be empty or
+missing, in which case this default applies.  Changes to this file take effect
+only after *oidentd* is reloaded (which occurs when a SIGHUP signal is
+received) or restarted.
+
+The system configuration file contains at most one directive of the following
+form:
+
+[subs="quotes"]
+....
+**default** {
+	__range-directives...__
+}
+....
+
+This default directive matches all users for which no explicit rules have been
+defined.  Any user directives following this directive inherit the capabilities
+it defines.  If present, the default directive should be the first directive in
+the user configuration file.
+
+The system configuration file may also contain zero or more directives of the
+following form:
+
+[subs="quotes"]
+....
+**user** __username__ {
+	__range-directives...__
+}
+....
+
+This user directive applies only to the specified user.
+
+
+USER CONFIGURATION FILE
+-----------------------
+Each user may create a user configuration file at *~/.oidentd.conf*.  This file
+must be readable by the user *oidentd* runs as.  The user configuration file is
+read automatically after every successful lookup, so any changes take effect
+immediately.
+
+The user configuration file contains at most one directive of the following
+form:
+
+[subs="quotes"]
+....
+**global** {
+	__capability-statements...__
+}
+....
+
+This global directive matches all connections owned by the user.  If present, it
+should be the first directive in the user configuration file.
+
+The user configuration file may also contain zero or more directives of the
+following form:
+
+[subs="quotes"]
+....
+__range-specification__ {
+	__capability-statements...__
+}
+....
+
+This range directive applies only to connections that match the given range
+specification.
+
+
+RANGE DIRECTIVES
+----------------
+At most one range directive in any given scope may take the following form:
+
+[subs="quotes"]
+....
+**default** {
+	__capability-directives...__
+}
+....
+
+This default directive defines rules for all connections that do not match any
+other range directive.  If present, the default directive should be the first
+directive in its scope.
+
+A range directive may also take the following form:
+
+[subs="quotes"]
+....
+__range-specification__ {
+	__capability-directives...__
+}
+....
+
+This range directive applies only to connections that match the given range
+specification.
+
+
+RANGE SPECIFICATIONS
+--------------------
+A range specification consists of filters that define which connections a range
+directive applies to.  It takes the following form:
+
+[subs="quotes"]
+....
+**to** __fhost__ **fport** __fport__ **from** __lhost__ **lport** __lport__
+....
+
+This range specification matches only connections with the specified foreign
+host, foreign port, local host, and local port.  At least one of these filters
+must be specified.  Omitted filters match any value.  Filters may be specified
+in any order.
+
+The _to_ filter specifies the foreign host or address of a connection, from the
+perspective of the machine running *oidentd*.
+
+The _fport_ filter specifies the foreign port or port range of a connection.
+
+The _from_ filter specifies the local host or address of a connection, from the
+perspective of the machine running *oidentd*.  This may be useful for
+supporting virtual hosts on systems with more than one IP address.
+
+The _lport_ filter specifies the local port or port range of a connection.
+
+Ports can be specified either numerically (e.g., 113) or using a service name
+(e.g., ident).  Port ranges are specified numerically as __min__:__max__.  The
+_max_ port may be omitted to select all ports greater than or equal to the _min_
+port.
+
+
+CAPABILITY DIRECTIVES
+---------------------
+A capability directive may take one of the following forms:
+
+[subs="quotes"]
+....
+**allow** __capability__
+....
+
+In this form, the directive grants the user permission to use the specified
+capability.
+
+[subs="quotes"]
+....
+**deny** __capability__
+....
+
+In this form, the directive revokes the user's permission to use the specified
+capability.
+
+[subs="quotes"]
+....
+**force** __capability-statement__
+....
+
+In this form, the directive forces the user to use the specified capability.
+
+CAPABILITIES
+------------
+The following expressions are valid capabilities:
+
+[subs="quotes"]
+ **forward**
+ **hide**
+ **numeric**
+ **random**
+ **random_numeric**
+
+These capabilities allow users to use the corresponding capability statements.
+
+[subs="quotes"]
+ **spoof**
+
+The *spoof* capability allows users to send custom ident replies.  Note that
+this does not include replying with the name of another user or spoofing
+replies for connections to privileged foreign ports.
+
+[subs="quotes"]
+ **spoof_all**
+
+The *spoof_all* capability allows users to reply with the names of other users.
+This capability should be used with care, as it allows users to impersonate
+other users on the local system.
+
+[subs="quotes"]
+ **spoof_privport**
+
+The *spoof_privport* capability allows users to spoof replies for connections to
+privileged foreign ports (with port numbers below 1024).
+
+
+CAPABILITY STATEMENTS
+---------------------
+A capability statement may take one of the following forms:
+
+[subs="quotes"]
+ **forward** __host__ __port__
+
+Forward received queries to another ident server.  The target server must
+support forwarding (like *oidentd* with the *--proxy* option).
+
+Additional capabilities may be required for forwarding to succeed.  For example,
+the *spoof* capability is required if the target server sends a response other
+than the user's name on the forwarding server.  It may therefore be desirable to
+also grant at least one of *hide*, *spoof*, *spoof_all*, and *spoof_privport* in
+addition to the *forward* capability.  If *force forward* is used, no additional
+checks are performed and no capabilities are required.
+
+If forwarding fails, *oidentd* responds with a "HIDDEN-USER" error or with the
+user's real username, depending on whether the user has been granted the *hide*
+capability.  Replies are logged, allowing the system administrator to identify
+which user sent a particular reply.
+
+[subs="quotes"]
+ **hide**
+
+Hide ident replies from clients.  When this capability is used, *oidentd*
+reports a "HIDDEN-USER" error to ident clients instead of sending an ident
+reply.
+
+[subs="quotes"]
+ **numeric**
+
+Respond with the user ID (UID).
+
+[subs="quotes"]
+ **random**
+
+Send randomly generated, alphanumeric ident replies.  A new reply is generated
+for each ident lookup.  Replies are logged, allowing the system administrator
+to identify which user sent a particular reply.
+
+[subs="quotes"]
+ **random_numeric**
+
+Send randomly generated, numeric ident replies between 0 (inclusive) and
+100,000 (exclusive), prefixed with "user".  A new reply is generated for each
+ident lookup.  Replies are logged, allowing the system administrator to
+identify which user sent a particular reply.
+
+[subs="quotes"]
+ **reply** __reply1__ [__reply2__ ...]
+
+Send an ident reply chosen at random from the given list of quoted replies.
+When used in a user configuration file, at most 20 replies may be specified.
+Replies are logged, allowing the system administrator to identify which user
+sent a particular reply.
+
+
+EXAMPLES
+--------
+
+=== SYSTEM CONFIGURATION FILE
+
+[subs="quotes"]
+....
+**default** {
+	**default** {
+		**allow** **spoof**
+	}
+
+	**fport** 6667 {
+		**deny** **spoof**
+		**allow** **hide**
+	}
+}
+....
+
+Allow all users to spoof ident replies, except on connections to port 6667.
+Only on connections to port 6667, allow users to hide their ident replies.
+
+[subs="quotes"]
+....
+**user** "root" {
+	**default** {
+		**force** **hide**
+	}
+}
+....
+
+Hide all connections owned by the root user.
+
+[subs="quotes"]
+....
+**user** "lisa" {
+	**lport** 1024: {
+		**force** **reply** "me"
+	}
+}
+....
+
+For connections owned by user "lisa" on local port 1024 or greater, always reply
+with "me", ignoring any settings in the user configuration file.
+
+
+=== USER CONFIGURATION FILE
+
+[subs="quotes"]
+....
+**global** {
+	**reply** "paul"
+}
+....
+
+Reply with "paul" to all ident queries.
+
+[subs="quotes"]
+....
+**to** irc.example.net **fport** 6667 {
+	**hide**
+}
+....
+
+Hide ident replies for connections to irc.example.net on port 6667.
+
+
+STRING FORMATTING
+-----------------
+Strings may be enclosed in double quotes.  This is useful for strings containing
+special characters that would otherwise be interpreted in an unintended way.
+
+Quoted strings may contain the following escape sequences:
+
+[subs="quotes"]
+....
+\a    alert (bell)
+\b    backspace
+\e    escape character
+\f    form feed
+\n    newline (line feed)
+\r    carriage return
+\t    horizontal tab
+\v    vertical tab
+\\:\    backslash
+\"    double quotation mark
+\\:__NNN__  the character with octal numerical value __NNN__
+\x__NN__  the character with hexadecimal numerical value __NN__
+....
+
+
+AUTHOR
+------
+mailto:oidentd@janikrabe.com[Janik Rabe]::
+  https://oidentd.janikrabe.com
+
+Originally written by Ryan McCabe.
+
+
+BUGS
+----
+Please report any bugs to mailto:oidentd@janikrabe.com[Janik Rabe].
+
+
+SEE ALSO
+--------
+*oidentd*(8)
+*oidentd_masq.conf*(5)
