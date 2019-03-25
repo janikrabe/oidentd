@@ -1,24 +1,27 @@
-oidentd 2.3.2 by Janik Rabe <oidentd@janikrabe.com>
-Originally written by Ryan McCabe <ryan@numb.org>
+oidentd
+=======
 
-oidentd is an RFC 1413 compliant ident daemon that runs on Linux, FreeBSD,
-OpenBSD, NetBSD, DragonFly BSD, and some versions of Darwin and Solaris.
-oidentd can handle IP/NAT masqueraded connections on many operating system
-kernels.  oidentd has a flexible mechanism for specifying ident responses.
-Users can be granted permission to specify their own responses, and different
-responses can be sent depending on host and port pairs.  oidentd features
-a capability-based permission system that allows system administrators fine-
-grained control over which functionalities may be used by each user.
+Version 2.3.2
 
-For more information on the operating system kernels oidentd supports,
-consult the KERNEL_SUPPORT.md file.
+Flexible, RFC 1413 compliant ident daemon with NAT support.
 
-For a complete list of features, consult the manual pages or run
-oidentd --help.
+oidentd is a flexible ident daemon for Linux, FreeBSD, OpenBSD, NetBSD, and
+DragonFly BSD.  It is highly configurable, allowing the system administator to
+define custom responses based on host and port pairs.  The administrator can
+also grant capabilities to individual users to allow them to change their ident
+replies, generate random replies, or hide their connections.  oidentd supports
+lookups for NAT connections and is able to forward queries to other servers.
+Detailed descriptions of all features are available in the manual pages.
 
-The most recent version of oidentd will always be available at
-https://files.janikrabe.com/pub/oidentd/releases/latest.
+Please consult the 'KERNEL_SUPPORT.md' file for more information about the
+supported kernels.  The 'INSTALL' file contains instructions for installing
+oidentd.  The 'HACKING' file describes how to work with the source code.
 
-Please mail any feedback, suggestions, patches, questions, comments, bug
-reports, et cetera to Janik Rabe <oidentd@janikrabe.com> or open an issue on
-GitHub at https://github.com/janikrabe/oidentd.
+oidentd is maintained and developed by Janik Rabe <oidentd@janikrabe.com>.  It
+was originally written by Ryan McCabe <ryan@numb.org>.
+
+The most recent version of oidentd is available from
+<https://files.janikrabe.com/pub/oidentd/releases/latest>.
+
+Please mail any feedback, questions, suggestions, patches, or bug reports to
+Janik Rabe <oidentd@janikrabe.com>.
