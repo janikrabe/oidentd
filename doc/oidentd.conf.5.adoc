@@ -10,12 +10,13 @@ A copy of the license is included in the file 'COPYING.NEWDOC'
 
 oidentd.conf(5)
 ===============
-:doctype:     manpage
-:man source:  oidentd
-:man version: 2.3.2
-:man manual:  oidentd User Manual
-:revdate:     2019-03-25
-:sysconfdir:  /etc
+:doctype:      manpage
+:man manual:   oidentd User Manual
+:man source:   oidentd
+:man version:  2.3.2
+:reproducible: yes
+:revdate:      2019-03-25
+:sysconfdir:   /etc
 
 
 NAME
