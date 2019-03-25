@@ -20,7 +20,7 @@ oidentd(8)
 
 NAME
 ----
-oidentd - RFC 1413 compliant Ident Protocol server
+oidentd - flexible, RFC 1413 compliant ident daemon with NAT support
 
 
 SYNOPSIS
