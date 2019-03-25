@@ -29,27 +29,27 @@ The *oidentd* configuration files are used to control the responses *oidentd*
 sends to clients after receiving a query for a connection owned by a particular
 user.
 
-The system configuration file *{sysconfdir}/oidentd.conf* specifies the types
-of responses individual users are permitted to send.  By default, users must
-respond with the name of their user account.
+The system-wide configuration file *{sysconfdir}/oidentd.conf* specifies the
+types of responses individual users are permitted to send.  By default, users
+must respond with the name of their user account.
 
 The user configuration files *~/.oidentd.conf* allow users to send custom ident
 responses or to hide their identities, provided that they have been granted the
 necessary capabilities through the system-wide configuration file.
 
 
-SYSTEM CONFIGURATION FILE
--------------------------
-The system configuration file is used to grant capabilities to users or force
-users to use a certain capability.  The default behavior is not to grant any
-privileges, which means that all users must send their real usernames in
-response to ident queries.  The system configuration file may be empty or
+SYSTEM-WIDE CONFIGURATION FILE
+------------------------------
+The system-wide configuration file is used to grant capabilities to users or
+force users to use a certain capability.  The default behavior is not to grant
+any privileges, which means that all users must send their real usernames in
+response to ident queries.  The system-wide configuration file may be empty or
 missing, in which case this default applies.  Changes to this file take effect
 only after *oidentd* is reloaded (which occurs when a SIGHUP signal is
 received) or restarted.
 
-The system configuration file contains at most one directive of the following
-form:
+The system-wide configuration file contains at most one directive of the
+following form:
 
 [subs="quotes"]
 ....
@@ -63,8 +63,8 @@ defined.  Any user directives following this directive inherit the capabilities
 it defines.  If present, the default directive should be the first directive in
 the user configuration file.
 
-The system configuration file may also contain zero or more directives of the
-following form:
+The system-wide configuration file may also contain zero or more directives of
+the following form:
 
 [subs="quotes"]
 ....
@@ -292,7 +292,7 @@ sent a particular reply.
 EXAMPLES
 --------
 
-=== SYSTEM CONFIGURATION FILE
+=== SYSTEM-WIDE CONFIGURATION FILE
 
 [subs="quotes"]
 ....
