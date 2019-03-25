@@ -16,4 +16,4 @@ SUFFIXES = .adoc
 oidentd.8: oidentd.8.adoc
 
 .adoc:
-	a2x --doctype manpage --format manpage -a "sysconfdir=\"$(sysconfdir)\"" $<
+	asciidoctor --backend manpage --doctype manpage -a "sysconfdir=$(sysconfdir)" $<
