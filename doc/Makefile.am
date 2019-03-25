@@ -20,4 +20,9 @@ oidentd.8: oidentd.8.adoc
 oidentd.conf.5: oidentd.conf.5.adoc
 
 .adoc:
-	asciidoctor --backend manpage --doctype manpage -a "sysconfdir=$(sysconfdir)" $<
+	asciidoctor \
+		--backend manpage \
+		--doctype manpage \
+		-a "sysconfdir=$(sysconfdir)" \
+		-a "mansource=@PACKAGE_STRING@" \
+		$<

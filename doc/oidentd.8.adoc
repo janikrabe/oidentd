@@ -13,7 +13,6 @@ oidentd(8)
 :doctype:      manpage
 :man manual:   oidentd User Manual
 :man source:   oidentd
-:man version:  2.3.2
 :reproducible: yes
 :revdate:      2019-03-02
 :sysconfdir:   /etc
