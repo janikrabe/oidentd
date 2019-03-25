@@ -53,8 +53,8 @@ OPTIONS
 
 *-C, --config*='FILE'::
   Use the specified system-wide configuration file.  If this option is not
-  specified, the default configuration file *{sysconfdir}/oidentd.conf* is
-  used.
+  given, *oidentd* defaults to *{sysconfdir}/oidentd.conf*.  The format of the
+  system-wide configuration file is described in *oidentd.conf*(5).
 
 *-d, --debug*::
   Show debug messages, including detailed lookup information that may be useful
