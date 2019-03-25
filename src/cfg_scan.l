@@ -215,7 +215,7 @@ FORWARD				forward
 
 <state_string>\n {
 	if (parser_mode == PARSE_SYSTEM) {
-		o_log(NORMAL, "[line %u] Error: Unterminated string constant",
+		o_log(LOG_CRIT, "[line %u] Error: Unterminated string constant",
 			current_line);
 	}
 
@@ -234,7 +234,7 @@ FORWARD				forward
 
 	if (result > 0xff) {
 		if (parser_mode == PARSE_SYSTEM) {
-			o_log(NORMAL, "[line %u] Bad escape sequence: \"%s\"\n",
+			o_log(LOG_CRIT, "[line %u] Bad escape sequence: \"%s\"\n",
 				current_line, yytext);
 		}
 
@@ -265,7 +265,7 @@ FORWARD				forward
 
 <state_string>\\[0-9] {
 	if (parser_mode == PARSE_SYSTEM) {
-		o_log(NORMAL, "[line %u] Error: Bad escape sequence: \"%s\"\n",
+		o_log(LOG_CRIT, "[line %u] Error: Bad escape sequence: \"%s\"\n",
 			current_line, yytext);
 	}
 
@@ -334,6 +334,12 @@ static char get_esc_char(char c) {
 			return '\a';
 
 		case 'e':
+			if (parser_mode == PARSE_SYSTEM) {
+				o_log(LOG_CRIT, "[line %u] Warning: Escape sequence '\\e' is "
+						"deprecated; use '\\033' or '\\x1B' instead.\n",
+						current_line);
+			}
+
 			return '\e';
 
 		default:

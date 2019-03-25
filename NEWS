@@ -1,5 +1,6 @@
 Unreleased changes
 
+	* Deprecated '\e' escape sequence in configuration files.
 
 Changes in version 2.3.2
 

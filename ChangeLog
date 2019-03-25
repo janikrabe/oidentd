@@ -1,6 +1,8 @@
 2019-03-25  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Rewrite manual page oidentd.conf(5).
+	* Deprecate non-standard '\e' escape sequence.
+	* Promote some messages to LOG_CRIT.
 
 2019-03-02  Janik Rabe  <oidentd@janikrabe.com>
 
