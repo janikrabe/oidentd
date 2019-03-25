@@ -32,7 +32,8 @@
 #define MASQ_MAP		SYSCONFDIR "/oidentd_masq.conf"
 
 /*
-** String prepended to a random number when the -r flag is specified
+** String prepended to a random number when the random_numeric capability is
+** used.
 */
 
 #define UPREFIX			"user"
