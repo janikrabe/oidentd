@@ -377,7 +377,6 @@ Quoted strings may contain the following escape sequences:
 ....
 \a    alert (bell)
 \b    backspace
-\e    escape character
 \f    form feed
 \n    newline (line feed)
 \r    carriage return
