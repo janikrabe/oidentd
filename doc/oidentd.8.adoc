@@ -49,7 +49,9 @@ OPTIONS
   multiple addresses.
 
 *-c, --charset*='CHARSET'::
-  Set an alternative character set to send alongside ident responses.
+  Inform clients that ident replies use the specified character set as defined
+  in RFC 1340 or its successors.  The default is not to send a character set to
+  clients.
 
 *-C, --config*='FILE'::
   Use the specified system-wide configuration file.  If this option is not
