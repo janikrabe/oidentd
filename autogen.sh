@@ -7,7 +7,7 @@ ACLOCAL=aclocal
 
 ($AUTOCONF --version) < /dev/null > /dev/null 2>&1 || {
 	echo
-	echo "Error: You must have \`autoconf' installed to compile this program."
+	echo "Error: You must have 'autoconf' installed to compile this program."
 	echo "Download the appropriate package for your distribution,"
 	echo "or get the source tarball at https://ftp.gnu.org/pub/gnu/autoconf"
 	exit 1
@@ -15,7 +15,7 @@ ACLOCAL=aclocal
 
 ($ACLOCAL --version) < /dev/null > /dev/null 2>&1 || {
 	echo
-	echo "Error: Missing \`aclocal'. The version of \`automake'"
+	echo "Error: Missing 'aclocal'. The version of 'automake'"
 	echo "installed doesn't appear recent enough."
 	echo "Download the appropriate package for your distribution,"
 	echo "or get the source tarball at https://ftp.gnu.org/pub/gnu/automake"

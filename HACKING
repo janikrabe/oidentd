@@ -14,12 +14,12 @@ Introduction
     This project uses the GNU Build System, also known as Autotools.  The
 instructions in this file assume that Autotools has already been installed;
 specifically, it is assumed that autoconf, autoheader, automake and aclocal
-are installed and available in `$PATH'.  For more information on installing
+are installed and available in '$PATH'.  For more information on installing
 and using the GNU Build System, please consult the documentation of autoconf
-and automake, or run `./autogen.sh'.
+and automake, or run './autogen.sh'.
 
-    The command `./autogen.sh' checks for the existence of these programs
-and, if they are present, generates a `./configure' script.  This script can
+    The command './autogen.sh' checks for the existence of these programs
+and, if they are present, generates a './configure' script.  This script can
 then be used to configure the build and generate the files required to build
 and install oidentd.  For more information on installing oidentd, please
 consult the INSTALL file.
@@ -32,8 +32,8 @@ Likewise, AsciiDoc is required for building the manual pages and must be
 installed when building from git.
 
     After modifying the sources, oidentd can be recompiled by issuing the
-`make' command.  When making changes to a file in the `src/kernel/' directory,
-the modified file must first be copied to `src/os.c', and `make' must be
+'make' command.  When making changes to a file in the 'src/kernel/' directory,
+the modified file must first be copied to 'src/os.c', and 'make' must be
 issued on an operating system kernel corresponding to the changed file.
 
 Source Tree
@@ -49,38 +49,38 @@ Source Tree
 Kernel Support
 ==============
 
-    The `./configure' script copies the appropriate source file for the
-current operating system from the `src/kernel/' directory to `src/os.c'.
-This behavior can be modified by editing `configure.ac'. The `./configure'
-script will automatically be regenerated the next time the `make' command
+    The './configure' script copies the appropriate source file for the
+current operating system from the 'src/kernel/' directory to 'src/os.c'.
+This behavior can be modified by editing 'configure.ac'. The './configure'
+script will automatically be regenerated the next time the 'make' command
 is issued.
 
     When making changes that affect kernel support, please ensure that the
-`KERNEL_SUPPORT.md' file is updated to reflect these changes.
+'KERNEL_SUPPORT.md' file is updated to reflect these changes.
 
 Releasing
 =========
 
     Before releasing a new version, please ensure that all documentation
-is up-to-date.  This includes the files `AUTHORS', `ChangeLog', `HACKING',
-`INSTALL', `KERNEL_SUPPORT.md', `README', and the manual pages in the `doc/'
+is up-to-date.  This includes the files 'AUTHORS', 'ChangeLog', 'HACKING',
+'INSTALL', 'KERNEL_SUPPORT.md', 'README', and the manual pages in the 'doc/'
 directory.  New versions should be released only by the project maintainers.
 
-    In `ChangeLog', add an entry '* Released as version <version>.' to the top
-of the file, replacing `<version>' with the version number of the new release.
+    In 'ChangeLog', add an entry '* Released as version <version>.' to the top
+of the file, replacing '<version>' with the version number of the new release.
 
-    Prepend a summary of all significant changes to the `NEWS' file.  Each
+    Prepend a summary of all significant changes to the 'NEWS' file.  Each
 change should be added as a separate line and prefixed with an asterisk and a
-space character (`* ').  The last change should be followed by a blank line to
+space character ('* ').  The last change should be followed by a blank line to
 separate the summary from that of the previous version.  At the top of the
-file, add the line "Changes in version <version>", replacing `<version>' with
+file, add the line "Changes in version <version>", replacing '<version>' with
 the version number of the new release.  Before that line, prepend "Unreleased
 changes", followed by two blank lines, to the file.
 
-    Update the version number in `README', `configure.ac' and the manual pages
-in the `doc/' directory.  Change the date in each of the manual pages to the
+    Update the version number in 'README', 'configure.ac' and the manual pages
+in the 'doc/' directory.  Change the date in each of the manual pages to the
 release date of the new version.
 
-    Finally, run `make distcheck' to produce a release tarball which can then
+    Finally, run 'make distcheck' to produce a release tarball which can then
 be distributed to users.  If this command succeeds, archives in other formats
-can be created using `make dist-xz`, `make dist-bzip2`, and `make dist-zip`.
+can be created using 'make dist-xz', 'make dist-bzip2', and 'make dist-zip'.
