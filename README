@@ -17,8 +17,9 @@ Please consult the 'KERNEL_SUPPORT.md' file for more information about the
 supported kernels.  The 'INSTALL' file contains instructions for installing
 oidentd.  The 'HACKING' file describes how to work with the source code.
 
-oidentd is maintained and developed by Janik Rabe <oidentd@janikrabe.com>.  It
-was originally written by Ryan McCabe <ryan@numb.org>.
+oidentd is maintained and developed by Janik Rabe <oidentd@janikrabe.com>, with
+contributions from many people listed in the 'AUTHORS' file.  It was originally
+written by Ryan McCabe <ryan@numb.org>.
 
 The most recent version of oidentd is available from
 <https://files.janikrabe.com/pub/oidentd/releases/latest>.
