@@ -1,37 +1,68 @@
-Issuing the commands "./configure", then "make", then "make install" will
-(respectively) configure, compile and install the oidentd daemon and its
-manual pages.  By default, the daemon is installed in /usr/local/sbin/oidentd,
-and the uncompressed manual pages are installed in /usr/local/share/man/man5
-and /usr/local/share/man/man8.
+Installing oidentd
+******************
 
-IPv6 and IP masquerade support are enabled by default on platforms that support
-them.  To disable IPv6 support, pass the --disable-ipv6 option to the configure
-script.  To disable IP masquerade support, pass the --disable-masq option to
-the configure script.
+Copyright (c) 2019 Janik Rabe
 
-If you're having problems with oidentd, additional debugging information is
-available when the --enable-debug option is passed to the configure script and
-oidentd is run with the --debug flag.
+    Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.  This file is offered as-is,
+without any warranty.
 
-On Linux, oidentd compiles with libnetfilter_conntrack support by default if
-IP masquerade support is enabled and the libnetfilter_conntrack and libcap-ng
-headers and libraries are present.  This allows oidentd to obtain connection
-tracking information directly from the kernel instead of using the "/proc"
-filesystem.  When oidentd is compiled on Linux with IP masquerade support
-enabled, but one of these libraries is not present, the "./configure" script
-will emit a warning.  This warning can safely be ignored if the target system
-has at least one of the files "nf_conntrack", "ip_conntrack" or "ip_masquerade"
-in "/proc/net".
+Introduction
+============
 
-oidentd does not ordinarily require superuser privileges and should not run as
-root, if possible.  Do note, however, that oidentd must start up as root so
-that it can bind port 113 (if no --port argument is given), and so that it can
-open /dev/kmem if required by the kernel.  Once oidentd does this, it can drop
-any extra privileges.  The file KERNEL_SUPPORT.md contains a list of operating
-systems on which access to /dev/kmem is required.  Note, however, that some
-configurations may require oidentd to start up as root even when kernel memory
-access is not needed.  For example, this is the case on Linux if IP/NAT
-masquerade support is enabled, so that oidentd can open the connection tracking
-file.  For information on how to configure which user and group oidentd will
-run as, please see the descriptions of the "--user" and "--group" flags in the
-oidentd manual page.
+    This document describes how to install oidentd from a release tarball.
+For instructions for building from git, please refer to the 'HACKING' file.
+
+Optional Dependencies
+=====================
+
+    Unless the '--disable-libnfct' flag is used, oidentd is compiled with
+support for libnetfilter_conntrack on Linux systems on which it is available.
+Please note that this requires the libnetfilter_conntrack and libcap-ng
+libraries and their headers to be installed.  libnetfilter_conntrack allows
+oidentd to obtain connection tracking information without using the '/proc'
+filesystem.  This is useful on kernels without CONFIG_NF_CONNTRACK_PROCFS, on
+which '/proc/net/nf_conntrack' is not available.
+
+Build Configuration
+===================
+
+    Run './configure' to configure the build.  The './configure' script accepts
+a number of optional flags:
+
+  - '--disable-nat':     disable NAT support
+  - '--disable-ipv6':    disable IPv6 support
+  - '--disable-libnfct': disable Linux libnetfilter_conntrack support
+  - '--enable-debug':    enable support for oidentd's '--debug' flag
+  - '--enable-warn':     enable all compiler warnings
+
+    By default, oidentd is configured with a prefix of '/usr/local'.  This is
+the directory that files will be installed to.  For example, the oidentd binary
+will be installed to '/usr/local/sbin/oidentd'.  The prefix can be changed by
+passing the '--prefix' option to the './configure' script.  A complete list of
+options can be viewed by running './configure --help'.
+
+Compilation and Installation
+============================
+
+    Run 'make' to compile the source code and documentation, then 'make install'
+to install the compiled files.  Note that 'make install' must be run as root if
+the current user does not have permission to write to the directory that was
+specified with the '--prefix' option to './configure'.
+
+Running oidentd
+===============
+
+    Like most internet-facing services, oidentd should not run as root.  For
+this reason, it drops its privileges after starting up.  However, oidentd still
+needs to be started as root for a number of reasons:
+
+  - to bind the privileged port 113
+  - to open the kernel memory device (on systems where this is required)
+  - to open the connection tracking file (on systems where this is required)
+  - to request the CAP_NET_ADMIN capability (on Linux with libnfct)
+
+    The user and group oidentd runs as after dropping privileges can be
+specified with the '--user' and '--group' options, respectively.  Documentation
+for these options are available in oidentd.conf(5).
