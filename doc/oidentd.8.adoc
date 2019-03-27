@@ -75,7 +75,9 @@ OPTIONS
   ident server returning static responses regardless of the query.  If no port
   is specified, the default ident port '113' is used.  If forwarding fails,
   *oidentd* falls back to the response specified in *oidentd_masq.conf*(5).
-  This option implies *--masquerade*.
+  This option implies *--masquerade*.  The *--masquerade-first* option can be
+  used to forward queries only if no response was specified in
+  *oidentd_masq.conf*(5).
 
 *-g, --group*='GROUP|GID'::
   Run as the specified group or GID.  If this option is not given, *oidentd*
@@ -112,8 +114,8 @@ OPTIONS
   If an entry matching the target host exists in the *oidentd_masq.conf*(5)
   configuration file, return the configured Ident response instead of
   forwarding the query.  With this option, queries are forwarded only if no
-  static response is configured.  If this option is not specified, the default
-  behavior of *--forward* is to forward queries before checking the
+  static response has been configured.  If this option is not specified, the
+  default behavior of *--forward* is to forward queries before checking the
   *oidentd_masq.conf*(5) file.  This option implies *--forward* and
   *--masquerade*.
 
