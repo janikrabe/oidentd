@@ -1,3 +1,7 @@
+2019-03-27  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Rewrite manual page oidentd_masq.conf(5).
+
 2019-03-25  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Rewrite manual page oidentd.conf(5).

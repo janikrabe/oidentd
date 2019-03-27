@@ -61,3 +61,4 @@ src/os.c
 # Generated manual pages
 doc/oidentd.8
 doc/oidentd.conf.5
+doc/oidentd_masq.conf.5
