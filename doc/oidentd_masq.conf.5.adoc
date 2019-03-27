@@ -48,19 +48,19 @@ Rules must have the following form:
 _host_[/_mask_] _response_ _system-type_
 ....
 
-The "host" field specifies the hostname or IP address of the host that owns the
+The _host_ field specifies the hostname or IP address of the host that owns the
 connection for which an ident query was received.  This host must be connecting
 through the machine *oidentd* runs on.  The host may be specified as either an
 IP address or a hostname.
 
-If a network mask is specified using the "mask" field, the rule applies to all
+If a network mask is specified using the _mask_ field, the rule applies to all
 hosts in the given subnetwork.  Network masks may be specified in dot notation
-(e.g., 255.255.192.0) or in CIDR notation (e.g., 18).
+(e.g., "255.255.192.0") or in CIDR notation (e.g., "18").
 
-The "response" field specifies the response to be sent when receiving a query
+The _response_ field specifies the response to be sent when receiving a query
 for the specified host or subnetwork.
 
-The "system-type" field specifies the operating system to send alongside the
+The _system-type_ field specifies the operating system to send alongside the
 ident response.  See the *--other* option in *oidentd*(8) for more information.
 
 
@@ -70,10 +70,10 @@ EXAMPLES
 [subs="quotes"]
 ....
 # host[/mask]           response  system-type
-# 10.0.0.1              user1     UNIX
-# server.internal       user2     UNIX-BSD
-# 10.0.0.0/24           user3     UNIX
-# 10.0.0.0/255.255.0.0  user4     UNKNOWN
+10.0.0.1                user1     UNIX
+server.internal         user2     UNIX-BSD
+10.0.0.0/24             user3     UNIX
+10.0.0.0/255.255.0.0    user4     UNKNOWN
 ....
 
 Note that the order of the rules is significant in this example.  Because lines
