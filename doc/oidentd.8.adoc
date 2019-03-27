@@ -64,8 +64,8 @@ OPTIONS
   *oidentd* was compiled with debugging support.
 
 *-e, --error*::
-  Hide error messages, returning 'UNKNOWN-ERROR' for all errors.  This includes
-  the 'NO-USER', 'HIDDEN-USER' and 'INVALID-PORT' errors.  This option may be
+  Hide error messages, returning *UNKNOWN-ERROR* for all errors.  This includes
+  the *NO-USER*, *HIDDEN-USER* and *INVALID-PORT* errors.  This option may be
   used to conceal the fact that *oidentd* is hiding ident responses for a user.
 
 *-f, --forward*=['PORT']::
@@ -73,7 +73,7 @@ OPTIONS
   running on to the host that established the corresponding connection.  The
   target host must be running *oidentd* with the *--proxy* option, or some
   ident server returning static responses regardless of the query.  If no port
-  is specified, the default ident port '113' is used.  If forwarding fails,
+  is specified, the default ident port (113) is used.  If forwarding fails,
   *oidentd* falls back to the response specified in *oidentd_masq.conf*(5).
   This option implies *--masquerade*.  The *--masquerade-first* option can be
   used to forward queries only if no response was specified in
@@ -81,9 +81,9 @@ OPTIONS
 
 *-g, --group*='GROUP|GID'::
   Run as the specified group or GID.  If this option is not given, *oidentd*
-  falls back to running as 'oidentd', 'nobody', 'nogroup' or GID '65534', in
-  this order.  On systems that require *oidentd* to run as the superuser, a
-  warning is shown and the group is not changed automatically.
+  falls back to running as "oidentd", "nobody", "nogroup" or GID 65534, in this
+  order.  On systems that require *oidentd* to run as the superuser, a warning
+  is shown and the group is not changed automatically.
 
 *-h, --help*::
   Print a summary of options and exit.
@@ -91,7 +91,7 @@ OPTIONS
 *-i, --foreground*::
   Do not fork to background.  This option may be useful for debugging, or for
   running *oidentd* from a service manager like *systemd*(1) with
-  'Type=simple'.
+  *Type=simple*.
 
 *-I, --stdio*::
   Read a single ident query from standard input, write the response to standard
@@ -123,11 +123,11 @@ OPTIONS
   Set an alternative operating system string to send alongside ident responses.
   Note that some clients may interpret queries as having failed when an unknown
   operating system is returned.  If this option is not specified, the value
-  'UNIX' is used.  If this option is specified without an argument, 'OTHER' is
+  *UNIX* is used.  If this option is specified without an argument, *OTHER* is
   returned.
 
 *-p, --port*='PORT'::
-  Listen on the specified port instead of port '113'.
+  Listen on the specified port instead of port 113.
 
 *-P, --proxy*='ORIGIN'::
   Allow the specified host to forward queries to this instance using the
@@ -151,8 +151,8 @@ OPTIONS
 
 *-u, --user*='USER|UID'::
   Run as the specified user or UID.  If this option is not given, *oidentd*
-  falls back to running as 'oidentd', 'nobody' or UID '65534', in this order.
-  On systems that require *oidentd* to run as the superuser, a warning is shown
+  falls back to running as "oidentd", "nobody" or UID 65534, in this order.  On
+  systems that require *oidentd* to run as the superuser, a warning is shown
   and the user is not changed automatically.
 
 *-U, --udb*::
