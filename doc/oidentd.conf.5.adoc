@@ -172,8 +172,9 @@ The _lport_ filter specifies the local port or port range of a connection.
 
 Ports can be specified either numerically (e.g., 113) or using a service name
 (e.g., ident).  Port ranges are specified numerically as __min__:__max__.  The
-_max_ port may be omitted to select all ports greater than or equal to the _min_
-port.
+_min_ port may be omitted to select all ports less than or equal to the _max_
+port.  Likewise, the _max_ port may be omitted to select all ports greater than
+or equal to the _min_ port.
 
 
 CAPABILITY DIRECTIVES
