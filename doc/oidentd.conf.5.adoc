@@ -211,30 +211,38 @@ CAPABILITIES
 The following expressions are valid capabilities:
 
 [subs="quotes"]
- **forward**
- **hide**
- **numeric**
- **random**
- **random_numeric**
+....
+**forward**
+**hide**
+**numeric**
+**random**
+**random_numeric**
+....
 
 These capabilities allow users to use the corresponding capability statements.
 
 [subs="quotes"]
- **spoof**
+....
+**spoof**
+....
 
 The *spoof* capability allows users to send custom ident replies.  Note that
 this does not include replying with the name of another user or spoofing
 replies for connections to privileged foreign ports.
 
 [subs="quotes"]
- **spoof_all**
+....
+**spoof_all**
+....
 
 The *spoof_all* capability allows users to reply with the names of other users.
 This capability should be used with care, as it allows users to impersonate
 other users on the local system.
 
 [subs="quotes"]
- **spoof_privport**
+....
+**spoof_privport**
+....
 
 The *spoof_privport* capability allows users to spoof replies for connections to
 privileged foreign ports (with port numbers below 1024).
@@ -246,7 +254,9 @@ CAPABILITY STATEMENTS
 A capability statement may take one of the following forms:
 
 [subs="quotes"]
- **forward** __host__ __port__
+....
+**forward** __host__ __port__
+....
 
 Forward received queries to another ident server.  The target server must
 support forwarding (like *oidentd* with the *--proxy* option).
@@ -264,26 +274,34 @@ capability.  Replies are logged, allowing the system administrator to identify
 which user sent a particular reply.
 
 [subs="quotes"]
- **hide**
+....
+**hide**
+....
 
 Hide ident replies from clients.  When this capability is used, *oidentd*
 reports a "HIDDEN-USER" error to ident clients instead of sending an ident
 reply.
 
 [subs="quotes"]
- **numeric**
+....
+**numeric**
+....
 
 Respond with the user ID (UID).
 
 [subs="quotes"]
- **random**
+....
+**random**
+....
 
 Send randomly generated, alphanumeric ident replies.  A new reply is generated
 for each ident lookup.  Replies are logged, allowing the system administrator
 to identify which user sent a particular reply.
 
 [subs="quotes"]
- **random_numeric**
+....
+**random_numeric**
+....
 
 Send randomly generated, numeric ident replies between 0 (inclusive) and
 100,000 (exclusive), prefixed with "user".  A new reply is generated for each
@@ -291,7 +309,9 @@ ident lookup.  Replies are logged, allowing the system administrator to
 identify which user sent a particular reply.
 
 [subs="quotes"]
- **reply** __reply1__ [__reply2__ ...]
+....
+**reply** __reply1__ [__reply2__ ...]
+....
 
 Send an ident reply chosen at random from the given list of quoted replies.
 When used in a user configuration file, at most 20 replies may be specified.
