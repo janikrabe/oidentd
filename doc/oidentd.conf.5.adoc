@@ -390,6 +390,20 @@ Quoted strings may contain the following escape sequences:
 ....
 
 
+COMMENTS
+--------
+
+After encountering a number sign ("#"), *oidentd* ignores any remaining text on
+the same line.  This allows users to add comments to the configuration file.
+Comments can also be written in the following form, which allows them to span
+multiple lines:
+
+[subs="quotes"]
+....
+/* __comment__ */
+....
+
+
 AUTHOR
 ------
 
