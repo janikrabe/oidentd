@@ -159,13 +159,13 @@ host, foreign port, local host, and local port.  At least one of these filters
 must be specified.  Omitted filters match any value.  Filters may be specified
 in any order.
 
-The _to_ filter specifies the foreign host or address of a connection, from the
-perspective of the machine running *oidentd*.
+The _fhost_ filter specifies the foreign host or address of a connection, from
+the perspective of the machine running *oidentd*.
 
 The _fport_ filter specifies the foreign port or port range of a connection.
 
-The _from_ filter specifies the local host or address of a connection, from the
-perspective of the machine running *oidentd*.  This may be useful for
+The _lhost_ filter specifies the local host or address of a connection, from
+the perspective of the machine running *oidentd*.  This may be useful for
 supporting virtual hosts on systems with more than one IP address.
 
 The _lport_ filter specifies the local port or port range of a connection.
