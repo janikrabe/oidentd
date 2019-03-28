@@ -76,10 +76,10 @@ server.internal         user2     UNIX-BSD
 10.0.0.0/255.255.0.0    user4     UNKNOWN
 ....
 
-Note that the order of the rules is significant in this example.  Because lines
-are read from top to bottom, more specific rules must precede more general ones.
-For example, the rule for "10.0.0.1" would never match if placed after the rule
-for "10.0.0.0/24".
+Note that the order of the rules is significant in this example.  Due to lines
+being read from top to bottom, more specific rules must precede more general
+ones.  For example, the rule for "10.0.0.1" would not match any connections if
+it were preceded by the more general "10.0.0.0/24".
 
 
 AUTHOR
