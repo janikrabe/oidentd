@@ -128,7 +128,7 @@
 #define MISSING_UID		((uid_t) -1)
 #define MISSING_GID		((gid_t) -1)
 
-#define VALID_PORT(p)	(((p) >= PORT_MIN && (((p) & PORT_MAX) == (p))))
+#define VALID_PORT(p)	((p) >= PORT_MIN && ((p) & PORT_MAX) == (p))
 #define ERROR(x)		(opt_enabled(HIDE_ERRORS) ? "UNKNOWN-ERROR" : (x))
 
 #if ENABLE_DEBUGGING

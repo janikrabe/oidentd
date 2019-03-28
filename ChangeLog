@@ -1,3 +1,7 @@
+2019-03-28  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Remove unnecessary parentheses from VALID_PORT.
+
 2019-03-27  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Rewrite manual page oidentd_masq.conf(5).
