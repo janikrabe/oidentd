@@ -27,6 +27,9 @@ Eric LeBlanc <inouk@toutatis.igt.net>
 Fabian Knittel <fabian.knittel@avona.com>
 	Bind to IPv6 socket by default
 
+Fardale <fardale+github@crans.org>
+	Fixed incorrect filter order in range specifications
+
 Guus Sliepen <sliepen@phys.uu.nl>
 	Initial netfilter (Linux >= 2.3 Support)
 

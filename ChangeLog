@@ -2,11 +2,24 @@
 
 	* Rewrite manual page oidentd_masq.conf(5).
 
+2019-03-26  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Rewrite INSTALL file.
+
 2019-03-25  Janik Rabe  <oidentd@janikrabe.com>
 
-	* Rewrite manual page oidentd.conf(5).
 	* Deprecate non-standard '\e' escape sequence.
+	* Fix incorrect UPREFIX comment.
 	* Promote some messages to LOG_CRIT.
+	* Reformat default oidentd_masq.conf.
+	* Rewrite README file.
+	* Rewrite manual page oidentd.conf(5).
+	* Update project description.
+
+2019-03-13  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Change default oidentd.conf comment style.
+	* Indent values in --version output.
 
 2019-03-02  Janik Rabe  <oidentd@janikrabe.com>
 

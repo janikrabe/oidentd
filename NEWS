@@ -1,6 +1,9 @@
 Unreleased changes
 
 	* Deprecated '\e' escape sequence in configuration files.
+	* Rewrote all manual pages, now licensed under GFDL v1.3+.
+	* Rewrote INSTALL and README files.
+	* Changed project description.
 
 Changes in version 2.3.2
 
