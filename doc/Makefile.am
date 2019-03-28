@@ -10,8 +10,7 @@ EXTRA_DIST = \
 	$(man_MANS) \
 	oidentd.8.adoc \
 	oidentd.conf.5.adoc \
-	oidentd_masq.conf.5.adoc \
-	rfc1413
+	oidentd_masq.conf.5.adoc
 
 SUFFIXES = .adoc
 
