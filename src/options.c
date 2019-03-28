@@ -496,6 +496,9 @@ static void print_version(bool verbose) {
 
 		printf("\nBuild settings:\n");
 		print_version_str("Configuration directory", SYSCONFDIR);
+#if XDGBDIR_SUPPORT
+		print_version_str("User configuration file", USER_CONF_XDG);
+#endif
 		print_version_str("User configuration file", USER_CONF);
 	}
 }

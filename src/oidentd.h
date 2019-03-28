@@ -49,6 +49,10 @@
 ** home directory.
 */
 
+#if XDGBDIR_SUPPORT
+#	define USER_CONF_XDG ".config/oidentd.conf"
+#endif
+
 #define USER_CONF		".oidentd.conf"
 
 /*

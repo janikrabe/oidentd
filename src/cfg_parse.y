@@ -521,14 +521,20 @@ int read_config(const char *path) {
 }
 
 /*
-** Open the user's ~/.oidentd.conf file for reading
-** by the parser.
+** Open the user's configuration file for reading by the parser.
 */
 
 static FILE *open_user_config(const struct passwd *pw) {
-	FILE *fp;
+	FILE *fp = NULL;
 
-	fp = safe_open(pw, USER_CONF);
+#if XDGBDIR_SUPPORT
+	if (!fp)
+		fp = safe_open(pw, USER_CONF_XDG);
+#endif
+
+	if (!fp)
+		fp = safe_open(pw, USER_CONF);
+
 	if (!fp)
 		return NULL;
 
@@ -540,7 +546,7 @@ static FILE *open_user_config(const struct passwd *pw) {
 }
 
 /*
-** Read in a user's $HOME/.oidentd.conf file.
+** Read in a user's configuration file.
 */
 
 list_t *user_db_get_pref_list(const struct passwd *pw) {

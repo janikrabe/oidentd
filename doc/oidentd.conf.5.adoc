@@ -35,9 +35,11 @@ The system-wide configuration file *{sysconfdir}/oidentd.conf* specifies the
 types of responses individual users are permitted to send.  By default, users
 must respond with their real username.
 
-The user configuration files *~/.oidentd.conf* allow users to send custom ident
-responses or to hide their identities, provided that they have been granted the
-necessary capabilities through the system-wide configuration file.
+The user configuration file *~/.config/oidentd.conf* allows users to send
+custom ident responses or to hide their identities, provided that they have
+been granted the necessary capabilities through the system-wide configuration
+file.  If this file does not exist or *oidentd* was compiled without XDG Base
+Directory support, the file *~/.oidentd.conf* is used instead.
 
 
 SYSTEM-WIDE CONFIGURATION FILE
@@ -82,10 +84,10 @@ This user directive applies only to the specified user.
 USER CONFIGURATION FILE
 -----------------------
 
-Each user may create a user configuration file at *~/.oidentd.conf*.  This file
-must be readable by the user *oidentd* runs as.  The user configuration file is
-read automatically after every successful lookup, so any changes take effect
-immediately.
+Each user may create a user configuration file at *~/.config/oidentd.conf* or
+*~/.oidentd.conf*.  This file must be readable by the user *oidentd* runs as.
+The user configuration file is read automatically after every successful
+lookup, so any changes take effect immediately.
 
 The user configuration file contains zero or one directive of the following
 form:

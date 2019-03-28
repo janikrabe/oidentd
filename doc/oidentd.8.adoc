@@ -171,7 +171,7 @@ FILES
 *{sysconfdir}/oidentd.conf*::
   System-wide configuration file; see *oidentd.conf*(5).
 
-*~/.oidentd.conf*::
+*~/.config/oidentd.conf*, *~/.oidentd.conf*::
   User configuration files; see *oidentd.conf*(5).
 
 *{sysconfdir}/oidentd_masq.conf*::

@@ -1,6 +1,8 @@
 Unreleased changes
 
 	* Deprecated '\e' escape sequence in configuration files.
+	* Implemented XDG Base Directory specification
+		* ~/.config/oidentd.conf takes precedence over ~/.oidentd.conf
 	* Rewrote all manual pages, now licensed under GFDL v1.3+.
 	* Rewrote INSTALL and README files.
 	* Changed project description.

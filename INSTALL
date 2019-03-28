@@ -34,6 +34,7 @@ a number of optional flags:
   - '--disable-nat':     disable NAT support
   - '--disable-ipv6':    disable IPv6 support
   - '--disable-libnfct': disable Linux libnetfilter_conntrack support
+  - '--disable-xdgbdir': disable XDG Base Directory support
   - '--enable-debug':    enable support for oidentd's '--debug' flag
   - '--enable-warn':     enable all compiler warnings
 
