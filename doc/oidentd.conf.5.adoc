@@ -239,7 +239,8 @@ replies for connections to privileged foreign ports.
 
 The *spoof_all* capability allows users to reply with the names of other users.
 This capability should be used with care, as it allows users to impersonate
-other users on the local system.
+other users on the local system.  The *spoof_all* capability only works in
+conjunction with *spoof*, but does not imply it.
 
 [subs="quotes"]
 ....
@@ -247,7 +248,8 @@ other users on the local system.
 ....
 
 The *spoof_privport* capability allows users to spoof replies for connections to
-privileged foreign ports (with port numbers below 1024).
+privileged foreign ports (with port numbers below 1024).  The *spoof_privport*
+capability only works in conjunction with *spoof*, but does not imply it.
 
 
 CAPABILITY STATEMENTS
