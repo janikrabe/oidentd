@@ -61,8 +61,8 @@ static bool user_db_have_cap(	const struct user_cap *user_cap,
 								u_int16_t cap_flag);
 
 static bool user_db_can_reply(	const struct user_cap *user_cap,
+								const struct passwd *user_pwd,
 								const char *reply,
-								uid_t con_uid,
 								in_port_t fport);
 
 static struct user_cap *user_db_cap_lookup(	struct user_info *user_info,
@@ -143,9 +143,8 @@ int get_ident(	const struct passwd *pwd,
 {
 	struct user_cap *user_cap;
 	struct user_cap *user_pref;
-	uid_t cur_uid = pwd->pw_uid;
 
-	user_cap = user_db_cap_lookup(user_db_lookup(cur_uid),
+	user_cap = user_db_cap_lookup(user_db_lookup(pwd->pw_uid),
 				lport, fport, laddr, faddr);
 
 	if (!user_cap)
@@ -201,7 +200,7 @@ int get_ident(	const struct passwd *pwd,
 			{
 				char *temp_reply = select_reply(user_pref);
 
-				if (user_db_can_reply(user_cap, temp_reply, cur_uid, fport)) {
+				if (user_db_can_reply(user_cap, pwd, temp_reply, fport)) {
 					xstrncpy(reply, temp_reply, len);
 					goto out_success;
 				}
@@ -218,7 +217,7 @@ int get_ident(	const struct passwd *pwd,
 						reply, len);
 
 					if (ret == 0) {
-						if (user_db_can_reply(user_cap, reply, cur_uid, fport))
+						if (user_db_can_reply(user_cap, pwd, reply, fport))
 							goto out_success;
 					} else if (user_db_have_cap(user_cap, CAP_HIDE)) {
 							goto out_hide;
@@ -349,24 +348,24 @@ void user_db_destroy(void) {
 */
 
 static bool user_db_can_reply(	const struct user_cap *user_cap,
+								const struct passwd *user_pwd,
 								const char *reply,
-								uid_t con_uid,
 								in_port_t fport)
 {
-	struct passwd *pw;
+	struct passwd *spoof_pwd;
 
-	pw = getpwnam(reply);
-	if (pw) {
+	spoof_pwd = getpwnam(reply);
+	if (spoof_pwd) {
 		/*
 		** A user can always reply with their own username.
 		*/
 
-		if (pw->pw_uid == con_uid)
+		if (spoof_pwd->pw_uid == user_pwd->pw_uid)
 			return true;
 
 		if (!user_db_have_cap(user_cap, CAP_SPOOF_ALL)) {
 			o_log(LOG_INFO, "User %s tried to masquerade as user %s",
-				reply, pw->pw_name);
+				user_pwd->pw_name, spoof_pwd->pw_name);
 
 			return false;
 		}

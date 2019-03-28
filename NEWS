@@ -1,6 +1,7 @@
 Unreleased changes
 
 	* Deprecated '\e' escape sequence in configuration files.
+	* Fixed incorrect username in log message when spoofing fails.
 	* Implemented XDG Base Directory specification
 		* ~/.config/oidentd.conf takes precedence over ~/.oidentd.conf
 	* Rewrote all manual pages, now licensed under GFDL v1.3+.

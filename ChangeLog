@@ -3,6 +3,7 @@
 	* Remove unnecessary parentheses from VALID_PORT.
 	* Implement XDG Base Directory specification.
 	* Indicate directories relative to $HOME in --version.
+	* Fix incorrect username in failed spoof_all log message.
 
 2019-03-27  Janik Rabe  <oidentd@janikrabe.com>
 
