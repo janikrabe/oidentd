@@ -1,6 +1,7 @@
 Unreleased changes
 
 	* Deprecated '\e' escape sequence in configuration files.
+	* Fixed incorrect username in log message when spoofing fails.
 
 Changes in version 2.3.2
 
