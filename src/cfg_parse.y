@@ -248,7 +248,7 @@ fport_statement:
 
 		if (extract_port_range($2, cur_cap->fport) == -1) {
 			if (parser_mode == PARSE_SYSTEM)
-				o_log(LOG_CRIT, "[line %u] Bad port: \"%s\"", current_line, $2);
+				o_log(LOG_CRIT, "[line %u] Bad port or port range: \"%s\"", current_line, $2);
 
 			free($2);
 			free_cap_entries(cur_cap);
@@ -306,7 +306,7 @@ lport_statement:
 
 		if (extract_port_range($2, cur_cap->lport) == -1) {
 			if (parser_mode == PARSE_SYSTEM)
-				o_log(LOG_CRIT, "[line %u] Bad port: \"%s\"", current_line, $2);
+				o_log(LOG_CRIT, "[line %u] Bad port or port range: \"%s\"", current_line, $2);
 
 			free($2);
 			free_cap_entries(cur_cap);
