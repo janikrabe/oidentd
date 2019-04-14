@@ -468,7 +468,7 @@ static void print_usage(void) {
 }
 
 static inline void print_version_str(const char *desc, const char *val) {
-	printf("\t%s: %*s\n", desc, 23 + strlen(val) - strlen(desc), val);
+	printf("\t%s: %*s%s\n", desc, 23 - (int) strlen(desc), "", val);
 }
 
 static inline void print_version_bool(const char *desc, const bool val) {
