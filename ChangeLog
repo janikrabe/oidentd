@@ -629,8 +629,8 @@
 	* Fixed a typo in the oidentd_masq.conf man file.
 	* Fixed bugs with the -f (--forward) command-line flag.
 	* Fixed bugs with the -o (--other) command-line flag.
-	* Fixed a typo that caused the the UDB and forward options to
-	  use the same bit mask.
+	* Fixed a typo that caused the UDB and forward options to use
+	  the same bit mask.
 
 2001-09-04  Ryan McCabe  <ryan@numb.org>
 
