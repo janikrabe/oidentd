@@ -101,7 +101,8 @@ static struct kainfo {
 } *kinfo;
 
 /*
-** Open the kernel memory device
+** Open the kernel memory device.
+** Return 0 on success, or -1 with errno set.
 */
 
 int k_open(void) {

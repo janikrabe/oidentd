@@ -932,6 +932,13 @@ static uid_t lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 ** Just open a netlink socket here.
 */
 
+/*
+** Open the kernel memory device.
+** Return 0 on success, or -1 with errno set.
+**
+** No kmem access required; open a Netlink socket instead.
+*/
+
 int k_open(void) {
 	netlink_sock = socket(AF_NETLINK, SOCK_DGRAM, NETLINK_TCPDIAG);
 

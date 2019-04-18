@@ -159,7 +159,10 @@ uid_t get_user6(	in_port_t lport,
 #endif
 
 /*
-** Stub k_open() function.
+** Open the kernel memory device.
+** Return 0 on success, or -1 with errno set.
+**
+** No kmem access required; nothing to do.
 */
 
 int k_open(void) {

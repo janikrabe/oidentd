@@ -168,6 +168,11 @@ typedef enum {
 } bool;
 #endif
 
+/*
+** Open the kernel memory device.
+** Return 0 on success, or -1 with errno set.
+*/
+
 int k_open(void);
 
 #ifndef HAVE_STRUCT_SOCKADDR_STORAGE

@@ -118,7 +118,8 @@ static int getbuf(kvm_t *kd, off_t addr, void *dst, size_t len);
 extern void free(void *ptr);
 
 /*
-** Open kernel devices, lookup kernel symbols etc...
+** Open the kernel memory device.
+** Return 0 on success, or -1 with errno set.
 */
 
 int k_open(void) {

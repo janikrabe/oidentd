@@ -104,7 +104,8 @@ static struct proc *xkvm_nextproc(struct kainfo *kp) {
 }
 
 /*
-** Open kernel devices, lookup kernel symbols etc...
+** Open the kernel memory device.
+** Return 0 on success, or -1 with errno set.
 */
 
 int k_open(void) {
@@ -133,7 +134,6 @@ int k_open(void) {
 		debug("kvm_nlist: %s", strerror(errno));
 		kvm_close(kinfo->kd);
 		free(kinfo);
-
 		return -1;
 	}
 
