@@ -934,5 +934,11 @@ static uid_t lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 
 int k_open(void) {
 	netlink_sock = socket(AF_NETLINK, SOCK_DGRAM, NETLINK_TCPDIAG);
+
+	if (netlink_sock == -1) {
+		/* Not a fatal error, just log a debug message */
+		debug("Failed to open netlink socket: %s", strerror(errno));
+	}
+
 	return 0;
 }
