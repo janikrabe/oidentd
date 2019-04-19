@@ -1,6 +1,6 @@
 dnl configure.ac - oidentd ident (RFC 1413) implementation.
 dnl Copyright (c) 2006      Ryan McCabe <ryan@numb.org>
-dnl Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
+dnl Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License, version 2,
@@ -459,8 +459,9 @@ case "$host_os" in
 	*netbsd* )
 		case "$host_os" in
 			*netbsd[[1-4]].* )
+				AC_MSG_WARN(Support for this version of NetBSD is deprecated and may be removed in the future)
 				use_kmem=yes
-				os_src=netbsd.c
+				os_src=legacy/netbsd.c
 				if test "$ac_cv_ipf_nat_p" = "no"; then
 					masq_support=no
 				fi
@@ -476,8 +477,9 @@ case "$host_os" in
 	;;
 
 	*darwin* )
+		AC_MSG_WARN(Support for this version of Darwin is deprecated and may be removed in the future)
 		use_kmem=yes
-		os_src=darwin.c
+		os_src=legacy/darwin.c
 		if test "$ac_cv_ipf_nat_p" = "no"; then
 			masq_support=no
 		fi
@@ -499,16 +501,19 @@ case "$host_os" in
 		if test "$masq_support" = "no"; then
 			case "$host_os" in
 				*openbsd2.[[0-3]]* )
+					AC_MSG_WARN(Support for this version of OpenBSD is deprecated and may be removed in the future)
 					use_kmem=yes
-					os_src=openbsd.c
+					os_src=legacy/openbsd.c
 				;;
 
 				*openbsd2.[[4-8]] )
-					os_src=openbsd24.c
+					AC_MSG_WARN(Support for this version of OpenBSD is deprecated and may be removed in the future)
+					os_src=legacy/openbsd24.c
 				;;
 
 				*openbsd2.9* )
-					os_src=openbsd29.c
+					AC_MSG_WARN(Support for this version of OpenBSD is deprecated and may be removed in the future)
+					os_src=legacy/openbsd29.c
 				;;
 
 				* )
@@ -518,8 +523,9 @@ case "$host_os" in
 		else
 			case "$host_os" in
 				*openbsd2.* )
+					AC_MSG_WARN(Support for this version of OpenBSD is deprecated and may be removed in the future)
 					use_kmem=yes
-					os_src=openbsd.c
+					os_src=legacy/openbsd.c
 				;;
 
 				* )
@@ -537,6 +543,7 @@ case "$host_os" in
 		if test "$masq_support" = "no"; then
 			case "$host_os" in
 				*freebsd[[1-3]].* )
+					AC_MSG_WARN(Support for this version of FreeBSD is deprecated and may be removed in the future)
 					use_kmem=yes
 					os_src=freebsd.c
 				;;
@@ -550,6 +557,7 @@ case "$host_os" in
 		else
 			case "$host_os" in
 				*freebsd[[1-4]].* )
+					AC_MSG_WARN(Support for this version of FreeBSD is deprecated and may be removed in the future)
 					use_kmem=yes
 					os_src=freebsd.c
 				;;
@@ -579,6 +587,7 @@ case "$host_os" in
 
 	*solaris* )
 		ADD_LIB="$ADD_LIB -lelf"
+		AC_MSG_WARN(Support for this version of Solaris is deprecated and may be removed in the future)
 		use_kmem=yes
 		masq_support=no
 		ipv6_support=no
@@ -590,32 +599,32 @@ case "$host_os" in
 
 			*solaris2.4* )
 				AC_DEFINE(SOLARIS, 4, [Solaris version number])
-				os_src=solaris4.c
+				os_src=legacy/solaris4.c
 			;;
 
 			*solaris2.5* )
 				AC_DEFINE(SOLARIS, 5, [Solaris version number])
-				os_src=solaris5.c
+				os_src=legacy/solaris5.c
 			;;
 
 			*solaris2.6* )
 				AC_DEFINE(SOLARIS, 6, [Solaris version number])
-				os_src=solaris7.c
+				os_src=legacy/solaris7.c
 			;;
 
 			*solaris2.7* )
 				AC_DEFINE(SOLARIS, 7, [Solaris version number])
-				os_src=solaris7.c
+				os_src=legacy/solaris7.c
 			;;
 
 			*solaris[[2-4]].* )
 				AC_DEFINE(SOLARIS, 8, [Solaris version number])
-				os_src=solaris8.c
+				os_src=legacy/solaris8.c
 			;;
 
 			*solaris5.0* )
 				AC_DEFINE(SOLARIS, 8, [Solaris version number])
-				os_src=solaris8.c
+				os_src=legacy/solaris8.c
 			;;
 
 			* )

@@ -1,3 +1,17 @@
+2019-04-19  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Deprecate support for Darwin.
+	* Deprecate support for FreeBSD 1-3.
+	* Deprecate support for FreeBSD 4.
+	* Deprecate support for NetBSD 1-4.
+	* Deprecate support for OpenBSD 2.0-2.3.
+	* Deprecate support for OpenBSD 2.4-2.8.
+	* Deprecate support for OpenBSD 2.9.
+	* Deprecate support for Solaris 2.4.
+	* Deprecate support for Solaris 2.5.
+	* Deprecate support for Solaris 2.6-2.7.
+	* Deprecate support for Solaris 2.8.
+
 2019-04-18  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Log debug message when Netlink socket fails to open.

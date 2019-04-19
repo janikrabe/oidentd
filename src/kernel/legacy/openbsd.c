@@ -1,5 +1,5 @@
 /*
-** netbsd.c - Low level kernel access functions for NetBSD.
+** openbsd.c - Low level kernel access functions for OpenBSD.
 **
 ** This file was originally taken from the pidentd 2.x software package.
 ** The original copyright notice is as follows:
@@ -7,13 +7,11 @@
 **		This program is in the public domain and may be used freely
 **		by anyone who wants to.
 **
-** NAT code taken from the OpenBSD NAT code by
+** OpenBSD IP masquerading support Copyright (c) 2000
 ** Slawomir Piotrowski <slawek@telsatgp.com.pl>
 **
 ** Modifications Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
 ** Modifications Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
-**
-** All IPv6 code Copyright 2002-2006 Ryan McCabe <ryan@numb.org>
 */
 
 #include <config.h>
@@ -30,7 +28,6 @@
 #include <errno.h>
 #include <string.h>
 #include <sys/types.h>
-#include <sys/param.h>
 #include <sys/socket.h>
 #include <sys/socketvar.h>
 #include <netinet/in.h>
@@ -41,28 +38,16 @@
 #include <netinet/in_pcb.h>
 #include <arpa/inet.h>
 #include <netinet/tcp.h>
-#include <netinet/ip_compat.h>
-
-#if __NetBSD_Version__ >= 399000300	/* 3.99.3 */
-#define	SO_UIDINFO	/* "struct socket" contains so_uidinfo" */
-
-#include <sys/proc.h>
-#include <sys/resource.h>
-#define	_KERNEL	42
-#include <sys/resourcevar.h>
-#undef _KERNEL
-#endif
 
 #if WANT_IPV6
 #	include <sys/sysctl.h>
 #	include <netinet/ip_var.h>
 #	include <netinet/tcp_timer.h>
 #	include <netinet/tcp_var.h>
-#	include <netinet/ip6.h>
-#	include <netinet6/in6_pcb.h>
 #endif
 
 #if MASQ_SUPPORT
+#	include <netinet/ip_fil_compat.h>
 #	include <netinet/ip_fil.h>
 #	include <netinet/ip_nat.h>
 #endif
@@ -77,13 +62,12 @@
 extern struct sockaddr_storage proxy;
 
 #define N_TCB			0
-#define N_TCB6			1
 
 #if MASQ_SUPPORT
-#	define N_NATLIST	2
-#	define N_TOTAL		4
-#else
+#	define N_NATLIST	1
 #	define N_TOTAL		3
+#else
+#	define N_TOTAL		2
 #endif
 
 static int getbuf(u_long addr, void *buf, size_t len);
@@ -105,6 +89,9 @@ static struct kainfo {
 */
 
 int k_open(void) {
+#warning "Support for this version of OpenBSD is deprecated and may be removed in the future"
+	o_log(LOG_CRIT, "Support for this version of OpenBSD is deprecated and may be removed in the future");
+
 	kinfo = xmalloc(sizeof(struct kainfo));
 
 	kinfo->kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
@@ -116,16 +103,6 @@ int k_open(void) {
 
 	kinfo->nl[N_TCB].n_name = "_tcbtable";
 
-#if WANT_IPV6
-#if __NetBSD_Version__ >= 106250000	/* 1.6Y */
-	kinfo->nl[N_TCB6].n_name = "_tcbtable";
-#else
-	kinfo->nl[N_TCB6].n_name = "_tcb6";
-#endif
-#else
-	kinfo->nl[N_TCB6].n_name = "_oidentd_nonexistent";
-#endif
-
 #if MASQ_SUPPORT
 	if (opt_enabled(MASQ))
 		kinfo->nl[N_NATLIST].n_name = "_nat_instances";
@@ -135,7 +112,7 @@ int k_open(void) {
 
 	kinfo->nl[N_TOTAL - 1].n_name = NULL;
 
-	if (kvm_nlist(kinfo->kd, kinfo->nl) == -1) {
+	if (kvm_nlist(kinfo->kd, kinfo->nl) != 0) {
 		kvm_close(kinfo->kd);
 		free(kinfo);
 		debug("kvm_nlist: %s", strerror(errno));
@@ -186,7 +163,7 @@ static struct socket *getlist4(	struct inpcbtable *tcbtablep,
 	if (!tcbtablep)
 		return NULL;
 
-	kpcbp = (struct inpcb *) tcbtablep->inpt_queue.cqh_first;
+	kpcbp = tcbtablep->inpt_queue.cqh_first;
 	while (kpcbp != (struct inpcb *) ktcbtablep) {
 		if (getbuf((u_long) kpcbp, &pcb, sizeof(struct inpcb)) == -1)
 			break;
@@ -209,7 +186,7 @@ static struct socket *getlist4(	struct inpcbtable *tcbtablep,
 			return pcb.inp_socket;
 		}
 
-		kpcbp = (struct inpcb *) pcb.inp_queue.cqe_next;
+		kpcbp = pcb.inp_queue.cqe_next;
 	}
 
 	return NULL;
@@ -238,9 +215,6 @@ uid_t get_user4(	in_port_t lport,
 	struct socket *sockp, sock;
 	struct inpcbtable tcbtable;
 	int ret;
-#ifdef SO_UIDINFO
-	struct uidinfo uidinfo;
-#endif
 
 	ret = getbuf(kinfo->nl[N_TCB].n_value, &tcbtable, sizeof(tcbtable));
 	if (ret == -1)
@@ -256,17 +230,10 @@ uid_t get_user4(	in_port_t lport,
 	if (getbuf((u_long) sockp, &sock, sizeof(sock)) == -1)
 		return MISSING_UID;
 
-#ifdef SO_UIDINFO
-	if (!sock.so_uidinfo)
+	if (!(sock.so_state & SS_CONNECTOUT))
 		return MISSING_UID;
 
-	if (getbuf((u_long) sock.so_uidinfo, &uidinfo, sizeof(uidinfo)) == -1)
-		return MISSING_UID;
-
-	return uidinfo.ui_uid;
-#else
-	return sock.so_uid;
-#endif
+	return sock.so_ruid;
 }
 
 #if MASQ_SUPPORT
@@ -289,7 +256,7 @@ int masq(	int sock,
 	struct sockaddr_storage ss;
 
 	/*
-	** Only IPv4 is supported right now..
+	** Only IPv4 is supported right now.
 	*/
 
 	if (faddr->ss_family != AF_INET || laddr->ss_family != AF_INET)
@@ -351,7 +318,7 @@ int masq(	int sock,
 
 				get_ip(&ss, ipbuf, sizeof(ipbuf));
 				debug("Forward to %s (%d %d) failed",
-					ipbuf, nat.nat_inport, fport);
+					ipbuf, lport, nat.nat_inport);
 			}
 		}
 
@@ -379,69 +346,6 @@ int masq(	int sock,
 #if WANT_IPV6
 
 /*
-** Traverse the tcb6 list until a match is found.
-** Returns NULL if no match.
-*/
-
-#if __NetBSD_Version__ >= 106250000
-static struct socket *getlist6(	struct inpcbtable *tcbtablep,
-								struct inpcbtable *ktcbtablep,
-#else
-static struct socket *getlist6(	struct in6pcb *tcb6,
-#endif
-								in_port_t lport,
-								in_port_t fport,
-								const struct in6_addr *laddr,
-								const struct in6_addr *faddr)
-{
-#if __NetBSD_Version__ >= 106250000
-	struct in6pcb *kpcbp, pcb;
-
-	if (!tcbtablep)
-		return NULL;
-
-	kpcbp = (struct in6pcb *) tcbtablep->inpt_queue.cqh_first;
-	while (kpcbp != (struct in6pcb *) ktcbtablep) {
-		if (getbuf((u_long) kpcbp, &pcb, sizeof(struct in6pcb)) == -1)
-			break;
-		if (pcb.in6p_fport == fport &&
-			pcb.in6p_lport == lport &&
-			IN6_ARE_ADDR_EQUAL(&pcb.in6p_laddr, laddr) &&
-			IN6_ARE_ADDR_EQUAL(&pcb.in6p_faddr, faddr))
-		{
-			return pcb.in6p_socket;
-		}
-
-		kpcbp = (struct in6pcb *) pcb.in6p_queue.cqe_next;
-	}
-#else
-	struct in6pcb *tcb6_cur, tcb6_temp;
-
-	if (!tcb6)
-		return NULL;
-
-	tcb6_cur = tcb6;
-
-	memcpy(&tcb6_temp, tcb6, sizeof(tcb6_temp));
-
-	do {
-		if (tcb6_temp.in6p_fport == fport &&
-			tcb6_temp.in6p_lport == lport &&
-			IN6_ARE_ADDR_EQUAL(&tcb6_temp.in6p_laddr, laddr) &&
-			IN6_ARE_ADDR_EQUAL(&tcb6_temp.in6p_faddr, faddr))
-		{
-			return tcb6_temp.in6p_socket;
-		}
-
-		tcb6_cur = tcb6_temp.in6p_next;
-		if (getbuf((u_long) tcb6_cur, &tcb6_temp, sizeof(tcb6_temp)) == -1)
-			break;
-	} while ((u_long) tcb6_cur != kinfo->nl[N_TCB6].n_value);
-#endif
-	return NULL;
-}
-
-/*
 ** Returns the UID of the owner of an IPv6 connection,
 ** or MISSING_UID on failure.
 */
@@ -451,51 +355,45 @@ uid_t get_user6(	in_port_t lport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
 {
-#if __NetBSD_Version__ >= 106250000	/* 1.6Y */
-	struct socket *sockp, sock;
-	struct inpcbtable tcbtable;
-	int ret;
-#ifdef SO_UIDINFO
-	struct uidinfo uidinfo;
-#endif
+	struct tcp_ident_mapping tir;
+	struct sockaddr_in6 *fin;
+	struct sockaddr_in6 *lin;
+	int mib[] = { CTL_NET, PF_INET, IPPROTO_TCP, TCPCTL_IDENT };
+	int error = 0;
+	size_t i;
 
-	ret = getbuf(kinfo->nl[N_TCB6].n_value, &tcbtable, sizeof(tcbtable));
-	if (ret == -1)
+	memset(&tir, 0, sizeof(tir));
+
+	fin = (struct sockaddr_in6 *) &tir.faddr;
+	fin->sin6_family = AF_INET6;
+	fin->sin6_len = sizeof(struct sockaddr_in6);
+
+	if (faddr->ss_len > sizeof(tir.faddr))
 		return MISSING_UID;
 
-	sockp = getlist6(&tcbtable,
-				(struct inpcbtable *) kinfo->nl[N_TCB6].n_value,
-				lport, fport, &SIN6(laddr)->sin6_addr, &SIN6(faddr)->sin6_addr);
-#else
-	struct socket *sockp, sock;
-	struct in6pcb tcb6;
-	int ret;
+	memcpy(&fin->sin6_addr, &SIN6(faddr)->sin6_addr, sizeof(tir.faddr));
+	fin->sin6_port = fport;
 
-	ret = getbuf(kinfo->nl[N_TCB6].n_value, &tcb6, sizeof(tcb6));
-	if (ret == -1)
+	lin = (struct sockaddr_in6 *) &tir.laddr;
+	lin->sin6_family = AF_INET6;
+	lin->sin6_len = sizeof(struct sockaddr_in6);
+
+	if (laddr->ss_len > sizeof(tir.laddr))
 		return MISSING_UID;
 
-	sockp = getlist6(&tcb6, lport, fport,
-				&SIN6(laddr)->sin6_addr, &SIN6(faddr)->sin6_addr);
-#endif
+	memcpy(&lin->sin6_addr, &SIN6(laddr)->sin6_addr, sizeof(tir.laddr));
+	lin->sin6_port = lport;
 
-	if (!sockp)
-		return MISSING_UID;
+	i = sizeof(tir);
+	error = sysctl(mib, sizeof(mib) / sizeof(int), &tir, &i, NULL, 0);
 
-	if (getbuf((u_long) sockp, &sock, sizeof(sock)) == -1)
-		return MISSING_UID;
+	if (error == 0 && tir.ruid != -1)
+		return tir.ruid;
 
-#ifdef SO_UIDINFO
-	if (!sock.so_uidinfo)
-		return MISSING_UID;
+	if (error == -1)
+		debug("sysctl: %s", strerror(errno));
 
-	if (getbuf((u_long) sock.so_uidinfo, &uidinfo, sizeof(uidinfo)) == -1)
-		return MISSING_UID;
-
-	return uidinfo.ui_uid;
-#else
-	return sock.so_uid;
-#endif
+	return MISSING_UID;
 }
 
 #endif

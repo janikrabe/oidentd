@@ -1,14 +1,20 @@
 /*
-** openbsd24.c - Low level kernel access functions for OpenBSD 2.4 and greater
+** openbsd29.c - Low level kernel access functions for OpenBSD 2.9 and greater
+** Copyright (c) 2001-2006 Ryan McCabe <ryan@numb.org>
+** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **
-** This file was originally taken from the pidentd 2.x software package.
-** The original copyright notice is as follows:
+** This program is free software; you can redistribute it and/or modify
+** it under the terms of the GNU General Public License, version 2,
+** as published by the Free Software Foundation.
 **
-**		This program is in the public domain and may be used freely
-**		by anyone who wants to.
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
 **
-** Modifications Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
-** Modifications Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
+** You should have received a copy of the GNU General Public License
+** along with this program; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
 #include <config.h>
@@ -70,16 +76,16 @@ uid_t get_user4(	in_port_t lport,
 
 	memset(&tir, 0, sizeof(tir));
 
-	tir.faddr.sa_family = AF_INET;
-	tir.faddr.sa_len = sizeof(struct sockaddr);
+	tir.faddr.ss_family = AF_INET;
+	tir.faddr.ss_len = sizeof(struct sockaddr);
 	fin = (struct sockaddr_in *) &tir.faddr;
 	fin->sin_port = fport;
 
 	if (!opt_enabled(PROXY) || !sin_equal(faddr, &proxy))
 		memcpy(&fin->sin_addr, &SIN4(faddr)->sin_addr, sizeof(struct in_addr));
 
-	tir.laddr.sa_family = AF_INET;
-	tir.laddr.sa_len = sizeof(struct sockaddr);
+	tir.laddr.ss_family = AF_INET;
+	tir.laddr.ss_len = sizeof(struct sockaddr);
 	lin = (struct sockaddr_in *) &tir.laddr;
 	lin->sin_port = lport;
 	memcpy(&lin->sin_addr, &SIN4(laddr)->sin_addr, sizeof(struct in_addr));
@@ -160,5 +166,8 @@ uid_t get_user6(	in_port_t lport,
 */
 
 int k_open(void) {
+#warning "Support for this version of OpenBSD is deprecated and may be removed in the future"
+	o_log(LOG_CRIT, "Support for this version of OpenBSD is deprecated and may be removed in the future");
+
 	return 0;
 }

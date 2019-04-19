@@ -123,6 +123,9 @@ extern void free(void *ptr);
 */
 
 int k_open(void) {
+#warning "Support for this version of Solaris is deprecated and may be removed in the future"
+	o_log(LOG_CRIT, "Support for this version of Solaris is deprecated and may be removed in the future");
+
 	int ret;
 
 	kinfo = xmalloc(sizeof(struct kainfo));

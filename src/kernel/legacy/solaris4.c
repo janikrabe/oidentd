@@ -1,8 +1,8 @@
 /*
-** solaris5.c - SunOS 5.5 kernel access functions
+** solaris4.c - SunOS 5.4 kernel access functions
 **
 ** Copyright (c) 1995-1997 Casper Dik     <Casper.Dik@Holland.Sun.COM>
-** Copyright (c) 1997      Peter Eriksson <pen@lysator.liu.se>
+** Copyright (c) 1997-1999 Peter Eriksson <pen@lysator.liu.se>
 ** Copyright (c) 2001-2006 Ryan McCabe    <ryan@numb.org>
 ** Copyright (c) 2018-2019 Janik Rabe     <oidentd@janikrabe.com>
 **
@@ -20,21 +20,10 @@
 #define _KMEMUSER
 #define _KERNEL
 
-/* some definition conflicts, but we must define _KERNEL */
+/* some definition conflicts. but we must define _KERNEL */
 
 #define exit			kernel_exit
 #define strsignal		kernel_strsignal
-#define mutex_init		kernel_mutex_init
-#define mutex_destroy	kernel_mutex_destroy
-#define sema_init		kernel_sema_init
-#define sema_destroy	kernel_sema_destroy
-
-#include <syslog.h>
-
-#ifdef _POSIX_C_SOURCE
-#	define DEF_POSIX_C_SOURCE _POSIX_C_SOURCE
-#	undef _POSIX_C_SOURCE
-#endif
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -42,21 +31,24 @@
 #include <sys/param.h>
 #include <netinet/in.h>
 
-#ifdef DEF_POSIX_C_SOURCE
-#	define	_POSIX_C_SOURCE DEF_POSIX_C_SOURCE
-#endif
-
 #include <stdio.h>
 #include <kvm.h>
 #include <nlist.h>
 #include <math.h>
-#include <stddef.h>
 #include <sys/fcntl.h>
 #include <sys/cred.h>
 #include <sys/file.h>
 #include <sys/stream.h>
 #include <inet/common.h>
 #include <inet/ip.h>
+
+#undef exit
+#undef strsignal
+
+#include <unistd.h>
+#include <string.h>
+#include <stddef.h>
+#include <syslog.h>
 #include <pwd.h>
 
 #include "oidentd.h"
@@ -64,40 +56,52 @@
 #include "inet_util.h"
 #include "missing.h"
 
-#define FANOUT_OFFSET(n)	(kip->nl[N_FANOUT].n_value + (n) * sizeof(ipc_t *))
-
-#undef exit
-#undef strsignal
-#undef mutex_init
-#undef mutex_destroy
-#undef sema_init
-#undef sema_destroy
-
-#undef SEMA_HELD
-#undef RW_LOCK_HELD
-#undef RW_READ_HELD
-#undef RW_WRITE_HELD
-#undef MUTEX_HELD
-
-#include <unistd.h>
-#include <string.h>
-#include <stddef.h>
-
 #define N_FANOUT		0
+#define N_PRACTIVE		1
 
 static struct kainfo {
 	kvm_t *kd;
-	struct nlist nl[2];
+	struct proc *nextp;
+	struct proc currentp;
+	struct nlist nl[3];
 } *kinfo;
+
+#define FANOUT_OFFSET(x) (kinfo->nl[N_FANOUT].n_value + sizeof(ipc_t *) * (x))
 
 static int getbuf(kvm_t *kd, off_t addr, void *dst, size_t len);
 
 /*
 ** This is needed as stdlib.h can't be included as it causes
-** a clash with exit() as declared by another header file.
+** a clash with exit(), as declared by another header file.
 */
 
 extern void free(void *ptr);
+
+/*
+** Workaround for Solaris 2.x bug in kvm_setproc,
+** kvm_setproc doesn't reread practive.
+*/
+
+static int xkvm_setproc(struct kainfo *kp) {
+	int ret;
+
+	ret = getbuf(kp->kd, (off_t) kp->nl[N_PRACTIVE].n_value, &kp->nextp,
+			sizeof(kp->nextp));
+
+	return ret;
+}
+
+static struct proc *xkvm_nextproc(struct kainfo *kp) {
+	int ret = getbuf(kp->kd, (off_t) kp->nextp, &kp->currentp,
+				sizeof(kp->currentp));
+
+	if (ret == -1)
+		return NULL;
+
+	kp->nextp = kp->currentp.p_next;
+
+	return &kp->currentp;
+}
 
 /*
 ** Open the kernel memory device.
@@ -105,6 +109,9 @@ extern void free(void *ptr);
 */
 
 int k_open(void) {
+#warning "Support for this version of Solaris is deprecated and may be removed in the future"
+	o_log(LOG_CRIT, "Support for this version of Solaris is deprecated and may be removed in the future");
+
 	kinfo = xmalloc(sizeof(struct kainfo));
 
 	/*
@@ -119,7 +126,8 @@ int k_open(void) {
 	}
 
 	kinfo->nl[0].n_name = "ipc_tcp_fanout";
-	kinfo->nl[1].n_name = NULL;
+	kinfo->nl[1].n_name = "practive";
+	kinfo->nl[2].n_name = NULL;
 
 	/*
 	** Extract offsets to the needed variables in the kernel
@@ -264,10 +272,10 @@ uid_t get_user4(	in_port_t lport,
 	** that refers to the vnode that refers to this stream stream
 	*/
 
-	if (kvm_setproc(kinfo->kd) != 0)
+	if (xkvm_setproc(kinfo->kd) != 0)
 		return MISSING_UID;
 
-	while ((procp = kvm_nextproc(kinfo->kd))) {
+	while ((procp = xkvm_nextproc(kinfo->kd))) {
 		struct uf_entry files[NFPCHUNK];
 		int nfiles = procp->p_user.u_nofiles;
 		off_t addr = (off_t) procp->p_user.u_flist;

@@ -1,8 +1,8 @@
 /*
-** solaris4.c - SunOS 5.4 kernel access functions
+** solaris7.c - SunOS 5.6 and 5.7 kernel access functions
 **
 ** Copyright (c) 1995-1997 Casper Dik     <Casper.Dik@Holland.Sun.COM>
-** Copyright (c) 1997-1999 Peter Eriksson <pen@lysator.liu.se>
+** Copyright (c) 1997      Peter Eriksson <pen@lysator.liu.se>
 ** Copyright (c) 2001-2006 Ryan McCabe    <ryan@numb.org>
 ** Copyright (c) 2018-2019 Janik Rabe     <oidentd@janikrabe.com>
 **
@@ -17,13 +17,31 @@
 
 #include <config.h>
 
+#include <unistd.h>
+#include <string.h>
+#include <stddef.h>
+#include <errno.h>
+#include <pwd.h>
+
+#include <stdio.h>
+#include <nlist.h>
+#include <math.h>
+
 #define _KMEMUSER
 #define _KERNEL
+
+#include <kvm.h>
 
 /* some definition conflicts. but we must define _KERNEL */
 
 #define exit			kernel_exit
 #define strsignal		kernel_strsignal
+#define mutex_init		kernel_mutex_init
+#define mutex_destroy	kernel_mutex_destroy
+#define sema_init		kernel_sema_init
+#define sema_destroy	kernel_sema_destroy
+
+#include <syslog.h>
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -31,42 +49,45 @@
 #include <sys/param.h>
 #include <netinet/in.h>
 
-#include <stdio.h>
-#include <kvm.h>
-#include <nlist.h>
-#include <math.h>
 #include <sys/fcntl.h>
 #include <sys/cred.h>
 #include <sys/file.h>
 #include <sys/stream.h>
+
+#if SOLARIS >= 7
+#	include <sys/dlpi.h>
+#	include <net/if_types.h>
+#endif
+
 #include <inet/common.h>
 #include <inet/ip.h>
-
-#undef exit
-#undef strsignal
-
-#include <unistd.h>
-#include <string.h>
-#include <stddef.h>
-#include <syslog.h>
-#include <pwd.h>
 
 #include "oidentd.h"
 #include "util.h"
 #include "inet_util.h"
 #include "missing.h"
 
+#define FANOUT_OFFSET(n)	(kip->nl[N_FANOUT].n_value + (n) * sizeof(icf_t) + offsetof(icf_t, icf_ipc))
+
+#undef exit
+#undef strsignal
+#undef mutex_init
+#undef mutex_destroy
+#undef sema_init
+#undef sema_destroy
+
+#undef SEMA_HELD
+#undef RW_LOCK_HELD
+#undef RW_READ_HELD
+#undef RW_WRITE_HELD
+#undef MUTEX_HELD
+
 #define N_FANOUT		0
-#define N_PRACTIVE		1
 
 static struct kainfo {
 	kvm_t *kd;
-	struct proc *nextp;
-	struct proc currentp;
-	struct nlist nl[3];
+	struct nlist nl[2];
 } *kinfo;
-
-#define FANOUT_OFFSET(x) (kinfo->nl[N_FANOUT].n_value + sizeof(ipc_t *) * (x))
 
 static int getbuf(kvm_t *kd, off_t addr, void *dst, size_t len);
 
@@ -78,37 +99,14 @@ static int getbuf(kvm_t *kd, off_t addr, void *dst, size_t len);
 extern void free(void *ptr);
 
 /*
-** Workaround for Solaris 2.x bug in kvm_setproc,
-** kvm_setproc doesn't reread practive.
-*/
-
-static int xkvm_setproc(struct kainfo *kp) {
-	int ret;
-
-	ret = getbuf(kp->kd, (off_t) kp->nl[N_PRACTIVE].n_value, &kp->nextp,
-			sizeof(kp->nextp));
-
-	return ret;
-}
-
-static struct proc *xkvm_nextproc(struct kainfo *kp) {
-	int ret = getbuf(kp->kd, (off_t) kp->nextp, &kp->currentp,
-				sizeof(kp->currentp));
-
-	if (ret == -1)
-		return NULL;
-
-	kp->nextp = kp->currentp.p_next;
-
-	return &kp->currentp;
-}
-
-/*
 ** Open the kernel memory device.
 ** Return 0 on success, or -1 with errno set.
 */
 
 int k_open(void) {
+#warning "Support for this version of Solaris is deprecated and may be removed in the future"
+	o_log(LOG_CRIT, "Support for this version of Solaris is deprecated and may be removed in the future");
+
 	kinfo = xmalloc(sizeof(struct kainfo));
 
 	/*
@@ -122,9 +120,8 @@ int k_open(void) {
 		return -1;
 	}
 
-	kinfo->nl[0].n_name = "ipc_tcp_fanout";
-	kinfo->nl[1].n_name = "practive";
-	kinfo->nl[2].n_name = NULL;
+	kinfo->nl[0].n_name = "ipc_tcp_conn_fanout";
+	kinfo->nl[1].n_name = NULL;
 
 	/*
 	** Extract offsets to the needed variables in the kernel
@@ -193,28 +190,6 @@ uid_t get_user4(	in_port_t lport,
 	int ret;
 	in_port_t *ports;
 	in_addr_t *locaddr, *raddr;
-	ipc_t *alticp = NULL;
-	u_int altoffset;
-
-#if defined(BIG_ENDIAN) || defined(_BIG_ENDIAN)
-	altoffset = fport >> 8;
-#else
-	altoffset = lport >> 8;
-#endif
-
-	altoffset ^= fport ^ lport;
-	altoffset ^= SIN4(faddr)->sin_addr.S_un.S_un_b.s_b4;
-
-	if (lport > 8 || fport != 0)
-		altoffset ^= 1;
-
-	altoffset &= 0xff;
-
-	ret = getbuf(kip->kd, (off_t) FANOUT_OFFSET(altoffset),
-			&alticp, sizeof(ipc_t *));
-
-	if (ret == -1)
-		alticp = NULL;
 
 	offset = fport ^ lport;
 	offset ^= (u_int) SIN4(faddr)->sin_addr.S_un.S_un_b.s_b4 ^ (offset >> 8);
@@ -223,17 +198,15 @@ uid_t get_user4(	in_port_t lport,
 	ret = getbuf(kinfo->kd, (off_t) FANOUT_OFFSET(offset),
 			&icp, sizeof(ipc_t *));
 
-	if (ret == -1) {
-		icp = alticp;
-		alticp = NULL;
-	}
+	if (ret == -1)
+		return MISSING_UID;
 
 	if (!icp)
 		return MISSING_UID;
 
-	locaddr = (in_addr_t *) &ic.ipc_tcp_laddr;
-	raddr = (in_addr_t *) &ic.ipc_tcp_faddr;
-	ports = (in_port_t *) &ic.ipc_tcp_ports;
+	locaddr = (in_addr_t *) &ic.ipc_laddr;
+	raddr = (in_addr_t *) &ic.ipc_faddr;
+	ports = (in_port_t *) &ic.ipc_ports;
 
 	while (icp) {
 		if (getbuf(kinfo->kd, (off_t) icp, &ic, sizeof(ic)) == -1)
@@ -247,11 +220,6 @@ uid_t get_user4(	in_port_t lport,
 		}
 
 		icp = ic.ipc_hash_next;
-
-		if (!icp) {
-			icp = alticp;
-			alticp = NULL;
-		}
 	}
 
 	if (!icp)
@@ -269,10 +237,10 @@ uid_t get_user4(	in_port_t lport,
 	** that refers to the vnode that refers to this stream stream
 	*/
 
-	if (xkvm_setproc(kinfo->kd) != 0)
+	if (kvm_setproc(kinfo->kd) != 0)
 		return MISSING_UID;
 
-	while ((procp = xkvm_nextproc(kinfo->kd))) {
+	while ((procp = kvm_nextproc(kinfo->kd))) {
 		struct uf_entry files[NFPCHUNK];
 		int nfiles = procp->p_user.u_nofiles;
 		off_t addr = (off_t) procp->p_user.u_flist;
