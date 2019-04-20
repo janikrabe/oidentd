@@ -494,7 +494,7 @@ int read_config(const char *path) {
 			}
 		}
 
-		o_log(LOG_CRIT, "Error opening config file: %s: %s",
+		o_log(LOG_CRIT, "Error opening configuration file: %s: %s",
 			path, strerror(errno));
 		return -1;
 	}

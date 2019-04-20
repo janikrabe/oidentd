@@ -258,7 +258,7 @@ int get_options(int argc, char *const argv[]) {
 
 				temp_limit = strtoul(optarg, &end, 10);
 				if (*end != '\0') {
-					o_log(LOG_CRIT, "Fatal: Not a valid number: \"%s\"", optarg);
+					o_log(LOG_CRIT, "Fatal: Invalid number: \"%s\"", optarg);
 					return -1;
 				}
 
@@ -364,7 +364,7 @@ int get_options(int argc, char *const argv[]) {
 	}
 
 	if (opt_enabled(DEBUG_MSGS) && opt_enabled(QUIET)) {
-		o_log(LOG_CRIT, "Fatal: The debug and quiet flags are incompatible");
+		o_log(LOG_CRIT, "Fatal: The '--debug' and '--quiet' flags are incompatible");
 		return -1;
 	}
 

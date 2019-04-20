@@ -196,7 +196,7 @@ int main(int argc, char **argv) {
 					child = fork();
 
 					if (child == -1) {
-						o_log(LOG_CRIT, "fork: %s", strerror(errno));
+						o_log(LOG_CRIT, "Failed to fork: %s", strerror(errno));
 					} else if (child == 0) {
 						size_t idx;
 
@@ -450,7 +450,7 @@ static void sig_child(int sig) {
 */
 
 static void sig_alarm(int unused __notused) {
-	o_log(LOG_INFO, "Timeout for request -- Closing connection");
+	o_log(LOG_INFO, "Request timed out; closing connection");
 	exit(EXIT_SUCCESS);
 }
 
