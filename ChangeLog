@@ -1,6 +1,7 @@
 2019-04-20  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Reduce option bitfield values.
+	* Use int values in capng_change_id call.
 
 2019-04-19  Janik Rabe  <oidentd@janikrabe.com>
 

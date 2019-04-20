@@ -129,8 +129,8 @@ bool drop_privs_libnfct(uid_t uid, gid_t gid) {
 	}
 
 	ret = capng_change_id(
-			opt_enabled(CHANGE_UID) ? uid : MISSING_UID,
-			opt_enabled(CHANGE_GID) ? gid : MISSING_GID,
+			opt_enabled(CHANGE_UID) ? (int) uid : -1,
+			opt_enabled(CHANGE_GID) ? (int) gid : -1,
 			CAPNG_CLEAR_BOUNDING | CAPNG_DROP_SUPP_GRP);
 	if (ret) {
 		debug("capng_change_id: error %d", ret);
