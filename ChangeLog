@@ -4,6 +4,7 @@
 	* Use int values in capng_change_id call.
 	* Use standard syslog priority names.
 	* Change some error messages.
+	* Use EXIT_SUCCESS exit code after forking.
 
 2019-04-19  Janik Rabe  <oidentd@janikrabe.com>
 

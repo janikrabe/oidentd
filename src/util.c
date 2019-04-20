@@ -250,7 +250,7 @@ int go_background(void) {
 		case 0:
 			break;
 		default:
-			_exit(0);
+			_exit(EXIT_SUCCESS);
 	}
 
 	if (setsid() == (pid_t) -1) {
