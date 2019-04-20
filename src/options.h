@@ -22,19 +22,19 @@
 
 #define _GNU_SOURCE
 
-#define CHANGE_UID    (1 << 0x01)
-#define CHANGE_GID    (1 << 0x02)
-#define HIDE_ERRORS   (1 << 0x03)
-#define MASQ          (1 << 0x04)
-#define FORWARD       (1 << 0x05)
-#define PROXY         (1 << 0x06)
-#define USEUDB        (1 << 0x07)
-#define DEBUG_MSGS    (1 << 0x08)
-#define QUIET         (1 << 0x09)
-#define FOREGROUND    (1 << 0x0a)
-#define NOSYSLOG      (1 << 0x0b)
-#define STDIO         (1 << 0x0c)
-#define MASQ_OVERRIDE (1 << 0x0d)
+#define CHANGE_UID    (1 << 0x00)
+#define CHANGE_GID    (1 << 0x01)
+#define HIDE_ERRORS   (1 << 0x02)
+#define MASQ          (1 << 0x03)
+#define FORWARD       (1 << 0x04)
+#define PROXY         (1 << 0x05)
+#define USEUDB        (1 << 0x06)
+#define DEBUG_MSGS    (1 << 0x07)
+#define QUIET         (1 << 0x08)
+#define FOREGROUND    (1 << 0x09)
+#define NOSYSLOG      (1 << 0x0a)
+#define STDIO         (1 << 0x0b)
+#define MASQ_OVERRIDE (1 << 0x0c)
 
 #ifndef LIBNFCT_SUPPORT
 #define LIBNFCT_SUPPORT 0
