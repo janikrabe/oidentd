@@ -514,7 +514,7 @@ int masq(	int sock,
 
 			get_ip(faddr, ipbuf, sizeof(ipbuf));
 
-			o_log(NORMAL,
+			o_log(LOG_INFO,
 				"[%s] (NAT) Successful lookup: %d , %d : %s",
 				ipbuf, lport, fport, user);
 

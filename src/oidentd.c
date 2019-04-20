@@ -85,7 +85,7 @@ int main(int argc, char **argv) {
 	if (get_options(argc, argv) != 0)
 		exit(EXIT_FAILURE);
 
-	openlog("oidentd", LOG_PID | LOG_CONS | LOG_NDELAY, FACILITY);
+	openlog("oidentd", LOG_PID | LOG_CONS | LOG_NDELAY, LOG_DAEMON);
 
 	if (read_config(config_file) != 0) {
 		o_log(LOG_CRIT, "Fatal: Error reading configuration file");
@@ -185,8 +185,8 @@ int main(int argc, char **argv) {
 					}
 
 					if (current_connections >= connection_limit) {
-						o_log(NORMAL, "Connection limit exceeded; "
-						              "closing incoming connection");
+						o_log(LOG_INFO, "Connection limit exceeded; "
+							"closing incoming connection");
 						close(connectfd);
 						continue;
 					}
@@ -283,10 +283,10 @@ static int service_request(int insock, int outsock) {
 	get_ip(&faddr, ip_buf, sizeof(ip_buf));
 
 	if (get_hostname(&faddr, host_buf, sizeof(host_buf)) != 0) {
-		o_log(NORMAL, "Connection from %s:%d", ip_buf, fport);
+		o_log(LOG_INFO, "Connection from %s:%d", ip_buf, fport);
 		xstrncpy(host_buf, ip_buf, sizeof(host_buf));
 	} else
-		o_log(NORMAL, "Connection from %s (%s):%d", host_buf, ip_buf, fport);
+		o_log(LOG_INFO, "Connection from %s (%s):%d", host_buf, ip_buf, fport);
 
 	if (!sock_read(insock, line, sizeof(line)))
 		return -1;
@@ -359,13 +359,13 @@ static int service_request(int insock, int outsock) {
 			sockprintf(outsock, "%d,%d:USERID:%s:%s\r\n",
 				lport, fport, ret_os, failuser);
 
-			o_log(NORMAL, "[%s] Failed lookup: %d , %d : (returned %s)",
+			o_log(LOG_INFO, "[%s] Failed lookup: %d , %d : (returned %s)",
 				host_buf, lport, fport, failuser);
 		} else {
 			sockprintf(outsock, "%d,%d:ERROR:%s\r\n",
 				lport, fport, ERROR("NO-USER"));
 
-			o_log(NORMAL, "[%s] %d , %d : ERROR : NO-USER",
+			o_log(LOG_INFO, "[%s] %d , %d : ERROR : NO-USER",
 				host_buf, lport, fport);
 		}
 
@@ -387,7 +387,7 @@ static int service_request(int insock, int outsock) {
 		sockprintf(outsock, "%d,%d:ERROR:%s\r\n",
 			lport, fport, ERROR("HIDDEN-USER"));
 
-		o_log(NORMAL, "[%s] %d , %d : HIDDEN-USER (%s)",
+		o_log(LOG_INFO, "[%s] %d , %d : HIDDEN-USER (%s)",
 			host_buf, lport, fport, pwd.pw_name);
 
 		goto out;
@@ -396,7 +396,7 @@ static int service_request(int insock, int outsock) {
 	sockprintf(outsock, "%d,%d:USERID:%s:%s\r\n",
 		lport, fport, ret_os, suser);
 
-	o_log(NORMAL, "[%s] Successful lookup: %d , %d : %s (%s)",
+	o_log(LOG_INFO, "[%s] Successful lookup: %d , %d : %s (%s)",
 		host_buf, lport, fport, pwd.pw_name, suser);
 
 out:
@@ -450,7 +450,7 @@ static void sig_child(int sig) {
 */
 
 static void sig_alarm(int unused __notused) {
-	o_log(NORMAL, "Timeout for request -- Closing connection");
+	o_log(LOG_INFO, "Timeout for request -- Closing connection");
 	exit(EXIT_SUCCESS);
 }
 

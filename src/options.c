@@ -387,7 +387,7 @@ int get_options(int argc, char *const argv[]) {
 		enable_opt(CHANGE_UID);
 		if (find_user("oidentd", &target_uid) != 0) {
 			if (find_user("nobody", &target_uid) != 0) {
-				o_log(NORMAL,
+				o_log(LOG_INFO,
 					"Users \"oidentd\" and \"nobody\" do "
 					"not exist; using %u as default UID",
 					DEFAULT_UID);
@@ -406,7 +406,7 @@ int get_options(int argc, char *const argv[]) {
 		if (find_group("oidentd", &target_gid) != 0) {
 			if (find_group("nobody", &target_gid) != 0) {
 				if (find_group("nogroup", &target_gid) != 0) {
-					o_log(NORMAL,
+					o_log(LOG_INFO,
 						"Groups \"oidentd\", \"nobody\" "
 						"and \"nogroup\" do not exist; "
 						"using %u as default GID",

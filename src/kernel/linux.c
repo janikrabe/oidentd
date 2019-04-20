@@ -741,7 +741,7 @@ static int masq_ct_line(char *line,
 			sockprintf(sock, "%d,%d:ERROR:%s\r\n",
 				lport, fport, ERROR("HIDDEN-USER"));
 
-			o_log(NORMAL, "[%s] %d (%d) , %d (%d) : HIDDEN-USER (%s)",
+			o_log(LOG_INFO, "[%s] %d (%d) , %d (%d) : HIDDEN-USER (%s)",
 				ipbuf, lport, masq_lport, fport, masq_fport, pw->pw_name);
 
 			return 0;
@@ -750,7 +750,7 @@ static int masq_ct_line(char *line,
 		sockprintf(sock, "%d,%d:USERID:%s:%s\r\n",
 			lport, fport, ret_os, suser);
 
-		o_log(NORMAL, "[%s] Successful lookup: %d (%d) , %d (%d) : %s (%s)",
+		o_log(LOG_INFO, "[%s] Successful lookup: %d (%d) , %d (%d) : %s (%s)",
 			ipbuf, lport, masq_lport, fport, masq_fport, pw->pw_name, suser);
 
 		return 0;
@@ -788,7 +788,7 @@ static int masq_ct_line(char *line,
 
 		get_ip(faddr, ipbuf, sizeof(ipbuf));
 
-		o_log(NORMAL,
+		o_log(LOG_INFO,
 			"[%s] (Masqueraded) Successful lookup: %d , %d : %s",
 			ipbuf, lport, fport, user);
 

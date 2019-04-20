@@ -408,7 +408,7 @@ int o_log(int priority, const char *fmt, ...) {
 	if (opt_enabled(QUIET) && priority != LOG_CRIT)
 		return 0;
 
-	if (priority == DEBUG && !opt_enabled(DEBUG_MSGS))
+	if (priority == LOG_DEBUG && !opt_enabled(DEBUG_MSGS))
 		return 0;
 
 	va_start(ap, fmt);
@@ -481,7 +481,7 @@ struct udb_lookup_res get_udb_user(	in_port_t lport,
 	sockprintf(sock, "%d,%d:USERID:%s:%s\r\n",
 		lport, fport, ret_os, buf.username);
 
-	o_log(NORMAL, "[%s] UDB lookup: %d , %d : (returned %s)",
+	o_log(LOG_INFO, "[%s] UDB lookup: %d , %d : (returned %s)",
 		faddr_buf, lport, fport, buf.username);
 
 	res.status = 2;

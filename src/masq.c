@@ -104,7 +104,7 @@ int find_masq_entry(struct sockaddr_storage *host,
 			xstrncpy(user, ibuf.username, user_len);
 			xstrncpy(os, ret_os, os_len);
 
-			o_log(NORMAL, "Successful UDB lookup: %s : %s", ipbuf, user);
+			o_log(LOG_INFO, "Successful UDB lookup: %s : %s", ipbuf, user);
 			return 0;
 		}
 	}
@@ -256,7 +256,7 @@ int fwd_request(	int sock,
 		real_lport, real_fport, ret_os, user);
 
 	get_ip(mrelay, ipbuf, sizeof(ipbuf));
-	o_log(NORMAL,
+	o_log(LOG_INFO,
 		"[%s] Successful lookup (by forward): %d (%d) , %d (%d) : %s",
 		ipbuf, real_lport, masq_lport, real_fport, masq_fport, user);
 

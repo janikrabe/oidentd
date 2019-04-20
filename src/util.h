@@ -22,10 +22,6 @@
 
 #include <stdlib.h> /* inline randval() */
 
-#define FACILITY	LOG_DAEMON
-#define NORMAL		LOG_INFO
-#define DEBUG		LOG_DEBUG
-
 #ifndef MIN
 #	define MIN(x,y) ((x) < (y) ? (x) : (y))
 #endif

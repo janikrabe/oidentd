@@ -2,6 +2,7 @@
 
 	* Reduce option bitfield values.
 	* Use int values in capng_change_id call.
+	* Use standard syslog priority names.
 
 2019-04-19  Janik Rabe  <oidentd@janikrabe.com>
 

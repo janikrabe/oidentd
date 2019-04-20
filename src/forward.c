@@ -135,7 +135,7 @@ out_fail:
 */
 
 static void fwd_alarm(int sig) {
-	o_log(NORMAL, "Forward timed out");
+	o_log(LOG_INFO, "Forward timed out");
 	close(fsock);
 	siglongjmp(timebuf, sig);
 }
