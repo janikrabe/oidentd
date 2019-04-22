@@ -327,16 +327,10 @@ force_reply:
 	TOK_FORCE TOK_REPLY TOK_STRING {
 		cur_cap->caps = CAP_REPLY;
 		cur_cap->action = ACTION_FORCE;
-		if (cur_cap->data.replies.num < 0xFF) {
-			cur_cap->data.replies.data = xrealloc(cur_cap->data.replies.data,
-				++cur_cap->data.replies.num * sizeof(u_char *));
-			cur_cap->data.replies.data[cur_cap->data.replies.num - 1] = $3;
-		} else {
-			o_log(LOG_CRIT, "[line %u] No more than 255 replies may be specified",
-				current_line);
-			free_cap_entries(cur_cap);
-			YYABORT;
-		}
+		cur_cap->data.replies.num = 1;
+		cur_cap->data.replies.data = xrealloc(cur_cap->data.replies.data,
+			sizeof(u_char *));
+		cur_cap->data.replies.data[0] = $3;
 	}
 |
 	force_reply TOK_STRING {
@@ -421,9 +415,10 @@ user_range_rule:
 user_reply:
 	TOK_REPLY TOK_STRING {
 		cur_cap->caps = CAP_REPLY;
+		cur_cap->data.replies.num = 1;
 		cur_cap->data.replies.data = xrealloc(cur_cap->data.replies.data,
-			++cur_cap->data.replies.num * sizeof(u_char *));
-		cur_cap->data.replies.data[cur_cap->data.replies.num - 1] = $2;
+			sizeof(u_char *));
+		cur_cap->data.replies.data[0] = $2;
 	}
 |
 	user_reply TOK_STRING {

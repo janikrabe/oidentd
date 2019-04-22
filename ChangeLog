@@ -6,6 +6,7 @@
 	* Adjust user_db.h macro values.
 	* Prevent overflow when too many replies are specified in the
 	  system-wide configuration file.
+	* Make reply statements override previous replies.
 
 2019-04-20  Janik Rabe  <oidentd@janikrabe.com>
 
