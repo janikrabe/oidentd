@@ -115,7 +115,7 @@ static inline void numeric_ident(uid_t con_uid, char *buf, size_t len) {
 */
 
 static inline void random_ident_numeric(char *buf, size_t len) {
-	snprintf(buf, len, "%s%u", UPREFIX, randval(100000));
+	snprintf(buf, len, "%s%u", UPREFIX, randval(RANDOM_NUMERIC_UPPER_EXCL));
 }
 
 /*
