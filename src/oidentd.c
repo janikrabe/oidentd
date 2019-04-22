@@ -61,8 +61,6 @@ static void sig_hup(int unused);
 static void copy_pw(const struct passwd *pw, struct passwd *pwd);
 static void free_pw(struct passwd *pwd);
 
-static void seed_prng(void);
-
 static int service_request(int insock, int outsock);
 
 u_int32_t timeout = DEFAULT_TIMEOUT;
@@ -98,11 +96,6 @@ int main(int argc, char **argv) {
 		} else {
 			o_log(LOG_CRIT, "Fatal: Error initializing core (try --debug)");
 		}
-		exit(EXIT_FAILURE);
-	}
-
-	if (random_seed() != 0) {
-		o_log(LOG_CRIT, "Fatal: Error seeding random number generator");
 		exit(EXIT_FAILURE);
 	}
 
@@ -205,7 +198,6 @@ int main(int argc, char **argv) {
 
 						free(listen_fds);
 						alarm(timeout);
-						seed_prng();
 						service_request(connectfd, connectfd);
 
 						exit(EXIT_SUCCESS);
@@ -382,6 +374,11 @@ static int service_request(int insock, int outsock) {
 	} else
 		copy_pw(pw, &pwd);
 
+	if (seed_prng() != 0) {
+		o_log(LOG_CRIT, "Failed to seed PRNG");
+		goto out_fail;
+	}
+
 	ret = get_ident(&pwd, lport, fport, &laddr, &faddr, suser, sizeof(suser));
 	if (ret == -1) {
 		sockprintf(outsock, "%d,%d:ERROR:%s\r\n",
@@ -402,6 +399,10 @@ static int service_request(int insock, int outsock) {
 out:
 	free_pw(&pwd);
 	return 0;
+
+out_fail:
+	free_pw(&pwd);
+	return -1;
 }
 
 /*
@@ -467,18 +468,3 @@ static void sig_hup(int unused __notused) {
 	}
 }
 #endif
-
-/*
-** Seed the PRNG.
-*/
-
-static void seed_prng(void) {
-#ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
-	srandom(0);
-#else
-	struct timeval tv;
-
-	gettimeofday(&tv, NULL);
-	srandom(tv.tv_sec ^ (tv.tv_usec << 11));
-#endif
-}

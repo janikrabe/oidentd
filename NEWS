@@ -6,6 +6,7 @@ Unreleased changes
 		* ~/.config/oidentd.conf takes precedence over ~/.oidentd.conf
 	* Rewrote all manual pages, now licensed under GFDL v1.3+.
 	* Rewrote INSTALL and README files.
+	* Improved PRNG interface.
 	* Changed project description.
 	* Deprecated support for Darwin.
 	* Deprecated support for FreeBSD 1-3.

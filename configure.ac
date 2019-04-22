@@ -236,7 +236,8 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <stdlib.h>
 AC_TYPE_SIGNAL
 
 AC_CHECK_FUNCS(snprintf vsnprintf getopt_long strsep vasprintf)
-AC_CHECK_FUNCS(gettimeofday select strdup strstr strtol uname)
+AC_CHECK_FUNCS(clock_gettime select strdup strstr strtol uname)
+AC_CHECK_FUNCS(arc4random_uniform lrand48 random)
 AC_CHECK_FUNCS(memcmp strftime vprintf gethostbyname)
 AC_CHECK_FUNCS(vasprintf asprintf snprintf vsnprintf)
 AC_CHECK_FUNCS(inet_aton getpagesize getopt_long)

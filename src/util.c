@@ -51,25 +51,92 @@
 #	include <udb.h>
 #endif
 
+#ifdef HAVE_ARC4RANDOM_UNIFORM
+	/* no rescale required */
+#elif defined HAVE_LRAND48
+#	define O_RAND_UPPER_EXCL_UL (1UL << 31)
+#else
+#	define O_RAND_UPPER_EXCL_UL ((unsigned long) RAND_MAX + 1UL)
+#endif
+
 /*
-** Seed PRNG from time-of-day clock. (FIXME: Should use entropy pool on
-** systems that have one. Should prefer lrand48()(3), then random()(3)
-** then rand()(3) in that order.)
+** Seed the PRNG.
+** A time-based seed is sufficient as oidentd does not require
+** cryptographically secure random numbers.
 ** Returns 0 on success, -1 on failure.
 */
 
-int random_seed(void) {
-#ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
-	srand(0);
-#else
-	struct timeval tv;
+int seed_prng(void) {
+#ifndef HAVE_ARC4RANDOM_UNIFORM
+#	ifndef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
+		struct timespec tp;
 
-	if (gettimeofday(&tv, NULL))
-		return -1;
-
-	srand((u_int32_t) (tv.tv_sec ^ tv.tv_usec));
+		if (clock_gettime(CLOCK_REALTIME, &tp)) {
+			debug("clock_gettime: %s", strerror(errno));
+			return -1;
+		}
+#	endif
 #endif
+
+#ifdef HAVE_ARC4RANDOM_UNIFORM
+	/* automatically reseeded upon fork(2) */
+#elif defined HAVE_LRAND48
+#	ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
+		srand48(0);
+#	else
+		srand48((long) (tp.tv_sec ^ tp.tv_nsec));
+#	endif
+#elif defined HAVE_RANDOM
+#	ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
+		srandom(0);
+#	else
+		srandom((unsigned int) (tp.tv_sec ^ tp.tv_nsec));
+#	endif
+#else
+#	ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
+		srand(0);
+#	else
+		srand((unsigned int) (tp.tv_sec ^ tp.tv_nsec));
+#	endif
+#endif
+
 	return 0;
+}
+
+#ifndef HAVE_ARC4RANDOM_UNIFORM
+
+/*
+** Return a pseudorandom integer in the interval [0, O_RAND_UPPER_EXCL_UL).
+*/
+unsigned long prng_next(void) {
+#ifdef HAVE_LRAND48
+	return (unsigned long) lrand48();
+#elif defined HAVE_RANDOM
+	return (unsigned long) random();
+#else
+	return (unsigned long) rand();
+#endif
+}
+#endif
+
+/*
+** Return a pseudorandom integer in the interval [0, i).
+*/
+
+unsigned int randval(unsigned int i) {
+#ifdef HAVE_ARC4RANDOM_UNIFORM
+	return (unsigned int) arc4random_uniform((uint32_t) i);
+#else
+	unsigned long blk_size = O_RAND_UPPER_EXCL_UL / (unsigned long) i;
+	unsigned long blk_after_last = blk_size * (unsigned long) i;
+	unsigned long next;
+
+	do {
+		next = prng_next();
+	} while (next >= blk_after_last);
+
+	return (unsigned int) (next / blk_size);
+#endif
 }
 
 /*

@@ -1,7 +1,7 @@
 /*
 ** oidentd_util.h - oidentd utility functions.
 ** Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
-** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
+** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -19,8 +19,6 @@
 
 #ifndef __OIDENTD_UTIL_H
 #define __OIDENTD_UTIL_H
-
-#include <stdlib.h> /* inline randval() */
 
 #ifndef MIN
 #	define MIN(x,y) ((x) < (y) ? (x) : (y))
@@ -71,20 +69,9 @@ void list_destroy(list_t *list, void (*free_data)(void *));
 int find_user(const char *temp_user, uid_t *uid);
 int find_group(const char *temp_group, gid_t *gid);
 
-int random_seed(void);
-
-/*
-** Return a pseudo-random integer between 0 and i-1 inclusive. The
-** obvious solution (rand()%i) isn't safe because on many systems,
-** the low-order bits of the return of rand()(3) are grossly non-random.
-** (FIXME: See comment preceding random_seed() regarding using better
-** PRNG functions on systems whose libraries provide them.)
-*/
-
-static inline unsigned int randval(unsigned int i) {
-	/* Per _Numerical Recipes in C_: */
-	return (unsigned int) ((double) i * rand() / (RAND_MAX + 1.0));
-}
+int seed_prng(void);
+unsigned long prng_next(void);
+unsigned int randval(unsigned int i);
 
 #ifndef HAVE_SNPRINTF
 	int snprintf(char *str, size_t n, char const *fmt, ...);
