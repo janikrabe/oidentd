@@ -3,6 +3,7 @@
 	* Improve PRNG interface.
 	* Remove superfluous newlines from o_log() calls.
 	* Create macro for random_numeric upper limit.
+	* Adjust user_db.h macro values.
 
 2019-04-20  Janik Rabe  <oidentd@janikrabe.com>
 

@@ -1,7 +1,7 @@
 /*
 ** oidentd_user_db.h - oidentd user database routines.
 ** Copyright (c) 2001-2006 Ryan McCabe <ryan@numb.org>
-** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
+** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,
@@ -25,17 +25,17 @@
 
 #define ACTION_DENY        0x00
 #define ACTION_ALLOW       0x01
-#define ACTION_FORCE       0x03
+#define ACTION_FORCE       0x02
 
-#define CAP_SPOOF          (1 << 0x01)
-#define CAP_SPOOF_ALL      (1 << 0x02)
-#define CAP_SPOOF_PRIVPORT (1 << 0x03)
-#define CAP_HIDE           (1 << 0x04)
-#define CAP_RANDOM         (1 << 0x05)
-#define CAP_RANDOM_NUMERIC (1 << 0x06)
-#define CAP_NUMERIC        (1 << 0x07)
-#define CAP_REPLY          (1 << 0x08)
-#define CAP_FORWARD        (1 << 0x09)
+#define CAP_SPOOF          (1 << 0x00)
+#define CAP_SPOOF_ALL      (1 << 0x01)
+#define CAP_SPOOF_PRIVPORT (1 << 0x02)
+#define CAP_HIDE           (1 << 0x03)
+#define CAP_RANDOM         (1 << 0x04)
+#define CAP_RANDOM_NUMERIC (1 << 0x05)
+#define CAP_NUMERIC        (1 << 0x06)
+#define CAP_REPLY          (1 << 0x07)
+#define CAP_FORWARD        (1 << 0x08)
 
 #define DB_HASH_SIZE		32
 
