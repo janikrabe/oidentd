@@ -99,7 +99,7 @@ int forward_request(const struct sockaddr_storage *host,
 	}
 
 	if (!sock_read(fsock, buf, sizeof(buf))) {
-		debug("read(%d): %s\n", fsock, strerror(errno));
+		debug("read(%d): %s", fsock, strerror(errno));
 		goto out_fail;
 	}
 
