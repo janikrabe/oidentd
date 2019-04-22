@@ -1,6 +1,7 @@
 2019-04-22  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Improve PRNG interface.
+	* Remove superfluous newlines from o_log() calls.
 
 2019-04-20  Janik Rabe  <oidentd@janikrabe.com>
 

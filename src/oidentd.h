@@ -136,7 +136,7 @@
 #define ERROR(x)		(opt_enabled(HIDE_ERRORS) ? "UNKNOWN-ERROR" : (x))
 
 #if ENABLE_DEBUGGING
-#	define debug(format, args...) do { o_log(LOG_DEBUG, "[%s:%u:%s] DEBUG: " format "\n", __FILE__, __LINE__, __FUNCTION__, ##args); } while (0)
+#	define debug(format, args...) do { o_log(LOG_DEBUG, "[%s:%u:%s] DEBUG: " format, __FILE__, __LINE__, __FUNCTION__, ##args); } while (0)
 #else
 #	define debug(format, args...) do { } while (0)
 #endif

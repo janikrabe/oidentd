@@ -234,7 +234,7 @@ FORWARD				forward
 
 	if (result > 0xff) {
 		if (parser_mode == PARSE_SYSTEM) {
-			o_log(LOG_CRIT, "[line %u] Bad escape sequence: \"%s\"\n",
+			o_log(LOG_CRIT, "[line %u] Bad escape sequence: \"%s\"",
 				current_line, yytext);
 		}
 
@@ -265,7 +265,7 @@ FORWARD				forward
 
 <state_string>\\[0-9] {
 	if (parser_mode == PARSE_SYSTEM) {
-		o_log(LOG_CRIT, "[line %u] Error: Bad escape sequence: \"%s\"\n",
+		o_log(LOG_CRIT, "[line %u] Error: Bad escape sequence: \"%s\"",
 			current_line, yytext);
 	}
 
@@ -336,11 +336,11 @@ static char get_esc_char(char c) {
 		case 'e':
 			if (parser_mode == PARSE_SYSTEM) {
 				o_log(LOG_CRIT, "[line %u] Warning: Escape sequence '\\e' is "
-						"deprecated; use '\\033' or '\\x1B' instead.\n",
+						"deprecated; use '\\033' or '\\x1B' instead.",
 						current_line);
 			}
 
-			return '\e';
+			return '\x1B';
 
 		default:
 			break;
