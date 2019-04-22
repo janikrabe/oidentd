@@ -327,15 +327,29 @@ force_reply:
 	TOK_FORCE TOK_REPLY TOK_STRING {
 		cur_cap->caps = CAP_REPLY;
 		cur_cap->action = ACTION_FORCE;
-		cur_cap->data.replies.data = xrealloc(cur_cap->data.replies.data,
-			++cur_cap->data.replies.num * sizeof(u_char *));
-		cur_cap->data.replies.data[cur_cap->data.replies.num - 1] = $3;
+		if (cur_cap->data.replies.num < 0xFF) {
+			cur_cap->data.replies.data = xrealloc(cur_cap->data.replies.data,
+				++cur_cap->data.replies.num * sizeof(u_char *));
+			cur_cap->data.replies.data[cur_cap->data.replies.num - 1] = $3;
+		} else {
+			o_log(LOG_CRIT, "[line %u] No more than 255 replies may be specified",
+				current_line);
+			free_cap_entries(cur_cap);
+			YYABORT;
+		}
 	}
 |
 	force_reply TOK_STRING {
-		cur_cap->data.replies.data = xrealloc(cur_cap->data.replies.data,
-			++cur_cap->data.replies.num * sizeof(u_char *));
-		cur_cap->data.replies.data[cur_cap->data.replies.num - 1] = $2;
+		if (cur_cap->data.replies.num < 0xFF) {
+			cur_cap->data.replies.data = xrealloc(cur_cap->data.replies.data,
+				++cur_cap->data.replies.num * sizeof(u_char *));
+			cur_cap->data.replies.data[cur_cap->data.replies.num - 1] = $2;
+		} else {
+			o_log(LOG_CRIT, "[line %u] No more than 255 replies may be specified",
+				current_line);
+			free_cap_entries(cur_cap);
+			YYABORT;
+		}
 	}
 ;
 
@@ -413,7 +427,8 @@ user_reply:
 	}
 |
 	user_reply TOK_STRING {
-		if (cur_cap->data.replies.num < MAX_RANDOM_REPLIES) {
+		if (cur_cap->data.replies.num < MAX_RANDOM_REPLIES
+				&& cur_cap->data.replies.num < 0xFF) {
 			cur_cap->data.replies.data = xrealloc(cur_cap->data.replies.data,
 				++cur_cap->data.replies.num * sizeof(u_char *));
 			cur_cap->data.replies.data[cur_cap->data.replies.num - 1] = $2;
@@ -572,7 +587,6 @@ list_t *user_db_get_pref_list(const struct passwd *pw) {
 }
 
 static void yyerror(const char *err) {
-
 	if (parser_mode == PARSE_USER)
 		free_cap_entries(cur_cap);
 	else

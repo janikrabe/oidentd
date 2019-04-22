@@ -319,6 +319,7 @@ identify which user sent a particular reply.
 
 Send an ident reply chosen at random from the given list of quoted replies.
 When used in a user configuration file, at most 20 replies may be specified.
+In the system-wide configuration file, up to 255 replies may be specified.
 Replies are logged, allowing the system administrator to identify which user
 sent a particular reply.
 

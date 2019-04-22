@@ -4,6 +4,8 @@
 	* Remove superfluous newlines from o_log() calls.
 	* Create macro for random_numeric upper limit.
 	* Adjust user_db.h macro values.
+	* Prevent overflow when too many replies are specified in the
+	  system-wide configuration file.
 
 2019-04-20  Janik Rabe  <oidentd@janikrabe.com>
 
@@ -81,7 +83,7 @@
 2019-01-01  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Add fuzzing build configuration.
-	* Remove parentheses from return statemenets.
+	* Remove parentheses from return statements.
 	* Build with -fPIE and -fstack-protector.
 
 2018-12-14  Janik Rabe  <oidentd@janikrabe.com>

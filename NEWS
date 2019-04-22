@@ -5,6 +5,8 @@ Unreleased changes
 	* Implemented XDG Base Directory specification
 		* ~/.config/oidentd.conf takes precedence over ~/.oidentd.conf
 	* Rewrote all manual pages, now licensed under GFDL v1.3+.
+	* Prevent overflow when too many replies are specified in the
+	  system-wide configuration file.
 	* Rewrote INSTALL and README files.
 	* Improved PRNG interface.
 	* Changed project description.
