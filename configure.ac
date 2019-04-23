@@ -240,6 +240,7 @@ AC_CHECK_FUNCS(arc4random_uniform lrand48 random)
 AC_CHECK_FUNCS(memcmp strftime vprintf gethostbyname)
 AC_CHECK_FUNCS(vasprintf asprintf snprintf vsnprintf)
 AC_CHECK_FUNCS(inet_aton getpagesize getopt_long)
+AC_CHECK_FUNCS(setgroups)
 
 AC_SEARCH_LIBS(socket, socket, , [AC_CHECK_LIB(socket, socket, LIBS="$LIBS -lsocket -lnsl", , -lsocket)])
 

@@ -2,6 +2,7 @@
 
 	* Remove libcap-ng status from '--version' output.
 	* Remove optional dependency on libcap-ng.
+	* Drop supplementary groups if possible.
 
 2019-04-22  Janik Rabe  <oidentd@janikrabe.com>
 

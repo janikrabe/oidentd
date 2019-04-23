@@ -199,12 +199,18 @@ int find_group(const char *temp_group, gid_t *gid) {
 */
 
 int drop_privs(uid_t new_uid, gid_t new_gid) {
-
 	if (opt_enabled(CHANGE_GID)) {
 		if (setgid(new_gid) != 0) {
 			debug("setgid(%u): %s", new_gid, strerror(errno));
 			return -1;
 		}
+
+#ifdef HAVE_SETGROUPS
+		if (setgroups(0, NULL)) {
+			debug("setgroups: %s", strerror(errno));
+			return -1;
+		}
+#endif
 	}
 
 	if (opt_enabled(CHANGE_UID)) {
