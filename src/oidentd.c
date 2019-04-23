@@ -103,6 +103,7 @@ int main(int argc, char **argv) {
 		listen_fds = setup_listen(addr, htons(listen_port));
 		if (!listen_fds || listen_fds[0] == -1) {
 			o_log(LOG_CRIT, "Fatal: Unable to set up listening socket");
+			o_log(LOG_CRIT, "  (try running " PACKAGE_NAME " as root)");
 			exit(EXIT_FAILURE);
 		}
 	}
