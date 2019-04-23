@@ -184,7 +184,7 @@ int get_options(int argc, char *const argv[]) {
 			case 'd':
 				enable_opt(DEBUG_MSGS);
 #if !ENABLE_DEBUGGING
-				o_log(LOG_CRIT, "Fatal: oidentd was compiled without debugging support");
+				o_log(LOG_CRIT, "Fatal: " PACKAGE_NAME " was compiled without debugging support");
 				return -1;
 #endif
 				break;
@@ -424,7 +424,7 @@ int get_options(int argc, char *const argv[]) {
 
 static void print_usage(void) {
 	const char usage[] =
-"\nUsage: oidentd [options]\n"
+"\nUsage: " PACKAGE_NAME " [options]\n"
 "-a or --address <address>    Bind to <address> (can be specified multiple times)\n"
 "-c or --charset <charset>    Specify an alternate charset\n"
 "-C or --config <config file> Use the specified configuration file instead of the default\n"
