@@ -197,10 +197,6 @@ struct sockaddr_storage {
 	#define ss_family __ss_family
 #endif
 
-#if LIBNFCT_SUPPORT
-	bool drop_privs_libnfct(uid_t uid, gid_t gid);
-#endif
-
 /*
 ** System-dependent initialization; called only once.
 ** Called before privileges are dropped.

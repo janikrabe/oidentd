@@ -1,5 +1,6 @@
 Unreleased changes
 
+	* Linux: removed optional dependency on libcap-ng.
 	* Deprecated '\e' escape sequence in configuration files.
 	* Fixed incorrect username in log message when spoofing fails.
 	* Implemented XDG Base Directory specification

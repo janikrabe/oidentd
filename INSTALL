@@ -19,11 +19,11 @@ Optional Dependencies
 
     Unless the '--disable-libnfct' flag is used, oidentd is compiled with
 support for libnetfilter_conntrack on Linux systems on which it is available.
-Please note that this requires the libnetfilter_conntrack and libcap-ng
-libraries and their headers to be installed.  libnetfilter_conntrack allows
-oidentd to obtain connection tracking information without using the '/proc'
-filesystem.  This is useful on kernels without CONFIG_NF_CONNTRACK_PROCFS, on
-which '/proc/net/nf_conntrack' is not available.
+Please note that this requires the libnetfilter_conntrack library and its
+headers to be installed.  libnetfilter_conntrack allows oidentd to obtain
+connection tracking information without using the '/proc' filesystem.  This is
+useful on kernels without CONFIG_NF_CONNTRACK_PROCFS, on which
+'/proc/net/nf_conntrack' is not available.
 
 Build Configuration
 ===================

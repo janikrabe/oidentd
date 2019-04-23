@@ -1,6 +1,7 @@
 2019-04-23  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Remove libcap-ng status from '--version' output.
+	* Remove optional dependency on libcap-ng.
 
 2019-04-22  Janik Rabe  <oidentd@janikrabe.com>
 

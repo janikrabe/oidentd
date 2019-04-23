@@ -32,7 +32,6 @@ AC_PROG_LEX
 AC_PROG_RANLIB
 AC_PROG_INSTALL
 AC_PATH_PROG(sedpath, sed)
-AC_CONFIG_MACRO_DIR([m4])
 
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
@@ -445,15 +444,6 @@ case "$host_os" in
 		if test "$libnfct_support" = "yes"; then
 			AC_CHECK_LIB(netfilter_conntrack, nfct_query, ,
 					[libnfct_support=no])
-			if test "$libnfct_support" = "yes"; then
-				LIBCAP_NG_PATH
-				if test -n "$CAPNG_LDADD"; then
-					LIBS="$LIBS -lcap-ng"
-				else
-					AC_MSG_WARN(libnetfilter_conntrack support requires libcap-ng)
-					libnfct_support=no
-				fi
-			fi
 		fi
 	;;
 

@@ -43,12 +43,6 @@
 #include "options.h"
 #include "netlink.h"
 
-#if HAVE_LIBCAP_NG
-#	include <cap-ng.h>
-#else
-#	undef LIBNFCT_SUPPORT
-#endif
-
 #if !MASQ_SUPPORT
 #	undef LIBNFCT_SUPPORT
 #endif
@@ -116,34 +110,6 @@ static int conntrack = CT_UNKNOWN;
 #endif
 
 #if LIBNFCT_SUPPORT
-bool drop_privs_libnfct(uid_t uid, gid_t gid) {
-	/* drop privileges, keeping only CAP_NET_ADMIN for libnfct queries */
-
-	int ret;
-	capng_clear(CAPNG_SELECT_BOTH);
-	ret = capng_update(CAPNG_ADD, CAPNG_EFFECTIVE | CAPNG_PERMITTED,
-			CAP_NET_ADMIN);
-	if (ret) {
-		debug("capng_update: error %d", ret);
-		return false;
-	}
-
-	ret = capng_change_id(
-			opt_enabled(CHANGE_UID) ? (int) uid : -1,
-			opt_enabled(CHANGE_GID) ? (int) gid : -1,
-			CAPNG_CLEAR_BOUNDING | CAPNG_DROP_SUPP_GRP);
-	if (ret) {
-		debug("capng_change_id: error %d", ret);
-		return false;
-	}
-
-	/* don't try to drop privileges again */
-	disable_opt(CHANGE_UID);
-	disable_opt(CHANGE_GID);
-
-	return true;
-}
-
 static bool dispatch_libnfct_query(struct ct_masq_query *queryp) {
 	struct nfct_handle *nfcthp = nfct_open(CONNTRACK, 0);
 

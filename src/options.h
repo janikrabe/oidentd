@@ -44,10 +44,6 @@
 #define HAVE_LIBUDB 0
 #endif
 
-#ifndef HAVE_LIBCAP_NG
-#define HAVE_LIBCAP_NG 0
-#endif
-
 bool opt_enabled(u_int32_t option);
 void disable_opt(u_int32_t option);
 int get_options(int argc, char *const argv[]);
