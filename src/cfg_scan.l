@@ -1,6 +1,6 @@
 %{
 /*
-** oidentd_cfg_scan.l - oidentd configuration scanner.
+** cfg_scan.l - oidentd configuration scanner.
 ** Copyright (c) 2001-2006 Ryan McCabe <ryan@numb.org>
 ** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **

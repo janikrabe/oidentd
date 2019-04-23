@@ -1,5 +1,5 @@
 /*
-** oidentd_masq.c - oidentd IP masquerading handler.
+** masq.c - oidentd IP masquerading handler.
 ** Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
 ** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **

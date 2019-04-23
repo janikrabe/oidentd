@@ -1,5 +1,5 @@
 /*
-** oidentd_options.h - oidentd command-line handler.
+** options.h - oidentd command-line handler.
 ** Copyright (c) 2001-2006 Ryan McCabe <ryan@numb.org>
 ** Copyright (c) 2018      Janik Rabe  <oidentd@janikrabe.com>
 **

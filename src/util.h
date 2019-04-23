@@ -1,5 +1,5 @@
 /*
-** oidentd_util.h - oidentd utility functions.
+** util.h - oidentd utility functions.
 ** Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
 ** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **

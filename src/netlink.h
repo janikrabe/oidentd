@@ -1,5 +1,5 @@
 /*
-** oidentd_netlink.h - Linux netlink definitions.
+** netlink.h - Linux netlink definitions.
 **
 ** This header file extracts the needed structure definitions, #defines
 ** and macros from linux/netlink.h and linux/tcp_diag.h, and converts them

@@ -1,5 +1,5 @@
 /*
-** oidentd_user_db.c - oidentd user database routines.
+** user_db.c - oidentd user database routines.
 ** Copyright (c) 2001-2006 Ryan McCabe <ryan@numb.org>
 ** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
 **
