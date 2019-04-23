@@ -468,7 +468,7 @@ static void print_usage(void) {
 }
 
 static inline void print_version_str(const char *desc, const char *val) {
-	printf("\t%s: %*s%s\n", desc, 23 - (int) strlen(desc), "", val);
+	printf("\t%s: %*s%s\n", desc, 21 - (int) strlen(desc), "", val);
 }
 
 static inline void print_version_bool(const char *desc, const bool val) {
@@ -490,7 +490,6 @@ static void print_version(bool verbose) {
 		print_version_bool("Debug build", ENABLE_DEBUGGING);
 		print_version_bool("Masquerading support", MASQ_SUPPORT);
 		print_version_bool("IPv6 support", WANT_IPV6);
-		print_version_bool("Linux libcap-ng support", HAVE_LIBCAP_NG);
 		print_version_bool("Linux libnfct support", LIBNFCT_SUPPORT);
 		print_version_bool("UDB library support", HAVE_LIBUDB);
 

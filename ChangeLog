@@ -1,3 +1,7 @@
+2019-04-23  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Remove libcap-ng status from '--version' output.
+
 2019-04-22  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Improve PRNG interface.
