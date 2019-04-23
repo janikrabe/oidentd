@@ -86,7 +86,7 @@ int forward_request(const struct sockaddr_storage *host,
 
 	alarm(5);
 
-	if (connect(fsock, (struct sockaddr *) &addr, sin_len(&addr)) != 0) {
+	if (connect(fsock, (struct sockaddr *) &addr, (socklen_t) sin_len(&addr)) != 0) {
 		get_ip(&addr, ipbuf, sizeof(ipbuf));
 		debug("connect to %s:%d: %s",
 			ipbuf, ntohs(sin_port(&addr)), strerror(errno));

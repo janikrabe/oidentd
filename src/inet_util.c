@@ -240,7 +240,7 @@ ssize_t sock_write(int sock, void *buf, ssize_t len) {
 	while (len > 0) {
 		ssize_t n;
 
-		n = write(sock, buf, len);
+		n = write(sock, buf, (size_t) len);
 		if (n == -1) {
 			if (errno == EINTR)
 				continue;
@@ -315,7 +315,7 @@ int get_port(const char *name, in_port_t *port) {
 		if (!VALID_PORT(temp_port))
 			return -1;
 
-		*port = temp_port;
+		*port = (in_port_t) temp_port;
 	}
 
 	return 0;
