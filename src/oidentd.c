@@ -114,7 +114,7 @@ int main(int argc, char **argv) {
 	}
 
 	if (k_open() != 0) {
-		o_log(LOG_CRIT, "Fatal: Unable to open kmem device: %s", strerror(errno));
+		o_log(LOG_CRIT, "Fatal: Unable to initialize kernel module: %s", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
 

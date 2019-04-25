@@ -276,5 +276,12 @@ uid_t get_user6(	in_port_t lport,
 */
 
 int k_open(void) {
+#ifdef HAVE_UNVEIL
+	if (unveil("/", "r")) {
+		debug("unveil: %s", strerror(errno));
+		return -1;
+	}
+#endif
+
 	return 0;
 }

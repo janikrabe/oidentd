@@ -1,3 +1,7 @@
+2019-04-25  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Add broad unveil call for OpenBSD.
+
 2019-04-23  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Remove libcap-ng status from '--version' output.
