@@ -65,10 +65,9 @@ Running oidentd
 this reason, it drops its privileges after starting up.  However, oidentd still
 needs to be started as root for a number of reasons:
 
-  - to bind the privileged port 113
+  - to bind the privileged port 113 (unless the '--port' option is used)
   - to open the kernel memory device (on systems where this is required)
   - to open the connection tracking file (on systems where this is required)
-  - to request the CAP_NET_ADMIN capability (on Linux with libnfct)
 
     The user and group oidentd runs as after dropping privileges can be
 specified with the '--user' and '--group' options, respectively.  Documentation
