@@ -31,17 +31,17 @@ Build Configuration
     Run './configure' to configure the build.  The './configure' script accepts
 a number of optional flags:
 
-  - '--disable-nat':     disable NAT support
+  - '--disable-nat': disable NAT support
         Disables '--forward', '--masquerade' and '--masquerade-first'
-  - '--disable-ipv6':    disable IPv6 support
+  - '--disable-ipv6': disable IPv6 support
         Disables listening on IPv6 and ignores all IPv6 connections
   - '--disable-libnfct': disable Linux libnetfilter_conntrack support
         See "Optional Dependencies" above for more information
   - '--disable-xdgbdir': disable XDG Base Directory support
         Do not look for '~/.config/oidentd.conf' before '~/.oidentd.conf'
-  - '--enable-debug':    enable debugging support
+  - '--enable-debug': enable debugging support
         Enables the '--debug' option
-  - '--enable-warn':     enable all compiler warnings
+  - '--enable-warn': enable all compiler warnings
         Show all warnings during compilation
 
     By default, oidentd is configured with a prefix of '/usr/local'.  This is
