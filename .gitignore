@@ -1,7 +1,7 @@
 # Backup files
 *~
 
-# http://www.gnu.org/software/automake
+# GNU automake
 Makefile
 Makefile.in
 /ar-lib
@@ -11,7 +11,7 @@ Makefile.in
 /test-driver
 /ylwrap
 
-# http://www.gnu.org/software/autoconf
+# GNU autoconf
 /autom4te.cache
 /autoscan.log
 /autoscan-*.log
@@ -31,13 +31,13 @@ Makefile.in
 /stamp-h1
 .deps/
 
-# https://www.gnu.org/software/libtool/
+# GNU libtool
 /ltmain.sh
 
-# http://www.gnu.org/software/texinfo
+# GNU texinfo
 /texinfo.tex
 
-# http://www.gnu.org/software/m4/
+# GNU m4
 m4/libtool.m4
 m4/ltoptions.m4
 m4/ltsugar.m4
