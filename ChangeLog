@@ -1,3 +1,7 @@
+2019-05-21  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Symlink os.c instead of copying.
+
 2019-04-25  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Add broad unveil call for OpenBSD.

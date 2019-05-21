@@ -690,4 +690,4 @@ AC_OUTPUT([
 	doc/Makefile
 ])
 
-cp -f $srcdir/src/kernel/$os_src src/os.c
+ln -fs $srcdir/src/kernel/$os_src src/os.c
