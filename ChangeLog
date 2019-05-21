@@ -4,6 +4,7 @@
 	* Deprecate configure flag '--disable-masq';
 	  use '--disable-nat' instead.
 	* Add detailed warning when compiling without libnfct.
+	* Deprecate MASQFILE and IPCONNTRACK on Linux.
 
 2019-04-25  Janik Rabe  <oidentd@janikrabe.com>
 

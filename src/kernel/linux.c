@@ -209,6 +209,8 @@ int core_init(void) {
 #	endif
 			} else {
 				conntrack = CT_IPCONNTRACK;
+				o_log(LOG_CRIT, "Support for " IPCONNTRACK " will be removed in a "
+				                "future release. Please update your kernel.");
 			}
 		} else {
 			conntrack = CT_NFCONNTRACK;
@@ -218,6 +220,8 @@ int core_init(void) {
 		                "please consider upgrading your kernel");
 		return -1;
 	} else {
+		o_log(LOG_CRIT, "Support for " MASQFILE " will be removed in a "
+		                "future release. Please update your kernel.");
 		conntrack = CT_MASQFILE;
 	}
 #endif
