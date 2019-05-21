@@ -1,6 +1,8 @@
 2019-05-21  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Symlink os.c instead of copying.
+	* Deprecate configure flag '--disable-masq';
+	  use '--disable-nat' instead.
 
 2019-04-25  Janik Rabe  <oidentd@janikrabe.com>
 
