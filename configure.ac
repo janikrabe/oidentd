@@ -20,8 +20,6 @@ AM_INIT_AUTOMAKE
 
 AC_DEFINE(PACKAGE_AUTHOR, ["Janik Rabe"], [maintainer])
 AC_DEFINE(PACKAGE_WEBSITE, ["https://oidentd.janikrabe.com"], [website])
-AC_DEFINE(PACKAGE_ORIG_AUTHOR, ["Ryan McCabe"], [original author])
-AC_DEFINE(PACKAGE_ORIG_EMAIL, ["ryan@numb.org"], [original author's email])
 
 AM_CONFIG_HEADER(config.h)
 

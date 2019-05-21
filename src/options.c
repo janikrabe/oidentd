@@ -478,8 +478,7 @@ static inline void print_version_bool(const char *desc, const bool val) {
 static void print_version(bool verbose) {
 	printf("%s by %s <%s>\n", PACKAGE_STRING,
 			PACKAGE_AUTHOR, PACKAGE_BUGREPORT);
-	printf("Originally written by %s <%s>\n",
-			PACKAGE_ORIG_AUTHOR, PACKAGE_ORIG_EMAIL);
+	printf("Originally written by Ryan McCabe <ryan@numb.org>\n");
 	printf("%s\n", PACKAGE_WEBSITE);
 
 	if (verbose) {
