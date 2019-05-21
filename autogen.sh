@@ -1,34 +1,35 @@
 #!/usr/bin/env sh
 
 AUTOCONF=autoconf
-AUTOHEADER=autoheader
 AUTOMAKE=automake
+AUTOHEADER=autoheader
 ACLOCAL=aclocal
 
-($AUTOCONF --version) < /dev/null > /dev/null 2>&1 || {
-	echo
-	echo "Error: You must have 'autoconf' installed to compile this program."
-	echo "Download the appropriate package for your distribution,"
-	echo "or get the source tarball at https://ftp.gnu.org/pub/gnu/autoconf"
-	exit 1
+require_binary() {
+	"$1" --version < /dev/null > /dev/null 2>&1 || {
+		echo "Error: No usable installation of '$1' was found in your \$PATH."
+		echo "       Please install it to compile oidentd."
+
+		test -z "$2" || {
+			echo
+			echo "Note: $2"
+		}
+
+		exit 1
+	}
 }
 
-($ACLOCAL --version) < /dev/null > /dev/null 2>&1 || {
-	echo
-	echo "Error: Missing 'aclocal'. The version of 'automake'"
-	echo "installed doesn't appear recent enough."
-	echo "Download the appropriate package for your distribution,"
-	echo "or get the source tarball at https://ftp.gnu.org/pub/gnu/automake"
-	exit 1
-}
+require_binary "$AUTOCONF"
+require_binary "$AUTOMAKE"
+require_binary "$AUTOHEADER" \
+	"Your version of 'automake' may not be recent enough."
+require_binary "$ACLOCAL" \
+	"Your version of 'automake' may not be recent enough."
 
-($ACLOCAL && $AUTOHEADER && $AUTOMAKE --gnu --add-missing --copy && $AUTOCONF) || {
-	echo
+$ACLOCAL && $AUTOHEADER && $AUTOMAKE --gnu --add-missing --copy && $AUTOCONF || {
 	echo "Error: Automatic generation of the configuration scripts has failed."
-	echo "Please try to generate them manually. If you believe this failure"
-	echo "is the result of a bug in oidentd, please email oidentd@janikrabe.com"
-	echo "with any relevant details."
+	echo "       Please try to generate them manually.  If you believe this"
+	echo "       failure is the result of a bug in oidentd, please email"
+	echo "       <oidentd@janikrabe.com> with any relevant details."
 	exit 1
 }
-
-echo "The configuration scripts have been generated successfully."
