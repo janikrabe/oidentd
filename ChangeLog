@@ -3,6 +3,7 @@
 	* Symlink os.c instead of copying.
 	* Deprecate configure flag '--disable-masq';
 	  use '--disable-nat' instead.
+	* Add detailed warning when compiling without libnfct.
 
 2019-04-25  Janik Rabe  <oidentd@janikrabe.com>
 

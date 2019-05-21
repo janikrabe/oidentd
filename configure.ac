@@ -666,7 +666,12 @@ if test "$want_libnfct" = "yes"; then
 	if test "$libnfct_support" = "yes"; then
 		AC_DEFINE(LIBNFCT_SUPPORT, 1, [Set to include libnetfilter_conntrack support])
 	else
-		AC_MSG_WARN(not including libnetfilter_conntrack support)
+		AC_MSG_WARN([You are compiling oidentd without libnetfilter_conntrack support.])
+		AC_MSG_WARN([Depending on your kernel configuration, this may make NAT support])
+		AC_MSG_WARN([unavailable.])
+		AC_MSG_WARN([Future releases of oidentd may require libnetfilter_conntrack])
+		AC_MSG_WARN([because parsing connection tracking files relies on an obsolete])
+		AC_MSG_WARN([Linux kernel option.])
 	fi
 fi
 
