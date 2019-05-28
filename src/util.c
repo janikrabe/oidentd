@@ -281,7 +281,7 @@ FILE *safe_open(const struct passwd *pw, const char *filename) {
 	fp = fopen(path, "r");
 	if (!fp) {
 		if (errno != ENOENT)
-			debug("open: %s: : %s", path, strerror(errno));
+			debug("open: %s: %s", path, strerror(errno));
 
 		goto out_fail;
 	}
