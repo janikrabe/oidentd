@@ -170,14 +170,12 @@ int get_options(int argc, char *const argv[]) {
 			}
 
 			case 'c':
-				if (charset)
-					free(charset);
+				free(charset);
 				charset = xstrdup(optarg);
 				break;
 
 			case 'C':
-				if (config_file)
-					free(config_file);
+				free(config_file);
 				config_file = xstrdup(optarg);
 				break;
 
@@ -267,8 +265,7 @@ int get_options(int argc, char *const argv[]) {
 			}
 
 			case 'o':
-				if (temp_os)
-					free(temp_os);
+				free(temp_os);
 
 				if (optarg) {
 					char *p;
@@ -299,8 +296,7 @@ int get_options(int argc, char *const argv[]) {
 				break;
 
 			case 'r':
-				if (failuser)
-					free(failuser);
+				free(failuser);
 				failuser = xstrdup(optarg);
 				break;
 
