@@ -106,7 +106,7 @@ static inline char *select_reply(const struct user_cap *user) {
 */
 
 static inline void numeric_ident(uid_t con_uid, char *buf, size_t len) {
-	snprintf(buf, len, "%u", (u_int32_t) con_uid);
+	snprintf(buf, len, "%lu", (unsigned long) con_uid);
 }
 
 /*

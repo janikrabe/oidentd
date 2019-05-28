@@ -274,12 +274,12 @@ uid_t get_user6(	in_port_t lport,
 		u_int32_t portf_temp;
 		in_port_t portl;
 		in_port_t portf;
-		uid_t uid;
+		unsigned long uid;
+		unsigned long inode;
 		int ret;
-		u_long inode;
 
 		ret = sscanf(buf,
-			"%*d: %8x%8x%8x%8x:%x %8x%8x%8x%8x:%x %*x %*X:%*X %*x:%*X %*x %u %*d %lu",
+			"%*d: %8x%8x%8x%8x:%x %8x%8x%8x%8x:%x %*x %*X:%*X %*x:%*X %*x %lu %*d %lu",
 			&local6.s6_addr32[0], &local6.s6_addr32[1], &local6.s6_addr32[2],
 			&local6.s6_addr32[3], &portl_temp,
 			&remote6.s6_addr32[0], &remote6.s6_addr32[1], &remote6.s6_addr32[2],
@@ -302,7 +302,7 @@ uid_t get_user6(	in_port_t lport,
 			if (inode == 0 && uid == 0)
 				return MISSING_UID;
 
-			return uid;
+			return (uid_t) uid;
 		}
 	}
 
@@ -322,18 +322,18 @@ uid_t get_user4(	in_port_t lport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
 {
-	uid_t uid;
+	unsigned long uid;
+	unsigned long inode;
 	FILE *fp;
 	char buf[1024];
-	u_int32_t inode;
 	in_addr_t laddr4;
 	in_addr_t faddr4;
 
 	if (netlink_sock != -1) {
-		uid = lookup_tcp_diag(laddr, faddr, lport, fport);
+		uid_t nluid = lookup_tcp_diag(laddr, faddr, lport, fport);
 
-		if (uid != MISSING_UID)
-			return uid;
+		if (nluid != MISSING_UID)
+			return nluid;
 	}
 
 	laddr4 = SIN4(laddr)->sin_addr.s_addr;
@@ -369,7 +369,7 @@ uid_t get_user4(	in_port_t lport,
 		in_addr_t remote;
 
 		ret = sscanf(buf,
-			"%*d: %x:%x %x:%x %*x %*x:%*x %*x:%*x %*x %u %*d %u",
+			"%*d: %x:%x %x:%x %*x %*x:%*x %*x:%*x %*x %lu %*d %lu",
 			&local, &portl_temp, &remote, &portf_temp, &uid, &inode);
 
 		if (ret != 6)
@@ -412,7 +412,7 @@ out_success:
 	if (inode == 0 && uid == 0)
 		return MISSING_UID;
 
-	return uid;
+	return (uid_t) uid;
 }
 
 #if MASQ_SUPPORT
@@ -702,7 +702,7 @@ static int masq_ct_line(char *line,
 			sockprintf(sock, "%d,%d:ERROR:%s\r\n",
 				lport, fport, ERROR("NO-USER"));
 
-			debug("getpwuid(%u): %s", con_uid, strerror(errno));
+			debug("getpwuid(%lu): %s", (unsigned long) con_uid, strerror(errno));
 			return 0;
 		}
 

@@ -201,7 +201,7 @@ int find_group(const char *temp_group, gid_t *gid) {
 int drop_privs(uid_t new_uid, gid_t new_gid) {
 	if (opt_enabled(CHANGE_GID)) {
 		if (setgid(new_gid) != 0) {
-			debug("setgid(%u): %s", new_gid, strerror(errno));
+			debug("setgid(%lu): %s", (unsigned long) new_gid, strerror(errno));
 			return -1;
 		}
 
@@ -220,7 +220,7 @@ int drop_privs(uid_t new_uid, gid_t new_gid) {
 
 		pw = getpwuid(new_uid);
 		if (!pw) {
-			debug("getpwuid(%u): No such user", new_uid);
+			debug("getpwuid(%lu): No such user ID", (unsigned long) new_uid);
 			return -1;
 		}
 
@@ -232,13 +232,13 @@ int drop_privs(uid_t new_uid, gid_t new_gid) {
 		ret = initgroups(pw->pw_name, my_gid);
 
 		if (ret != 0) {
-			debug("initgroups(%s, %u): %s", pw->pw_name, my_gid,
+			debug("initgroups(%s, %lu): %s", pw->pw_name, (unsigned long) my_gid,
 				strerror(errno));
 			return -1;
 		}
 
 		if (setuid(new_uid) != 0) {
-			debug("setuid(%u): %s", new_uid, strerror(errno));
+			debug("setuid(%lu): %s", (unsigned long) new_uid, strerror(errno));
 			return -1;
 		}
 	}
@@ -272,8 +272,8 @@ FILE *safe_open(const struct passwd *pw, const char *filename) {
 
 	if (st.st_uid != pw->pw_uid) {
 		o_log(LOG_CRIT,
-			"Refused to read %s during request for %s (owner is UID %d)",
-			path, pw->pw_name, st.st_uid);
+			"Refused to read %s during request for %s (owner is UID %lu)",
+			path, pw->pw_name, (unsigned long) st.st_uid);
 
 		goto out_fail;
 	}
@@ -295,8 +295,8 @@ FILE *safe_open(const struct passwd *pw, const char *filename) {
 
 	if (st.st_uid != pw->pw_uid) {
 		o_log(LOG_CRIT,
-			"Refused to read \"%s\" during request for %s (owner is UID %u)",
-			path, pw->pw_name, st.st_uid);
+			"Refused to read %s during request for %s (owner is UID %lu)",
+			path, pw->pw_name, (unsigned long) st.st_uid);
 
 		fclose(fp);
 		goto out_fail;

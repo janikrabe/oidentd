@@ -385,7 +385,7 @@ int get_options(int argc, char *const argv[]) {
 			if (find_user("nobody", &target_uid) != 0) {
 				o_log(LOG_INFO,
 					"Users \"oidentd\" and \"nobody\" do "
-					"not exist; using %u as default UID",
+					"not exist; using %lu as default UID",
 					DEFAULT_UID);
 
 				target_uid = DEFAULT_UID;
@@ -405,7 +405,7 @@ int get_options(int argc, char *const argv[]) {
 					o_log(LOG_INFO,
 						"Groups \"oidentd\", \"nobody\" "
 						"and \"nogroup\" do not exist; "
-						"using %u as default GID",
+						"using %lu as default GID",
 						DEFAULT_GID);
 
 					target_gid = DEFAULT_GID;
