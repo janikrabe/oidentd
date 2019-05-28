@@ -126,7 +126,7 @@ int find_masq_entry(struct sockaddr_storage *host,
 		++line_num;
 		p = strchr(buf, '\n');
 		if (!p) {
-			debug("[%s:%d] Long line", MASQ_MAP, line_num);
+			debug("[%s:%d] Line too long", MASQ_MAP, line_num);
 			goto failure;
 		}
 		*p = '\0';
