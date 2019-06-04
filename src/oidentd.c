@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
 	if (get_options(argc, argv) != 0)
 		exit(EXIT_FAILURE);
 
-	openlog("oidentd", LOG_PID | LOG_CONS | LOG_NDELAY, LOG_DAEMON);
+	openlog(PACKAGE_NAME, LOG_PID | LOG_CONS | LOG_NDELAY, LOG_DAEMON);
 
 	if (read_config(config_file) != 0) {
 		o_log(LOG_CRIT, "Fatal: Error reading configuration file");
