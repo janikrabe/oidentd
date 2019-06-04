@@ -361,7 +361,7 @@ static int service_request(int insock, int outsock) {
 		sockprintf(outsock, "%d,%d:ERROR:%s\r\n",
 			lport, fport, ERROR("NO-USER"));
 
-		debug("getpwuid(%d): %s", con_uid, strerror(errno));
+		debug("getpwuid(%lu): %s", (unsigned long) con_uid, strerror(errno));
 		return 0;
 	} else
 		copy_pw(pw, &pwd);
