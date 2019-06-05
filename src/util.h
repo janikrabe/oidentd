@@ -73,8 +73,4 @@ int seed_prng(void);
 unsigned long prng_next(void);
 unsigned int randval(unsigned int i);
 
-#ifndef HAVE_VSNPRINTF
-	int vsnprintf(char *str, size_t n, char *fmt, va_list ap);
-#endif
-
 #endif

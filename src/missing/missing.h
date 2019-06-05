@@ -11,10 +11,6 @@
 #ifndef __OIDENTD_MISSING_H
 #define __OIDENTD_MISSING_H
 
-#ifndef HAVE_VSNPRINTF
-int vsnprintf(char *str, size_t n, char *fmt, va_list ap);
-#endif
-
 #ifndef HAVE_INET_NTOP
 const char *inet_ntop(int af, const void *src, char *dst, size_t len);
 #endif
