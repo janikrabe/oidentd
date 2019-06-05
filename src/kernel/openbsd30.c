@@ -56,6 +56,8 @@
 #include "masq.h"
 #include "options.h"
 
+#define PF_DEVICE "/dev/pf"
+
 extern struct sockaddr_storage proxy;
 
 /*
@@ -142,9 +144,9 @@ int masq(	int sock,
 	if (faddr->ss_family != AF_INET || laddr->ss_family != AF_INET)
 		return -1;
 
-	pfdev = open("/dev/pf", O_RDWR);
+	pfdev = open(PF_DEVICE, O_RDWR);
 	if (pfdev == -1) {
-		debug("open: %s", strerror(errno));
+		debug("open: %s: %s", PF_DEVICE, strerror(errno));
 		return -1;
 	}
 
