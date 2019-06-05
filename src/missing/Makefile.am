@@ -7,7 +7,6 @@ libmissing_a_SOURCES = \
 	inet_ntop.c    \
 	ipv6_missing.c \
 	getopt.c       \
-	snprintf.c     \
 	vasprintf.c
 
 noinst_HEADERS = \

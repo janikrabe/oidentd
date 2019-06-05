@@ -15,10 +15,6 @@
 int vsnprintf(char *str, size_t n, char *fmt, va_list ap);
 #endif
 
-#ifndef HAVE_SNPRINTF
-int snprintf(char *str, size_t n, char const *fmt, ...);
-#endif
-
 #ifndef HAVE_INET_NTOP
 const char *inet_ntop(int af, const void *src, char *dst, size_t len);
 #endif
