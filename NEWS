@@ -13,6 +13,7 @@ Unreleased changes
 	* Changed project description.
 	* Deprecated support for MASQFILE and IPCONNTRACK on Linux.
 		* Users of recent kernels are unaffected by this change.
+	* Minor bugfixes, cleanups, and improvements.
 	* Deprecated support for Darwin.
 	* Deprecated support for FreeBSD 1-3.
 	* Deprecated support for FreeBSD 4.
