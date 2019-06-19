@@ -391,7 +391,7 @@ inline void get_ip(	struct sockaddr_storage *ss,
 inline bool sin4_equal(	struct sockaddr_storage *ss1,
 						struct sockaddr_storage *ss2)
 {
-	return (SIN4(ss1)->sin_addr.s_addr == SIN4(ss2)->sin_addr.s_addr)
+	return (SIN4(ss1)->sin_addr.s_addr == SIN4(ss2)->sin_addr.s_addr);
 }
 
 /*
