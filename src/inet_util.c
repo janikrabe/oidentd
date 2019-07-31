@@ -421,7 +421,7 @@ inline bool sin6_equal(	struct sockaddr_storage *ss1,
 void sin_setv6(struct in6_addr *sin6, struct sockaddr_storage *ss) {
 	memset(ss, 0, sizeof(struct sockaddr_storage));
 	ss->ss_family = AF_INET6;
-	memcpy(&SIN6(ss)->sin6_addr, sin6, sizeof(struct sockaddr_in6));
+	memcpy(&SIN6(ss)->sin6_addr, sin6, sizeof(struct in6_addr));
 }
 
 #endif
