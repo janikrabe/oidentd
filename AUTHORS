@@ -33,6 +33,9 @@ Fardale <fardale+github@crans.org>
 Guus Sliepen <sliepen@phys.uu.nl>
 	Initial netfilter (Linux >= 2.3 Support)
 
+Hanno Böck <hanno@gentoo.org>
+	Fixed overflow due to incorrect sizeof type
+
 Jan Alexander Steffens <jan.steffens@gmail.com>
 	Forwarding capability
 
