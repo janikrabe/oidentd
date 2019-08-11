@@ -72,3 +72,7 @@ needs to be started as root for a number of reasons:
     The user and group oidentd runs as after dropping privileges can be
 specified with the '--user' and '--group' options, respectively.  Documentation
 for these options are available in oidentd.conf(5).
+
+    Note that in some cases, oidentd may be unable to run as an unprivileged
+user on FreeBSD, NetBSD, and DragonFly BSD.  On affected systems, a warning
+will be shown at runtime and when running './configure'.
