@@ -73,12 +73,13 @@ change should be added as a separate line and prefixed with an asterisk and a
 space character ('* ').  The last change should be followed by a blank line to
 separate the summary from that of the previous version.  At the top of the
 file, add the line "Changes in version <version>", replacing '<version>' with
-the version number of the new release.  Before that line, prepend "Unreleased
-changes", followed by two blank lines, to the file.
+the version number of the new release.
 
-    Update the version number in 'README', 'configure.ac' and the manual pages
-in the 'doc/' directory.  Change the date in each of the manual pages to the
-release date of the new version.
+    Update the version number in 'README' and 'configure.ac'.  Change the date
+in each of the manual pages to the release date of the new version.
+
+    Commit the changes and tag the commit with "v<version>", where '<version>'
+is the version number of the release.
 
     Finally, run 'make distcheck' to produce a release tarball which can then
 be distributed to users.  If this command succeeds, archives in other formats
