@@ -1,3 +1,7 @@
+2019-08-11  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Set type of default UID and GID to unsigned long.
+
 2019-07-31  Hanno Böck  <hanno@gentoo.org>
 
 	* Fix overflow by using proper type for sizeof

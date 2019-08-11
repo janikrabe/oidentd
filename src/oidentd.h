@@ -80,8 +80,8 @@
 ** run with.
 */
 
-#define DEFAULT_UID		65534
-#define DEFAULT_GID		65534
+#define DEFAULT_UID		65534UL
+#define DEFAULT_GID		65534UL
 
 /*
 ** Default port oidentd runs on and default forward port.
