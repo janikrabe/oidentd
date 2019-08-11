@@ -13,9 +13,9 @@ replies, generate random replies, or hide their connections.  oidentd supports
 lookups for NAT connections and is able to forward queries to other servers.
 Detailed descriptions of all features are available in the manual pages.
 
-Please consult the KERNEL_SUPPORT.md file for more information about the
-supported kernels.  The INSTALL file contains instructions for installing
-oidentd.  The HACKING file describes how to work with the source code.
+The INSTALL file contains instructions for installing oidentd.  The HACKING
+file describes how to work with the source code.  Please consult the
+KERNEL_SUPPORT.md file for information about the supported kernels.
 
 oidentd is maintained and developed by Janik Rabe <oidentd@janikrabe.com>, with
 contributions from many people who are listed in the AUTHORS file.  oidentd was
