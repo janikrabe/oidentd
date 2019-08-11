@@ -40,9 +40,9 @@ a number of optional flags:
   - '--disable-xdgbdir': disable XDG Base Directory support
         Do not look for '~/.config/oidentd.conf' before '~/.oidentd.conf'
   - '--enable-debug': enable debugging support
-        Enables the '--debug' option
-  - '--enable-warn': enable all compiler warnings
-        Show all warnings during compilation
+        Enables support for the '--debug' option
+  - '--enable-warn': enable additional compiler warnings
+        Show more warnings during compilation
 
     By default, oidentd is configured with a prefix of '/usr/local'.  This is
 the directory that files will be installed to.  For example, the oidentd binary
