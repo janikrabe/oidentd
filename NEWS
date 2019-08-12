@@ -1,4 +1,4 @@
-Unreleased changes
+Changes in version 2.4.0
 
 	* Linux: removed optional dependency on libcap-ng.
 	* Deprecated '\e' escape sequence in configuration files.
