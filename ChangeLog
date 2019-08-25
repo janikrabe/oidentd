@@ -1,3 +1,7 @@
+2019-08-25  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Remove default CFLAGS -fstack-protector -fPIE.
+
 2019-08-12  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Released as version 2.4.0.
