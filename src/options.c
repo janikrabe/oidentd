@@ -475,7 +475,7 @@ static void print_version(bool verbose) {
 	printf("%s by %s <%s>\n", PACKAGE_STRING,
 			PACKAGE_AUTHOR, PACKAGE_BUGREPORT);
 	printf("Originally written by Ryan McCabe <ryan@numb.org>\n");
-	printf("%s\n", PACKAGE_WEBSITE);
+	printf("%s\n", PACKAGE_URL);
 
 	if (verbose) {
 		printf("\nBuild information:\n");

@@ -15,11 +15,13 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with this program; if not, write to the Free Software
 dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-AC_INIT([oidentd], [2.4.0], [oidentd@janikrabe.com])
+AC_INIT([oidentd],
+        [2.4.0],
+        [oidentd@janikrabe.com],,
+        [https://oidentd.janikrabe.com])
 AM_INIT_AUTOMAKE
 
 AC_DEFINE(PACKAGE_AUTHOR, ["Janik Rabe"], [maintainer])
-AC_DEFINE(PACKAGE_WEBSITE, ["https://oidentd.janikrabe.com"], [website])
 
 AM_CONFIG_HEADER(config.h)
 
