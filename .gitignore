@@ -49,7 +49,8 @@ autom4te.cache
 *.a
 *.d
 *.o
-*.tar.gz
+*.tar.*
+*.zip
 
 # Generated source files and executables
 src/oidentd
