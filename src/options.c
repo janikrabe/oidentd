@@ -65,34 +65,34 @@ static void print_version(bool verbose);
 static inline void enable_opt(u_int32_t option);
 
 static const struct option longopts[] = {
-	{"address",				required_argument,	0, 'a'},
-	{"charset",				required_argument,	0, 'c'},
-	{"config",				required_argument,	0, 'C'},
-	{"debug",				no_argument,		0, 'd'},
-	{"error",				no_argument,		0, 'e'},
-	{"group",				required_argument,	0, 'g'},
-	{"help",				no_argument,		0, 'h'},
-	{"foreground",				no_argument,		0, 'i'},
-	{"stdio",				no_argument,		0, 'I'},
-	{"limit",				required_argument,	0, 'l'},
-	{"other",				optional_argument,	0, 'o'},
-	{"port",				required_argument,	0, 'p'},
-	{"quiet",				no_argument,		0, 'q'},
-	{"reply",				required_argument,	0, 'r'},
-	{"nosyslog",				no_argument,		0, 'S'},
-	{"timeout",				required_argument,	0, 't'},
-	{"user",				required_argument,	0, 'u'},
+	{"address",          required_argument, 0, 'a'},
+	{"charset",          required_argument, 0, 'c'},
+	{"config",           required_argument, 0, 'C'},
+	{"debug",            no_argument,       0, 'd'},
+	{"error",            no_argument,       0, 'e'},
+	{"group",            required_argument, 0, 'g'},
+	{"help",             no_argument,       0, 'h'},
+	{"foreground",       no_argument,       0, 'i'},
+	{"stdio",            no_argument,       0, 'I'},
+	{"limit",            required_argument, 0, 'l'},
+	{"other",            optional_argument, 0, 'o'},
+	{"port",             required_argument, 0, 'p'},
+	{"quiet",            no_argument,       0, 'q'},
+	{"reply",            required_argument, 0, 'r'},
+	{"nosyslog",         no_argument,       0, 'S'},
+	{"timeout",          required_argument, 0, 't'},
+	{"user",             required_argument, 0, 'u'},
 #if HAVE_LIBUDB
-	{"udb",					no_argument,		0, 'U'},
+	{"udb",              no_argument,       0, 'U'},
 #endif
-	{"version",				no_argument,		0, 'v'},
+	{"version",          no_argument,       0, 'v'},
 #if MASQ_SUPPORT
-	{"forward",				optional_argument,	0, 'f'},
-	{"masquerade",				no_argument,		0, 'm'},
-	{"masquerade-first",			no_argument,		0, 'M'},
-	{"forward-last",			no_argument,		0, '0'}, /* deprecated */
+	{"forward",          optional_argument, 0, 'f'},
+	{"masquerade",       no_argument,       0, 'm'},
+	{"masquerade-first", no_argument,       0, 'M'},
+	{"forward-last",     no_argument,       0, '0'}, /* deprecated */
 #endif
-	{"proxy",				required_argument,	0, 'P'},
+	{"proxy",            required_argument, 0, 'P'},
 	{NULL, 0, NULL, 0}
 };
 
