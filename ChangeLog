@@ -1,3 +1,7 @@
+2019-10-27  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Add '--reply-all' option.
+
 2019-08-25  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Remove default CFLAGS -fstack-protector -fPIE.

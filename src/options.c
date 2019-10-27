@@ -41,14 +41,15 @@
 #include "options.h"
 
 #if MASQ_SUPPORT
-#	define OPTSTRING "a:c:C:def::g:hiIl:mMo::p:P:qr:St:u:Uv"
+#	define OPTSTRING "a:c:C:def::g:hiIl:mMo::p:P:qr:R:St:u:Uv"
 	extern in_port_t fwdport;
 #else
-#	define OPTSTRING "a:c:C:deg:hiIl:o::p:P:qr:St:u:Uv"
+#	define OPTSTRING "a:c:C:deg:hiIl:o::p:P:qr:R:St:u:Uv"
 #endif
 
 extern struct sockaddr_storage proxy;
 extern char *failuser;
+extern char *replyall;
 extern char *ret_os;
 extern char *config_file;
 extern u_int32_t timeout;
@@ -79,6 +80,7 @@ static const struct option longopts[] = {
 	{"port",             required_argument, 0, 'p'},
 	{"quiet",            no_argument,       0, 'q'},
 	{"reply",            required_argument, 0, 'r'},
+	{"reply-all",        required_argument, 0, 'R'},
 	{"nosyslog",         no_argument,       0, 'S'},
 	{"timeout",          required_argument, 0, 't'},
 	{"user",             required_argument, 0, 'u'},
@@ -300,6 +302,11 @@ int get_options(int argc, char *const argv[]) {
 				failuser = xstrdup(optarg);
 				break;
 
+			case 'R':
+				free(replyall);
+				replyall = xstrdup(optarg);
+				break;
+
 			case 'S':
 				enable_opt(NOSYSLOG);
 				break;
@@ -457,6 +464,7 @@ static void print_usage(void) {
 
 "-v or --version              Display version information and exit\n"
 "-r or --reply <string>       If a query fails, pretend it succeeded, returning <string>\n"
+"-R or --reply-all <string>   Always return <string> without performing connection lookups\n"
 "-h or --help                 Display this help and exit\n";
 
 	print_version(false);

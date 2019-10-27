@@ -1,3 +1,7 @@
+Unreleased changes
+
+	* Added '--reply-all' option.
+
 Changes in version 2.4.0
 
 	* Linux: removed optional dependency on libcap-ng.

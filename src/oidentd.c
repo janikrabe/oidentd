@@ -72,6 +72,7 @@ gid_t target_gid;
 
 char *ret_os;
 char *failuser;
+char *replyall;
 char *config_file;
 
 in_port_t listen_port;
@@ -85,12 +86,12 @@ int main(int argc, char **argv) {
 
 	openlog(PACKAGE_NAME, LOG_PID | LOG_CONS | LOG_NDELAY, LOG_DAEMON);
 
-	if (read_config(config_file) != 0) {
+	if (!replyall && read_config(config_file) != 0) {
 		o_log(LOG_CRIT, "Fatal: Error reading configuration file");
 		exit(EXIT_FAILURE);
 	}
 
-	if (core_init() != 0) {
+	if (!replyall && core_init() != 0) {
 		if (opt_enabled(DEBUG_MSGS)) {
 			o_log(LOG_CRIT, "Fatal: Error initializing core");
 		} else {
@@ -113,7 +114,7 @@ int main(int argc, char **argv) {
 		exit(EXIT_FAILURE);
 	}
 
-	if (k_open() != 0) {
+	if (!replyall && k_open() != 0) {
 		o_log(LOG_CRIT, "Fatal: Unable to initialize kernel module: %s", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
@@ -124,7 +125,7 @@ int main(int argc, char **argv) {
 	}
 
 #if HAVE_LIBUDB
-	if (opt_enabled(USEUDB)) {
+	if (!replyall && opt_enabled(USEUDB)) {
 		if (udb_init(UDB_ENV_BASE_KEY) == 0) {
 			o_log(LOG_CRIT, "Fatal: Can't open UDB shared memory tables");
 			exit(EXIT_FAILURE);
@@ -291,6 +292,16 @@ static int service_request(int insock, int outsock) {
 		return 0;
 	}
 
+	if (replyall) {
+		sockprintf(outsock, "%d,%d:USERID:%s:%s\r\n",
+			lport_temp, fport_temp, ret_os, replyall);
+
+		o_log(LOG_INFO, "[%s] Static reply: %d , %d : (returned %s)",
+			host_buf, lport_temp, fport_temp, replyall);
+
+		return 0;
+	}
+
 	lport = (in_port_t) lport_temp;
 	fport = (in_port_t) fport_temp;
 
@@ -452,6 +463,13 @@ static void sig_alarm(int unused __notused) {
 */
 
 static void sig_hup(int unused __notused) {
+	if (replyall) {
+		/*
+		 * Configuration file was never loaded; don't try to reload it.
+		 */
+		return;
+	}
+
 	user_db_destroy();
 
 	if (read_config(CONFFILE) != 0) {

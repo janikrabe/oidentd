@@ -141,6 +141,13 @@ OPTIONS
   When a lookup fails, send the specified ident response as if it had
   succeeded.
 
+*-R, --reply-all*='REPLY'::
+  Send the specified reply in response to all well-formed queries.  When this
+  option is used, the configuration files are not read and connection lookups
+  are never performed.  Privileged initialization is not performed on systems
+  that would otherwise require it, so unprivileged users can run oidentd with
+  this option as long as they have permission to bind the requested port.
+
 *-S, --nosyslog*::
   Log messages to the standard error stream, even if it is not a terminal.  If
   standard error is a terminal, messages are written to it by default.
