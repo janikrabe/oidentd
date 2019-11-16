@@ -1,6 +1,7 @@
 2019-11-16  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Revert deprecation of '--disable-masq' configure flag.
+	* Clarify behavior of user configuration files.
 
 2019-10-27  Janik Rabe  <oidentd@janikrabe.com>
 
