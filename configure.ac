@@ -53,10 +53,7 @@ require_superuser=no
 enableval=""
 masq_support=yes
 AC_ARG_ENABLE(masq,
-[  --disable-masq          obsolete alias for '--disable-nat'])
-if test -n "$enableval"; then
-	AC_MSG_WARN([The '--disable-masq' alias is deprecated; please use '--disable-nat' instead.])
-fi
+[  --disable-masq          disable NAT/IP masquerading support])
 if test "$enableval" = "no"; then
 	masq_support=no
 fi
