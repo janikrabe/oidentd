@@ -1,4 +1,4 @@
-Unreleased changes
+Changes in version 2.5.0
 
 	* Added '--reply-all' option.
 	* Imported documentation from website.
