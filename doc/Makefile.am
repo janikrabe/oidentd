@@ -7,6 +7,7 @@ DISTCLEANFILES = \
 	$(man_MANS)
 
 EXTRA_DIST = \
+	book \
 	$(man_MANS) \
 	oidentd.8.adoc \
 	oidentd.conf.5.adoc \
