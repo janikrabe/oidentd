@@ -1,3 +1,7 @@
+2020-04-16  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Import documentation from website.
+
 2019-11-16  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Revert deprecation of '--disable-masq' configure flag.
