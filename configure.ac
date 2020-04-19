@@ -19,7 +19,7 @@ AC_INIT([oidentd],
         [2.5.0],
         [oidentd@janikrabe.com],,
         [https://oidentd.janikrabe.com])
-AM_INIT_AUTOMAKE([dist-bzip2 dist-xz dist-zip])
+AM_INIT_AUTOMAKE([dist-bzip2 dist-xz dist-zip dist-zstd])
 
 AC_DEFINE(PACKAGE_AUTHOR, ["Janik Rabe"], [maintainer])
 
