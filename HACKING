@@ -81,6 +81,5 @@ in each of the manual pages to the release date of the new version.
     Commit the changes and tag the commit with "v<version>", where '<version>'
 is the version number of the release.
 
-    Finally, run 'make distcheck' to produce a release tarball which can then
-be distributed to users.  If this command succeeds, archives in other formats
-can be created using 'make dist-xz', 'make dist-bzip2', and 'make dist-zip'.
+    Finally, run 'make distcheck' to produce a set of release tarballs which
+can then be distributed to users.
