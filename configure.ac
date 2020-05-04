@@ -90,12 +90,11 @@ if test "$enableval" = "no"; then
 fi
 
 enableval=""
+debug_support=yes
 AC_ARG_ENABLE(debug,
-[  --enable-debug          enable debugging support])
-if test "$enableval" = "yes"; then
-	AC_DEFINE(ENABLE_DEBUGGING, 1, [Set to enable debugging])
-else
-	AC_DEFINE(ENABLE_DEBUGGING, 0, [Set to enable debugging])
+[  --disable-debug         disable debugging support])
+if test "$enableval" = "no"; then
+	debug_support=no
 fi
 
 enableval=""
@@ -678,6 +677,12 @@ if test "$xdgbdir_support" = "yes"; then
 	AC_DEFINE(XDGBDIR_SUPPORT, 1, [Set to include XDG Base Directory support])
 else
 	AC_DEFINE(XDGBDIR_SUPPORT, 0, [Set to include XDG Base Directory support])
+fi
+
+if test "$debug_support" = "yes"; then
+	AC_DEFINE(ENABLE_DEBUGGING, 1, [Set to enable debugging])
+else
+	AC_DEFINE(ENABLE_DEBUGGING, 0, [Set to enable debugging])
 fi
 
 if test -n "$DEBUG_CFLAGS"; then

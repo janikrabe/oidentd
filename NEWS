@@ -1,3 +1,8 @@
+Unreleased changes
+
+	* Support for '--debug' is now included by default.
+		* Run './configure' with '--disable-debug' to disable.
+
 Changes in version 2.5.0
 
 	* Added '--reply-all' option.
