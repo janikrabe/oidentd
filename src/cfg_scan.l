@@ -333,15 +333,6 @@ static char get_esc_char(char c) {
 		case 'a':
 			return '\a';
 
-		case 'e':
-			if (parser_mode == PARSE_SYSTEM) {
-				o_log(LOG_CRIT, "[line %u] Warning: Escape sequence '\\e' is "
-						"deprecated; use '\\033' or '\\x1B' instead.",
-						current_line);
-			}
-
-			return '\x1B';
-
 		default:
 			break;
 	}
