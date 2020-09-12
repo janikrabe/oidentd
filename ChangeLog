@@ -7,6 +7,7 @@
 	* Remove support for legacy kernels (deprecated).
 	* Remove Linux MASQFILE support (deprecated).
 	* Remove Linux IPCONNTRACK support (deprecated).
+	* Update default configuration file to hide root connections.
 
 2020-05-04  Janik Rabe  <oidentd@janikrabe.com>
 

@@ -9,6 +9,7 @@ Unreleased changes
 	* Removed support for legacy kernels.
 	* Removed Linux MASQFILE support.
 	* Removed Linux IPCONNTRACK support.
+	* Updated default configuration file to hide root connections.
 
 Changes in version 2.5.0
 
