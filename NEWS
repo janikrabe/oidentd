@@ -2,6 +2,8 @@ Unreleased changes
 
 	* Support for '--debug' is now included by default.
 		* Run './configure' with '--disable-debug' to disable.
+	* Removed '--forward-last' ('-M') flag.
+		* Renamed to '--masquerade-first' ('-M').
 
 Changes in version 2.5.0
 
