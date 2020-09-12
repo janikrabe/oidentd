@@ -53,7 +53,6 @@
 
 #define CFILE		"/proc/net/tcp"
 #define CFILE6		"/proc/net/tcp6"
-#define MASQFILE	"/proc/net/ip_masquerade"
 #define IPCONNTRACK	"/proc/net/ip_conntrack"
 #define NFCONNTRACK	"/proc/net/nf_conntrack"
 
@@ -97,7 +96,6 @@ static uid_t lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 #if MASQ_SUPPORT
 enum {
 	CT_UNKNOWN,
-	CT_MASQFILE,
 	CT_IPCONNTRACK,
 	CT_NFCONNTRACK,
 };
@@ -173,52 +171,36 @@ int core_init(void) {
 		return 0;
 	}
 
-	masq_fp = fopen(MASQFILE, "r");
+	masq_fp = fopen(NFCONNTRACK, "r");
 	if (!masq_fp) {
 		if (errno != ENOENT) {
-			o_log(LOG_CRIT, "fopen: %s: %s", MASQFILE, strerror(errno));
+			o_log(LOG_CRIT, "fopen: %s: %s", NFCONNTRACK, strerror(errno));
 			return -1;
 		}
 
-		masq_fp = fopen(NFCONNTRACK, "r");
+		masq_fp = fopen(IPCONNTRACK, "r");
 		if (!masq_fp) {
 			if (errno != ENOENT) {
-				o_log(LOG_CRIT, "fopen: %s: %s", NFCONNTRACK, strerror(errno));
+				o_log(LOG_CRIT, "fopen: %s: %s", IPCONNTRACK, strerror(errno));
 				return -1;
 			}
 
-			masq_fp = fopen(IPCONNTRACK, "r");
-			if (!masq_fp) {
-				if (errno != ENOENT) {
-					o_log(LOG_CRIT, "fopen: %s: %s", IPCONNTRACK, strerror(errno));
-					return -1;
-				}
-
 #	if LIBNFCT_SUPPORT
-				return 0;
+			return 0;
 #	else
-				o_log(LOG_CRIT, "NAT/IP masquerading support is unavailable "
-				                "because " PACKAGE_NAME " was compiled without "
-				                "libnetfilter_conntrack support and no "
-				                "connection tracking file was found.");
-				disable_opt(MASQ);
+			o_log(LOG_CRIT, "NAT/IP masquerading support is unavailable "
+							"because " PACKAGE_NAME " was compiled without "
+							"libnetfilter_conntrack support and no "
+							"connection tracking file was found.");
+			disable_opt(MASQ);
 #	endif
-			} else {
-				conntrack = CT_IPCONNTRACK;
-				o_log(LOG_CRIT, "Support for " IPCONNTRACK " will be removed in a "
-				                "future release. Please update your kernel.");
-			}
 		} else {
-			conntrack = CT_NFCONNTRACK;
+			conntrack = CT_IPCONNTRACK;
+			o_log(LOG_CRIT, "Support for " IPCONNTRACK " will be removed in a "
+							"future release. Please update your kernel.");
 		}
-	} else if (opt_enabled(PROXY) || opt_enabled(FORWARD)) {
-		o_log(LOG_CRIT, "Only local NAT is supported on your system; "
-		                "please consider upgrading your kernel");
-		return -1;
 	} else {
-		o_log(LOG_CRIT, "Support for " MASQFILE " will be removed in a "
-		                "future release. Please update your kernel.");
-		conntrack = CT_MASQFILE;
+		conntrack = CT_NFCONNTRACK;
 	}
 #endif
 	return 0;
@@ -443,14 +425,6 @@ int masq(	int sock,
 		/* rewind fp to read new contents */
 		rewind(masq_fp);
 
-		if (conntrack == CT_MASQFILE) {
-			/* eat the header line */
-			if (!fgets(buf, sizeof(buf), masq_fp)) {
-				debug("fgets: conntrack file: Could not read header");
-				return -1;
-			}
-		}
-
 		while (fgets(buf, sizeof(buf), masq_fp)) {
 			int ret = masq_ct_line(buf, sock, conntrack,
 				lport, fport, laddr, faddr);
@@ -493,36 +467,7 @@ static int masq_ct_line(char *line,
 	struct sockaddr_storage remoten_ss;
 	int ret;
 
-	if (ct_type == CT_MASQFILE) {
-		in_addr_t localm4;
-		in_addr_t remotem4;
-		u_int32_t mport_temp;
-		u_int32_t nport_temp;
-		u_int32_t masq_lport_temp;
-		u_int32_t masq_fport_temp;
-
-		if (faddr->ss_family != AF_INET)
-			return -1;
-
-		ret = sscanf(line, "%15s %X:%X %X:%X %X %X %*d %*d %*u",
-				proto, &localm4, &masq_lport_temp,
-				&remotem4, &masq_fport_temp, &mport_temp, &nport_temp);
-
-		if (ret != 7)
-			return 1;
-
-		mport = (in_port_t) mport_temp;
-		nport = (in_port_t) nport_temp;
-		masq_lport = (in_port_t) masq_lport_temp;
-		masq_fport = (in_port_t) masq_fport_temp;
-
-		sin_setv4(localm4, &localm_ss);
-		sin_setv4(remotem4, &remotem_ss);
-
-		/* Assume local NAT. */
-		sin_setv4(localm4, &remoten_ss);
-		sin_setv4(remotem4, &localn_ss);
-	} else if (ct_type == CT_IPCONNTRACK) {
+	if (ct_type == CT_IPCONNTRACK) {
 		unsigned int ml1, ml2, ml3, ml4, mr1, mr2, mr3, mr4;
 		unsigned int nl1, nl2, nl3, nl4, nr1, nr2, nr3, nr4;
 		in_addr_t localm4;
