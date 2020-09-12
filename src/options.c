@@ -92,7 +92,6 @@ static const struct option longopts[] = {
 	{"forward",          optional_argument, 0, 'f'},
 	{"masquerade",       no_argument,       0, 'm'},
 	{"masquerade-first", no_argument,       0, 'M'},
-	{"forward-last",     no_argument,       0, '0'}, /* deprecated */
 #endif
 	{"proxy",            required_argument, 0, 'P'},
 	{NULL, 0, NULL, 0}
@@ -210,12 +209,6 @@ int get_options(int argc, char *const argv[]) {
 			case 'm':
 				enable_opt(MASQ);
 				break;
-
-			case '0':
-				o_log(LOG_CRIT, "Warning: The --forward-last flag is deprecated "
-				                "and will be removed in the future. Please use "
-				                "--masquerade-first (-M) instead.");
-				/* fall through */
 
 			case 'M':
 				enable_opt(MASQ | FORWARD | MASQ_OVERRIDE);
