@@ -53,7 +53,6 @@
 
 #define CFILE		"/proc/net/tcp"
 #define CFILE6		"/proc/net/tcp6"
-#define IPCONNTRACK	"/proc/net/ip_conntrack"
 #define NFCONNTRACK	"/proc/net/nf_conntrack"
 
 static int netlink_sock;
@@ -96,7 +95,6 @@ static uid_t lookup_tcp_diag(	struct sockaddr_storage *src_addr,
 #if MASQ_SUPPORT
 enum {
 	CT_UNKNOWN,
-	CT_IPCONNTRACK,
 	CT_NFCONNTRACK,
 };
 FILE *masq_fp;
@@ -178,27 +176,15 @@ int core_init(void) {
 			return -1;
 		}
 
-		masq_fp = fopen(IPCONNTRACK, "r");
-		if (!masq_fp) {
-			if (errno != ENOENT) {
-				o_log(LOG_CRIT, "fopen: %s: %s", IPCONNTRACK, strerror(errno));
-				return -1;
-			}
-
 #	if LIBNFCT_SUPPORT
-			return 0;
+		return 0;
 #	else
-			o_log(LOG_CRIT, "NAT/IP masquerading support is unavailable "
-							"because " PACKAGE_NAME " was compiled without "
-							"libnetfilter_conntrack support and no "
-							"connection tracking file was found.");
-			disable_opt(MASQ);
+		o_log(LOG_CRIT, "NAT/IP masquerading support is unavailable "
+						"because " PACKAGE_NAME " was compiled without "
+						"libnetfilter_conntrack support and no "
+						"connection tracking file was found.");
+		disable_opt(MASQ);
 #	endif
-		} else {
-			conntrack = CT_IPCONNTRACK;
-			o_log(LOG_CRIT, "Support for " IPCONNTRACK " will be removed in a "
-							"future release. Please update your kernel.");
-		}
 	} else {
 		conntrack = CT_NFCONNTRACK;
 	}
@@ -467,64 +453,7 @@ static int masq_ct_line(char *line,
 	struct sockaddr_storage remoten_ss;
 	int ret;
 
-	if (ct_type == CT_IPCONNTRACK) {
-		unsigned int ml1, ml2, ml3, ml4, mr1, mr2, mr3, mr4;
-		unsigned int nl1, nl2, nl3, nl4, nr1, nr2, nr3, nr4;
-		in_addr_t localm4;
-		in_addr_t remotem4;
-		in_addr_t localn4;
-		in_addr_t remoten4;
-		u_int32_t nport_temp;
-		u_int32_t mport_temp;
-		u_int32_t masq_lport_temp;
-		u_int32_t masq_fport_temp;
-
-		if (faddr->ss_family != AF_INET)
-			return -1;
-
-		ret = sscanf(line,
-			"%15s %*d %*d ESTABLISHED"
-			" src=%u.%u.%u.%u dst=%u.%u.%u.%u sport=%u dport=%u"
-			" src=%u.%u.%u.%u dst=%u.%u.%u.%u sport=%u dport=%u",
-			proto,
-			&ml1, &ml2, &ml3, &ml4, &mr1, &mr2, &mr3, &mr4,
-			&masq_lport_temp, &masq_fport_temp,
-			&nl1, &nl2, &nl3, &nl4, &nr1, &nr2, &nr3, &nr4,
-			&nport_temp, &mport_temp);
-
-		if (ret != 21) {
-			ret = sscanf(line,
-				"%15s %*d %*d ESTABLISHED"
-				" src=%u.%u.%u.%u dst=%u.%u.%u.%u sport=%u dport=%u"
-				" packets=%*d bytes=%*d"
-				" src=%u.%u.%u.%u dst=%u.%u.%u.%u sport=%u dport=%u",
-			proto,
-			&ml1, &ml2, &ml3, &ml4, &mr1, &mr2, &mr3, &mr4,
-			&masq_lport_temp, &masq_fport_temp,
-			&nl1, &nl2, &nl3, &nl4, &nr1, &nr2, &nr3, &nr4,
-			&nport_temp, &mport_temp);
-		}
-
-		if (ret != 21)
-			return 1;
-
-		masq_lport = (in_port_t) masq_lport_temp;
-		masq_fport = (in_port_t) masq_fport_temp;
-
-		nport = (in_port_t) nport_temp;
-		mport = (in_port_t) mport_temp;
-
-		localm4 = ml1 << 24 | ml2 << 16 | ml3 << 8 | ml4;
-		remotem4 = mr1 << 24 | mr2 << 16 | mr3 << 8 | mr4;
-
-		localn4 = nl1 << 24 | nl2 << 16 | nl3 << 8 | nl4;
-		remoten4 = nr1 << 24 | nr2 << 16 | nr3 << 8 | nr4;
-
-		sin_setv4(localm4, &localm_ss);
-		sin_setv4(remotem4, &remotem_ss);
-		sin_setv4(localn4, &localn_ss);
-		sin_setv4(remoten4, &remoten_ss);
-	} else if (ct_type == CT_NFCONNTRACK) {
+	if (ct_type == CT_NFCONNTRACK) {
 		char ml[MAX_IPLEN];
 		char mr[MAX_IPLEN];
 		char nl[MAX_IPLEN];

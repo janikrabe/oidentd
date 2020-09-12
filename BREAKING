@@ -1,2 +1,1 @@
-* Remove Linux IPCONNTRACK support (deprecated)
 * Configuration file: hide root connections by default
