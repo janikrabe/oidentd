@@ -8,6 +8,7 @@ Unreleased changes
 	* Removed '\e' escape sequence for strings in configuration files.
 	* Removed support for legacy kernels.
 	* Removed Linux MASQFILE support.
+	* Removed Linux IPCONNTRACK support.
 
 Changes in version 2.5.0
 
