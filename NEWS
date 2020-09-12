@@ -5,6 +5,7 @@ Unreleased changes
 	* Removed '--forward-last' ('-M') flag.
 		* Renamed to '--masquerade-first' ('-M').
 	* Removed libudb support.
+	* Removed '\e' escape sequence for strings in configuration files.
 
 Changes in version 2.5.0
 
