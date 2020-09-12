@@ -386,11 +386,6 @@ fi
 if test "$masq_support" = "yes"; then
 	old_CPPFLAGS=$CPPFLAGS
 
-	if test `uname -s` = "SunOS"; then
-		release=`uname -r | cut -d. -f2`
-		CPPFLAGS="$CPPFLAGS -DSOLARIS=$release"
-	fi
-
 	AC_MSG_CHECKING(if nat_t has nat_p member)
 	AC_CACHE_VAL(ac_cv_ipf_nat_p,
 		AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
@@ -410,9 +405,6 @@ if test "$masq_support" = "yes"; then
 				#if defined(__OpenBSD__)
 				#	include <netinet/ip_fil_compat.h>
 				#else
-				#	if defined(SOLARIS) && SOLARIS >= 8
-				#		include <netinet/ip6.h>
-				#	endif
 				#	include <netinet/ip_compat.h>
 				#endif
 
@@ -450,12 +442,7 @@ case "$host_os" in
 	*netbsd* )
 		case "$host_os" in
 			*netbsd[[1-4]].* )
-				AC_MSG_WARN(Support for this version of NetBSD is deprecated and may be removed in the future)
-				use_kmem=yes
-				os_src=legacy/netbsd.c
-				if test "$ac_cv_ipf_nat_p" = "no"; then
-					masq_support=no
-				fi
+				AC_MSG_ERROR([cannot build on $host_os; oidentd requires NetBSD 5.0 or newer])
 			;;
 
 			* )
@@ -467,63 +454,14 @@ case "$host_os" in
 		esac
 	;;
 
-	*darwin* )
-		AC_MSG_WARN(Support for this version of Darwin is deprecated and may be removed in the future)
-		use_kmem=yes
-		os_src=legacy/darwin.c
-		if test "$ac_cv_ipf_nat_p" = "no"; then
-			masq_support=no
-		fi
-	;;
-
 	*openbsd* )
 		case "$host_os" in
-			*openbsd1.* )
-				AC_MSG_ERROR([cannot build on $host_os; oidentd requires OpenBSD 2.0 or newer])
-			;;
-
-			*openbsd2.* )
-				if test "$ac_cv_ipf_nat_p" = "no"; then
-					masq_support=no
-				fi
+			*openbsd[[1-2]].* )
+				AC_MSG_ERROR([cannot build on $host_os; oidentd requires OpenBSD 3.0 or newer])
 			;;
 		esac
 
-		if test "$masq_support" = "no"; then
-			case "$host_os" in
-				*openbsd2.[[0-3]]* )
-					AC_MSG_WARN(Support for this version of OpenBSD is deprecated and may be removed in the future)
-					use_kmem=yes
-					os_src=legacy/openbsd.c
-				;;
-
-				*openbsd2.[[4-8]] )
-					AC_MSG_WARN(Support for this version of OpenBSD is deprecated and may be removed in the future)
-					os_src=legacy/openbsd24.c
-				;;
-
-				*openbsd2.9* )
-					AC_MSG_WARN(Support for this version of OpenBSD is deprecated and may be removed in the future)
-					os_src=legacy/openbsd29.c
-				;;
-
-				* )
-					os_src=openbsd30.c
-				;;
-			esac
-		else
-			case "$host_os" in
-				*openbsd2.* )
-					AC_MSG_WARN(Support for this version of OpenBSD is deprecated and may be removed in the future)
-					use_kmem=yes
-					os_src=legacy/openbsd.c
-				;;
-
-				* )
-					os_src=openbsd30.c
-				;;
-			esac
-		fi
+		os_src=openbsd30.c
 	;;
 
 	*freebsd* )
@@ -574,54 +512,6 @@ case "$host_os" in
 			use_kmem=yes
 			os_src=freebsd.c
 		fi
-	;;
-
-	*solaris* )
-		ADD_LIB="$ADD_LIB -lelf"
-		AC_MSG_WARN(Support for this version of Solaris is deprecated and may be removed in the future)
-		use_kmem=yes
-		masq_support=no
-		ipv6_support=no
-
-		case "$host_os" in
-			*solaris2.[[0-3]]* )
-				AC_MSG_ERROR([cannot build on $host_os; oidentd requires Solaris 2.4 or newer])
-			;;
-
-			*solaris2.4* )
-				AC_DEFINE(SOLARIS, 4, [Solaris version number])
-				os_src=legacy/solaris4.c
-			;;
-
-			*solaris2.5* )
-				AC_DEFINE(SOLARIS, 5, [Solaris version number])
-				os_src=legacy/solaris5.c
-			;;
-
-			*solaris2.6* )
-				AC_DEFINE(SOLARIS, 6, [Solaris version number])
-				os_src=legacy/solaris7.c
-			;;
-
-			*solaris2.7* )
-				AC_DEFINE(SOLARIS, 7, [Solaris version number])
-				os_src=legacy/solaris7.c
-			;;
-
-			*solaris[[2-4]].* )
-				AC_DEFINE(SOLARIS, 8, [Solaris version number])
-				os_src=legacy/solaris8.c
-			;;
-
-			*solaris5.0* )
-				AC_DEFINE(SOLARIS, 8, [Solaris version number])
-				os_src=legacy/solaris8.c
-			;;
-
-			* )
-				AC_MSG_ERROR([cannot build on $host_os; oidentd requires Solaris 5.0 or older])
-			;;
-		esac
 	;;
 
 	* )
