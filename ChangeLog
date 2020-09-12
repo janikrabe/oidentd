@@ -5,6 +5,7 @@
 	* Remove '\e' escape sequence for strings in configuration files
 	  (deprecated).
 	* Remove support for legacy kernels (deprecated).
+	* Remove Linux MASQFILE support (deprecated).
 
 2020-05-04  Janik Rabe  <oidentd@janikrabe.com>
 

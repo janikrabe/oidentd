@@ -1,3 +1,2 @@
-* Remove Linux MASQFILE support (deprecated)
 * Remove Linux IPCONNTRACK support (deprecated)
 * Configuration file: hide root connections by default
