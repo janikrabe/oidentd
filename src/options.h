@@ -28,20 +28,15 @@
 #define MASQ          (1 << 0x03)
 #define FORWARD       (1 << 0x04)
 #define PROXY         (1 << 0x05)
-#define USEUDB        (1 << 0x06)
-#define DEBUG_MSGS    (1 << 0x07)
-#define QUIET         (1 << 0x08)
-#define FOREGROUND    (1 << 0x09)
-#define NOSYSLOG      (1 << 0x0a)
-#define STDIO         (1 << 0x0b)
-#define MASQ_OVERRIDE (1 << 0x0c)
+#define DEBUG_MSGS    (1 << 0x06)
+#define QUIET         (1 << 0x07)
+#define FOREGROUND    (1 << 0x08)
+#define NOSYSLOG      (1 << 0x09)
+#define STDIO         (1 << 0x0a)
+#define MASQ_OVERRIDE (1 << 0x0b)
 
 #ifndef LIBNFCT_SUPPORT
 #define LIBNFCT_SUPPORT 0
-#endif
-
-#ifndef HAVE_LIBUDB
-#define HAVE_LIBUDB 0
 #endif
 
 bool opt_enabled(u_int32_t option);

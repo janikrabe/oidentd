@@ -260,8 +260,6 @@ AC_CHECK_FUNC(getnameinfo, AC_DEFINE(HAVE_GETNAMEINFO, 1, [Define to 1 if you ha
 AC_CHECK_FUNC(inet_ntop, AC_DEFINE(HAVE_INET_NTOP, 1, [Define to 1 if you have the 'inet_ntop' function.]),
 	AC_SEARCH_LIBS(inet_ntop, nsl, AC_DEFINE(HAVE_INET_NTOP, 1, [Define to 1 if you have the 'inet_ntop' function.])))
 
-AC_CHECK_LIB(udb, main)
-
 AC_MSG_CHECKING(for struct sockaddr_storage)
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 					#include <sys/socket.h>],

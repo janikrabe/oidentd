@@ -46,11 +46,6 @@
 #include "options.h"
 #include "masq.h"
 
-#if HAVE_LIBUDB
-#	warning "libudb support is deprecated"
-#	include <udb.h>
-#endif
-
 #ifndef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
 static void sig_segv(int unused __notused) __noreturn;
 static void sig_child(int sig);
@@ -123,15 +118,6 @@ int main(int argc, char **argv) {
 		o_log(LOG_CRIT, "Fatal: Failed to drop privileges (global)");
 		exit(EXIT_FAILURE);
 	}
-
-#if HAVE_LIBUDB
-	if (!replyall && opt_enabled(USEUDB)) {
-		if (udb_init(UDB_ENV_BASE_KEY) == 0) {
-			o_log(LOG_CRIT, "Fatal: Can't open UDB shared memory tables");
-			exit(EXIT_FAILURE);
-		}
-	}
-#endif
 
 #ifndef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
 	signal(SIGALRM, sig_alarm);
@@ -307,16 +293,6 @@ static int service_request(int insock, int outsock) {
 
 	/* User ID is unknown. */
 	con_uid = MISSING_UID;
-
-#if HAVE_LIBUDB
-	if (opt_enabled(USEUDB)) {
-		struct udb_lookup_res udb_res = get_udb_user(
-				lport, fport, &laddr, &faddr, insock);
-		if (udb_res.status == 2)
-			return 0;
-		con_uid = udb_res.uid;
-	}
-#endif
 
 	if (con_uid == MISSING_UID && laddr.ss_family == AF_INET)
 		con_uid = get_user4(htons(lport), htons(fport), &laddr, &faddr);

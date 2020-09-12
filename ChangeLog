@@ -1,6 +1,7 @@
 2020-09-12  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Remove '--forward-last' flag (renamed to '--masquerade-first').
+	* Remove libudb support (deprecated).
 
 2020-05-04  Janik Rabe  <oidentd@janikrabe.com>
 
