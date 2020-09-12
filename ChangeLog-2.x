@@ -1,0 +1,790 @@
+2020-05-04  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Compile with ENABLE_DEBUGGING by default.
+
+2020-04-16  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Released as version 2.5.0.
+	* Import documentation from website.
+
+2019-11-16  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Revert deprecation of '--disable-masq' configure flag.
+	* Clarify behavior of user configuration files.
+
+2019-10-27  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Add '--reply-all' option.
+
+2019-08-25  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Remove default CFLAGS -fstack-protector -fPIE.
+
+2019-08-12  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Released as version 2.4.0.
+
+2019-08-11  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Set type of default UID and GID to unsigned long.
+
+2019-07-31  Hanno Böck  <hanno@gentoo.org>
+
+	* Fix overflow by using proper type for sizeof
+
+2019-06-05  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Show pf device path when open fails (OpenBSD)
+	* Remove snprintf(), vsnprintf() from libmissing
+
+2019-06-04  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Use PACKAGE_NAME macro for syslog ident
+
+2019-05-28  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Clarify error message in MASQ_MAP parser
+	* Remove unnecessary free(NULL) checks
+	* Remove duplicate colon in safe_open()
+	* Scan and print uid_t and gid_t as %lu
+
+2019-05-21  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Deprecate configure flag '--disable-masq';
+	  use '--disable-nat' instead.
+	* Add detailed warning when compiling without libnfct.
+	* Deprecate MASQFILE and IPCONNTRACK on Linux.
+
+2019-04-25  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Add broad unveil call for OpenBSD.
+
+2019-04-23  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Remove libcap-ng status from '--version' output.
+	* Remove optional dependency on libcap-ng.
+	* Drop supplementary groups if possible.
+
+2019-04-22  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Improve PRNG interface.
+	* Remove superfluous newlines from o_log() calls.
+	* Create macro for random_numeric upper limit.
+	* Adjust user_db.h macro values.
+	* Prevent overflow when too many replies are specified in the
+	  system-wide configuration file.
+	* Make reply statements override previous replies.
+
+2019-04-20  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Reduce option bitfield values.
+	* Use int values in capng_change_id call.
+	* Use standard syslog priority names.
+	* Change some error messages.
+	* Use EXIT_SUCCESS exit code after forking.
+
+2019-04-19  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Deprecate support for Darwin.
+	* Deprecate support for FreeBSD 1-3.
+	* Deprecate support for FreeBSD 4.
+	* Deprecate support for NetBSD 1-4.
+	* Deprecate support for OpenBSD 2.0-2.3.
+	* Deprecate support for OpenBSD 2.4-2.8.
+	* Deprecate support for OpenBSD 2.9.
+	* Deprecate support for Solaris 2.4.
+	* Deprecate support for Solaris 2.5.
+	* Deprecate support for Solaris 2.6-2.7.
+	* Deprecate support for Solaris 2.8.
+
+2019-04-18  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Log debug message when Netlink socket fails to open.
+
+2019-04-03  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Improve extract_port_range error messages.
+
+2019-03-28  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Remove unnecessary parentheses from VALID_PORT.
+	* Implement XDG Base Directory specification.
+	* Indicate directories relative to $HOME in --version.
+	* Fix incorrect username in failed spoof_all log message.
+
+2019-03-27  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Rewrite manual page oidentd_masq.conf(5).
+
+2019-03-26  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Rewrite INSTALL file.
+
+2019-03-25  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Deprecate non-standard '\e' escape sequence.
+	* Fix incorrect UPREFIX comment.
+	* Promote some messages to LOG_CRIT.
+	* Reformat default oidentd_masq.conf.
+	* Rewrite README file.
+	* Rewrite manual page oidentd.conf(5).
+	* Update project description.
+
+2019-03-13  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Change default oidentd.conf comment style.
+	* Indent values in --version output.
+
+2019-03-02  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Rewrite manual page oidentd(8).
+
+2019-02-04  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Handle fork() errors.
+
+2019-01-03  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Released as version 2.3.2.
+	* Fix oidentd_masq.conf(5) comment style.
+
+2019-01-01  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Add fuzzing build configuration.
+	* Remove parentheses from return statements.
+	* Build with -fPIE and -fstack-protector.
+
+2018-12-14  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix NULL dereference with libnfct on CT_UNKNOWN kernels.
+	* Fix size_t format specifications.
+
+2018-12-13  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix byte order of ports in libnfct queries.
+
+2018-12-08  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Change masq() return type from bool to int.
+	* Change core_init() return type from bool to int.
+	* Change find_user() return type from bool to int.
+	* Change find_group() return type from bool to int.
+
+2018-10-29  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Deprecate libudb support.
+
+2018-10-28  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix masquerading buffer lengths on Linux systems without `WANT_IPV6`.
+	* Narrow variable scopes.
+	* Remove unused variables.
+	* Fix sscanf unsigned integer specifications.
+	* Change `randval()` to use unsigned integers.
+
+2018-10-02  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Add systemd services and socket file.
+	* Show compile-time configuration in `--version` output.
+
+2018-09-27  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Improve error messages.
+
+2018-06-24  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Make `--forward` imply `--masquerade`.
+	* Log warning when connection limit is exceeded.
+
+2018-06-13  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Released as version 2.3.1.
+	* Fix build with libnetfilter_conntrack on Linux.
+
+2018-06-12  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Released as version 2.3.0.
+	* Forward declare yyrestart and yylex.
+	* Change sock_write and sockprintf signatures.
+	* Change get_hostname to use socklen_t.
+	* Change get_ip to use socklen_t.
+	* Fix a few signed/unsigned conversion issues.
+	* Add default cases to switch statements.
+
+2018-05-16  Jan Alexander Steffens  <jan.steffens@gmail.com>
+
+	* Move reply data into union.
+	* Add out_hide label to get_ident.
+	* Move request forwarding to forward.c.
+	* Implement forward capability.
+	* Document forward capability.
+
+2018-05-04  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Consistently use ssize_t in sock_read.
+
+2018-04-07  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix a few signed/unsigned conversion issues.
+	* Remove some redundant redeclarations.
+
+2018-04-06  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Add Linux IPv6 masquerading support.
+	* Always use libnetfilter_conntrack when available.
+	* Fix signed/unsigned bit shifting on Linux.
+	* Separate declarations from code (ISO C90).
+	* Made a couple of function arguments constant.
+	* Fix incorrect conversion from ssize_t to int.
+	* Fix incorrect vasprintf return type.
+	* Remove unused type parameter from callback_nfct.
+	* Prevent overflows when parsing UIDs and GIDs.
+
+2018-04-04  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Add build information to `--version` output.
+
+2018-04-03  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Add spoofed replies to the default configuration file.
+
+2018-03-30  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Released as version 2.2.3.
+	* On systems where oidentd needs to run as root, do not drop
+	  privileges automatically and show a warning instead.
+
+2018-03-26  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix lookup of connections to IPv6-mapped IPv4 addresses.
+	* Warn when lexer or parser generator cannot be found.
+
+2018-03-22  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Allow to, fport, from, lport to be specified in any order.
+
+2018-03-22  Fardale  <fardale+github@crans.org>
+
+	* Fix incorrect order of lport and fport in manual pages.
+
+2018-03-10  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Allow only local NAT if /proc/net/ip_masquerade is used.
+
+2018-03-08  Petr Písař  <ppisar@redhat.com>
+
+	* Regenerate Bison header file using Automake.
+	* Fix an out-of-bound read/write issue.
+	* Check for fgets() failure when reading header lines.
+	* Return error if masq_ct_line() cannot decide.
+
+2018-03-07  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Released as version 2.2.2.
+	* Implicitly drop privileges only when running as root.
+
+2018-03-02  Magnus Holmgren  <holmgren@debian.org>
+
+	* Don't let --enable-debug mess with build flags.
+
+2018-02-24  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Rename --forward-last to --masquerade-first.
+		- Option --forward-last is now deprecated.
+	* Replace --masq with --masquerade in manual pages.
+	* Make the -M option imply -f in addition to -m.
+	* Don't assume sysconfdir is /etc.
+		- Previously it was possible to specify a custom
+		  configuration file using the -C option, but the
+		  path to /etc/oidentd_masq.conf was hardcoded.
+
+2018-02-21  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Run as oidentd:oidentd by default.
+		- Only if the oidentd user does not exist, fall back to
+		  running as nobody, or UID 65534, in this order.
+		- Only if the oidentd group does not exist, fall back to
+		  running as nobody, nogroup, or GID 65534, in this order.
+		- Thanks to Johannes Löthberg <johannes@kyriasis.com> for
+		  this suggestion.
+
+2018-02-20  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Released as version 2.2.1.
+	* Move configuration file out of src directory.
+	* Fix LIBNFCT_SUPPORT being defined on systems where
+	  $want_libnfct = "no".
+
+2018-02-19  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Released as version 2.2.0.
+
+2018-02-18  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Add libnetfilter_conntrack support for IP masquerading on Linux.
+		- Enabled by default if libnetfilter_conntrack and libcap-ng
+		  libraries and headers are present during configuration.
+		- Can be disabled by passing the --disable-libnfct flag to
+		  the './configure' script.
+		- Feature requested by Johnny A. Solbu <johnny@solbu.net>.
+	* Bind socket before forking.
+		- This allows errors (most commonly EACCES) to be shown.
+
+2018-02-17  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Update the default configuration file.
+		- Add header comment.
+		- Disable all capabilities by default.
+		- Properly hide superuser connections instead of simply
+		  responding with "UNKNOWN" (commented out by default).
+	* Properly drop privileges without the --user and --group options.
+		- This seems to always have been the intention, but a
+		  bug prevented this feature from working correctly.
+
+2018-02-17  Johnny A. Solbu  <johnny@solbu.net>
+
+	* Use the configuration file shipped by distributions.
+
+2018-02-16  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Install a default configuration file to sysconfdir.
+	* Warn when k_open() functions disable masquerading.
+	* Replace some AC_CHECK_LIB macros with AC_SEARCH_LIBS.
+	* Consistently use AC_MSG_ERROR macro.
+
+2018-02-15  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Only show a warning when masquerading support is unavailable.
+		- Instead of exiting immediately, show a warning and
+		  continue without masquerading support.
+	* Removed scripts "dist.sh" and "scrub.sh".
+		- These scripts should no longer be necessary with the
+		  presence of "make distcheck" and "git clean -dfx".
+
+2018-02-14  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Follow RFC 1413 recommendations on white space.
+		- Remove unnecessary white space from ident replies.
+	* Fail when masquerading on Linux is requested but not supported.
+	* Replaced deprecated AC_TRY_* macros.
+
+2018-02-13  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix libudb support and various inconsistencies.
+	* Return exit code 0 when --version is used.
+	* Prevent --limit option from falling through.
+		- This caused --limit to also enable --other.
+	* Fix "make distcheck" attempting to include missing files.
+	* Change masq function to return bool.
+
+2018-02-12  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix --disable-masq option to ./configure.
+		- NAT/IP masquerading support was re-enabled after processing
+		  this flag.
+
+2018-02-12  Johnny A. Solbu  <johnny@solbu.net>
+
+	* Add missing required files to "make dist".
+
+2018-02-12  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Return exit code 0 when --help is used.
+
+2018-02-08  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Add basic NetBSD 5+ support.
+		- IP masquerading is not yet supported.
+
+2018-02-06  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Re-add legacy FreeBSD support.
+
+2018-02-03  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Explicitly drop support for NetBSD 5+ and SunOS 5.1+.
+		- oidentd does not compile on these versions, so fail
+		  directly in configure.ac instead of trying to compile
+		  an incompatible source file.
+
+2018-02-02  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix build on OpenBSD.
+
+2018-02-01  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Add missing OpenBSD prerequisite headers.
+
+2018-01-28  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Suggest use of --debug when core_init fails.
+
+2018-01-27  Jan Rękorajski  <baggins@pld-linux.org>
+
+	* Support listening on multiple specified IP addresses.
+
+2018-01-25  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix build on FreeBSD.
+	* Add missing FreeBSD prerequisite headers.
+
+2018-01-19  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Use exit code constants where possible.
+
+2018-01-19  Matthias Scheler  <tron@NetBSD.org>
+
+	* Replace hardcoded CONFFILE path in usage instructions.
+
+2018-01-18  Joerg Sonnenberger  <joerg@bec.de>
+
+	* Add basic DragonFly BSD support.
+
+2018-01-13  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Declare randval() function static.
+
+2018-01-10  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Always show errors when socket initialization fails.
+
+2018-01-10  Fabian Knittel  <fabian.knittel@avona.com>
+
+	* Bind to IPv6 socket as well.
+
+2018-01-10  Petr Písař  <ppisar@redhat.com>
+
+	* Open connection tracking table only when necessary.
+
+2018-01-09  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Update logging priorities to ensure that errors are shown.
+	* Update documentation and manual pages.
+	* Warn when --debug is used in a build without debugging support.
+
+2018-01-08  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix and modernize build system.
+	* Add missing user_db header to linux.c.
+
+2018-01-07  Kufat  <kufat@kufat.net>
+
+	* Move inline function randval() to header.
+	* Header for rand in randval().
+
+2018-01-07  Chris Taylor  <chris@equate.dyndns.org>
+
+	* Add handling for nf_conntrack_acct being off.
+		- Thanks to Jonas Gorski
+
+2018-01-07  Simon Arlott  <oidentd@fire.lp0.eu>
+
+	* Fix bug handling NAT with a different destination port on Linux.
+	* Fix forwarding when the destination port is different.
+	* Add an option that does forwarding only if the masquerading file
+	  lookup fails.
+	* Support Layer 3 Independent Connection tracking on Linux.
+	* Handle local NAT on Linux (instead of forwarding to self).
+	* Copy fport before converting v4-mapped v6 addresses.
+
+2018-01-07  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Released as version 2.1.0.
+	* Fix memory corruption on FreeBSD.
+
+2006-05-22  Ryan McCabe  <ryan@numb.org>
+
+	* Released as version 2.0.8.
+	* Removed spaces between commas and colons from responses.
+	* Pulled in patches for Linux from Debian.
+	* Pulled in Darwin patches from fink and
+	  http://sbutler.typepad.com/oidentd-2.0.7-darwin-fix.patch.
+	* Pulled in NetBSD patches from pkgsrc/net/oidentd/patches/patch-ac.
+	* Pulled in patches for FreeBSD from FreeBSD ports
+	  (ports/security/oidentd/files/patch-unprivileged_ipv6).
+
+2006-01-26  Christof Douma  <christof@douma.eu.org>
+
+	* Open masquerading options before dropping permissions on linux.
+
+2003-07-11  Ryan McCabe  <ryan@numb.org>
+
+	* Really fix the bug with random ident replies.
+
+	* Build fixes (specifically, for Solaris).
+
+2003-04-27  Ryan McCabe  <ryan@numb.org>
+
+	* Released as version 2.0.6.
+	* Fixed a build problem on some versions of FreeBSD when NAT support
+	  is included.
+		- Problem reported by John Blazek <freebsd@logicalsolutns.com>
+	* Made random replies 12 characters long. I guess some programs don't
+	  like it when they get a 512-byte long random reply.
+
+2003-04-23  Douglas Henke  <henke@insync.net>
+
+	* Improve PRNG seeding and random number selection.
+	* Add support for running in the foreground, logging only to stderr,
+	  and for inetd support and daemontools support.
+
+2003-02-14  Ryan McCabe  <ryan@numb.org>
+
+	* Make it build again on recent versions of Darwin.
+
+2003-02-12  Ryan McCabe  <ryan@numb.org>
+
+	* Released as version 2.0.5.
+
+2003-02-12  Ryan McCabe  <ryan@numb.org>
+
+	* Added support for connection forwarding on recent versions of
+	  OpenBSD and on FreeBSD when NAT is disabled.
+
+2003-02-12  Mieczyslaw Nalewaj  <nami@polbox.com>
+
+	* Add support for FreeBSD 5.
+
+2003-02-12  Elliott Mitchell  <ehem@m5p.com>
+
+	* Prevent memory leaks in parts of the configuration parser.
+
+2003-01-09  Christian Kellner  <gicmo@gmx.net>
+
+	* DNAT patch for Linux
+
+2003-01-09  Krzysztof Oledzki  <ole@ans.pl>
+
+	* Fix lookups of IPv6 connections.
+
+2002-08-24  Ryan McCabe  <ryan@numb.org>
+
+	* Fixed a compile error for older versions of libc on Linux.
+		- Thanks to Motohiko Takemura <takemura@pharmaco.crl.hyo-med.ac.jp>
+
+2002-08-22  Ryan McCabe  <ryan@numb.org>
+
+	* Cleaned up the connection forwarding code, made connection
+	  forwarding actually work on BSD.
+		- Thanks to Ewen McNeill <ewen@naos.co.nz>
+
+2002-08-20  Ryan McCabe  <ryan@numb.org>
+
+	* Released as version 2.0.4.
+
+2002-08-08  Ryan McCabe  <ryan@numb.org>
+
+	* Added support for Solaris 9.
+		- Thanks to Douglas Palmer <palmer@nyed.uscourts.gov>
+	* Use the netlink socket diagnostics interface to look up
+	  connection owners on Linux, if available.
+
+2002-01-30  Ryan McCabe  <ryan@numb.org>
+
+	* Added support for Darwin.
+
+2002-01-22  Ryan McCabe  <ryan@numb.org>
+
+	* Kill the "Address family not supported by protocol" warning
+	  when running with --debug.
+
+2002-01-16  Ryan McCabe  <ryan@numb.org>
+
+	* Really fixed forwarding and proxy support on FreeBSD.
+	* Fixes for NAT on OpenBSD >= 3.0.
+
+2002-01-01  Ryan McCabe  <ryan@numb.org>
+
+	* Added support for NetBSD.
+	* Fixed a bug in the OpenBSD connection forwarding code.
+
+2001-12-29  Ryan McCabe  <ryan@numb.org>
+
+	* Released as version 2.0.3.
+	* Fixed a bug in the configure script that caused a compile
+	  error on OpenBSD 3.0.
+	* Moved all the OS-specific user lookup functions into the src/kernel
+	  directory.
+
+2001-12-28  Ryan McCabe  <ryan@numb.org>
+
+	* Released as version 2.0.2.
+	* Fixed a bug in the forwarding code.
+
+2001-12-28  Kamil Andrusz  <wizz@mniam.net>
+
+	* Add support for OpenBSD >= 3.0 packet filter.
+
+2001-11-12  Ryan McCabe  <ryan@numb.org>
+
+	* Cleaned up the parsing of $HOME/.oidentd.conf files.
+
+2001-11-03  Ryan McCabe  <ryan@numb.org>
+
+	* Allow multiple strings after a reply statement, from which
+	  one of them will be selected randomly.
+
+2001-10-29  Ryan McCabe  <ryan@numb.org>
+
+	* Added a --limit command-line option.
+
+2001-10-03  Ryan McCabe  <ryan@numb.org>
+
+	* Released as version 2.0.1.
+	* Fixed a crash that occurred when oidentd reloaded its
+	  configuration file.
+
+2001-10-03  Ryan McCabe  <ryan@numb.org>
+
+	* Only lookup the "_nat_instances" symbol on BSD if the --masq
+	  option is given.
+		- Without this patch, oidentd fails on FreeBSD (at least) if
+		  NAT support is not compiled into the kernel.
+
+2001-10-02  Ryan McCabe  <ryan@numb.org>
+
+	* Blank lines and lines beginning with # (comments) are ignored
+	  in /etc/oidentd_masq.conf.
+
+2001-09-30  Ryan McCabe  <ryan@numb.org>
+
+	* Re-enable NAT support for OpenBSD 2.9 and greater.
+		- Eric LeBlanc <inouk@toutatis.igt.net> noted that
+		  the kernel access method used for earlier OpenBSD
+		  versions still works for version 2.9.
+
+2001-09-29  Ryan McCabe  <ryan@numb.org>
+
+	* Released as version 2.0.0.
+	* Fixed a bug that caused freebsd.c to be built instead of
+	  freebsd4.c when IP masq/NAT is diabled on FreeBSD.
+
+2001-09-29  Ryan McCabe  <ryan@numb.org>
+
+	* Removed the debugging code from the FreeBSD NAT handler.
+		- Thanks to Steven Nikkel <steven_nikkel@bigfoot.com> for
+		  making NAT support on FreeBSD possible.
+	* Made debugging messages a compile time option.
+		- They're only included if configure is passed --enable-debug
+
+2001-09-27  Motohiko Takemura  <takemura@pharmaco.crl.hyo-med.ac.jp>
+
+	* Fix a bug in the command-line argument handler.
+
+2001-09-25  Ryan McCabe  <ryan@numb.org>
+
+	* Allow oidentd to bind more than one interface returned
+	  by getaddrinfo().
+
+2001-09-19  Ryan McCabe  <ryan@numb.org>
+
+	* Fixed a potential problem with the default port binding mechanism.
+
+2001-09-19  Ryan McCabe  <ryan@numb.org>
+
+	* Added a new command-line flag, --config, that is used to specify
+	  the location of the configuration file.  The default is
+	  /etc/oidentd.conf.
+
+2001-09-19  Ryan McCabe  <ryan@numb.org>
+
+	* Make sure the trailing new line is trimmed from the operating
+	  system parameter in the /etc/oidentd_masq.conf file.
+		- Thanks to Eric LeBlanc <inouk@toutatis.igt.net> for
+		  noticing this.
+
+2001-09-18  Ryan McCabe  <ryan@numb.org>
+
+	* Fixes for IP masquerading and connection forwarding on OpenBSD
+	  and FreeBSD.
+
+2001-09-18  Eric LeBlanc  <inouk@toutatis.igt.net>
+2001-09-18  Motohiko Takemura  <takemura@pharmaco.crl.hyo-med.ac.jp>
+
+	* Fix a bug that caused IP masquerading to fail.
+
+2001-09-18  Martin Waitz  <tali@stud.uni-erlangen.de>
+
+	* UDB fixes
+
+2001-09-17  Ryan McCabe  <ryan@numb.org>
+
+	* Added IP masquerade support for FreeBSD.
+
+2001-09-17  Ryan McCabe  <ryan@numb.org>
+
+	* Fixed bugs that caused openbsd.c not to compile.
+	* Add OpenBSD 2.9 support.
+		- Thanks to Stephen Marley <stephen@openkast.com> for access to
+		  a machine running OpenBSD 2.9.
+
+2001-09-14  Ryan McCabe  <ryan@numb.org>
+
+	* Released as version 1.9.9.1
+
+2001-09-14  Ryan McCabe  <ryan@numb.org>
+
+	* Merged the --other and --os command-line flags.  See the manual
+	  page for details.
+
+2001-09-12  Motohiko Takemura  <takemura@pharmaco.crl.hyo-med.ac.jp>
+
+	* Fixed a typo in the oidentd_masq.conf man file.
+	* Fixed bugs with the -f (--forward) command-line flag.
+	* Fixed bugs with the -o (--other) command-line flag.
+	* Fixed a typo that caused the UDB and forward options to use
+	  the same bit mask.
+
+2001-09-04  Ryan McCabe  <ryan@numb.org>
+
+	* Fix a crash when no configuration file was used.
+
+2001-09-04  Ryan McCabe  <ryan@numb.org>
+
+	* IPv4/IPv6 interoperability cleanups.
+	* Fixed the configure --enable-ivp6 and --enable-masq options.
+		- Thanks to Arkadiusz Miskiewicz <misiek@pld.ORG.PL> for
+		  input and the bug report concerning the configure flags.
+
+2001-08-31  Ryan McCabe  <ryan@numb.org>
+
+	* It's $HOME/.oidentd.conf.  Fix everywhere...
+
+2001-08-31  Ryan McCabe  <ryan@numb.org>
+
+	* Fixed Solaris 8 support.
+		- Thanks to Carlton Clark <rstark@manatrip.ath.cx> for
+		  access to his Solaris 8 box.
+
+2001-08-29  Ryan McCabe  <ryan@numb.org>
+
+	* Solaris 7 support.
+	* Cleaned up the Solaris 2.[456] support.
+
+2001-08-28  Ryan McCabe  <ryan@numb.org>
+
+	* Solaris 8 support.
+	* Small cleanups.
+
+2001-08-28  Ryan McCabe  <ryan@numb.org>
+
+	* Compile fix for systems that have __ss_family instead of ss_family.
+
+2001-08-27  Ryan McCabe  <ryan@numb.org>
+
+	* Fix the port binding mechanism.
+
+2001-08-27  Ryan McCabe  <ryan@numb.org>
+
+	* autoconf tweaks.
+	* Fixed to work with automake 1.5.
+
+2001-08-25  Ryan McCabe  <ryan@numb.org>
+
+	* Fixed compile bugs that showed up when you passed configure a
+	  --srcdir argument.
+		- Reported by Frederic L. W. Meunier <0@pervalidus.net>
+
+2001-08-24  Ryan McCabe  <ryan@numb.org>
+
+	* Released version 1.9.9
