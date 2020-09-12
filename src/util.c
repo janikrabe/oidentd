@@ -47,10 +47,6 @@
 #include "missing.h"
 #include "options.h"
 
-#if HAVE_LIBUDB
-#	include <udb.h>
-#endif
-
 #ifdef HAVE_ARC4RANDOM_UNIFORM
 	/* no rescale required */
 #elif defined HAVE_LRAND48
@@ -496,69 +492,3 @@ int o_log(int priority, const char *fmt, ...) {
 	free(buf);
 	return ret;
 }
-
-#if HAVE_LIBUDB
-/*
-** Look up a connection in the UDB shared memory tables.
-**
-** This only supports IPv4 right now.
-*/
-
-struct udb_lookup_res get_udb_user(	in_port_t lport,
-					in_port_t fport,
-					const struct sockaddr_storage *laddr,
-					const struct sockaddr_storage *faddr,
-					int sock)
-{
-	struct udb_connection conn;
-	struct udb_conn_user buf;
-	struct udb_lookup_res res = {0, (uid_t) -1};
-	struct passwd *pw;
-	char faddr_buf[MAX_IPLEN];
-	char laddr_buf[MAX_IPLEN];
-	extern char *ret_os;
-
-	if (laddr->ss_family != AF_INET || faddr->ss_family != AF_INET)
-		return res;
-
-	memset(&conn, 0, sizeof(conn));
-
-	conn.from.sin_family = laddr->ss_family;
-	memcpy(&conn.from.sin_addr, &SIN4(laddr)->sin_addr,
-		sizeof(conn.from.sin_addr));
-	conn.from.sin_port = htons(lport);
-
-	conn.to.sin_family = faddr->ss_family;
-	memcpy(&conn.to.sin_addr, &SIN4(faddr)->sin_addr, sizeof(conn.to.sin_addr));
-	conn.to.sin_port = htons(fport);
-
-	get_ip(faddr, faddr_buf, sizeof(faddr_buf));
-	get_ip(laddr, laddr_buf, sizeof(laddr_buf));
-
-	debug("UDB lookup: %s:%d->%s:%d",
-		laddr_buf, ntohs(conn.from.sin_port),
-		faddr_buf, ntohs(conn.to.sin_port));
-
-	if (!udb_conn_get(&conn, &buf))
-		return res;
-
-	/* If the user is local, return their UID */
-	pw = getpwnam(buf.username);
-	if (pw) {
-		res.status = 1;
-		res.uid = pw->pw_uid;
-		return res;
-	}
-
-	/* User not local, reply with string from UDB table. */
-	sockprintf(sock, "%d,%d:USERID:%s:%s\r\n",
-		lport, fport, ret_os, buf.username);
-
-	o_log(LOG_INFO, "[%s] UDB lookup: %d , %d : (returned %s)",
-		faddr_buf, lport, fport, buf.username);
-
-	res.status = 2;
-	return res;
-}
-
-#endif

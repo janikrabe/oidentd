@@ -51,10 +51,6 @@
 #	include <libnetfilter_conntrack/libnetfilter_conntrack.h>
 #endif
 
-#if HAVE_LIBUDB
-#	include <udb.h>
-#endif
-
 #define CFILE		"/proc/net/tcp"
 #define CFILE6		"/proc/net/tcp6"
 #define MASQFILE	"/proc/net/ip_masquerade"

@@ -84,9 +84,6 @@ static const struct option longopts[] = {
 	{"nosyslog",         no_argument,       0, 'S'},
 	{"timeout",          required_argument, 0, 't'},
 	{"user",             required_argument, 0, 'u'},
-#if HAVE_LIBUDB
-	{"udb",              no_argument,       0, 'U'},
-#endif
 	{"version",          no_argument,       0, 'v'},
 #if MASQ_SUPPORT
 	{"forward",          optional_argument, 0, 'f'},
@@ -324,14 +321,6 @@ int get_options(int argc, char *const argv[]) {
 				}
 				break;
 
-#if HAVE_LIBUDB
-			case 'U':
-				o_log(LOG_CRIT, "Warning: UDB support is deprecated and will "
-				                "be removed in the future.");
-				enable_opt(USEUDB);
-				break;
-#endif
-
 			case 'v':
 				print_version(true);
 				exit(EXIT_SUCCESS);
@@ -450,11 +439,6 @@ static void print_usage(void) {
 "-S or --nosyslog             Write messages to stderr instead of syslog\n"
 "-t or --timeout <seconds>    Wait at most <seconds> before closing connections\n"
 "-u or --user <user>          Run as specified user or UID\n"
-
-#if HAVE_LIBUDB
-"-U or --udb                  Perform lookups in UDB shared memory tables (deprecated)\n"
-#endif
-
 "-v or --version              Display version information and exit\n"
 "-r or --reply <string>       If a query fails, pretend it succeeded, returning <string>\n"
 "-R or --reply-all <string>   Always return <string> without performing connection lookups\n"
@@ -487,7 +471,6 @@ static void print_version(bool verbose) {
 		print_version_bool("Masquerading support", MASQ_SUPPORT);
 		print_version_bool("IPv6 support", WANT_IPV6);
 		print_version_bool("Linux libnfct support", LIBNFCT_SUPPORT);
-		print_version_bool("UDB library support", HAVE_LIBUDB);
 
 		printf("\nBuild settings:\n");
 		print_version_str("Configuration directory", SYSCONFDIR);

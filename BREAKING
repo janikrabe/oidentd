@@ -1,4 +1,3 @@
-* Remove libudb support (deprecated)
 * Remove '\e' escape sequence (deprecated)
 * Remove support for legacy kernels (deprecated; not before September 2021)
 * Remove Linux MASQFILE support (deprecated)

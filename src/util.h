@@ -29,30 +29,9 @@ typedef struct list {
 	void *data;
 } list_t;
 
-struct udb_lookup_res {
-	/*
-	** 0 if no match was found or an error occurred
-	** 1 if a local match was found
-	** 2 if a non-local match was found and the reply sent to the client
-	*/
-	char status;
-
-	/*
-	** The matching UID if a local match was found
-	** Otherwise, MISSING_UID as reserved by POSIX
-	*/
-	uid_t uid;
-};
-
 int o_log(int priority, const char *fmt, ...) __format((printf, 2, 3));
 int drop_privs(uid_t new_uid, gid_t new_gid);
 int go_background(void);
-
-struct udb_lookup_res get_udb_user(	in_port_t lport,
-					in_port_t fport,
-					const struct sockaddr_storage *laddr,
-					const struct sockaddr_storage *faddr,
-					int sock);
 
 FILE *safe_open(const struct passwd *pw, const char *filename);
 

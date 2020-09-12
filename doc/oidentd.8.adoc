@@ -162,12 +162,6 @@ OPTIONS
   systems that require *oidentd* to run as the superuser, a warning is shown
   and the user is not changed automatically.
 
-*-U, --udb*::
-  Look up connection owners using libudb.  Lookup results that do not match any
-  local user are returned verbatim.  If a UDB lookup fails, the operating
-  system is queried directly.  This option also applies to NAT connections if
-  the *--masquerade* option is specified.
-
 *-v, --version*::
   Print version and build information and exit.
 

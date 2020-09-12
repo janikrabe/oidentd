@@ -32,10 +32,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#if HAVE_LIBUDB
-#	include <udb.h>
-#endif
-
 #include "oidentd.h"
 #include "util.h"
 #include "missing.h"
@@ -86,29 +82,6 @@ int find_masq_entry(struct sockaddr_storage *host,
 	struct sockaddr_storage addr;
 	u_int32_t line_num;
 	char buf[4096];
-
-#if HAVE_LIBUDB
-	if (opt_enabled(USEUDB)) {
-		struct udb_ip_user ibuf;
-		struct sockaddr_storage hostaddr;
-		char ipbuf[MAX_IPLEN];
-
-		memcpy(&hostaddr, host, sizeof(hostaddr));
-
-		get_ip(&hostaddr, ipbuf, sizeof(ipbuf));
-
-		debug("[%s] UDB lookup...", ipbuf);
-
-		if (udb_ip_get(SIN4(&hostaddr), &ibuf)) {
-			get_ip(&hostaddr, ipbuf, sizeof(ipbuf));
-			xstrncpy(user, ibuf.username, user_len);
-			xstrncpy(os, ret_os, os_len);
-
-			o_log(LOG_INFO, "Successful UDB lookup: %s : %s", ipbuf, user);
-			return 0;
-		}
-	}
-#endif
 
 	fp = fopen(MASQ_MAP, "r");
 	if (!fp) {
