@@ -2,7 +2,7 @@
 ** forward.c - oidentd request forwarding.
 ** Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
 ** Copyright (c) 2018      Jan Steffens <jan.steffens@gmail.com>
-** Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
+** Copyright (c) 2018-2019 Janik Rabe  <info@janikrabe.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License, version 2,

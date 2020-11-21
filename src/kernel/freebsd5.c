@@ -11,7 +11,7 @@
 ** is distributed under the same copyright.
 **
 ** Modifications Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
-** Modifications Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
+** Modifications Copyright (c) 2018-2019 Janik Rabe  <info@janikrabe.com>
 */
 
 #define _WANT_UCRED

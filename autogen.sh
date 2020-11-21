@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # autogen.sh - oidentd ident (RFC 1413) implementation.
-# Copyright (c) 2019 Janik Rabe  <oidentd@janikrabe.com>
+# Copyright (c) 2019 Janik Rabe  <info@janikrabe.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License, version 2,
@@ -46,6 +46,6 @@ $ACLOCAL && $AUTOHEADER && $AUTOMAKE --gnu --add-missing --copy && $AUTOCONF || 
 	echo "Error: Automatic generation of the configuration scripts has failed."
 	echo "       Please try to generate them manually.  If you believe this"
 	echo "       failure is the result of a bug in oidentd, please email"
-	echo "       <oidentd@janikrabe.com> with any relevant details."
+	echo "       <info@janikrabe.com> with any relevant details."
 	exit 1
 }

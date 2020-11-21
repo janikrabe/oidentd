@@ -1,6 +1,6 @@
 dnl configure.ac - oidentd ident (RFC 1413) implementation.
 dnl Copyright (c) 2006      Ryan McCabe <ryan@numb.org>
-dnl Copyright (c) 2018-2019 Janik Rabe  <oidentd@janikrabe.com>
+dnl Copyright (c) 2018-2019 Janik Rabe  <info@janikrabe.com>
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License, version 2,
@@ -17,8 +17,8 @@ dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 AC_INIT([oidentd],
         [2.5.0],
-        [oidentd@janikrabe.com],,
-        [https://oidentd.janikrabe.com])
+        [info@janikrabe.com],,
+        [https://janikrabe.com/projects/oidentd/])
 AM_INIT_AUTOMAKE([dist-bzip2 dist-xz dist-zip dist-zstd])
 
 AC_DEFINE(PACKAGE_AUTHOR, ["Janik Rabe"], [maintainer])

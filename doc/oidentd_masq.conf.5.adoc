@@ -85,8 +85,8 @@ it were preceded by the more general "10.0.0.0/24".
 AUTHOR
 ------
 
-mailto:oidentd@janikrabe.com[Janik Rabe]::
-  https://oidentd.janikrabe.com
+mailto:info@janikrabe.com[Janik Rabe]::
+  https://janikrabe.com/projects/oidentd/
 
 Originally written by Ryan McCabe.
 
@@ -94,7 +94,7 @@ Originally written by Ryan McCabe.
 BUGS
 ----
 
-Please report any bugs to mailto:oidentd@janikrabe.com[Janik Rabe].
+Please report any bugs to mailto:info@janikrabe.com[Janik Rabe].
 
 
 SEE ALSO
