@@ -15,31 +15,27 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with this program; if not, write to the Free Software
 dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-AC_INIT([oidentd],
-        [2.5.0],
-        [oidentd@janikrabe.com],,
-        [https://oidentd.janikrabe.com])
+AC_INIT([oidentd],[2.5.0],[oidentd@janikrabe.com],[],[https://oidentd.janikrabe.com])
 AM_INIT_AUTOMAKE
 
 AC_DEFINE(PACKAGE_AUTHOR, ["Janik Rabe"], [maintainer])
 
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS(config.h)
 
 AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_YACC
-AC_PROG_LEX
+AC_PROG_LEX(noyywrap)
 AC_PROG_RANLIB
 AC_PROG_INSTALL
 AC_PATH_PROG(sedpath, sed)
 
-AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_C_CONST
 AC_C_INLINE
 AC_TYPE_PID_T
 AC_TYPE_SIZE_T
-AC_HEADER_TIME
+
 AC_STRUCT_TM
 AC_CANONICAL_HOST
 
@@ -231,8 +227,6 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <stdlib.h>
 			[AC_MSG_RESULT(yes)
 			AC_DEFINE(HAVE___ATTRIBUTE__FORMAT, 1, [Define if your compiler has __attribute__ format])],
 			[AC_MSG_RESULT(no)])
-
-AC_TYPE_SIGNAL
 
 AC_CHECK_FUNCS(strsep)
 AC_CHECK_FUNCS(clock_gettime select strdup strstr strtol uname)
@@ -690,11 +684,12 @@ AC_SUBST(LDFLAGS)
 AC_SUBST(ADD_LIB)
 AC_SUBST(CPPFLAGS)
 
-AC_OUTPUT([
+AC_CONFIG_FILES([
 	Makefile
 	src/Makefile
 	src/missing/Makefile
 	doc/Makefile
 ])
+AC_OUTPUT
 
 cp -f $srcdir/src/kernel/$os_src src/os.c
