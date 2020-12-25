@@ -43,7 +43,8 @@ The `./configure` script supports a number of optional flags:
 * `--disable-libnfct` disables support for libnetfilter\_conntrack.
 * `--disable-nat` disables support for
   {{< abbr "NAT" "Network Address Translation" >}}.
-* `--enable-debug` compiles oidentd with the `--debug` option.
+* `--disable-debug` compiles oidentd without the `--debug` option to reduce the
+  size of the executable.
 * `--enable-warn` is intended for developers and enables additional warning
   messages during compilation.
 

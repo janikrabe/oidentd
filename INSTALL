@@ -39,8 +39,8 @@ a number of optional flags:
         See "Optional Dependencies" above for more information
   - '--disable-xdgbdir': disable XDG Base Directory support
         Do not look for '~/.config/oidentd.conf' before '~/.oidentd.conf'
-  - '--enable-debug': enable debugging support
-        Enables support for the '--debug' option
+  - '--disable-debug': disable debugging support
+        Disables support for the '--debug' option
   - '--enable-warn': enable additional compiler warnings
         Show more warnings during compilation
 
