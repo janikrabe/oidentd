@@ -1,20 +1,14 @@
----
-# Copyright (c)  2018-2020  Janik Rabe
-#
-# Permission is granted to copy, distribute and/or modify this document
-# under the terms of the GNU Free Documentation License, Version 1.3
-# or any later version published by the Free Software Foundation;
-# with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
-# A copy of the license is included in the file 'COPYING.DOC'
+<!--
+Copyright (c)  2018-2020  Janik Rabe
 
-title: "Installation"
-weight: 1
----
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+A copy of the license is included in the file 'COPYING.DOC'
+-->
 
-{{% alert "primary" "Looking for the download link?" %}}
-You can download oidentd from the
-[project website]({{% ref "/projects/oidentd" %}}).
-{{% /alert %}}
+# Installation
 
 Most popular operating system distributions include a recent version of oidentd
 in their package repositories.
@@ -39,10 +33,10 @@ More information can be found in the `INSTALL` file in the source tree.
 The `./configure` script supports a number of optional flags:
 
 * `--disable-ipv6` disables support for
-  {{< abbr "IPv6" "Internet Protocol, Version 6" >}}.
+  <abbr title="Internet Protocol version 6">IPv6</abbr>.
 * `--disable-libnfct` disables support for libnetfilter\_conntrack.
 * `--disable-nat` disables support for
-  {{< abbr "NAT" "Network Address Translation" >}}.
+  <abbr title="Network Address Translation">NAT</abbr>.
 * `--disable-debug` compiles oidentd without the `--debug` option to reduce the
   size of the executable.
 * `--enable-warn` is intended for developers and enables additional warning

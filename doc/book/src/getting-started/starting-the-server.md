@@ -1,15 +1,14 @@
----
-# Copyright (c)  2018-2020  Janik Rabe
-#
-# Permission is granted to copy, distribute and/or modify this document
-# under the terms of the GNU Free Documentation License, Version 1.3
-# or any later version published by the Free Software Foundation;
-# with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
-# A copy of the license is included in the file 'COPYING.DOC'
+<!--
+Copyright (c)  2018-2020  Janik Rabe
 
-title: "Starting the Server"
-weight: 4
----
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+A copy of the license is included in the file 'COPYING.DOC'
+-->
+
+# Starting the Server
 
 oidentd can be run as a standalone server or started by a service manager.
 By default, oidentd forks to the background after starting up.
@@ -44,9 +43,9 @@ Many systemd-based distributions include service files for oidentd.
 On these distributions, oidentd can be started and enabled with the following
 command:
 
-{{< code >}}
+```
 systemctl enable --now oidentd
-{{< /code >}}
+```
 
-[drop-privs]: {{% ref dropping-privileges %}}
-[systemd]:    {{% ref "#systemd-service" %}}
+[drop-privs]: ../security/dropping-privileges.md
+[systemd]:    #systemd-service

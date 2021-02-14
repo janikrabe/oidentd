@@ -3,7 +3,7 @@ oidentd
 
 Version 2.5.0
 
-Flexible, RFC 1413 compliant ident daemon with NAT support.
+Flexible, RFC 1413 compliant Ident daemon with NAT support.
 
 oidentd is a flexible ident daemon for Linux, FreeBSD, OpenBSD, NetBSD, and
 DragonFly BSD.  It is highly configurable, allowing the system administator to

@@ -1,15 +1,14 @@
----
-# Copyright (c)  2018-2020  Janik Rabe
-#
-# Permission is granted to copy, distribute and/or modify this document
-# under the terms of the GNU Free Documentation License, Version 1.3
-# or any later version published by the Free Software Foundation;
-# with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
-# A copy of the license is included in the file 'COPYING.DOC'
+<!--
+Copyright (c)  2018-2020  Janik Rabe
 
-title: "Dropping Privileges"
-weight: 1
----
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+A copy of the license is included in the file 'COPYING.DOC'
+-->
+
+# Dropping Privileges
 
 It is highly recommended not to run internet-facing services as root.
 For this reason, oidentd attempts to switch to an unprivileged user

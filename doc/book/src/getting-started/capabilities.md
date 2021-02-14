@@ -1,15 +1,14 @@
----
-# Copyright (c)  2018-2020  Janik Rabe
-#
-# Permission is granted to copy, distribute and/or modify this document
-# under the terms of the GNU Free Documentation License, Version 1.3
-# or any later version published by the Free Software Foundation;
-# with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
-# A copy of the license is included in the file 'COPYING.DOC'
+<!--
+Copyright (c)  2018-2020  Janik Rabe
 
-title: "Capabilities"
-weight: 2
----
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+A copy of the license is included in the file 'COPYING.DOC'
+-->
+
+# Capabilities
 
 Capabilities allow the system administrator to control the set of features
 users have access to.
@@ -100,4 +99,4 @@ It only works in conjunction with the `spoof` capability.
 
 This capability does not have an imperative syntax.
 
-[capdirs]: {{% ref "configuration#capability-directives" %}}
+[capdirs]: configuration/index.md#capability-directives

@@ -1,15 +1,14 @@
----
-# Copyright (c)  2018-2020  Janik Rabe
-#
-# Permission is granted to copy, distribute and/or modify this document
-# under the terms of the GNU Free Documentation License, Version 1.3
-# or any later version published by the Free Software Foundation;
-# with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
-# A copy of the license is included in the file 'COPYING.DOC'
+<!--
+Copyright (c)  2018-2020  Janik Rabe
 
-title: "Support"
-weight: 5
----
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+A copy of the license is included in the file 'COPYING.DOC'
+-->
+
+# Support
 
 If you need help or have any questions about oidentd, feel free to use any of
 the following resources.
@@ -22,7 +21,7 @@ and `oidentd_masq.conf(5)` manual pages.
 Additional documentation for developers and package maintainers is available in
 the `INSTALL` and `HACKING` files in the oidentd source tree.
 
-## {{< abbr "IRC" "Internet Relay Chat" >}} Channel
+## <abbr title="Internet Relay Chat">IRC</abbr> Channel
 
 You can find us in `#oidentd` on `ircs://chat.freenode.net`.
 Please be patient; it may take a while for someone to see your message.
@@ -36,4 +35,4 @@ This is also the best way to share any feedback you may have.
 We're always looking for ways to make oidentd better, and we'd appreciate your
 help.
 
-[contact-maint]: {{% ref "/contact" %}}
+[contact-maint]: https://janikrabe.com/

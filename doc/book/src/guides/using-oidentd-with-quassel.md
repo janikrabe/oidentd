@@ -1,15 +1,14 @@
----
-# Copyright (c)  2018-2020  Janik Rabe
-#
-# Permission is granted to copy, distribute and/or modify this document
-# under the terms of the GNU Free Documentation License, Version 1.3
-# or any later version published by the Free Software Foundation;
-# with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
-# A copy of the license is included in the file 'COPYING.DOC'
+<!--
+Copyright (c)  2018-2020  Janik Rabe
 
-title: "Using oidentd with Quassel"
-weight: 1
----
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+A copy of the license is included in the file 'COPYING.DOC'
+-->
+
+# Using oidentd with Quassel
 
 You can use oidentd to spoof Ident replies so that they match Idents configured
 within Quassel.
@@ -22,7 +21,7 @@ This is the recommended method.
 
 Append the following to your [system-wide configuration file][sys-conf]:
 
-{{< code >}}
+```
 user "<username>" {
 	default {
 		allow spoof
@@ -34,12 +33,12 @@ user "<username>" {
 		force forward <host> <port>
 	}
 }
-{{< /code >}}
+```
 
 Replace `<username>` with the user name of the Quassel user (e.g.,
 `quasselcore`).
 
-Replace `<host>` with the {{< abbr "IP" "Internet Protocol" >}} address or
+Replace `<host>` with the <abbr title="Internet Protocol">IP</abbr> address or
 hostname Quassel's built-in Ident server is configured to listen on (e.g.,
 `::1`).
 
@@ -52,13 +51,13 @@ Quassel can automatically write to an oidentd user configuration file when
 establishing a new connection.
 
 Use of this feature is discouraged as of oidentd 2.3.0.
-Some {{< abbr "IRC" "Internet Relay Chat" >}} servers send Ident queries before
-the connection's local port is known to Quassel, which may cause lookups to
-fail.
+Some <abbr title="Internet Relay Chat">IRC</abbr> servers send Ident queries
+before the connection's local port is known to Quassel, which may cause lookups
+to fail.
 
 Append the following to your [system-wide configuration file][sys-conf]:
 
-{{< code >}}
+```
 user "<username>" {
 	default {
 		allow spoof
@@ -67,7 +66,7 @@ user "<username>" {
 		allow spoof_all
 	}
 }
-{{< /code >}}
+```
 
 Replace `<username>` with the user name of the Quassel user (e.g.,
 `quasselcore`).
@@ -76,12 +75,12 @@ Ensure that the Quassel home directory (typically `~quasselcore`) is
 world-executable (mode `0711`) so that oidentd can read the user configuration
 file:
 
-{{< code >}}
+```
 chmod 0711 ~quasselcore
-{{< /code >}}
+```
 
 Finally, make sure Quassel is run with the `--oidentd` flag.
 
 Your changes will take effect after you reload oidentd and restart Quassel.
 
-[sys-conf]: {{% ref "../getting-started/configuration#system-wide-configuration-file" %}}
+[sys-conf]: ../getting-started/configuration/index.md#system-wide-configuration-file
