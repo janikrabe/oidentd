@@ -23,13 +23,10 @@ ACLOCAL=aclocal
 
 require_binary() {
 	"$1" --version < /dev/null > /dev/null || {
-		echo "Error: No usable installation of '$1' was found in your \$PATH."
-		echo "       Please install it to compile oidentd."
+		printf "Error: No usable installation of '%s' was found in your \$PATH.\n" "$1"
+		printf "       Please install it to compile oidentd.\n"
 
-		test -z "$2" || {
-			echo
-			echo "Note: $2"
-		}
+		test -z "$2" || printf "\nNote: %s\n" "$2"
 
 		exit 1
 	}
@@ -43,9 +40,9 @@ require_binary "$ACLOCAL" \
 	"Your version of 'automake' may not be recent enough."
 
 $ACLOCAL && $AUTOHEADER && $AUTOMAKE --gnu --add-missing --copy && $AUTOCONF || {
-	echo "Error: Automatic generation of the configuration scripts has failed."
-	echo "       Please try to generate them manually.  If you believe this"
-	echo "       failure is the result of a bug in oidentd, please email"
-	echo "       <info@janikrabe.com> with any relevant details."
+	printf "Error: Automatic generation of the configuration scripts has failed.\n"
+	printf "       Please try to generate them manually.  If you believe this\n"
+	printf "       failure is the result of a bug in oidentd, please email\n"
+	printf "       <info@janikrabe.com> with any relevant details.\n"
 	exit 1
 }
