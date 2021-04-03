@@ -22,7 +22,7 @@ AUTOHEADER=autoheader
 ACLOCAL=aclocal
 
 require_binary() {
-	"$1" --version < /dev/null > /dev/null 2>&1 || {
+	"$1" --version < /dev/null > /dev/null || {
 		echo "Error: No usable installation of '$1' was found in your \$PATH."
 		echo "       Please install it to compile oidentd."
 
