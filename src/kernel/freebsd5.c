@@ -17,9 +17,6 @@
 ** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#define _GNU_SOURCE
-#define _WANT_UCRED
-
 #include <config.h>
 
 #include <unistd.h>
@@ -72,12 +69,12 @@ uid_t get_user4(	in_port_t lport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
 {
-	struct ucred ucred;
+	struct xucred xuc;
 	struct sockaddr_in sin4[2];
 	size_t len;
 	int ret;
 
-	len = sizeof(struct ucred);
+	len = sizeof(xuc);
 
 	memset(sin4, 0, sizeof(sin4));
 
@@ -94,14 +91,20 @@ uid_t get_user4(	in_port_t lport,
 		sin4[1].sin_addr.s_addr = SIN4(faddr)->sin_addr.s_addr;
 
 	ret = sysctlbyname("net.inet.tcp.getcred",
-		&ucred, &len, sin4, sizeof(sin4));
+		&xuc, &len, sin4, sizeof(sin4));
 
 	if (ret == -1) {
 		debug("sysctlbyname: %s", strerror(errno));
 		return MISSING_UID;
 	}
 
-	return ucred.cr_uid;
+	if (xuc.cr_version != XUCRED_VERSION) {
+		debug("kernel is using xucred version %u, expected %u",
+			xuc.cr_version, XUCRED_VERSION);
+		return MISSING_UID;
+	}
+
+	return xuc.cr_uid;
 }
 
 #if WANT_IPV6
@@ -116,12 +119,12 @@ uid_t get_user6(	in_port_t lport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
 {
-	struct ucred ucred;
+	struct xucred xuc;
 	struct sockaddr_in6 sin6[2];
 	size_t len;
 	int ret;
 
-	len = sizeof(struct ucred);
+	len = sizeof(xuc);
 
 	memset(sin6, 0, sizeof(sin6));
 
@@ -138,14 +141,20 @@ uid_t get_user6(	in_port_t lport,
 		sizeof(sin6[1].sin6_addr));
 
 	ret = sysctlbyname("net.inet6.tcp6.getcred",
-			&ucred, &len, sin6, sizeof(sin6));
+		&xuc, &len, sin6, sizeof(sin6));
 
 	if (ret == -1) {
 		debug("sysctlbyname: %s", strerror(errno));
 		return MISSING_UID;
 	}
 
-	return ucred.cr_uid;
+	if (xuc.cr_version != XUCRED_VERSION) {
+		debug("kernel is using xucred version %u, expected %u",
+			xuc.cr_version, XUCRED_VERSION);
+		return MISSING_UID;
+	}
+
+	return xuc.cr_uid;
 }
 
 #endif
