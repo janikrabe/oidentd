@@ -459,34 +459,18 @@ case "$host_os" in
 	;;
 
 	*freebsd* )
-		if test "$ac_cv_ipf_nat_p" = "no"; then
-			masq_support=no
-		fi
+		case "$host_os" in
+			*freebsd[[1-3]].* )
+				AC_MSG_ERROR([cannot build on $host_os; oidentd requires FreeBSD 4.0 or newer])
+			;;
 
-		if test "$masq_support" = "no"; then
-			case "$host_os" in
-				*freebsd[[1-3]].* )
-					AC_MSG_ERROR([cannot build on $host_os; oidentd requires FreeBSD 4.0 or newer])
-				;;
-
-				* )
-					use_kmem=no
-					require_superuser=yes
-					os_src=freebsd4.c
-				;;
-			esac
-		else
-			case "$host_os" in
-				*freebsd[[1-4]].* )
-					AC_MSG_ERROR([cannot build on $host_os; oidentd requires FreeBSD 5.0 or newer])
-				;;
-
-				* )
-					use_kmem=yes
-					os_src=freebsd5.c
-				;;
-			esac
-		fi
+			* )
+				use_kmem=no
+				require_superuser=yes
+				os_src=freebsd4.c
+				masq_support=no
+			;;
+		esac
 	;;
 
 	*dragonfly* )

@@ -2,6 +2,7 @@
 
 	* Drop support for very old FreeBSD versions.
 	* Drop NAT support for DragonFly BSD.
+	* Drop NAT support for FreeBSD.
 
 2020-09-12  Janik Rabe  <oidentd@janikrabe.com>
 
