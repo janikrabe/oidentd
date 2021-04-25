@@ -354,6 +354,11 @@ int get_options(int argc, char *const argv[]) {
 	}
 
 #if NEED_ROOT
+	if (geteuid() != 0) {
+		o_log(LOG_CRIT, "Fatal: " PACKAGE_NAME " needs to run as root on this system");
+		return -1;
+	}
+
 	/*
 	** Warn the user that privileges will not be dropped automatically.
 	*/
