@@ -476,7 +476,7 @@ case "$host_os" in
 	*dragonfly* )
 		use_kmem=no
 		require_superuser=yes
-		os_src=freebsd4.c
+		os_src=dflybsd1.c
 		masq_support=no
 	;;
 
