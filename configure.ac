@@ -490,18 +490,10 @@ case "$host_os" in
 	;;
 
 	*dragonfly* )
-		if test "$ac_cv_ipf_nat_p" = "no"; then
-			masq_support=no
-		fi
-
-		if test "$masq_support" = "no"; then
-			use_kmem=no
-			require_superuser=yes
-			os_src=freebsd4.c
-		else
-			use_kmem=yes
-			os_src=freebsd.c
-		fi
+		use_kmem=no
+		require_superuser=yes
+		os_src=freebsd4.c
+		masq_support=no
 	;;
 
 	* )
