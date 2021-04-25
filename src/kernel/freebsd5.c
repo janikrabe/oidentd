@@ -1,5 +1,5 @@
 /*
-** freebsd4.c - Ident lookup routines for >= FreeBSD 4
+** freebsd5.c - Ident lookup routines for FreeBSD >= 5
 ** Copyright (c) 2000-2006 Ryan McCabe <ryan@numb.org>
 ** Copyright (c) 2018-2019 Janik Rabe  <info@janikrabe.com>
 **
