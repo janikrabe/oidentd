@@ -10,6 +10,9 @@ Unreleased changes
 	* Removed Linux MASQFILE support.
 	* Removed Linux IPCONNTRACK support.
 	* Updated default configuration file to hide root connections.
+	* Removed ipf NAT support for FreeBSD and DragonFly BSD.
+		* NAT support for these systems required access to kernel memory and
+		  was not compatible with modern versions.
 
 Changes in version 2.5.0
 
