@@ -1,3 +1,7 @@
+2021-04-25  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Drop support for very old FreeBSD versions.
+
 2020-09-12  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Remove '--forward-last' flag (renamed to '--masquerade-first').

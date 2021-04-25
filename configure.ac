@@ -466,9 +466,7 @@ case "$host_os" in
 		if test "$masq_support" = "no"; then
 			case "$host_os" in
 				*freebsd[[1-3]].* )
-					AC_MSG_WARN(Support for this version of FreeBSD is deprecated and may be removed in the future)
-					use_kmem=yes
-					os_src=freebsd.c
+					AC_MSG_ERROR([cannot build on $host_os; oidentd requires FreeBSD 4.0 or newer])
 				;;
 
 				* )
@@ -480,9 +478,7 @@ case "$host_os" in
 		else
 			case "$host_os" in
 				*freebsd[[1-4]].* )
-					AC_MSG_WARN(Support for this version of FreeBSD is deprecated and may be removed in the future)
-					use_kmem=yes
-					os_src=freebsd.c
+					AC_MSG_ERROR([cannot build on $host_os; oidentd requires FreeBSD 5.0 or newer])
 				;;
 
 				* )
