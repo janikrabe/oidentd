@@ -535,7 +535,15 @@ case "$host_os" in
 					os_src=freebsd.c
 				;;
 
+				*freebsd4.* )
+					AC_DEFINE(FREEBSD_USE_XUCRED, 0, [Whether getcred sysctl returns xucred struct])
+					use_kmem=no
+					require_superuser=yes
+					os_src=freebsd4.c
+				;;
+
 				* )
+					AC_DEFINE(FREEBSD_USE_XUCRED, 1, [Whether getcred sysctl returns xucred struct])
 					use_kmem=no
 					require_superuser=yes
 					os_src=freebsd4.c
@@ -563,6 +571,7 @@ case "$host_os" in
 		fi
 
 		if test "$masq_support" = "no"; then
+			AC_DEFINE(FREEBSD_USE_XUCRED, 0, [Whether getcred sysctl returns xucred struct])
 			use_kmem=no
 			require_superuser=yes
 			os_src=freebsd4.c

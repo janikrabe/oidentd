@@ -50,6 +50,12 @@
 #include "missing.h"
 #include "options.h"
 
+#if FREEBSD_USE_XUCRED
+#	define FREEBSD_GETCRED_RESULT xucred
+#else
+#	define FREEBSD_GETCRED_RESULT ucred
+#endif
+
 /*
 ** System-dependent initialization; called only once.
 ** Called before privileges are dropped.
@@ -72,12 +78,12 @@ uid_t get_user4(	in_port_t lport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
 {
-	struct ucred ucred;
+	struct FREEBSD_GETCRED_RESULT uc;
 	struct sockaddr_in sin4[2];
 	size_t len;
 	int ret;
 
-	len = sizeof(struct ucred);
+	len = sizeof(uc);
 
 	memset(sin4, 0, sizeof(sin4));
 
@@ -94,14 +100,21 @@ uid_t get_user4(	in_port_t lport,
 		sin4[1].sin_addr.s_addr = SIN4(faddr)->sin_addr.s_addr;
 
 	ret = sysctlbyname("net.inet.tcp.getcred",
-		&ucred, &len, sin4, sizeof(sin4));
+		&uc, &len, sin4, sizeof(sin4));
 
 	if (ret == -1) {
 		debug("sysctlbyname: %s", strerror(errno));
 		return MISSING_UID;
 	}
 
-	return ucred.cr_uid;
+#if FREEBSD_USE_XUCRED
+	if (uc.cr_version != XUCRED_VERSION) {
+		debug("kernel is using xucred version %u, expected %u", xuc.cr_version, XUCRED_VERSION);
+		return MISSING_UID;
+	}
+#endif
+
+	return uc.cr_uid;
 }
 
 #if WANT_IPV6
@@ -116,12 +129,12 @@ uid_t get_user6(	in_port_t lport,
 				struct sockaddr_storage *laddr,
 				struct sockaddr_storage *faddr)
 {
-	struct ucred ucred;
+	struct FREEBSD_GETCRED_RESULT uc;
 	struct sockaddr_in6 sin6[2];
 	size_t len;
 	int ret;
 
-	len = sizeof(struct ucred);
+	len = sizeof(uc);
 
 	memset(sin6, 0, sizeof(sin6));
 
@@ -138,14 +151,21 @@ uid_t get_user6(	in_port_t lport,
 		sizeof(sin6[1].sin6_addr));
 
 	ret = sysctlbyname("net.inet6.tcp6.getcred",
-			&ucred, &len, sin6, sizeof(sin6));
+			&uc, &len, sin6, sizeof(sin6));
 
 	if (ret == -1) {
 		debug("sysctlbyname: %s", strerror(errno));
 		return MISSING_UID;
 	}
 
-	return ucred.cr_uid;
+#if FREEBSD_USE_XUCRED
+	if (uc.cr_version != XUCRED_VERSION) {
+		debug("kernel is using xucred version %u, expected %u", xuc.cr_version, XUCRED_VERSION);
+		return MISSING_UID;
+	}
+#endif
+
+	return uc.cr_uid;
 }
 
 #endif
