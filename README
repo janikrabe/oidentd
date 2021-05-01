@@ -1,7 +1,7 @@
 oidentd
 =======
 
-Version 2.5.0
+Version 2.5.1
 
 Flexible, RFC 1413 compliant ident daemon with NAT support.
 
