@@ -1,3 +1,11 @@
+2021-05-01  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Released as version 2.5.1.
+
+2021-04-30  Janik Rabe  <oidentd@janikrabe.com>
+
+	* Fix ident lookups on FreeBSD 13+.
+
 2020-05-04  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Compile with ENABLE_DEBUGGING by default.

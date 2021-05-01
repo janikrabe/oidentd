@@ -14,6 +14,10 @@ Unreleased changes
 		* NAT support for these systems required access to kernel memory and
 		  was not compatible with modern versions.
 
+Changes in version 2.5.1
+
+	* Fixed ident lookups on FreeBSD 13+.
+
 Changes in version 2.5.0
 
 	* Added '--reply-all' option.
