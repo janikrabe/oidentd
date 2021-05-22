@@ -23,7 +23,7 @@ the `INSTALL` and `HACKING` files in the oidentd source tree.
 
 ## <abbr title="Internet Relay Chat">IRC</abbr> Channel
 
-You can find us in `#oidentd` on `ircs://chat.freenode.net`.
+You can find us in `#oidentd` on `ircs://irc.libera.chat`.
 Please be patient; it may take a while for someone to see your message.
 
 ## Contact the Maintainer
