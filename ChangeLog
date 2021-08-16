@@ -1,3 +1,7 @@
+2021-08-16  Janik Rabe  <info@janikrabe.com>
+
+	* Released as version 3.0.0.
+
 2021-04-25  Janik Rabe  <info@janikrabe.com>
 
 	* Fail on non-zero EUID if NEED_ROOT is set.

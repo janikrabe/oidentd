@@ -14,7 +14,7 @@ oidentd.conf(5)
 :man manual:   oidentd User Manual
 :man source:   oidentd
 :reproducible: yes
-:revdate:      2020-04-16
+:revdate:      2021-08-16
 :sysconfdir:   /etc
 
 

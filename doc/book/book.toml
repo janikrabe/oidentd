@@ -3,4 +3,4 @@ authors = ["Janik Rabe"]
 language = "en"
 multilingual = false
 src = "src"
-title = "oidentd 2.5.0"
+title = "oidentd 3.0.0"

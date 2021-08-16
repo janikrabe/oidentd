@@ -1,4 +1,4 @@
-Unreleased changes
+Changes in version 3.0.0
 
 	* Support for '--debug' is now included by default.
 		* Run './configure' with '--disable-debug' to disable.
