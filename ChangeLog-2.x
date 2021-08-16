@@ -6,10 +6,6 @@
 
 	* Fix ident lookups on FreeBSD 13+.
 
-2020-05-04  Janik Rabe  <oidentd@janikrabe.com>
-
-	* Compile with ENABLE_DEBUGGING by default.
-
 2020-04-16  Janik Rabe  <oidentd@janikrabe.com>
 
 	* Released as version 2.5.0.

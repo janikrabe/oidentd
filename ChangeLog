@@ -1,11 +1,12 @@
-2021-04-25  Janik Rabe  <oidentd@janikrabe.com>
+2021-04-25  Janik Rabe  <info@janikrabe.com>
 
+	* Fail on non-zero EUID if NEED_ROOT is set.
 	* Drop support for very old FreeBSD versions.
 	* Drop NAT support for DragonFly BSD.
 	* Drop NAT support for FreeBSD.
 	* Create separate kernel module for DragonFly BSD.
 
-2020-09-12  Janik Rabe  <oidentd@janikrabe.com>
+2020-09-12  Janik Rabe  <info@janikrabe.com>
 
 	* Remove '--forward-last' flag (renamed to '--masquerade-first').
 	* Remove libudb support (deprecated).
@@ -15,3 +16,7 @@
 	* Remove Linux MASQFILE support (deprecated).
 	* Remove Linux IPCONNTRACK support (deprecated).
 	* Update default configuration file to hide root connections.
+
+2020-05-04  Janik Rabe  <info@janikrabe.com>
+
+	* Compile with ENABLE_DEBUGGING by default.

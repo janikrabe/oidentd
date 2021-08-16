@@ -75,8 +75,9 @@ separate the summary from that of the previous version.  At the top of the
 file, add the line "Changes in version <version>", replacing '<version>' with
 the version number of the new release.
 
-    Update the version number in 'README' and 'configure.ac'.  Change the date
-in each of the manual pages to the release date of the new version.
+    Update the version number in 'configure.ac', 'doc/book/book.toml', and
+'README'.  Change the date in each of the manual pages to the release date of
+the new version.
 
     Commit the changes and tag the commit with "v<version>", where '<version>'
 is the version number of the release.

@@ -13,6 +13,9 @@ Christof Douma <christof@douma.eu.org>
 Daniel Brafford <pod@charter.net>
 	Initial IPv6 support and IPv6 implementation for Linux
 
+Dessa <Dessa@gmake.de>
+	Build script improvements
+
 Douglas Henke <henke@insync.net>
 	Improvements to PRNG seeding
 	Flags --foreground and --nosyslog
