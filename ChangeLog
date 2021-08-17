@@ -1,3 +1,7 @@
+2021-08-17  Janik Rabe  <info@janikrabe.com>
+
+	* Allow using masquerading without IPv6 support on Linux.
+
 2021-08-16  Janik Rabe  <info@janikrabe.com>
 
 	* Released as version 3.0.0.

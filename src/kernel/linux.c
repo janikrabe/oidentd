@@ -462,10 +462,12 @@ static int masq_ct_line(char *line,
 		in_addr_t remotem4;
 		in_addr_t localn4;
 		in_addr_t remoten4;
+#if WANT_IPV6
 		struct in6_addr localm6;
 		struct in6_addr remotem6;
 		struct in6_addr localn6;
 		struct in6_addr remoten6;
+#endif
 		u_int32_t nport_temp;
 		u_int32_t mport_temp;
 		u_int32_t masq_lport_temp;
@@ -511,6 +513,8 @@ static int masq_ct_line(char *line,
 			sin_setv4(remoten4, &remoten_ss);
 
 			break;
+
+#if WANT_IPV6
 		case AF_INET6:
 			if (strcasecmp(family, "ipv6"))
 				return 1;
@@ -527,9 +531,11 @@ static int masq_ct_line(char *line,
 			sin_setv6(&remoten6, &remoten_ss);
 
 			break;
+#endif
+
 		default:
 			debug("masq_ct_line: bad address family %d", faddr->ss_family);
-			return -1;
+			return 1;
 		}
 
 		masq_lport = (in_port_t) masq_lport_temp;
@@ -561,8 +567,10 @@ static int masq_ct_line(char *line,
 		if (con_uid == MISSING_UID && faddr->ss_family == AF_INET)
 			con_uid = get_user4(htons(masq_lport), htons(masq_fport), laddr, &remotem_ss);
 
+#if WANT_IPV6
 		if (con_uid == MISSING_UID && faddr->ss_family == AF_INET6)
 			con_uid = get_user6(htons(masq_lport), htons(masq_fport), laddr, &remotem_ss);
+#endif
 
 		if (con_uid == MISSING_UID)
 			return -1;
