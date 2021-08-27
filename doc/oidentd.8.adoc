@@ -21,7 +21,7 @@ oidentd(8)
 NAME
 ----
 
-oidentd - flexible, RFC 1413 compliant ident daemon with NAT support
+oidentd - flexible, RFC 1413 compliant Ident daemon with NAT support
 
 
 SYNOPSIS
@@ -49,7 +49,7 @@ OPTIONS
   multiple addresses.
 
 *-c, --charset*='CHARSET'::
-  Inform clients that ident replies use the specified character set as defined
+  Inform clients that Ident replies use the specified character set as defined
   in RFC 1340 or its successors.  The default is not to send a character set to
   clients.
 
@@ -66,14 +66,14 @@ OPTIONS
 *-e, --error*::
   Hide error messages, returning *UNKNOWN-ERROR* for all errors.  This includes
   the *NO-USER*, *HIDDEN-USER* and *INVALID-PORT* errors.  This option may be
-  used to conceal the fact that *oidentd* is hiding ident responses for a user.
+  used to conceal the fact that *oidentd* is hiding Ident responses for a user.
 
 *-f, --forward*=['PORT']::
   Forward requests for hosts masquerading through the server *oidentd* is
   running on to the host that established the corresponding connection.  The
   target host must be running *oidentd* with the *--proxy* option, or some
-  ident server returning static responses regardless of the query.  If no port
-  is specified, the default ident port (113) is used.  If forwarding fails,
+  Ident server returning static responses regardless of the query.  If no port
+  is specified, the default Ident port (113) is used.  If forwarding fails,
   *oidentd* falls back to the response specified in *oidentd_masq.conf*(5).
   This option implies *--masquerade*.  The *--masquerade-first* option can be
   used to forward queries only if no response was specified in
@@ -94,7 +94,7 @@ OPTIONS
   *Type=simple*.
 
 *-I, --stdio*::
-  Read a single ident query from standard input, write the response to standard
+  Read a single Ident query from standard input, write the response to standard
   output, then exit.  This option may be useful for debugging, or when running
   *oidentd* from a listener daemon such as *xinetd*(8).
 
@@ -120,7 +120,7 @@ OPTIONS
   *--masquerade*.
 
 *-o, --other*=['OS']::
-  Set an alternative operating system string to send alongside ident responses.
+  Set an alternative operating system string to send alongside Ident responses.
   Note that some clients may interpret queries as having failed when an unknown
   operating system is returned.  If this option is not specified, the value
   *UNIX* is used.  If this option is specified without an argument, *OTHER* is
@@ -138,7 +138,7 @@ OPTIONS
   Suppress normal logging, showing only critical messages.
 
 *-r, --reply*='REPLY'::
-  When a lookup fails, send the specified ident response as if it had
+  When a lookup fails, send the specified Ident response as if it had
   succeeded.
 
 *-R, --reply-all*='REPLY'::
@@ -153,7 +153,7 @@ OPTIONS
   standard error is a terminal, messages are written to it by default.
 
 *-t, --timeout*='SECONDS'::
-  Close connections if no ident query is received within the specified number
+  Close connections if no Ident query is received within the specified number
   of seconds.  By default, connections are closed after 30 seconds.
 
 *-u, --user*='USER|UID'::

@@ -1,6 +1,6 @@
 [Unit]
 Conflicts=oidentd.service
-Description=RFC 1413 compliant ident socket
+Description=RFC 1413 compliant Ident socket
 Documentation=man:oidentd(8) man:oidentd.conf(5) man:oidentd_masq.conf(5)
 
 [Socket]

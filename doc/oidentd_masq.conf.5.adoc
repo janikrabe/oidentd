@@ -28,8 +28,8 @@ DESCRIPTION
 -----------
 
 If NAT support is enabled with the *--masquerade* option, *oidentd* reads the
-*{sysconfdir}/oidentd_masq.conf* file to determine ident responses to queries
-intended for other machines.  It is also possible to forward queries to ident
+*{sysconfdir}/oidentd_masq.conf* file to determine Ident responses to queries
+intended for other machines.  It is also possible to forward queries to Ident
 servers on the hosts connecting through the machine *oidentd* runs on.  For more
 information on forwarding, please see the *--forward* option in *oidentd*(8).
 
@@ -49,7 +49,7 @@ _host_[/_mask_] _response_ _system-type_
 ....
 
 The _host_ field specifies the hostname or IP address of the host that owns the
-connection for which an ident query was received.  This host must be connecting
+connection for which an Ident query was received.  This host must be connecting
 through the machine *oidentd* runs on.  The host may be specified as either an
 IP address or a hostname.
 
@@ -61,7 +61,7 @@ The _response_ field specifies the response to be sent when receiving a query
 for the specified host or subnetwork.
 
 The _system-type_ field specifies the operating system to send alongside the
-ident response.  See the *--other* option in *oidentd*(8) for more information.
+Ident response.  See the *--other* option in *oidentd*(8) for more information.
 
 
 EXAMPLES

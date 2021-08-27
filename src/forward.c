@@ -47,7 +47,7 @@ static int fsock;
 static void fwd_alarm(int sig) __noreturn;
 
 /*
-** Make an ident request to another machine and return its response,
+** Make an Ident request to another machine and return its response,
 ** if the request was successful.
 */
 

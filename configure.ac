@@ -1,4 +1,4 @@
-dnl configure.ac - oidentd ident (RFC 1413) implementation.
+dnl configure.ac - oidentd Ident (RFC 1413) implementation.
 dnl Copyright (c) 2006      Ryan McCabe <ryan@numb.org>
 dnl Copyright (c) 2018-2019 Janik Rabe  <info@janikrabe.com>
 dnl

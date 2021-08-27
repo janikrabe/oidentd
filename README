@@ -5,10 +5,10 @@ Version 3.0.0
 
 Flexible, RFC 1413 compliant Ident daemon with NAT support.
 
-oidentd is a flexible ident daemon for Linux, FreeBSD, OpenBSD, NetBSD, and
+oidentd is a flexible Ident daemon for Linux, FreeBSD, OpenBSD, NetBSD, and
 DragonFly BSD.  It is highly configurable, allowing the system administator to
 define custom responses based on host and port pairs.  The administrator can
-also grant capabilities to individual users to allow them to change their ident
+also grant capabilities to individual users to allow them to change their Ident
 replies, generate random replies, or hide their connections.  oidentd supports
 lookups for NAT connections and is able to forward queries to other servers.
 Detailed descriptions of all features are available in the manual pages.

@@ -78,7 +78,7 @@ static struct user_cap *user_db_get_pref(	const struct passwd *pw,
 											struct sockaddr_storage *faddr);
 
 /*
-** Generate a pseudo-random ident response consisting of a string of "len"
+** Generate a pseudo-random Ident response consisting of a string of "len"
 ** characters of the set "valid"
 */
 
@@ -102,7 +102,7 @@ static inline char *select_reply(const struct user_cap *user) {
 }
 
 /*
-** Use a user's UID as the ident reply.
+** Use a user's UID as the Ident reply.
 */
 
 static inline void numeric_ident(uid_t con_uid, char *buf, size_t len) {
@@ -110,7 +110,7 @@ static inline void numeric_ident(uid_t con_uid, char *buf, size_t len) {
 }
 
 /*
-** Generates an ident response of the form UPREFIXxxxxx,
+** Generates an Ident response of the form UPREFIXxxxxx,
 ** where xxxxx is a pseudo-random number between 1 and 99999
 */
 
@@ -129,7 +129,7 @@ static inline bool user_db_have_cap(const struct user_cap *user_cap,
 }
 
 /*
-** Stores the appropriate ident reply in "reply."
+** Stores the appropriate Ident reply in "reply."
 ** Returns 0 if user is not hidden, -1 if the user is hidden.
 */
 

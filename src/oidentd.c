@@ -1,5 +1,5 @@
 /*
-** oidentd.c - oidentd ident (RFC 1413) implementation.
+** oidentd.c - oidentd Ident (RFC 1413) implementation.
 ** Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
 ** Copyright (c) 2018-2019 Janik Rabe  <info@janikrabe.com>
 **
@@ -192,7 +192,7 @@ int main(int argc, char **argv) {
 }
 
 /*
-** Handle the client's request: read the client data and send the ident reply.
+** Handle the client's request: read the client data and send the Ident reply.
 */
 
 static int service_request(int insock, int outsock) {
@@ -300,7 +300,7 @@ static int service_request(int insock, int outsock) {
 #if WANT_IPV6
 	/*
 	 * Check for IPv6-mapped IPv4 addresses. This ensures that the correct
-	 * ident response is returned for connections to a mapped address.
+	 * Ident response is returned for connections to a mapped address.
 	 */
 	if (con_uid == MISSING_UID && laddr.ss_family == AF_INET) {
 		struct sockaddr_storage laddr_m6, faddr_m6;

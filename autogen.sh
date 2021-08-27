@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-# autogen.sh - oidentd ident (RFC 1413) implementation.
+# autogen.sh - oidentd Ident (RFC 1413) implementation.
 # Copyright (c) 2019 Janik Rabe  <info@janikrabe.com>
 #
 # This program is free software; you can redistribute it and/or modify

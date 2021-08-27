@@ -1,5 +1,5 @@
 /*
-** oidentd.h - oidentd ident (RFC 1413) implementation.
+** oidentd.h - oidentd Ident (RFC 1413) implementation.
 ** Copyright (c) 1998-2006 Ryan McCabe <ryan@numb.org>
 ** Copyright (c) 2018-2019 Janik Rabe  <info@janikrabe.com>
 **
@@ -25,7 +25,7 @@
 #endif
 
 /*
-** File containing the ident replies to be used for hosts that
+** File containing the Ident replies to be used for hosts that
 ** masquerade through us.
 */
 
@@ -56,7 +56,7 @@
 #define USER_CONF		".oidentd.conf"
 
 /*
-** Maximum length of ident replies.
+** Maximum length of Ident replies.
 */
 
 #define MAX_ULEN		512

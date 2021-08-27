@@ -205,7 +205,7 @@ failure:
 }
 
 /*
-** Forward an ident request to another machine, return the response to the
+** Forward an Ident request to another machine, return the response to the
 ** client that has connected to us and requested it.
 */
 

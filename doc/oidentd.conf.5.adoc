@@ -36,7 +36,7 @@ types of responses individual users are permitted to send.  By default, users
 must respond with their real username.
 
 The user configuration files *~/.config/oidentd.conf* allow users to send
-custom ident responses or to hide their identities, provided that they have
+custom Ident responses or to hide their identities, provided that they have
 been granted the necessary capabilities through the system-wide configuration
 file.  If this file does not exist or *oidentd* was compiled without XDG Base
 Directory support, the file *~/.oidentd.conf* is used instead.
@@ -50,7 +50,7 @@ SYSTEM-WIDE CONFIGURATION FILE
 The system-wide configuration file is used to grant capabilities to users or
 force users to use a certain capability.  The default behavior is not to grant
 any privileges, which means that all users must send their real usernames in
-response to ident queries.  The system-wide configuration file may be empty or
+response to Ident queries.  The system-wide configuration file may be empty or
 missing, in which case this default applies.  Changes to this file take effect
 only after *oidentd* is reloaded (which occurs when a SIGHUP signal is
 received) or restarted.
@@ -230,7 +230,7 @@ These capabilities allow users to use the corresponding capability statements.
 **spoof**
 ....
 
-The *spoof* capability allows users to send custom ident replies.  Note that
+The *spoof* capability allows users to send custom Ident replies.  Note that
 this does not include replying with the name of another user or spoofing
 replies for connections to privileged foreign ports.
 
@@ -264,7 +264,7 @@ A capability statement may take one of the following forms:
 **forward** __host__ __port__
 ....
 
-Forward received queries to another ident server.  The target server must
+Forward received queries to another Ident server.  The target server must
 support forwarding (like *oidentd* with the *--proxy* option).
 
 Additional capabilities may be required for forwarding to succeed.  For example,
@@ -284,8 +284,8 @@ which user sent a particular reply.
 **hide**
 ....
 
-Hide ident replies from clients.  When this capability is used, *oidentd*
-reports a "HIDDEN-USER" error to ident clients instead of sending an ident
+Hide Ident replies from clients.  When this capability is used, *oidentd*
+reports a "HIDDEN-USER" error to Ident clients instead of sending an Ident
 reply.
 
 [subs="quotes"]
@@ -300,8 +300,8 @@ Respond with the user ID (UID).
 **random**
 ....
 
-Send randomly generated, alphanumeric ident replies.  A new reply is generated
-for each ident lookup.  Replies are logged, allowing the system administrator
+Send randomly generated, alphanumeric Ident replies.  A new reply is generated
+for each Ident lookup.  Replies are logged, allowing the system administrator
 to identify which user sent a particular reply.
 
 [subs="quotes"]
@@ -309,9 +309,9 @@ to identify which user sent a particular reply.
 **random_numeric**
 ....
 
-Send randomly generated, numeric ident replies between 0 (inclusive) and
+Send randomly generated, numeric Ident replies between 0 (inclusive) and
 100,000 (exclusive), prefixed with "user".  A new reply is generated for each
-ident lookup.  Replies are logged, allowing the system administrator to
+Ident lookup.  Replies are logged, allowing the system administrator to
 identify which user sent a particular reply.
 
 [subs="quotes"]
@@ -319,7 +319,7 @@ identify which user sent a particular reply.
 **reply** __reply1__ [__reply2__ ...]
 ....
 
-Send an ident reply chosen at random from the given list of quoted replies.
+Send an Ident reply chosen at random from the given list of quoted replies.
 When used in a user configuration file, at most 20 replies may be specified.
 In the system-wide configuration file, up to 255 replies may be specified.
 Replies are logged, allowing the system administrator to identify which user
@@ -345,8 +345,8 @@ EXAMPLES
 }
 ....
 
-Allow all users to spoof ident replies, except on connections to port 6667.
-Only on connections to port 6667, allow users to hide their ident replies.
+Allow all users to spoof Ident replies, except on connections to port 6667.
+Only on connections to port 6667, allow users to hide their Ident replies.
 
 [subs="quotes"]
 ....
@@ -381,7 +381,7 @@ with "me", ignoring any settings in the user configuration file.
 }
 ....
 
-Reply with "paul" to all ident queries.
+Reply with "paul" to all Ident queries.
 
 [subs="quotes"]
 ....
@@ -390,7 +390,7 @@ Reply with "paul" to all ident queries.
 }
 ....
 
-Hide ident replies for connections to irc.example.net on port 6667.
+Hide Ident replies for connections to irc.example.net on port 6667.
 
 
 STRING FORMATTING
