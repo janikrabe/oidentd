@@ -183,7 +183,7 @@ AUTHOR
 ------
 
 mailto:info@janikrabe.com[Janik Rabe]::
-  https://janikrabe.com/projects/oidentd/
+  https://janikrabe.com
 
 Originally written by Ryan McCabe.
 
