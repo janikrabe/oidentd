@@ -1,5 +1,5 @@
 <!--
-Copyright (c)  2018-2020  Janik Rabe
+Copyright (c)  2018-2023  Janik Rabe
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3
@@ -12,9 +12,19 @@ A copy of the license is included in the file 'COPYING.DOC'
 
 _Flexible, RFC 1413 compliant Ident daemon with NAT support._
 
-oidentd is a configurable, <abbr title="Request for Comments">RFC</abbr> 1413
+oidentd is a flexible, <abbr title="Request for Comments">RFC</abbr> 1413
 compliant Ident server.
 It runs on Linux, FreeBSD, OpenBSD, NetBSD, and DragonFly BSD.
+It is highly configurable, allowing the system administrator to define custom
+responses based on host and port pairs.
+The administrator can also grant capabilities to individual users to allow them
+to change their Ident replies, generate random replies, or hide their
+connections.
+oidentd supports lookups for NAT connections and is able to forward queries to
+other servers.
+
+oidentd was originally written by Ryan McCabe in 1998. Since January 2018, it
+is maintained by Janik Rabe, with contributions from several other volunteers.
 
 The Ident Protocol is used primarily on
 <abbr title="Internet Relay Chat">IRC</abbr> to detect and prevent abuse and to
