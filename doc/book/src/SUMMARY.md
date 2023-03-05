@@ -9,6 +9,7 @@ A copy of the license is included in the file 'COPYING.DOC'
 -->
 
 [About oidentd](index.md)
+[Download](download.md)
 
 - [Getting Started](getting-started/index.md)
 	- [Installation](getting-started/installation.md)
