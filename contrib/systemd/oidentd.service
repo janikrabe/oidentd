@@ -4,7 +4,7 @@ Documentation=man:oidentd(8) man:oidentd.conf(5) man:oidentd_masq.conf(5)
 After=network.target
 
 [Service]
-ExecStart=/usr/sbin/oidentd -S
+ExecStart=/usr/sbin/oidentd
 ExecReload=/bin/kill -HUP $MAINPID
 PrivateDevices=true
 Restart=on-failure
