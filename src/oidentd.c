@@ -104,9 +104,16 @@ int main(int argc, char **argv) {
 		}
 	}
 
-	if (!opt_enabled(FOREGROUND) && go_background() == -1) {
-		o_log(LOG_CRIT, "Fatal: Error creating daemon process");
-		exit(EXIT_FAILURE);
+	if (!opt_enabled(FOREGROUND)) {
+		if (opt_enabled(NOSYSLOG)) {
+			o_log(LOG_CRIT, "Warning: Running in background with --nosyslog set;"
+					" logs will be discarded");
+		}
+
+		if (go_background() == -1) {
+			o_log(LOG_CRIT, "Fatal: Error creating daemon process");
+			exit(EXIT_FAILURE);
+		}
 	}
 
 	if (!replyall && k_open() != 0) {
