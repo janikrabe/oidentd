@@ -14,7 +14,7 @@ oidentd_masq.conf(5)
 :man manual:   oidentd User Manual
 :man source:   oidentd
 :reproducible: yes
-:revdate:      2021-08-16
+:revdate:      2023-03-11
 :sysconfdir:   /etc
 
 
