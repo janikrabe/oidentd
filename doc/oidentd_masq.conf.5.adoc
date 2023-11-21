@@ -94,7 +94,7 @@ Originally written by Ryan McCabe.
 BUGS
 ----
 
-Please report any bugs to mailto:info@janikrabe.com[Janik Rabe].
+Please report any bugs at <https://github.com/janikrabe/oidentd>.
 
 
 SEE ALSO
