@@ -18,14 +18,6 @@
 #define NETLINK_TCPDIAG	4
 #define TCPDIAG_GETSOCK	18
 
-#define NLMSG_ERROR		0x2
-#define NLMSG_DONE		0x3
-
-#define NLMSG_SPACE(len) NLMSG_ALIGN(NLMSG_LENGTH(len))
-#define NLMSG_DATA(nlh)  ((void*)(((char*)nlh) + NLMSG_LENGTH(0)))
-#define NLMSG_NEXT(nlh,len) ((len) -= NLMSG_ALIGN((nlh)->nlmsg_len), \
-	(struct nlmsghdr*)(((char*)(nlh)) + NLMSG_ALIGN((nlh)->nlmsg_len)))
-
 /* Socket identity */
 struct tcpdiag_sockid {
 	u_int16_t tcpdiag_sport;
