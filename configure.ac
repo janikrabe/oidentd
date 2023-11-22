@@ -212,18 +212,20 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <stdlib.h>],
 			[AC_MSG_RESULT(no)])
 
 AC_MSG_CHECKING(for __attribute__ noreturn)
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <stdlib.h>],
-			[ exit(0); } static void foo(void) __attribute__((noreturn));
-			static void foo(void) {exit(0); ])],
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <stdlib.h>
+static void foo(void) __attribute__((noreturn));
+static void foo(void) {exit(0);}],
+			[exit(0);])],
 			[AC_MSG_RESULT(yes)
 			AC_DEFINE(HAVE___ATTRIBUTE__NORETURN, 1, [Define if your compiler has __attribute__ noreturn])],
 			[AC_MSG_RESULT(no)])
 
 AC_MSG_CHECKING(for __attribute__ format)
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <stdlib.h>
-				#include <stdarg.h>],
-			[ exit(0); } static int foo(char *fmt, ...) __attribute__((format (printf, 1, 2)));
-			static int foo(char *fmt, ...) { ])],
+				#include <stdarg.h>
+static void foo(char *fmt, ...) __attribute__((format (printf, 1, 2)));
+static void foo(char *fmt, ...) {}],
+			[exit(0);])],
 			[AC_MSG_RESULT(yes)
 			AC_DEFINE(HAVE___ATTRIBUTE__FORMAT, 1, [Define if your compiler has __attribute__ format])],
 			[AC_MSG_RESULT(no)])
