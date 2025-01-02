@@ -79,7 +79,7 @@ file:
 chmod 0711 ~quasselcore
 ```
 
-Finally, make sure Quassel is run with the `--oidentd` flag.
+Finally, make sure Quassel is run with the `--oidentd` flag. To modify the systemd unit file of Quassel, run `sudo systemctl edit --full quasselcore` and append the flag to the `ExecStart` line.
 
 Your changes will take effect after you reload oidentd and restart Quassel.
 
